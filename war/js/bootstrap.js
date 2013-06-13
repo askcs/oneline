@@ -420,7 +420,7 @@ angular.module('WebPaige')
         {
           // console.log('tab is taller than content ->', $this);
           $('.tabs-left .tab-content #' + $this).css({
-            height: $('.tabs-left .nav-tabs').height() - 41
+            height: $('.tabs-left .nav-tabs').height() + 6
           });
         }
         else if (contentHeight > tabHeight)

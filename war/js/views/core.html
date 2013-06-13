@@ -11,34 +11,34 @@
     <!-- tabs -->
     <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
 
-      <li class="active">
+      <li class="{{(views.purchaser==true) && 'active'}}">
         <a href="#purchaser" 
             ng-click="setViewTo('purchaser')" 
-            data-toggle="tab">Buy number</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-cart-4"></span> Buy number</a>
       </li>
 
-      <li>
+      <li class="{{(views.manager==true) && 'active'}}">
         <a href="#manager" 
             ng-click="setViewTo('manager')" 
-            data-toggle="tab">Add number</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Add number</a>
       </li>
 
-      <li>
+      <li class="{{(views.notifier==true) && 'active'}}">
         <a href="#notifier" 
             ng-click="setViewTo('notifier')" 
-            data-toggle="tab">Call notifications</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span> Call notifications</a>
       </li>
 
-      <li>
+      <li class="{{(views.reporter==true) && 'active'}}">
         <a href="#reporter" 
             ng-click="setViewTo('reporter')" 
-            data-toggle="tab">Recent calls</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span> Recent calls</a>
       </li>
 
-      <li>
+      <li class="{{(views.guarder==true) && 'active'}}">
         <a href="#guarder" 
             ng-click="setViewTo('guarder')" 
-            data-toggle="tab">Blacklist</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span> Blacklist</a>
       </li>
 
     </ul>
@@ -51,11 +51,12 @@
 
 
       <!-- purchaser -->
-      <div class="tab-pane active" id="purchaser">
+      <div class="tab-pane {{(views.purchaser==true) && 'active'}}" id="purchaser">
         <div class="tab-header">
           <h3 class="pull-left">Buy number</h3>
         </div>
         <hr>
+
         <p>Consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
         cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
         proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -65,7 +66,7 @@
 
 
       <!-- manager -->
-      <div class="tab-pane" id="manager">
+      <div class="tab-pane {{(views.manager==true) && 'active'}}" id="manager">
         <div class="tab-header">
           <h3 class="pull-left">Add number</h3>
         </div>
@@ -79,7 +80,7 @@
 
 
       <!-- notifier -->
-      <div class="tab-pane" id="notifier">
+      <div class="tab-pane {{(views.notifier==true) && 'active'}}" id="notifier">
         <div class="tab-header">
           <h3 class="pull-left">Call notifications</h3>
         </div>
@@ -92,7 +93,7 @@
 
 
       <!-- reporter -->
-      <div class="tab-pane" id="reporter">
+      <div class="tab-pane {{(views.reporter==true) && 'active'}}" id="reporter">
         <div class="tab-header">
           <h3 class="pull-left">Recent calls</h3>
         </div>
@@ -107,7 +108,7 @@
 
 
       <!-- guarder -->
-      <div class="tab-pane" id="guarder">
+      <div class="tab-pane {{(views.guarder==true) && 'active'}}" id="guarder">
         <div class="tab-header">
           <h3 class="pull-left">Blacklist</h3>
         </div>
