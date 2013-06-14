@@ -2982,6 +2982,14 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 	  /**
+	   * General order container
+	   */
+	  $scope.order = {
+	  	type: 	''
+	  };
+
+
+	  /**
 	   * View setter
 	   */
 	  function setView (hash)
@@ -3031,5 +3039,30 @@ angular.module('WebPaige.Controllers.Core', [])
 	   * Set view
 	   */
 	  setView(view);
+
+
+	  /**
+	   * Switch step
+	   */
+	  $scope.switchStep = function (step)
+	  {
+	    $scope.$watch(step, function ()
+	    {
+		    $scope.purchaser = {step: step};
+	    });
+	  };
+
+	  $scope.switchStep(1);
+
+	  $scope.increaseStep = function ()
+	  {
+	  	if ($scope.purchaser.step < 5) $scope.switchStep($scope.purchaser.step + 1);
+	  };
+
+	  $scope.decreaseStep = function ()
+	  {
+	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
+	  };
+
 	}
 ]);

@@ -58,14 +58,73 @@
         <hr>
 
         <ul class="breadcrumb">
-          <li><a href="#">Home</a> <span class="divider">/</span></li>
-          <li><a href="#">Library</a> <span class="divider">/</span></li>
-          <li class="active">Data</li>
+          <li>
+            <span class="label">1</span>&nbsp;
+            <a ng-click="switchStep(1)" ng-show="purchaser.step < 2">Buy number</a>
+            <span ng-hide="purchaser.step < 2">Buy number</span>
+            <span class="divider">></span>
+          </li>
+          <li>
+            <span class="label">2</span>&nbsp;
+            <a ng-click="switchStep(2)">Payment types</a>
+            <span class="divider">></span>
+          </li>
+          <li>
+            <span class="label">3</span>&nbsp;
+            <a ng-click="switchStep(3)">User information</a>
+            <span class="divider">></span>
+          </li>
+          <li>
+            <span class="label">4</span>&nbsp;
+            <a ng-click="switchStep(4)">Credit card details</a>
+            <span class="divider">></span>
+          </li>
+          <li>
+            <span class="label">5</span>&nbsp;
+            <a ng-click="switchStep(5)">Confirmation</a>
+          </li>
         </ul>
 
-        <p>Consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <ul>
+
+          <li ng-show="purchaser.step == 1">
+            <p>We are providing many options for your Oneline number.</p>
+
+            <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Local numbers
+            <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Virtual numbers
+            <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Premium
+
+          </li>
+
+          <li ng-show="purchaser.step == 2">
+            <p>Payment types</p>
+          </li>
+
+          <li ng-show="purchaser.step == 3">
+            <p>User information</p>
+          </li>
+
+          <li ng-show="purchaser.step == 4">
+            <p>Credit card details</p>
+          </li>
+
+          <li ng-show="purchaser.step == 5">
+            <p>Confirmation</p>
+          </li>
+
+        </ul>
+
+        <hr>
+
+        <ul class="pager">
+          <li class="previous">
+            <a ng-click="decreaseStep()">Previous</a>
+          </li>
+          <li class="next">
+            <a ng-click="increaseStep()">Next</a>
+          </li>
+        </ul>
+
       </div>
       <!-- end purchaser -->
 
