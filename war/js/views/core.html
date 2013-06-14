@@ -60,28 +60,32 @@
         <ul class="breadcrumb">
           <li>
             <span class="label">1</span>&nbsp;
-            <a ng-click="switchStep(1)" ng-show="purchaser.step < 2">Buy number</a>
-            <span ng-hide="purchaser.step < 2">Buy number</span>
+            <a ng-click="switchStep(1)" ng-show="purchaser.step > 1">Buy number</a>
+            <span ng-show="purchaser.step < 2">Buy number</span>
             <span class="divider">></span>
           </li>
           <li>
             <span class="label">2</span>&nbsp;
-            <a ng-click="switchStep(2)">Payment types</a>
+            <a ng-click="switchStep(2)" ng-show="purchaser.step > 2">Payment types</a>
+            <span ng-show="purchaser.step < 3">Payment types</span>
             <span class="divider">></span>
           </li>
           <li>
             <span class="label">3</span>&nbsp;
-            <a ng-click="switchStep(3)">User information</a>
+            <a ng-click="switchStep(3)" ng-show="purchaser.step > 3">User information</a>
+            <span ng-show="purchaser.step < 4">User information</span>
             <span class="divider">></span>
           </li>
           <li>
             <span class="label">4</span>&nbsp;
-            <a ng-click="switchStep(4)">Credit card details</a>
+            <a ng-click="switchStep(4)" ng-show="purchaser.step > 4">Credit card details</a>
+            <span ng-show="purchaser.step < 5">Credit card details</span>
             <span class="divider">></span>
           </li>
           <li>
             <span class="label">5</span>&nbsp;
-            <a ng-click="switchStep(5)">Confirmation</a>
+            <a ng-click="switchStep(5)" ng-show="purchaser.step > 5">Confirmation</a>
+            <span ng-show="purchaser.step < 6">Confirmation</span>
           </li>
         </ul>
 
@@ -118,10 +122,10 @@
 
         <ul class="pager">
           <li class="previous">
-            <a ng-click="decreaseStep()">Previous</a>
+            <a ng-click="decreaseStep()" ng-show="purchaser.step > 1">Previous</a>
           </li>
           <li class="next">
-            <a ng-click="increaseStep()">Next</a>
+            <a ng-click="increaseStep()" ng-show="purchaser.step < 5">Next</a>
           </li>
         </ul>
 
