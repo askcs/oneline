@@ -6,7 +6,14 @@
 
 <!-- app -->
 <div class="row-fluid">
+
+
   <div class="tabbable tabs-left">
+
+
+
+
+
     
     <!-- tabs -->
     <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
@@ -45,8 +52,16 @@
     <!-- end tabs -->
 
 
+
+
+
+
+
     <!-- tabs content -->
     <div class="tab-content">
+
+
+
 
 
 
@@ -89,16 +104,30 @@
           </li>
         </ul>
 
-        <ul>
+        <ul style="list-style: none; margin: 0; padding: 0;">
 
           <li ng-show="purchaser.step == 1">
-            <h4>Number types</h4>
-            <p>We are providing many options for your Oneline number.</p>
 
-            <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Local numbers
-            <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Virtual numbers
-            <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Premium
+            <div class="row-fluid">
 
+              <div class="span9">
+                <h4>Number types</h4>
+                <p>We are providing many options for your Oneline number.</p>
+
+                <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Local numbers
+                <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Virtual numbers
+                <input type="radio" name="order.type" ng-model="order.type" value="">&nbsp;Premium
+              </div>
+
+              <div class="span3">
+                <div style="display: block;" class="text-center">
+                  <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 10em; line-height: 1.2em;"></span>
+                </div>
+                <h4>What kind of number should I buy?</h4>
+                <p>First impression is always important. Your number should tell you about something about you or just you!</p>
+              </div>
+
+            </div>
           </li>
 
           <li ng-show="purchaser.step == 2">
@@ -138,6 +167,9 @@
 
 
 
+
+
+
       <!-- manager -->
       <div class="tab-pane {{(views.manager==true) && 'active'}}" id="manager">
         <div class="tab-header">
@@ -150,7 +182,7 @@
           <div class="span9">
             <form class="form-inline well">
               <input type="text" class="input-medium" placeholder="Label">&nbsp;
-              <input type="password" class="input-medium" placeholder="Telefon number">&nbsp;
+              <input type="password" class="input-large" placeholder="Telefon number">&nbsp;
               <button type="submit" class="btn">Add</button>
             </form>
 
@@ -194,10 +226,10 @@
 
           <div class="span3">
             <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 10em; line-height: 1.2em;"></span>
+              <span aria-hidden="true" class="icomoon icomoon-phone-7" style="font-size: 10em; line-height: 1.2em;"></span>
             </div>
-            <h4>What kind of number should I buy?</h4>
-            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
+            <h4>Proin consequat lacus nisl,</h4>
+            <p>Nulla adipiscing imperdiet dictum. Nulla sagittis augue magna, lobortis egestas massa pretium vel. Nam congue malesuada nisi, sed elementum odio commodo mollis. Morbi sed enim imperdiet, suscipit leo non, ultricies massa. Proin a tincidunt urna.</p>
           </div>
 
         </div>
@@ -207,16 +239,65 @@
 
 
 
+
+
+
       <!-- notifier -->
       <div class="tab-pane {{(views.notifier==true) && 'active'}}" id="notifier">
         <div class="tab-header">
-          <h3 class="pull-left">Call notifications</h3>
+          <h3 class="pull-left">Missed Call Notificationss</h3>
         </div>
         <hr>
-        <p>Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+        <div class="row-fluid">
+
+          <div class="span9">
+            <p>Your smart secretary can send notifcations about your missed calls.</p>
+
+            <form class="form-inline">
+
+              <table class="table table-striped">
+                <tr>
+                  <td>
+                    <label class="checkbox">
+                      <input type="checkbox"> Email Notification
+                    </label>
+                  </td>
+                  <td>
+                    <input type="text" class="input-large" placeholder="">
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <label class="checkbox">
+                      <input type="checkbox"> SMS Notification
+                    </label>
+                  </td>
+                  <td>
+                    <input type="text" class="input-large" placeholder="Registered mobile phone number">
+                  </td>
+                </tr>
+              </table>
+
+              <button type="submit" class="btn">Save changes</button>
+            </form>
+
+          </div>
+
+          <div class="span3">
+            <div style="display: block;" class="text-center">
+              <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 10em; line-height: 1.2em;"></span>
+            </div>
+            <h4>What kind of number should I buy?</h4>
+            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
+          </div>
+
+        </div>
       </div>
       <!-- end notifier -->
+
+
+
 
 
 
@@ -226,12 +307,105 @@
           <h3 class="pull-left">Recent calls</h3>
         </div>
         <hr>
-        <p>Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur.</p>
+
+        <div class="row-fluid">
+
+          <div class="span9">
+            <p>Oneline provides all your recent calls only to you.</p>
+
+            <form class="form-inline well">
+              <div class="control-group pull-left" style="margin-right: 5px">
+                <input type="text" 
+                        style="width: 190px" 
+                        name="daterange" 
+                        ng-model="daterange" 
+                        daterangepicker="" 
+                        class="ng-pristine ng-valid" 
+                        data-toggle="daterangepicker"
+                        placeholder="16-06-2013 / 23-06-2013">
+                <i class="icon-calendar" style="position: relative; margin: 1px 0 0 -24px"></i>
+              </div>
+            </form>
+
+            <!-- <h4>Numbers</h4> -->
+            
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th><a href="#">Call type</a></th>
+                  <th><a href="#">From</a></th>
+                  <th><a href="#">Date</a></th>
+                  <th><a href="#">Duration</a></th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="label label-warning">Missed</span></td>
+                  <td>+31 4520542</td>
+                  <td>17-6-2013 14:38:11</td>
+                  <td>00:00:00</td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-mini">Block</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="label label-important">Blacklist</span></td>
+                  <td>+31 1234569</td>
+                  <td>17-6-2013 15:00:32</td>
+                  <td>00:00:00</td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-mini">Allow</button>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td><span class="label label-success">Answered</span></td>
+                  <td>+31 2352345</td>
+                  <td>17-6-2013 15:15:11</td>
+                  <td>00:02:47</td>
+                  <td>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-mini">Block</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="pagination pagination-right">
+              <ul>
+                <li class="disabled"><a href="#">«</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">»</a></li>
+             </ul>
+            </div>
+
+          </div>
+
+          <div class="span3">
+            <div style="display: block;" class="text-center">
+              <span aria-hidden="true" class="icomoon icomoon-calendar-5" style="font-size: 10em; line-height: 1.2em;"></span>
+            </div>
+            <h4>Quisque condimentum at nibh vel convallis.</h4>
+            <p>Duis pellentesque sagittis justo in lacinia. Sed nec dignissim metus. Nam est felis, mattis eget volutpat et, aliquet et massa.</p>
+            <p>Pellentesque eget ante non mauris aliquet iaculis quis sed orci. Curabitur quis magna ac mauris adipiscing bibendum. Duis semper semper ante. Vestibulum euismod lorem id dignissim sagittis.</p>
+          </div>
+
+        </div>
+
       </div>
       <!-- end reporter -->
+
+
+
 
 
 
@@ -241,11 +415,62 @@
           <h3 class="pull-left">Blacklist</h3>
         </div>
         <hr>
-        <p>Incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat.</p>
+
+        <div class="row-fluid">
+
+          <div class="span9">
+            <p>Oneline can block any unwanted incoming calls and let them know kindly.</p>
+
+            <form class="form-inline well">
+              <input type="text" class="input-medium" placeholder="Label">&nbsp;
+              <input type="password" class="input-large" placeholder="Telefon number">&nbsp;
+              <button type="submit" class="btn">Add to blacklist</button>
+            </form>
+
+            <!-- <h4>Numbers</h4> -->
+            
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Label</th>
+                  <th>Telefon number</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Home</td>
+                  <td>+31 (78) 7501234</td>
+                  <td>
+                    <button type="button" class="btn btn-mini">Allow</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Work</td>
+                  <td>+31 (629) 123456</td>
+                  <td>
+                    <button type="button" class="btn btn-mini">Allow</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+          <div class="span3">
+            <div style="display: block;" class="text-center">
+              <span aria-hidden="true" class="icomoon icomoon-user-block-2" style="font-size: 10em; line-height: 1.2em;"></span>
+            </div>
+            <h4>Aenean erat neque, dignissim non magna vitae</h4>
+            <p>Integer risus sapien, adipiscing sit amet quam vel, tempus feugiat libero. Nulla adipiscing imperdiet dictum. Nulla sagittis augue magna, lobortis egestas massa pretium vel. Nam congue malesuada nisi, sed elementum odio commodo mollis. Morbi sed enim imperdiet, suscipit leo non, ultricies massa. Proin a tincidunt urna.</p>
+          </div>
+        </div>
+
       </div>
       <!-- end guarder -->
+
+
+
 
 
 
