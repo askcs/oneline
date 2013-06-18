@@ -20,11 +20,16 @@ angular.module('WebPaige.Controllers.Core', [])
 		$rootScope.fixStyles();
 
 
-		$scope.countries = $rootScope.config.countries;
+		/**
+		 * Pass containers
+		 */
+		$scope.countries 	= $rootScope.config.countries;
+		$scope.types 			= $rootScope.config.types;
 
-		$scope.types = $rootScope.config.types;
 
-
+		/**
+		 * Set defaults
+		 */
 		$scope.defaults = {
 			country: {
         id:     9,
@@ -32,12 +37,36 @@ angular.module('WebPaige.Controllers.Core', [])
       }
 		}
 
+
 	  /**
 	   * General order container
 	   */
 	  $scope.order = {
 	  	type: 	''
 	  };
+
+
+	  /**
+	   * Set number type
+	   */
+	  $scope.setNumberType = function (type)
+	  {  	
+		  $scope.number = {
+		  	local: 		false,
+		  	virtual: 	false,
+		  	premium: 	false
+		  };
+
+		  $scope.number[type] = true;
+
+		  $scope.order.type = type;
+	  };
+
+
+	  /**
+	   * Set default number type
+	   */
+	  $scope.setNumberType('local');
 
 
 	  /**
