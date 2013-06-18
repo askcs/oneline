@@ -1,7 +1,9 @@
 
 var data_number_types = ['local', 'virtual', 'premium'];
 
-var data_countries = ['nederland'];
+var data_countries = ['United Kingdom', 'Austria', 'Belgium', 'Croatia', 'Czech Republic', 'Denmark', 'Estonia', 'Finland', 'France', 'Germany', 
+											'Greece', 'Hungary', 'Ireland', 'Italy', 'Luxembourg', 'Netherlands', 'Norway', 'Poland', 'Portugal', 'Russian Federation',
+											'Spain', 'Sweden', 'Switzerland', 'Turkey', 'United Kingdom'];
 
 var data_regions = ['010', '020', '030', '040', '050'];
 

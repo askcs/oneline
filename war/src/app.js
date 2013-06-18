@@ -617,32 +617,32 @@ angular.module('WebPaige',[
  * Fetch libraries with AMD (if they are not present) and save in localStorage
  * If a library is presnet it wont be fetched from server
  */
-// if ('localStorage' in window && window['localStorage'] !== null)
-// {
-//   basket
-//     .require(
-//       { url: 'libs/chosen/chosen.jquery.min.js' },
-//       { url: 'libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
-//       { url: 'libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
-//       { url: 'libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
-//       { url: 'libs/daterangepicker/1.1.0/daterangepicker.min.js' },
-//       { url: 'libs/sugar/1.3.7/sugar.min.js' },
-//       { url: 'libs/raphael/2.1.0/raphael-min.js' }
-//     )
-//     .then(function ()
-//       {
-//         basket
-//           .require(
-//             { url: 'libs/g-raphael/0.5.1/g.raphael-min.js' },
-//             { url: 'libs/g-raphael/0.5.1/g.pie-min.js' }
-//           )
-//           .then(function ()
-//           {
-//             // console.warn('basket parsed scripts..');
-//         });
-//       }
-//     );
-// };/*jslint node: true */
+if ('localStorage' in window && window['localStorage'] !== null)
+{
+  basket
+    .require(
+      { url: 'libs/chosen/chosen.jquery.min.js' },
+      { url: 'libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
+      { url: 'libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
+      { url: 'libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
+      { url: 'libs/daterangepicker/1.1.0/daterangepicker.min.js' },
+      { url: 'libs/sugar/1.3.7/sugar.min.js' },
+      { url: 'libs/raphael/2.1.0/raphael-min.js' }
+    )
+    .then(function ()
+      {
+        basket
+          .require(
+            { url: 'libs/g-raphael/0.5.1/g.raphael-min.js' },
+            { url: 'libs/g-raphael/0.5.1/g.pie-min.js' }
+          )
+          .then(function ()
+          {
+            // console.warn('basket parsed scripts..');
+        });
+      }
+    );
+};/*jslint node: true */
 /*global angular */
 /*global profile */
 'use strict';
@@ -807,7 +807,114 @@ angular.module('WebPaige')
       {
         _this.timeline.config.states[state] = _this.statesall[state];
       });
+    },
+
+
+
+
+    countries: [
+      {
+        id:     1,
+        label: 'United Kingdom'
+      }, 
+      {
+        id:     2,
+        label: 'Austria'
+      }, 
+      {
+        id:     3,
+        label: 'Belgium'
+      }, 
+      {
+        id:     4,
+        label: 'France'
+      }, 
+      {
+        id:     5,
+        label: 'Germany'
+      }, 
+      {
+        id:     6,
+        label: 'Ireland'
+      }, 
+      {
+        id:     7,
+        label: 'Italy'
+      }, 
+      {
+        id:     8,
+        label: 'Luxembourg'
+      }, 
+      {
+        id:     9,
+        label: 'Netherlands'
+      }, 
+      {
+        id:     10,
+        label: 'Poland'
+      }, 
+      {
+        id:     11,
+        label: 'Portugal'
+      }, 
+      {
+        id:     12,
+        label: 'Spain'
+      }, 
+      {
+        id:     13,
+        label: 'Sweden'
+      }, 
+      {
+        id:     14,
+        label: 'Switzerland'
+      }, 
+      {
+        id:     15,
+        label: 'Turkey'
+      }, 
+      {
+        id:     16,
+        label: 'United Kingdom'
+      }
+    ],
+
+    types: {
+      number: [
+        {
+          id:    1,
+          label: 'Local Numbers'
+        },
+        {
+          id:    2,
+          label: 'Virtual Numbers'
+        },
+        {
+          id:    3,
+          label: 'Premium'
+        }
+      ],
+
+      virtual: [
+        {
+          id:     1,
+          label:  'Personal assistant services (84-87)'
+        },
+        {
+          id:     2,
+          label:  'VPN (82)'
+        },
+        {
+          id:     3,
+          label:  'Elektronisch communicatie (85 - 91)'
+        },
+        {
+          id:     4,
+          label:  'Company numbers (88)'
+        }
+      ]
     }
+
   }
 );;/*jslint node: true */
 /*global angular */
@@ -2981,6 +3088,18 @@ angular.module('WebPaige.Controllers.Core', [])
 		$rootScope.fixStyles();
 
 
+		$scope.countries = $rootScope.config.countries;
+
+		$scope.types = $rootScope.config.types;
+
+
+		$scope.defaults = {
+			country: {
+        id:     9,
+        label: 'Netherlands'
+      }
+		}
+
 	  /**
 	   * General order container
 	   */
@@ -3046,10 +3165,10 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
 	  $scope.switchStep = function (step)
 	  {
-	    $scope.$watch(step, function ()
-	    {
+	    // $scope.$watch(step, function ()
+	    // {
 		    $scope.purchaser = {step: step};
-	    });
+	    // });
 	  };
 
 	  $scope.switchStep(1);
@@ -3063,6 +3182,12 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
+
+
+	  $scope.setCountry = function ()
+	  {
+	  	console.log('selected country -->', $scope.order);
+	  }
 
 	}
 ]);

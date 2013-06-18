@@ -20,6 +20,18 @@ angular.module('WebPaige.Controllers.Core', [])
 		$rootScope.fixStyles();
 
 
+		$scope.countries = $rootScope.config.countries;
+
+		$scope.types = $rootScope.config.types;
+
+
+		$scope.defaults = {
+			country: {
+        id:     9,
+        label: 'Netherlands'
+      }
+		}
+
 	  /**
 	   * General order container
 	   */
@@ -85,10 +97,10 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
 	  $scope.switchStep = function (step)
 	  {
-	    $scope.$watch(step, function ()
-	    {
+	    // $scope.$watch(step, function ()
+	    // {
 		    $scope.purchaser = {step: step};
-	    });
+	    // });
 	  };
 
 	  $scope.switchStep(1);
@@ -102,6 +114,12 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
+
+
+	  $scope.setCountry = function ()
+	  {
+	  	console.log('selected country -->', $scope.order);
+	  }
 
 	}
 ]);

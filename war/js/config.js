@@ -163,6 +163,113 @@ angular.module('WebPaige')
       {
         _this.timeline.config.states[state] = _this.statesall[state];
       });
+    },
+
+
+
+
+    countries: [
+      {
+        id:     1,
+        label: 'United Kingdom'
+      }, 
+      {
+        id:     2,
+        label: 'Austria'
+      }, 
+      {
+        id:     3,
+        label: 'Belgium'
+      }, 
+      {
+        id:     4,
+        label: 'France'
+      }, 
+      {
+        id:     5,
+        label: 'Germany'
+      }, 
+      {
+        id:     6,
+        label: 'Ireland'
+      }, 
+      {
+        id:     7,
+        label: 'Italy'
+      }, 
+      {
+        id:     8,
+        label: 'Luxembourg'
+      }, 
+      {
+        id:     9,
+        label: 'Netherlands'
+      }, 
+      {
+        id:     10,
+        label: 'Poland'
+      }, 
+      {
+        id:     11,
+        label: 'Portugal'
+      }, 
+      {
+        id:     12,
+        label: 'Spain'
+      }, 
+      {
+        id:     13,
+        label: 'Sweden'
+      }, 
+      {
+        id:     14,
+        label: 'Switzerland'
+      }, 
+      {
+        id:     15,
+        label: 'Turkey'
+      }, 
+      {
+        id:     16,
+        label: 'United Kingdom'
+      }
+    ],
+
+    types: {
+      number: [
+        {
+          id:    1,
+          label: 'Local Numbers'
+        },
+        {
+          id:    2,
+          label: 'Virtual Numbers'
+        },
+        {
+          id:    3,
+          label: 'Premium'
+        }
+      ],
+
+      virtual: [
+        {
+          id:     1,
+          label:  'Personal assistant services (84-87)'
+        },
+        {
+          id:     2,
+          label:  'VPN (82)'
+        },
+        {
+          id:     3,
+          label:  'Elektronisch communicatie (85 - 91)'
+        },
+        {
+          id:     4,
+          label:  'Company numbers (88)'
+        }
+      ]
     }
+
   }
 );
