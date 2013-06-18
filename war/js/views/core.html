@@ -17,7 +17,7 @@
 
       <li class="{{(views.purchaser==true) && 'active'}}">
         <a href="#purchaser" 
-            ng-click="setViewTo('purchaser')" 
+            ng-click="resetPurchaser(); setViewTo('purchaser')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-cart-4"></span> Buy number</a>
       </li>
 

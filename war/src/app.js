@@ -3103,6 +3103,19 @@ angular.module('WebPaige.Controllers.Core', [])
         id:     9,
         label: 'Netherlands'
       }
+		};
+
+
+		/**
+		 * Reset purchaser
+		 */
+		$scope.resetPurchaser = function ()
+		{
+			$scope.order = {
+				type: 	'local'
+			};
+
+			$scope.setNumberType('local');
 		}
 
 
