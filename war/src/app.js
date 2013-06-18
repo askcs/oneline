@@ -814,70 +814,126 @@ angular.module('WebPaige')
 
     countries: [
       {
-        id:     1,
+        id:     44,
         label: 'United Kingdom'
-      }, 
+      },
       {
-        id:     2,
-        label: 'Austria'
-      }, 
-      {
-        id:     3,
+        id:     32,
         label: 'Belgium'
       }, 
       {
-        id:     4,
+        id:     33,
         label: 'France'
       }, 
       {
-        id:     5,
+        id:     49,
         label: 'Germany'
-      }, 
+      },
       {
-        id:     6,
-        label: 'Ireland'
-      }, 
-      {
-        id:     7,
-        label: 'Italy'
-      }, 
-      {
-        id:     8,
-        label: 'Luxembourg'
-      }, 
-      {
-        id:     9,
+        id:     31,
         label: 'Netherlands'
-      }, 
+      },
       {
-        id:     10,
-        label: 'Poland'
-      }, 
-      {
-        id:     11,
-        label: 'Portugal'
-      }, 
-      {
-        id:     12,
-        label: 'Spain'
-      }, 
-      {
-        id:     13,
-        label: 'Sweden'
-      }, 
-      {
-        id:     14,
-        label: 'Switzerland'
-      }, 
-      {
-        id:     15,
+        id:     90,
         label: 'Turkey'
-      }, 
-      {
-        id:     16,
-        label: 'United Kingdom'
       }
     ],
+
+
+    regions: {
+      31: [
+        {
+          id:     297,
+          label:  'Aalsmeer'
+        },
+        {
+          id:     72,
+          label:  'Alkmaar'
+        },
+        {
+          id:     546,
+          label:  'Almelo'
+        },
+        {
+          id:     36,
+          label:  'Almere'
+        },
+        {
+          id:     172,
+          label:  'Alphen A/D Rijn'
+        },
+        {
+          id:     33,
+          label:  'Amersfoort'
+        },
+        {
+          id:     20,
+          label:  'Amsterdam'
+        },
+        {
+          id:     55,
+          label:  'Apeldoorn'
+        },
+        {
+          id:     26,
+          label:  'Arnhem'
+        },
+        {
+          id:     10,
+          label:  'Rotterdam'
+        }
+      ],
+      90: [
+        {
+          id:     1,
+          label:  'Turkey 1'
+        },
+        {
+          id:     2,
+          label:  'Turkey 2'
+        }
+      ],
+      44: [
+        {
+          id:     1,
+          label:  'United Kingdom 1'
+        },
+        {
+          id:     2,
+          label:  'United Kingdom 2'
+        }
+      ],
+      49: [
+        {
+          id:     1,
+          label:  'Germany 1'
+        },
+        {
+          id:     2,
+          label:  'Germany 2'
+        }
+      ],
+      33: [
+        {
+          id:     1,
+          label:  'France 1'
+        },
+        {
+          id:     2,
+          label:  'France 2'
+        }
+      ],
+      32: [
+        {
+          id:     1,
+          label:  'Belgium 1'
+        },
+        {
+          id:     2,
+          label:  'Belgium 2'
+        }
+      ]
+    },
 
     types: {
       number: [
@@ -3108,13 +3164,19 @@ angular.module('WebPaige.Controllers.Core', [])
 		 * Set defaults
 		 */
 		$scope.defaults = {
-			country: {
-        id:     9,
-        label: 'Netherlands'
-      }
+			country: 31
 		};
 
-		$scope.order.country = $scope.defaults.country.id;
+		$scope.order.country = $scope.defaults.country;
+
+
+	  /**
+	   * Watcher on order container
+	   */
+    $scope.$watch('order', function ()
+    {
+	  	console.log('order -->', $scope.order);
+    }, true);
 
 
 		/**
@@ -3144,7 +3206,7 @@ angular.module('WebPaige.Controllers.Core', [])
 
 		  $scope.number[type] = true;
 
-		  $scope.order.type = type;
+		  $scope.order.type 	= type;
 	  };
 
 
@@ -3240,15 +3302,6 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
-
-
-	  /**
-	   * Watcher on order container
-	   */
-    $scope.$watch('order', function ()
-    {
-	  	console.log('order -->', $scope.order);
-    }, true);
 
 	}
 ]);

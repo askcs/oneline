@@ -39,11 +39,10 @@
       <li class="{{(views.guarder==true) && 'active'}}">
         <a ng-click="setViewTo('guarder')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span> Blacklist</a>
-      </li>
+        </li>
 
     </ul>
     <!-- end tabs -->
-
 
 
 
@@ -114,6 +113,7 @@
 
                 <form class="form-horizontal">
 
+                  <!-- number types -->
                   <div class="control-group well">
                     <label class="control-label" for="inputEmail">Types</label>
                     <div class="controls">
@@ -136,44 +136,56 @@
                       </ul>
                     </div>
                   </div>
+                  <!-- end number types -->
 
+                  <!-- countries -->
                   <div class="control-group well" ng-show="number.local || number.virtual">
                     <label class="control-label" for="inputPassword">Country</label>
                     <div class="controls">
                       <select ng-model="order.country" 
-                              ng-options="country.id as country.label for country in countries"
-                              >
+                              ng-options="country.id as country.label for country in countries">
                       </select>
                     </div>
                   </div>
+                  <!-- end countries -->
 
                   <!-- regions local -->
                   <div class="control-group well" ng-show="number.local">
                     <label class="control-label" for="inputPassword">Regions (Local)</label>
+                    <div class="controls">
+                      <select ng-model="order.region" 
+                              ng-options="region.id as region.label for region in regions"
+                              ng-click="updateRegions()">
+                      </select>
+                    </div>
                   </div>
+                  <!-- end regions local -->
 
                   <!-- regions virtual -->
                   <div class="control-group well" ng-show="number.virtual">
                     <label class="control-label" for="inputPassword">Regions (Virtual)</label>
                   </div>
+                  <!-- end regions virtual -->
 
                   <!-- numbers local -->
                   <div class="control-group well" ng-show="number.local">
                     <label class="control-label" for="inputPassword">Numbers (Local)</label>
                   </div>
+                  <!-- end numbers local -->
 
                   <!-- numbers virtual -->
                   <div class="control-group well" ng-show="number.virtual">
                     <label class="control-label" for="inputPassword">Numbers (Virtual)</label>
                   </div>
+                  <!-- end numbers virtual -->
 
                   <!-- preimum stuff -->
                   <div class="control-group well" ng-show="number.premium">
                     <label class="control-label" for="inputPassword">Premium stuff</label>
                   </div>
+                  <!-- end preimum stuff -->
 
                 </form>
-
 
 
               </div>

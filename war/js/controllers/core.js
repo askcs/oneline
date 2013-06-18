@@ -40,13 +40,19 @@ angular.module('WebPaige.Controllers.Core', [])
 		 * Set defaults
 		 */
 		$scope.defaults = {
-			country: {
-        id:     9,
-        label: 'Netherlands'
-      }
+			country: 31
 		};
 
-		$scope.order.country = $scope.defaults.country.id;
+		$scope.order.country = $scope.defaults.country;
+
+
+	  /**
+	   * Watcher on order container
+	   */
+    $scope.$watch('order', function ()
+    {
+	  	console.log('order -->', $scope.order);
+    }, true);
 
 
 		/**
@@ -76,7 +82,7 @@ angular.module('WebPaige.Controllers.Core', [])
 
 		  $scope.number[type] = true;
 
-		  $scope.order.type = type;
+		  $scope.order.type 	= type;
 	  };
 
 
@@ -172,15 +178,6 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
-
-
-	  /**
-	   * Watcher on order container
-	   */
-    $scope.$watch('order', function ()
-    {
-	  	console.log('order -->', $scope.order);
-    }, true);
 
 	}
 ]);
