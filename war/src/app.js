@@ -3088,6 +3088,15 @@ angular.module('WebPaige.Controllers.Core', [])
 		$rootScope.fixStyles();
 
 
+	  /**
+	   * General order container
+	   */
+	  $scope.order = {
+	  	type: 	'',
+	  	country: {}
+	  };
+
+
 		/**
 		 * Pass containers
 		 */
@@ -3105,6 +3114,8 @@ angular.module('WebPaige.Controllers.Core', [])
       }
 		};
 
+		$scope.order.country = $scope.defaults.country.id;
+
 
 		/**
 		 * Reset purchaser
@@ -3112,19 +3123,12 @@ angular.module('WebPaige.Controllers.Core', [])
 		$scope.resetPurchaser = function ()
 		{
 			$scope.order = {
-				type: 	'local'
+				type: 		'local',
+				country: 	$scope.defaults.country.id
 			};
 
 			$scope.setNumberType('local');
-		}
-
-
-	  /**
-	   * General order container
-	   */
-	  $scope.order = {
-	  	type: 	''
-	  };
+		};
 
 
 	  /**
@@ -3213,23 +3217,38 @@ angular.module('WebPaige.Controllers.Core', [])
 	    // });
 	  };
 
+
+	  /**
+	   * Switch step in default value
+	   */
 	  $scope.switchStep(1);
 
+
+	  /**
+	   * Go further in steps
+	   */
 	  $scope.increaseStep = function ()
 	  {
 	  	if ($scope.purchaser.step < 5) $scope.switchStep($scope.purchaser.step + 1);
 	  };
 
+
+	  /**
+	   * Go back in steps
+	   */
 	  $scope.decreaseStep = function ()
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
 
 
-	  $scope.setCountry = function ()
-	  {
-	  	console.log('selected country -->', $scope.order);
-	  }
+	  /**
+	   * Watcher on order container
+	   */
+    $scope.$watch('order', function ()
+    {
+	  	console.log('order -->', $scope.order);
+    }, true);
 
 	}
 ]);

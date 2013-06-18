@@ -1,5 +1,6 @@
-
-<br><br>
+<div class="page-header">
+  <h2>OneLine</h2>
+</div>
 
 <!-- app -->
 <div class="row-fluid">
@@ -16,32 +17,27 @@
     <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
 
       <li class="{{(views.purchaser==true) && 'active'}}">
-        <a href="#purchaser" 
-            ng-click="resetPurchaser(); setViewTo('purchaser')" 
+        <a ng-click="resetPurchaser(); setViewTo('purchaser')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-cart-4"></span> Buy number</a>
       </li>
 
       <li class="{{(views.manager==true) && 'active'}}">
-        <a href="#manager" 
-            ng-click="setViewTo('manager')" 
+        <a ng-click="setViewTo('manager')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Add number</a>
       </li>
 
       <li class="{{(views.notifier==true) && 'active'}}">
-        <a href="#notifier" 
-            ng-click="setViewTo('notifier')" 
+        <a ng-click="setViewTo('notifier')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span> Call notifications</a>
       </li>
 
       <li class="{{(views.reporter==true) && 'active'}}">
-        <a href="#reporter" 
-            ng-click="setViewTo('reporter')" 
+        <a ng-click="setViewTo('reporter')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span> Recent calls</a>
       </li>
 
       <li class="{{(views.guarder==true) && 'active'}}">
-        <a href="#guarder" 
-            ng-click="setViewTo('guarder')" 
+        <a ng-click="setViewTo('guarder')" 
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span> Blacklist</a>
       </li>
 
@@ -63,7 +59,7 @@
 
 
       <!-- purchaser -->
-      <div class="tab-pane {{(views.purchaser==true) && 'active'}}" id="purchaser">
+      <div class="tab-pane {{(views.purchaser==true) && 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Buy number</h3>
         </div>
@@ -146,8 +142,7 @@
                     <div class="controls">
                       <select ng-model="order.country" 
                               ng-options="country.id as country.label for country in countries"
-                              ng-selected="defaults.country.id"
-                              ng-change="setCountry()">
+                              >
                       </select>
                     </div>
                   </div>
@@ -255,7 +250,7 @@
 
 
       <!-- manager -->
-      <div class="tab-pane {{(views.manager==true) && 'active'}}" id="manager">
+      <div class="tab-pane {{(views.manager==true) && 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Add number</h3>
         </div>
@@ -327,7 +322,7 @@
 
 
       <!-- notifier -->
-      <div class="tab-pane {{(views.notifier==true) && 'active'}}" id="notifier">
+      <div class="tab-pane {{(views.notifier==true) && 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Missed Call Notificationss</h3>
         </div>
@@ -386,7 +381,7 @@
 
 
       <!-- reporter -->
-      <div class="tab-pane {{(views.reporter==true) && 'active'}}" id="reporter">
+      <div class="tab-pane {{(views.reporter==true) && 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Recent calls</h3>
         </div>
@@ -502,7 +497,7 @@
 
 
       <!-- guarder -->
-      <div class="tab-pane {{(views.guarder==true) && 'active'}}" id="guarder">
+      <div class="tab-pane {{(views.guarder==true) && 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Blacklist</h3>
         </div>
