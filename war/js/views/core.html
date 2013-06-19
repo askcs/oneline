@@ -233,21 +233,38 @@
                   <div class="control-group well" style="position: relative;" ng-show="(order.package==2) && order.virtual">
                     <label class="control-label" for="inputPassword">Virtual area code</label>
                     <div class="controls">
-                      <select ng-model="order.range" 
-                              ng-options="range.id as range.label for range in ranges">
-                      </select>
+                      <ul style="list-style: none; margin: 0; padding: 0; margin-top: 5px;">
+                        <li ng-repeat="range in ranges" style="display: inline; float: left; width: 60px; margin: 0 15px 0 0;">
+                          <label class="radio">
+                            <input type="radio" ng-model="order.range" value="{{range}}" ng-click="setVirtualArea()">&nbsp;{{range}}
+                          </label>
+                        </li>
+                      </ul>
                     </div>
 
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">4</div>
                   </div>
                   <!-- end ranges virtual -->
-
+                  
 
 
                   <!-- numbers virtual -->
                   <div class="control-group well" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
                     <label class="control-label" for="inputPassword">Numbers (Virtual)</label>
-                    <div class="controls"></div>
+                    <div class="controls">
+
+                      <table class="table table-striped">
+                        <tr ng-repeat="number in numbers">
+                          <td>
+                            <label class="radio">
+                              <input type="radio" ng-model="order.number" value="{{number}}">&nbsp;
+                              +{{order.country}} ({{order.range}}) {{number}}
+                            </label>
+                          </td>
+                        </tr>
+                      </table>
+
+                    </div>
 
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">4</div>
                   </div>
@@ -255,14 +272,14 @@
 
 
 
-                  <!-- preimum stuff -->
+                  <!-- premium stuff -->
                   <div class="control-group well" style="position: relative;" ng-show="(order.package==3)">
                     <label class="control-label" for="inputPassword">Premium stuff</label>
                     <div class="controls"></div>
 
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">2</div>
                   </div>
-                  <!-- end preimum stuff -->
+                  <!-- end premium stuff -->
 
 
 

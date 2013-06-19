@@ -56,7 +56,8 @@ angular.module('WebPaige.Controllers.Core', [])
     {
 	  	console.log('order -->', $scope.order);
 
-	  	$scope.regions = $rootScope.config.regions[$scope.order.country];
+	  	$scope.regions 	= $rootScope.config.regions[$scope.order.country];
+	  	$scope.ranges 	= $rootScope.config.ranges[$scope.order.virtual];
 
     }, true);
 
@@ -83,7 +84,17 @@ angular.module('WebPaige.Controllers.Core', [])
 		$scope.setRegion = function ()
 		{
 			if ($scope.order.region)
-				$scope.numbers = Generators.list($scope.order.country, $scope.order.region);
+				$scope.numbers = Generators.list();
+		}
+
+
+		/**
+		 * Set virtual area code
+		 */
+		$scope.setVirtualArea = function ()
+		{
+			if ($scope.order.virtual)
+				$scope.numbers = Generators.list();
 		}
 
 

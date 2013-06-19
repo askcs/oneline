@@ -26,7 +26,7 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
       /**
        * Produce number
        */
-      number: function (country, region)
+      number: function ()
       {
         return Math.floor( Math.random() * 9000000 );
       },
@@ -34,16 +34,18 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
       /**
        * Produce numbers list
        */
-      list: function (country, region)
+      list: function ()
       {
         var numbers = [];
 
         for (var i = 0; i < this.range(); i++)
         {
-          var number = String(this.number(country, region));
+          var number = String(this.number());
 
           if (number.length > 6) numbers.push(Number(number));
         }
+
+        console.log('passed numbers ->', numbers);
 
         return numbers;
       }

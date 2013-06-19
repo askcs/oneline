@@ -969,22 +969,10 @@ angular.module('WebPaige')
     ],
 
     ranges: {
-      1: {
-        min:    84,
-        max:    87
-      },
-      2: {
-        min:    82,
-        max:    82
-      },
-      3: {
-        min:    85,
-        max:    91
-      },
-      4: {
-        min:    88,
-        max:    88
-      }
+      1: [84, 85, 86, 87],
+      2: [82],
+      3: [85, 86, 87, 88, 89, 90, 91],
+      4: [88]
     }
 
   }
@@ -2459,7 +2447,7 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
       /**
        * Produce number
        */
-      number: function (country, region)
+      number: function ()
       {
         return Math.floor( Math.random() * 9000000 );
       },
@@ -2467,16 +2455,18 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
       /**
        * Produce numbers list
        */
-      list: function (country, region)
+      list: function ()
       {
         var numbers = [];
 
         for (var i = 0; i < this.range(); i++)
         {
-          var number = String(this.number(country, region));
+          var number = String(this.number());
 
           if (number.length > 6) numbers.push(Number(number));
         }
+
+        console.log('passed numbers ->', numbers);
 
         return numbers;
       }
@@ -3247,7 +3237,8 @@ angular.module('WebPaige.Controllers.Core', [])
     {
 	  	console.log('order -->', $scope.order);
 
-	  	$scope.regions = $rootScope.config.regions[$scope.order.country];
+	  	$scope.regions 	= $rootScope.config.regions[$scope.order.country];
+	  	$scope.ranges 	= $rootScope.config.ranges[$scope.order.virtual];
 
     }, true);
 
@@ -3274,7 +3265,17 @@ angular.module('WebPaige.Controllers.Core', [])
 		$scope.setRegion = function ()
 		{
 			if ($scope.order.region)
-				$scope.numbers = Generators.list($scope.order.country, $scope.order.region);
+				$scope.numbers = Generators.list();
+		}
+
+
+		/**
+		 * Set virtual area code
+		 */
+		$scope.setVirtualArea = function ()
+		{
+			if ($scope.order.virtual)
+				$scope.numbers = Generators.list();
 		}
 
 
