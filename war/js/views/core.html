@@ -106,6 +106,7 @@
                 <p>We are providing many options for your Oneline number.</p>
 
                 <form class="form-horizontal">
+
                   <!-- number types -->
                   <div class="control-group alert alert-block" style="position: relative;">
                     <label class="control-label" for="inputEmail">Types</label>
@@ -115,28 +116,10 @@
                         <li>
                           <label class="radio">
                             <input type="radio" ng-model="order.package" ng-click="setPackage(package.id)" value="{{package.id}}">&nbsp;{{package.label}}
-                            <!-- <input type="radio" ng-model="order.package" value="{{package.id}}">&nbsp;{{package.label}} -->
                           </label>
                         </li>
                       </ul>
 
-                      <!-- <ul style="list-style: none; margin: 0, padding: 0;">
-                        <li>
-                          <label class="radio">
-                            <input type="radio" ng-model="order.type" ng-click="setNumberType('local')" value="local">&nbsp;Local numbers
-                          </label>
-                        </li>
-                        <li>
-                          <label class="radio">
-                            <input type="radio" ng-model="order.type" ng-click="setNumberType('virtual')" value="virtual">&nbsp;Virtual numbers
-                          </label>
-                        </li>
-                        <li>
-                          <label class="radio">
-                            <input type="radio" ng-model="order.type" ng-click="setNumberType('premium')" value="premium">&nbsp;Premium
-                          </label>
-                        </li>
-                      </ul> -->
                     </div>
 
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">1</div>

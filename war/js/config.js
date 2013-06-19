@@ -292,15 +292,27 @@ angular.module('WebPaige')
     packages: [
         {
           id:    1,
-          label: 'Local Numbers'
+          label: 'Local Numbers',
+          prices:{
+            monthly:  5,
+            yearly:   50
+          }
         },
         {
           id:    2,
-          label: 'Virtual Numbers'
+          label: 'Virtual Numbers',
+          prices:{
+            monthly:  10,
+            yearly:   100
+          }
         },
         {
           id:    3,
-          label: 'Premium'
+          label: 'Premium',
+          prices:{
+            monthly:  15.90,
+            yearly:   160
+          }
         }
     ],
 
@@ -329,7 +341,16 @@ angular.module('WebPaige')
       2: [82],
       3: [85, 86, 87, 88, 89, 90, 91],
       4: [88]
-    }
+    },
+
+    premiums: [
+      {
+        package:  1,
+        country:  31,
+        region:   10,
+        number:   2222222
+      },
+    ]
 
   }
 );

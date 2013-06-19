@@ -104,6 +104,8 @@ angular.module('WebPaige.Controllers.Core', [])
 	  $scope.setPackage = function (pack)
 	  {  
 		  $scope.order.package 	= Number(pack);
+
+		  $scope.order.number = null;
 	  };
 
 
