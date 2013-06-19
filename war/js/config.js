@@ -169,27 +169,27 @@ angular.module('WebPaige')
     countries: [
       {
         id:     44,
-        label: 'United Kingdom'
+        label: 'United Kingdom (44)'
       },
       {
         id:     32,
-        label: 'Belgium'
+        label: 'Belgium (32)'
       }, 
       {
         id:     33,
-        label: 'France'
+        label: 'France (33)'
       }, 
       {
         id:     49,
-        label: 'Germany'
+        label: 'Germany (49)'
       },
       {
         id:     31,
-        label: 'Netherlands'
+        label: 'Netherlands (31)'
       },
       {
         id:     90,
-        label: 'Turkey'
+        label: 'Turkey (90)'
       }
     ],
 

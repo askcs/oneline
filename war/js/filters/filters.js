@@ -5,6 +5,131 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 
 /**
+ * Translate package
+ */
+.filter('translatePackage', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.packages, function (pack, index)
+				{
+					if (pack.id == selected) gem = pack;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+/**
+ * Translate country
+ */
+.filter('translateCountry', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.countries, function (country, index)
+				{
+					if (country.id == selected) gem = country;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+/**
+ * Translate region
+ */
+.filter('translateRegion', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected, country)
+		{
+			if (selected && country)
+			{
+				var gem;
+
+				angular.forEach($config.regions[country], function (region, index)
+				{
+					if (region.id == selected) gem = region;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+
+/**
+ * Translate service
+ */
+.filter('translateService', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.virtuals, function (virtual, index)
+				{
+					if (virtual.id == selected) gem = virtual;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
  * Translate roles
  */
 .filter('translateRole', 

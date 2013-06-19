@@ -813,27 +813,27 @@ angular.module('WebPaige')
     countries: [
       {
         id:     44,
-        label: 'United Kingdom'
+        label: 'United Kingdom (44)'
       },
       {
         id:     32,
-        label: 'Belgium'
+        label: 'Belgium (32)'
       }, 
       {
         id:     33,
-        label: 'France'
+        label: 'France (33)'
       }, 
       {
         id:     49,
-        label: 'Germany'
+        label: 'Germany (49)'
       },
       {
         id:     31,
-        label: 'Netherlands'
+        label: 'Netherlands (31)'
       },
       {
         id:     90,
-        label: 'Turkey'
+        label: 'Turkey (90)'
       }
     ],
 
@@ -2476,6 +2476,131 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
 
 
 angular.module('WebPaige.Filters', ['ngResource'])
+
+
+/**
+ * Translate package
+ */
+.filter('translatePackage', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.packages, function (pack, index)
+				{
+					if (pack.id == selected) gem = pack;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+/**
+ * Translate country
+ */
+.filter('translateCountry', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.countries, function (country, index)
+				{
+					if (country.id == selected) gem = country;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+/**
+ * Translate region
+ */
+.filter('translateRegion', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected, country)
+		{
+			if (selected && country)
+			{
+				var gem;
+
+				angular.forEach($config.regions[country], function (region, index)
+				{
+					if (region.id == selected) gem = region;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+
+/**
+ * Translate service
+ */
+.filter('translateService', 
+[
+	'$config', 
+	function ($config)
+	{
+		return function (selected)
+		{
+			if (selected)
+			{
+				var gem;
+
+				angular.forEach($config.virtuals, function (virtual, index)
+				{
+					if (virtual.id == selected) gem = virtual;
+				});
+
+				return gem.label;
+			}
+		}
+	}
+])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**

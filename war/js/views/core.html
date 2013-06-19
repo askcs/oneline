@@ -1,6 +1,4 @@
-<div class="page-header">
-  <h2>OneLine</h2>
-</div>
+<br><br>
 
 <!-- app -->
 <div class="row-fluid">
@@ -96,27 +94,20 @@
           </li>
         </ul>
 
-        <ul style="list-style: none; margin: 0; padding: 0;">
 
+        <div class="row-fluid">
 
+          <div class="span9">
 
+            <ul style="list-style: none; margin: 0; padding: 0;">
 
-
-
-          <li ng-show="purchaser.step == 1">
-
-            <div class="row-fluid">
-
-              <div class="span9">
+              <li ng-show="purchaser.step == 1">
                 <h4>Number types</h4>
                 <p>We are providing many options for your Oneline number.</p>
 
                 <form class="form-horizontal">
-
-
-
                   <!-- number types -->
-                  <div class="control-group well" style="position: relative;">
+                  <div class="control-group alert alert-block" style="position: relative;">
                     <label class="control-label" for="inputEmail">Types</label>
                     <div class="controls">
                       
@@ -152,10 +143,8 @@
                   </div>
                   <!-- end number types -->
 
-
-
                   <!-- countries -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==1) || (order.package==2)">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1) || (order.package==2)">
                     <label class="control-label" for="inputPassword">Country</label>
                     <div class="controls">
                       <select ng-model="order.country" 
@@ -168,10 +157,8 @@
                   </div>
                   <!-- end countries -->
 
-
-
                   <!-- regions local -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==1)">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1)">
                     <label class="control-label" for="inputPassword">Regions</label>
                     <div class="controls">
                       <select ng-model="order.region" 
@@ -185,10 +172,8 @@
                   </div>
                   <!-- end regions local -->
 
-
-
                   <!-- numbers local -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==1) && order.region">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1) && order.region">
                     <label class="control-label" for="inputPassword">Numbers (Local)</label>
                     <div class="controls">
 
@@ -209,10 +194,8 @@
                   </div>
                   <!-- end numbers local -->
 
-
-
                   <!-- regions virtual -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==2)">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2)">
                     <label class="control-label" for="inputPassword">Services</label>
                     <div class="controls">
                       <select ng-model="order.virtual" 
@@ -227,10 +210,8 @@
                   </div>
                   <!-- end regions virtual -->
 
-
-
                   <!-- ranges virtual -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==2) && order.virtual">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual">
                     <label class="control-label" for="inputPassword">Virtual area code</label>
                     <div class="controls">
                       <ul style="list-style: none; margin: 0; padding: 0; margin-top: 5px;">
@@ -245,11 +226,9 @@
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">4</div>
                   </div>
                   <!-- end ranges virtual -->
-                  
-
 
                   <!-- numbers virtual -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
                     <label class="control-label" for="inputPassword">Numbers (Virtual)</label>
                     <div class="controls">
 
@@ -270,86 +249,116 @@
                   </div>
                   <!-- end numbers virtual -->
 
-
-
                   <!-- premium stuff -->
-                  <div class="control-group well" style="position: relative;" ng-show="(order.package==3)">
+                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==3)">
                     <label class="control-label" for="inputPassword">Premium stuff</label>
                     <div class="controls"></div>
 
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">2</div>
                   </div>
                   <!-- end premium stuff -->
-
-
-
                 </form>
+              </li>
 
 
-              </div>
 
-              <div class="span3">
-                <div style="display: block;" class="text-center">
-                  <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 10em; line-height: 1.2em;"></span>
-                </div>
-                <h4>What kind of number should I buy?</h4>
-                <p>First impression is always important. Your number should tell you about something about you or just you!</p>
+
+
+              <li ng-show="purchaser.step == 2">
+                <h4>Payment types</h4>
+                <p>Payment types</p>
+              </li>
+
+
+
+
+
+              <li ng-show="purchaser.step == 3">
+                <h4>User information</h4>
+                <p>User information</p>
+              </li>
+
+
+
+
+
+              <li ng-show="purchaser.step == 4">
+                <h4>Credit card details</h4>
+                <p>Credit card details</p>
+              </li>
+
+
+
+
+
+              <li ng-show="purchaser.step == 5">
+                <h4>Confirmation</h4>
+                <p>Confirmation</p>
+              </li>
+
+
+
+
+            </ul>
+
+            <hr>
+
+            <ul class="pager">
+              <li class="previous">
+                <a ng-click="decreaseStep()" ng-show="purchaser.step > 1">Previous</a>
+              </li>
+              <li class="next">
+                <a ng-click="increaseStep()" ng-show="purchaser.step < 5">Next</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="span3">
+
+            <div id="basket" data-spy="affix" data-offset-top="200">
+
+              <h4>Basket</h4>
+              <p>Selected basket contents</p>
+
+              <div class="alert alert-block" style="margin-top: -2px;">
+                <div ng-hide="order.package">You have not selected anything yet.</div>
+
+                <dl ng-show="order.package">
+
+                  <dt>Number type:</dt>
+                    <dd>{{order.package | translatePackage}}</dd>
+
+                  <dt>Country:</dt>
+                    <dd>{{order.country | translateCountry}}</dd>
+
+                  <dt ng-show="(order.package==1) && order.region">Region:</dt>
+                    <dd ng-show="(order.package==1) && order.region">{{order.region | translateRegion:order.country}}</dd>
+
+                  <dt ng-show="(order.package==2) && order.virtual">Virtual service:</dt>
+                    <dd ng-show="(order.package==2) && order.virtual">{{order.virtual | translateService}}</dd>
+
+                  <dt ng-show="(order.package==2) && order.virtual && order.range">Selected virtual area code:</dt>
+                    <dd ng-show="(order.package==2) && order.virtual && order.range">{{order.range}}</dd>
+
+                  <dt ng-show="order.number">Number:</dt>
+                    <dd ng-show="order.number">
+                      <span ng-show="(order.package==1)">+{{order.country}} ({{order.region}}) {{order.number}}</span>
+                      <span ng-show="(order.package==2)">+{{order.country}} ({{order.range}}) {{order.number}}</span>
+                    </dd>
+
+                </dl>
               </div>
 
             </div>
-          </li>
 
+            <div style="display: inline; float: left; margin-top: 15px;">
+              <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 8em; margin-left: -20px;"></span>
+            </div>
+            <h4 style="margin-top: 35px;">What kind of number should I buy?</h4>
+            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
+          </div>
 
-
-
-
-          <li ng-show="purchaser.step == 2">
-            <h4>Payment types</h4>
-            <p>Payment types</p>
-          </li>
-
-
-
-
-
-          <li ng-show="purchaser.step == 3">
-            <h4>User information</h4>
-            <p>User information</p>
-          </li>
-
-
-
-
-
-          <li ng-show="purchaser.step == 4">
-            <h4>Credit card details</h4>
-            <p>Credit card details</p>
-          </li>
-
-
-
-
-
-          <li ng-show="purchaser.step == 5">
-            <h4>Confirmation</h4>
-            <p>Confirmation</p>
-          </li>
-
-
-
-
-        </ul>
-
-        <hr>
-
-        <ul class="pager">
-          <li class="previous">
-            <a ng-click="decreaseStep()" ng-show="purchaser.step > 1">Previous</a>
-          </li>
-          <li class="next">
-            <a ng-click="increaseStep()" ng-show="purchaser.step < 5">Next</a>
-          </li>
-        </ul>
+        </div>
 
       </div>
       <!-- end purchaser -->
