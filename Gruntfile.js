@@ -44,7 +44,7 @@ module.exports = function (grunt)
             // 'war/js/services/md5.js',
             'war/js/services/storage.js',
             'war/js/services/strings.js',
-            // 'war/js/services/announcer.js',
+            'war/js/services/generators.js',
             // 'war/js/services/sloter.js',
             // 'war/js/services/stats.js',
             // 'war/js/services/offsetter.js',

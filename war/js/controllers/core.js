@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location',
-	function ($rootScope, $scope, $location)
+	'$rootScope', '$scope', '$location', 'Generators',
+	function ($rootScope, $scope, $location, Generators)
 	{
 		/**
 		 * Fix styles
@@ -24,35 +24,44 @@ angular.module('WebPaige.Controllers.Core', [])
 	   * General order container
 	   */
 	  $scope.order = {
-	  	type: 	'',
-	  	country: {}
+	  	package: 	'',
+	  	country: 	{}
 	  };
 
 
 		/**
 		 * Pass containers
 		 */
+		$scope.packages 	= $rootScope.config.packages;
 		$scope.countries 	= $rootScope.config.countries;
-		$scope.types 			= $rootScope.config.types;
+
+		$scope.virtuals 			= $rootScope.config.virtuals;
 
 
 		/**
 		 * Set defaults
 		 */
 		$scope.defaults = {
-			country: 31
+			package: 	1,
+			country: 	31
 		};
 
 		$scope.order.country = $scope.defaults.country;
 
 
 	  /**
-	   * Watcher on order container
+	   * Watcher on -order- container
 	   */
     $scope.$watch('order', function ()
     {
 	  	console.log('order -->', $scope.order);
+
+	  	$scope.regions = $rootScope.config.regions[$scope.order.country];
+
     }, true);
+
+
+
 
 
 		/**
@@ -61,35 +70,34 @@ angular.module('WebPaige.Controllers.Core', [])
 		$scope.resetPurchaser = function ()
 		{
 			$scope.order = {
-				type: 		'local',
-				country: 	$scope.defaults.country.id
+				package: 	null,
+				country: 	$scope.defaults.country.id,
+				region: 	null
 			};
-
-			$scope.setNumberType('local');
 		};
+
+
+		/**
+		 * Set region
+		 */
+		$scope.setRegion = function ()
+		{
+			if ($scope.order.region)
+				$scope.numbers = Generators.list($scope.order.country, $scope.order.region);
+		}
 
 
 	  /**
 	   * Set number type
 	   */
-	  $scope.setNumberType = function (type)
-	  {  	
-		  $scope.number = {
-		  	local: 		false,
-		  	virtual: 	false,
-		  	premium: 	false
-		  };
-
-		  $scope.number[type] = true;
-
-		  $scope.order.type 	= type;
+	  $scope.setPackage = function (pack)
+	  {  
+		  $scope.order.package 	= Number(pack);
 	  };
 
 
-	  /**
-	   * Set default number type
-	   */
-	  $scope.setNumberType('local');
+
+
 
 
 	  /**
@@ -144,15 +152,15 @@ angular.module('WebPaige.Controllers.Core', [])
 	  setView(view);
 
 
+
+
+
 	  /**
 	   * Switch step
 	   */
 	  $scope.switchStep = function (step)
 	  {
-	    // $scope.$watch(step, function ()
-	    // {
-		    $scope.purchaser = {step: step};
-	    // });
+	    $scope.purchaser = {step: step};
 	  };
 
 
@@ -178,6 +186,10 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
+
+
+
+
 
 	}
 ]);

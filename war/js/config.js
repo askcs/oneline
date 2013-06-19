@@ -166,8 +166,6 @@ angular.module('WebPaige')
     },
 
 
-
-
     countries: [
       {
         id:     44,
@@ -200,43 +198,43 @@ angular.module('WebPaige')
       31: [
         {
           id:     297,
-          label:  'Aalsmeer'
+          label:  'Aalsmeer (297)'
         },
         {
           id:     72,
-          label:  'Alkmaar'
+          label:  'Alkmaar (72)'
         },
         {
           id:     546,
-          label:  'Almelo'
+          label:  'Almelo (546)'
         },
         {
           id:     36,
-          label:  'Almere'
+          label:  'Almere (36)'
         },
         {
           id:     172,
-          label:  'Alphen A/D Rijn'
+          label:  'Alphen A/D Rijn (172)'
         },
         {
           id:     33,
-          label:  'Amersfoort'
+          label:  'Amersfoort (33)'
         },
         {
           id:     20,
-          label:  'Amsterdam'
+          label:  'Amsterdam (20)'
         },
         {
           id:     55,
-          label:  'Apeldoorn'
+          label:  'Apeldoorn (55)'
         },
         {
           id:     26,
-          label:  'Arnhem'
+          label:  'Arnhem (26)'
         },
         {
           id:     10,
-          label:  'Rotterdam'
+          label:  'Rotterdam (10)'
         }
       ],
       90: [
@@ -291,8 +289,7 @@ angular.module('WebPaige')
       ]
     },
 
-    types: {
-      number: [
+    packages: [
         {
           id:    1,
           label: 'Local Numbers'
@@ -305,26 +302,45 @@ angular.module('WebPaige')
           id:    3,
           label: 'Premium'
         }
-      ],
+    ],
 
-      virtual: [
-        {
-          id:     1,
-          label:  'Personal assistant services (84-87)'
-        },
-        {
-          id:     2,
-          label:  'VPN (82)'
-        },
-        {
-          id:     3,
-          label:  'Elektronisch communicatie (85 - 91)'
-        },
-        {
-          id:     4,
-          label:  'Company numbers (88)'
-        }
-      ]
+
+    virtuals: [
+      {
+        id:     1,
+        label:  'Personal assistant services (84-87)'
+      },
+      {
+        id:     2,
+        label:  'VPN (82)'
+      },
+      {
+        id:     3,
+        label:  'Elektronisch communicatie (85 - 91)'
+      },
+      {
+        id:     4,
+        label:  'Company numbers (88)'
+      }
+    ],
+
+    ranges: {
+      1: {
+        min:    84,
+        max:    87
+      },
+      2: {
+        min:    82,
+        max:    82
+      },
+      3: {
+        min:    85,
+        max:    91
+      },
+      4: {
+        min:    88,
+        max:    88
+      }
     }
 
   }

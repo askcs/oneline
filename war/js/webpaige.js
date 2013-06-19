@@ -33,7 +33,7 @@ angular.module('WebPaige',[
   // 'WebPaige.Services.MD5',
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
-  // 'WebPaige.Services.Announcer',
+  'WebPaige.Services.Generators',
   // 'WebPaige.Services.Sloter',
   // 'WebPaige.Services.Stats',
   // 'WebPaige.Services.Offsetter',

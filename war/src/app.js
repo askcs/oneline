@@ -601,7 +601,7 @@ angular.module('WebPaige',[
   // 'WebPaige.Services.MD5',
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
-  // 'WebPaige.Services.Announcer',
+  'WebPaige.Services.Generators',
   // 'WebPaige.Services.Sloter',
   // 'WebPaige.Services.Stats',
   // 'WebPaige.Services.Offsetter',
@@ -810,8 +810,6 @@ angular.module('WebPaige')
     },
 
 
-
-
     countries: [
       {
         id:     44,
@@ -844,43 +842,43 @@ angular.module('WebPaige')
       31: [
         {
           id:     297,
-          label:  'Aalsmeer'
+          label:  'Aalsmeer (297)'
         },
         {
           id:     72,
-          label:  'Alkmaar'
+          label:  'Alkmaar (72)'
         },
         {
           id:     546,
-          label:  'Almelo'
+          label:  'Almelo (546)'
         },
         {
           id:     36,
-          label:  'Almere'
+          label:  'Almere (36)'
         },
         {
           id:     172,
-          label:  'Alphen A/D Rijn'
+          label:  'Alphen A/D Rijn (172)'
         },
         {
           id:     33,
-          label:  'Amersfoort'
+          label:  'Amersfoort (33)'
         },
         {
           id:     20,
-          label:  'Amsterdam'
+          label:  'Amsterdam (20)'
         },
         {
           id:     55,
-          label:  'Apeldoorn'
+          label:  'Apeldoorn (55)'
         },
         {
           id:     26,
-          label:  'Arnhem'
+          label:  'Arnhem (26)'
         },
         {
           id:     10,
-          label:  'Rotterdam'
+          label:  'Rotterdam (10)'
         }
       ],
       90: [
@@ -935,8 +933,7 @@ angular.module('WebPaige')
       ]
     },
 
-    types: {
-      number: [
+    packages: [
         {
           id:    1,
           label: 'Local Numbers'
@@ -949,26 +946,45 @@ angular.module('WebPaige')
           id:    3,
           label: 'Premium'
         }
-      ],
+    ],
 
-      virtual: [
-        {
-          id:     1,
-          label:  'Personal assistant services (84-87)'
-        },
-        {
-          id:     2,
-          label:  'VPN (82)'
-        },
-        {
-          id:     3,
-          label:  'Elektronisch communicatie (85 - 91)'
-        },
-        {
-          id:     4,
-          label:  'Company numbers (88)'
-        }
-      ]
+
+    virtuals: [
+      {
+        id:     1,
+        label:  'Personal assistant services (84-87)'
+      },
+      {
+        id:     2,
+        label:  'VPN (82)'
+      },
+      {
+        id:     3,
+        label:  'Elektronisch communicatie (85 - 91)'
+      },
+      {
+        id:     4,
+        label:  'Company numbers (88)'
+      }
+    ],
+
+    ranges: {
+      1: {
+        min:    84,
+        max:    87
+      },
+      2: {
+        min:    82,
+        max:    82
+      },
+      3: {
+        min:    85,
+        max:    91
+      },
+      4: {
+        min:    88,
+        max:    88
+      }
     }
 
   }
@@ -2418,6 +2434,57 @@ angular.module('WebPaige.Services.Strings', ['ngResource'])
 );;'use strict';
 
 
+angular.module('WebPaige.Services.Generators', ['ngResource'])
+
+
+/**
+ * Custom genrators
+ */
+.factory('Generators', 
+  function ()
+  {
+    return {
+
+      /**
+       * Produce range
+       */
+      range: function ()
+      {
+        var min = 5,
+            max = 120;
+
+        return Math.floor( Math.random() * (max - min + 1) ) + min;
+      },
+
+      /**
+       * Produce number
+       */
+      number: function (country, region)
+      {
+        return Math.floor( Math.random() * 9000000 );
+      },
+
+      /**
+       * Produce numbers list
+       */
+      list: function (country, region)
+      {
+        var numbers = [];
+
+        for (var i = 0; i < this.range(); i++)
+        {
+          var number = String(this.number(country, region));
+
+          if (number.length > 6) numbers.push(Number(number));
+        }
+
+        return numbers;
+      }
+    }
+  }
+);;'use strict';
+
+
 angular.module('WebPaige.Filters', ['ngResource'])
 
 
@@ -3135,8 +3202,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location',
-	function ($rootScope, $scope, $location)
+	'$rootScope', '$scope', '$location', 'Generators',
+	function ($rootScope, $scope, $location, Generators)
 	{
 		/**
 		 * Fix styles
@@ -3148,35 +3215,44 @@ angular.module('WebPaige.Controllers.Core', [])
 	   * General order container
 	   */
 	  $scope.order = {
-	  	type: 	'',
-	  	country: {}
+	  	package: 	'',
+	  	country: 	{}
 	  };
 
 
 		/**
 		 * Pass containers
 		 */
+		$scope.packages 	= $rootScope.config.packages;
 		$scope.countries 	= $rootScope.config.countries;
-		$scope.types 			= $rootScope.config.types;
+
+		$scope.virtuals 			= $rootScope.config.virtuals;
 
 
 		/**
 		 * Set defaults
 		 */
 		$scope.defaults = {
-			country: 31
+			package: 	1,
+			country: 	31
 		};
 
 		$scope.order.country = $scope.defaults.country;
 
 
 	  /**
-	   * Watcher on order container
+	   * Watcher on -order- container
 	   */
     $scope.$watch('order', function ()
     {
 	  	console.log('order -->', $scope.order);
+
+	  	$scope.regions = $rootScope.config.regions[$scope.order.country];
+
     }, true);
+
+
+
 
 
 		/**
@@ -3185,35 +3261,34 @@ angular.module('WebPaige.Controllers.Core', [])
 		$scope.resetPurchaser = function ()
 		{
 			$scope.order = {
-				type: 		'local',
-				country: 	$scope.defaults.country.id
+				package: 	null,
+				country: 	$scope.defaults.country.id,
+				region: 	null
 			};
-
-			$scope.setNumberType('local');
 		};
+
+
+		/**
+		 * Set region
+		 */
+		$scope.setRegion = function ()
+		{
+			if ($scope.order.region)
+				$scope.numbers = Generators.list($scope.order.country, $scope.order.region);
+		}
 
 
 	  /**
 	   * Set number type
 	   */
-	  $scope.setNumberType = function (type)
-	  {  	
-		  $scope.number = {
-		  	local: 		false,
-		  	virtual: 	false,
-		  	premium: 	false
-		  };
-
-		  $scope.number[type] = true;
-
-		  $scope.order.type 	= type;
+	  $scope.setPackage = function (pack)
+	  {  
+		  $scope.order.package 	= Number(pack);
 	  };
 
 
-	  /**
-	   * Set default number type
-	   */
-	  $scope.setNumberType('local');
+
+
 
 
 	  /**
@@ -3268,15 +3343,15 @@ angular.module('WebPaige.Controllers.Core', [])
 	  setView(view);
 
 
+
+
+
 	  /**
 	   * Switch step
 	   */
 	  $scope.switchStep = function (step)
 	  {
-	    // $scope.$watch(step, function ()
-	    // {
-		    $scope.purchaser = {step: step};
-	    // });
+	    $scope.purchaser = {step: step};
 	  };
 
 
@@ -3302,6 +3377,10 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
 	  };
+
+
+
+
 
 	}
 ]);
