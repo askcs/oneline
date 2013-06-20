@@ -24,8 +24,12 @@ angular.module('WebPaige.Controllers.Core', [])
 	   * General order container
 	   */
 	  $scope.order = {
-	  	package: 	'',
-	  	country: 	{}
+	  	package: 	null,
+	  	country: 	31
+	  	// package: 	1,
+	  	// country: 	31,
+	  	// region: 	10,
+	  	// number: 	1234567
 	  };
 
 
@@ -35,7 +39,8 @@ angular.module('WebPaige.Controllers.Core', [])
 		$scope.packages 	= $rootScope.config.packages;
 		$scope.countries 	= $rootScope.config.countries;
 
-		$scope.virtuals 			= $rootScope.config.virtuals;
+		$scope.virtuals 	= $rootScope.config.virtuals;
+
 
 
 		/**
@@ -56,6 +61,19 @@ angular.module('WebPaige.Controllers.Core', [])
     {
 	  	$scope.regions 	= $rootScope.config.regions[$scope.order.country];
 	  	$scope.ranges 	= $rootScope.config.ranges[$scope.order.virtual];
+
+	  	if ($scope.order.package)
+	  	{
+				var prices = {
+					monthly: 	$rootScope.config.packages[$scope.order.package].prices.monthly,
+					yearly: 	$rootScope.config.packages[$scope.order.package].prices.yearly
+				};
+
+				$scope.prices = {
+					monthly: 	($scope.order.premium) ? prices.monthly.premium : prices.monthly.normal,
+					yearly: 	($scope.order.premium) ? prices.yearly.premium : prices.yearly.normal
+				}
+	  	}
 
     }, true);
 
@@ -103,7 +121,7 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {  
 		  $scope.order.package 	= Number(pack);
 
-		  $scope.order.number = null;
+		  $scope.order.number 	= null;
 	  };
 
 
@@ -201,7 +219,7 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
 	  $scope.decreaseStep = function ()
 	  {
-	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1)
+	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1);
 	  };
 
 

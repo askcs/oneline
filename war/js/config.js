@@ -289,7 +289,38 @@ angular.module('WebPaige')
       ]
     },
 
-    packages: [
+    packages: {
+      1: {
+        id:    1,
+        label: 'Local Numbers',
+        prices:{
+          monthly: {
+            normal:   5,
+            premium:  15
+          },
+          yearly: {
+            normal:   50,
+            premium:  150
+          }
+        }
+      },
+      2: {
+        id:    2,
+        label: 'Virtual Numbers',
+        prices:{
+          monthly: {
+            normal:   10,
+            premium:  30
+          },
+          yearly: {
+            normal:   100,
+            premium:  300
+          }
+        }
+      }
+    },
+
+    packages__: [
       {
         id:    1,
         label: 'Local Numbers',
@@ -318,15 +349,6 @@ angular.module('WebPaige')
           }
         }
       }
-      // ,
-      // {
-      //   id:    3,
-      //   label: 'Premium',
-      //   prices:{
-      //     monthly:  15.90,
-      //     yearly:   160
-      //   }
-      // }
     ],
 
 

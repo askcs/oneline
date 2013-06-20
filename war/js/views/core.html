@@ -63,46 +63,44 @@
         <hr>
 
         <ul class="breadcrumb">
+
           <li>
             <span class="label">1</span>&nbsp;
-            <a ng-click="switchStep(1)" ng-show="purchaser.step > 1">Buy number</a>
-            <span ng-show="purchaser.step < 2">Buy number</span>
+            <a ng-click="switchStep(1)" ng-show="purchaser.step > 1">Number selection</a>
+            <span ng-show="purchaser.step < 2">Number selection</span>
             <span class="divider">></span>
           </li>
+
           <li>
             <span class="label">2</span>&nbsp;
-            <a ng-click="switchStep(2)" ng-show="purchaser.step > 2">Payment types</a>
-            <span ng-show="purchaser.step < 3">Payment types</span>
+            <a ng-click="switchStep(2)" ng-show="purchaser.step > 2">Abonements</a>
+            <span ng-show="purchaser.step < 3">Abonements</span>
             <span class="divider">></span>
           </li>
+
           <li>
             <span class="label">3</span>&nbsp;
-            <a ng-click="switchStep(3)" ng-show="purchaser.step > 3">User information</a>
-            <span ng-show="purchaser.step < 4">User information</span>
-            <span class="divider">></span>
+            <a ng-click="switchStep(3)" ng-show="purchaser.step > 3">Payment</a>
+            <span ng-show="purchaser.step < 4">Payment</span>
           </li>
-          <li>
-            <span class="label">4</span>&nbsp;
-            <a ng-click="switchStep(4)" ng-show="purchaser.step > 4">Credit card details</a>
-            <span ng-show="purchaser.step < 5">Credit card details</span>
-            <span class="divider">></span>
-          </li>
-          <li>
+
+          <!-- <li>
             <span class="label">5</span>&nbsp;
             <a ng-click="switchStep(5)" ng-show="purchaser.step > 5">Confirmation</a>
             <span ng-show="purchaser.step < 6">Confirmation</span>
-          </li>
+          </li> -->
+
         </ul>
 
 
         <div class="row-fluid">
-
           <div class="span9">
-
             <ul style="list-style: none; margin: 0; padding: 0;">
 
+
+
               <li ng-show="purchaser.step == 1">
-                <h4>Number types</h4>
+                <h4>Number selection</h4>
                 <p>We are providing many options for your Oneline number.</p>
 
                 <form class="form-horizontal">
@@ -180,7 +178,7 @@
                             <tr ng-repeat="number in numbers.normals">
                               <td>
                                 <label class="radio">
-                                  <input type="radio" ng-model="order.number" value="{{number}}">&nbsp;
+                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=false">&nbsp;
                                   +{{order.country}} ({{order.region}}) {{number}}
                                 </label>
                               </td>
@@ -194,7 +192,7 @@
                             <tr ng-repeat="number in numbers.premiums">
                               <td>
                                 <label class="radio">
-                                  <input type="radio" ng-model="order.number" value="{{number}}">&nbsp;
+                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=true">&nbsp;
                                   +{{order.country}} ({{order.region}}) {{number}}
                                 </label>
                               </td>
@@ -252,33 +250,52 @@
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
                     <label class="control-label" for="inputPassword">Numbers</label>
                     <div class="controls">
-                      <table class="table table-striped">
-                        <tr ng-repeat="number in numbers.normals">
-                          <td>
-                            <label class="radio">
-                              <input type="radio" ng-model="order.number" value="{{number}}">&nbsp;
-                              +{{order.country}} ({{order.range}}) {{number}}
-                            </label>
-                          </td>
-                        </tr>
-                      </table>
+
+
+                      <ul class="nav nav-tabs" id="myTab">
+                        <li class="{{(tabs.normals==true) && 'active'}}">
+                          <a ng-click="tabs.normals=true; tabs.premiums=false">Normals</a>
+                        </li>
+                        <li class="{{(tabs.premiums==true) && 'active'}}">
+                          <a ng-click="tabs.premiums=true; tabs.normals=false;">Premiums</a>
+                        </li>
+                      </ul>
+                       
+                      <div class="tab-content" style="margin-top: -21px; height: auto; overflow: hidden;">
+                        <div class="tab-pane {{(tabs.normals==true) && 'active'}}" id="normals">
+
+                          <table class="table table-striped">
+                            <tr ng-repeat="number in numbers.normals">
+                              <td>
+                                <label class="radio">
+                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=false">&nbsp;
+                                  +{{order.country}} ({{order.range}}) {{number}}
+                                </label>
+                              </td>
+                            </tr>
+                          </table>
+
+                        </div>
+                        <div class="tab-pane {{(tabs.premiums==true) && 'active'}}" id="premiums">
+                        
+                          <table class="table table-striped">
+                            <tr ng-repeat="number in numbers.premiums">
+                              <td>
+                                <label class="radio">
+                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=true">&nbsp;
+                                  +{{order.country}} ({{order.range}}) {{number}}
+                                </label>
+                              </td>
+                            </tr>
+                          </table>
+
+                        </div>
+                      </div>
+
                     </div>
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">4</div>
                   </div>
                   <!-- end numbers virtual -->
-
-
-                  <!-- premium stuff -->
-                  <!-- <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==3)">
-                    <label class="control-label" for="inputPassword">Premium stuff</label>
-                    <div class="controls"></div>
-
-                    <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">2</div>
-                  </div> -->
-                  <!-- end premium stuff -->
-
-
-
                 </form>
               </li>
 
@@ -287,8 +304,37 @@
 
 
               <li ng-show="purchaser.step == 2">
-                <h4>Payment types</h4>
+                <h4>Abonements</h4>
                 <p>Payment types</p>
+
+                <div class="row-fluid">
+                  <ul class="thumbnails">
+                    <li class="span4">
+                      <div class="thumbnail" style="text-align: center">
+                        <div class="caption">
+                          <h3>{{prices.monthly}}€ per month</h3>
+                          <p>Oneline Personal<br> 
+                            Monthly<br> 
+                            Subscription</p>
+                          <p><a ng-click="order.monthly=true; order.yearly=false; switchStep(3)" class="btn btn-success">Buy this package</a></p>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="span4">
+                      <div class="thumbnail" style="text-align: center">
+                        <div class="caption">
+                          <h3>{{prices.yearly}}€ per year</h3>
+                          <p>Oneline Personal<br> 
+                            Monthly<br> 
+                            Subscription</p>
+                          <p><a ng-click="order.monthly=false; order.yearly=true; switchStep(3)" class="btn btn-success">Buy this package</a></p>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+
               </li>
 
 
@@ -296,27 +342,18 @@
 
 
               <li ng-show="purchaser.step == 3">
-                <h4>User information</h4>
-                <p>User information</p>
+                <h4>Payment</h4>
+                <p>Ogen stuff</p>
               </li>
 
 
 
 
 
-              <li ng-show="purchaser.step == 4">
-                <h4>Credit card details</h4>
-                <p>Credit card details</p>
-              </li>
-
-
-
-
-
-              <li ng-show="purchaser.step == 5">
+              <!-- <li ng-show="purchaser.step == 5">
                 <h4>Confirmation</h4>
                 <p>Confirmation</p>
-              </li>
+              </li> -->
 
 
 
@@ -348,7 +385,13 @@
                 <dl ng-show="order.package">
 
                   <dt>Number type:</dt>
-                    <dd>{{order.package | translatePackage}}</dd>
+                    <dd>
+                      {{order.package | translatePackage}}
+                      <span ng-show="order.number">-&nbsp;
+                        <span ng-show="order.premium">Premium</span>
+                        <span ng-hide="order.premium">Normal</span>
+                      </span>
+                    </dd>
 
                   <dt>Country:</dt>
                     <dd>{{order.country | translateCountry}}</dd>
@@ -366,6 +409,12 @@
                     <dd ng-show="order.number">
                       <span ng-show="(order.package==1)">+{{order.country}} ({{order.region}}) {{order.number}}</span>
                       <span ng-show="(order.package==2)">+{{order.country}} ({{order.range}}) {{order.number}}</span>
+                    </dd>
+
+                  <dt ng-show="order.monthly || order.yearly">Subscription:</dt>
+                    <dd>
+                      <span ng-show="order.monthly">Monthly payment</span>
+                      <span ng-show="order.yearly">Yearly payment</span>
                     </dd>
 
                 </dl>
