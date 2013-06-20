@@ -36,18 +36,20 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
        */
       list: function ()
       {
-        var numbers = [];
+        var normals   = [],
+            premiums  = ['1111111', '2222222', '3333333', '4444444', '5555555', '6666666', '7777777', '8888888', '9999999'];
 
         for (var i = 0; i < this.range(); i++)
         {
           var number = String(this.number());
 
-          if (number.length > 6) numbers.push(Number(number));
+          if (number.length > 6) normals.push(Number(number));
         }
 
-        console.log('passed numbers ->', numbers);
-
-        return numbers;
+        return {
+          normals:  normals,
+          premiums: premiums
+        }
       }
     }
   }

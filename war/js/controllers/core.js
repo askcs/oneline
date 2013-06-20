@@ -54,8 +54,6 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
     $scope.$watch('order', function ()
     {
-	  	console.log('order -->', $scope.order);
-
 	  	$scope.regions 	= $rootScope.config.regions[$scope.order.country];
 	  	$scope.ranges 	= $rootScope.config.ranges[$scope.order.virtual];
 
@@ -110,6 +108,12 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+
+
+	  $scope.tabs = {
+	  	normals: 	true,
+	  	premiums: false
+	  }
 
 
 

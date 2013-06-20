@@ -934,30 +934,43 @@ angular.module('WebPaige')
     },
 
     packages: [
-        {
-          id:    1,
-          label: 'Local Numbers',
-          prices:{
-            monthly:  5,
-            yearly:   50
-          }
-        },
-        {
-          id:    2,
-          label: 'Virtual Numbers',
-          prices:{
-            monthly:  10,
-            yearly:   100
-          }
-        },
-        {
-          id:    3,
-          label: 'Premium',
-          prices:{
-            monthly:  15.90,
-            yearly:   160
+      {
+        id:    1,
+        label: 'Local Numbers',
+        prices:{
+          monthly: {
+            normal:   5,
+            premium:  15
+          },
+          yearly: {
+            normal:   50,
+            premium:  150
           }
         }
+      },
+      {
+        id:    2,
+        label: 'Virtual Numbers',
+        prices:{
+          monthly: {
+            normal:   10,
+            premium:  30
+          },
+          yearly: {
+            normal:   100,
+            premium:  300
+          }
+        }
+      }
+      // ,
+      // {
+      //   id:    3,
+      //   label: 'Premium',
+      //   prices:{
+      //     monthly:  15.90,
+      //     yearly:   160
+      //   }
+      // }
     ],
 
 
@@ -2478,18 +2491,20 @@ angular.module('WebPaige.Services.Generators', ['ngResource'])
        */
       list: function ()
       {
-        var numbers = [];
+        var normals   = [],
+            premiums  = ['1111111', '2222222', '3333333', '4444444', '5555555', '6666666', '7777777', '8888888', '9999999'];
 
         for (var i = 0; i < this.range(); i++)
         {
           var number = String(this.number());
 
-          if (number.length > 6) numbers.push(Number(number));
+          if (number.length > 6) normals.push(Number(number));
         }
 
-        console.log('passed numbers ->', numbers);
-
-        return numbers;
+        return {
+          normals:  normals,
+          premiums: premiums
+        }
       }
     }
   }
@@ -3381,8 +3396,6 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
     $scope.$watch('order', function ()
     {
-	  	console.log('order -->', $scope.order);
-
 	  	$scope.regions 	= $rootScope.config.regions[$scope.order.country];
 	  	$scope.ranges 	= $rootScope.config.ranges[$scope.order.virtual];
 
@@ -3437,6 +3450,12 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+
+
+	  $scope.tabs = {
+	  	normals: 	true,
+	  	premiums: false
+	  }
 
 
 
