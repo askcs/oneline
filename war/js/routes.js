@@ -16,11 +16,31 @@ angular.module('WebPaige')
      * Login router
      */
     $routeProvider
-    // .when('/login',
-    // {
-    //   templateUrl: 'dist/views/login.html',
-    //   controller: 'login'
-    // })
+    .when('/login',
+    {
+      templateUrl: 'dist/views/login.html',
+      controller: 'login'
+    })
+
+
+    /**
+     * Forgot password router
+     */
+    .when('/forgotpass',
+    {
+      templateUrl: 'dist/views/forgotpass.html',
+      controller: 'forgotpass'
+    })
+
+
+    /**
+     * Register router
+     */
+    .when('/register',
+    {
+      templateUrl: 'dist/views/register.html',
+      controller: 'register'
+    })
 
 
     /**
@@ -241,7 +261,7 @@ angular.module('WebPaige')
      * Router fallback
      */
     .otherwise({
-      redirectTo: '/core'
+      redirectTo: '/login'
     });
 
 

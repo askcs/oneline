@@ -17,7 +17,9 @@ angular.module('WebPaige',[
   // 'WebPaige.Modals.Settings',
   // 'WebPaige.Modals.Help',
   // controller
-  // 'WebPaige.Controllers.Login',
+  'WebPaige.Controllers.Login',
+  'WebPaige.Controllers.Forgotpass',
+  'WebPaige.Controllers.Register',
   // 'WebPaige.Controllers.Logout',
   // 'WebPaige.Controllers.Dashboard',
   'WebPaige.Controllers.Core',

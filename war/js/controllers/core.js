@@ -28,8 +28,8 @@ angular.module('WebPaige.Controllers.Core', [])
 	  	country: 	31
 	  	// package: 	1,
 	  	// country: 	31,
-	  	// region: 	10,
-	  	// number: 	1234567
+	  	// region: 		10,
+	  	// number: 		1234567
 	  };
 
 
@@ -38,7 +38,6 @@ angular.module('WebPaige.Controllers.Core', [])
 		 */
 		$scope.packages 	= $rootScope.config.packages;
 		$scope.countries 	= $rootScope.config.countries;
-
 		$scope.virtuals 	= $rootScope.config.virtuals;
 
 
@@ -88,7 +87,7 @@ angular.module('WebPaige.Controllers.Core', [])
 		{
 			$scope.order = {
 				package: 	null,
-				country: 	$scope.defaults.country.id,
+				country: 	$scope.defaults.country,
 				region: 	null
 			};
 		};
@@ -128,10 +127,13 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+	  /**
+	   * Tabs arranger
+	   */
 	  $scope.tabs = {
 	  	normals: 	true,
 	  	premiums: false
-	  }
+	  };
 
 
 

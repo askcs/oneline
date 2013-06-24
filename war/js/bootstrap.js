@@ -347,6 +347,43 @@ angular.module('WebPaige')
 
       $rootScope.statusBar.display('Loading..');
 
+
+
+
+
+      // switch ($location.path())
+      // {
+      //   case '/dashboard':
+      //     $rootScope.location = 'dashboard';
+      //   break;
+
+      //   case '/planboard':
+      //     $rootScope.location = 'planboard';
+      //   break;
+
+      //   case '/messages':
+      //     $rootScope.location = 'messages';
+      //   break;
+
+      //   case '/groups':
+      //     $rootScope.location = 'groups';
+      //   break;
+
+      //   case '/settings':
+      //     $rootScope.location = 'settings';
+      //   break;
+
+      //   default:
+      //     if ($location.path().match(/profile/))
+      //     {
+      //       $rootScope.location = 'profile';
+      //     }
+      // }
+
+
+      $rootScope.location = $location.path().substring(1);
+
+
       $('div[ng-view]').hide();
     });
 
@@ -490,8 +527,6 @@ angular.module('WebPaige')
     //     $rootScope.statusBar.off();
     //   })
     // }
-
-
     
 
   }

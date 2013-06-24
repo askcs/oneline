@@ -13,7 +13,7 @@ angular.module('WebPaige')
   {
     title:    'OneLine',
     version:  '0.1.0',
-    lang:     'nl',
+    lang:     'en',
 
     fullscreen: true,
 

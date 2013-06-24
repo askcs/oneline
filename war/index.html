@@ -57,7 +57,9 @@
 
 
     <!-- navbar -->
-    <div class="navbar navbar-inverse navbar-fixed-top ng-cloak" bs-navbar>
+    <div class="navbar navbar-inverse navbar-fixed-top ng-cloak" 
+          ng-hide="(location=='login' || location=='forgotpass' || location=='register')" 
+          bs-navbar>
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -200,7 +202,9 @@
 
 
     <!-- footer -->
-    <div id="footer" ng-hide="browser.mobile" class="ng-cloak">
+    <div id="footer"
+          ng-hide="browser.mobile || (location=='login' || location=='forgotpass' || location=='register')" 
+          class="ng-cloak">
       <div class="container-fluid">
 
         <!-- copyrights -->
@@ -222,7 +226,6 @@
             </button>
           </div>
           <!-- end download mobile app -->
-
         </div>
         <!-- end copyrights -->
 

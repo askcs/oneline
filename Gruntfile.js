@@ -51,7 +51,9 @@ module.exports = function (grunt)
             // filters
             'war/js/filters/filters.js',
             // controllers
-            // 'war/js/controllers/login.js',
+            'war/js/controllers/login.js',
+            'war/js/controllers/forgotpass.js',
+            'war/js/controllers/register.js',
             // 'war/js/controllers/logout.js',
             // 'war/js/controllers/dashboard.js',
             'war/js/controllers/core.js',
@@ -122,13 +124,15 @@ module.exports = function (grunt)
           collapseWhitespace: true
         },
         files: {
-          // 'war/dist/views/login.html':                    'war/js/views/login.html',
-          // 'war/dist/views/logout.html':                   'war/js/views/logout.html',
-          // 'war/dist/views/dashboard.html':                'war/js/views/dashboard.html',
-          'war/dist/views/core.html':              'war/js/views/core.html',
-          // 'war/dist/views/profile.html':                  'war/js/views/profile.html',
-          // 'war/dist/views/settings.html':                 'war/js/views/settings.html',
-          // 'war/dist/views/help.html':                     'war/js/views/help.html'
+          'war/dist/views/login.html':        'war/js/views/login.html',
+          'war/dist/views/forgotpass.html':   'war/js/views/forgotpass.html',
+          'war/dist/views/register.html':     'war/js/views/register.html',
+          // 'war/dist/views/logout.html':    'war/js/views/logout.html',
+          // 'war/dist/views/dashboard.html': 'war/js/views/dashboard.html',
+          'war/dist/views/core.html':         'war/js/views/core.html',
+          // 'war/dist/views/profile.html':   'war/js/views/profile.html',
+          // 'war/dist/views/settings.html':  'war/js/views/settings.html',
+          // 'war/dist/views/help.html':      'war/js/views/help.html'
         }
       }
     },
