@@ -6,32 +6,29 @@
 
   <div class="tabbable tabs-left">
 
-
-
-
-
     
     <!-- tabs -->
     <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
 
       <li class="{{(views.purchaser==true) && 'active'}}">
         <a ng-click="resetPurchaser(); setViewTo('purchaser')" 
-            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-cart-4"></span> Buy number</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-cart-4"></span> Online number</a>
       </li>
 
       <li class="{{(views.manager==true) && 'active'}}">
+        <!-- <span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Connected numbers -->
         <a ng-click="setViewTo('manager')" 
-            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Add number</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Connected numbers</a>
       </li>
 
       <li class="{{(views.notifier==true) && 'active'}}">
         <a ng-click="setViewTo('notifier')" 
-            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span> Call notifications</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span> Notification settings</a>
       </li>
 
       <li class="{{(views.reporter==true) && 'active'}}">
         <a ng-click="setViewTo('reporter')" 
-            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span> Recent calls</a>
+            data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span> Call list</a>
       </li>
 
       <li class="{{(views.guarder==true) && 'active'}}">
@@ -43,16 +40,8 @@
     <!-- end tabs -->
 
 
-
-
-
-
     <!-- tabs content -->
     <div class="tab-content">
-
-
-
-
 
 
       <!-- purchaser -->
@@ -62,7 +51,9 @@
         </div>
         <hr>
 
-        <ul class="breadcrumb">
+        <!-- breadcrumbs -->
+        <ul class="breadcrumb"
+            ng-show="purchaser.step > 0">
 
           <li>
             <span class="label">1</span>&nbsp;
@@ -84,28 +75,47 @@
             <span ng-show="purchaser.step < 4">Payment</span>
           </li>
 
-          <!-- <li>
-            <span class="label">5</span>&nbsp;
-            <a ng-click="switchStep(5)" ng-show="purchaser.step > 5">Confirmation</a>
-            <span ng-show="purchaser.step < 6">Confirmation</span>
-          </li> -->
-
         </ul>
+        <!-- end breadcrumbs -->
+
+        <!-- wizard welcome -->
+        <div class="row-fluid" ng-show="purchaser.step == 0">
+
+          <div class="span4">
+            <h4>Online business</h4>
+            <p>0800 numbers<br>0900 numbers</p>
+            <p>Coming soon..</p>
+          </div>
+
+          <div class="span4">
+            <button class="btn btn-primary" 
+                    ng-click="switchStep(1)">Buy a number now</button>
+          </div>
+
+          <div class="span4">
+            <h4>Online personal</h4>
+            <p>Local numbers</p>
+            <p>Virtual numbers are available</p>
+          </div>
+
+        </div>
+        <!-- end wizard welcome -->
 
 
-        <div class="row-fluid">
+        <!-- steps -->
+        <div class="row-fluid" ng-show="purchaser.step > 0">
+
+
+          <!-- purchasing wizard -->
           <div class="span9">
             <ul style="list-style: none; margin: 0; padding: 0;">
 
-
-
+              <!-- number selection -->
               <li ng-show="purchaser.step == 1">
                 <h4>Number selection</h4>
                 <p>We are providing many options for your Oneline number.</p>
 
                 <form class="form-horizontal">
-
-
 
                   <!-- number types -->
                   <div class="control-group alert alert-block" style="position: relative;">
@@ -123,8 +133,6 @@
                   </div>
                   <!-- end number types -->
 
-
-
                   <!-- countries -->
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1) || (order.package==2)">
                     <label class="control-label" for="inputPassword">Country</label>
@@ -137,8 +145,6 @@
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">2</div>
                   </div>
                   <!-- end countries -->
-
-
 
                   <!-- regions local -->
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1)">
@@ -153,8 +159,6 @@
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">3</div>
                   </div>
                   <!-- end regions local -->
-
-
 
                   <!-- numbers local -->
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1) && order.region">
@@ -209,8 +213,6 @@
                   </div>
                   <!-- end numbers local -->
 
-
-
                   <!-- regions virtual -->
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2)">
                     <label class="control-label" for="inputPassword">Services</label>
@@ -225,8 +227,6 @@
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">3</div>
                   </div>
                   <!-- end regions virtual -->
-
-
 
                   <!-- ranges virtual -->
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual">
@@ -243,8 +243,6 @@
                     <div style="position: absolute; bottom: 10px; left: 10px; font-size: 1.8em; font-weight: bold; color: gray">4</div>
                   </div>
                   <!-- end ranges virtual -->
-
-
 
                   <!-- numbers virtual -->
                   <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
@@ -298,11 +296,9 @@
                   <!-- end numbers virtual -->
                 </form>
               </li>
+              <!-- end number selection -->
 
-
-
-
-
+              <!-- abonements -->
               <li ng-show="purchaser.step == 2">
                 <h4>Abonements</h4>
                 <p>Payment types</p>
@@ -333,36 +329,19 @@
                     </li>
                   </ul>
                 </div>
-
-
               </li>
+              <!-- end abonements -->
 
-
-
-
-
-              <li ng-show="purchaser.step == 3">
-                <h4>Payment</h4>
-                <p>Ogen stuff</p>
-              </li>
-
-
-
-
-
-              <!-- <li ng-show="purchaser.step == 5">
-                <h4>Confirmation</h4>
-                <p>Confirmation</p>
-              </li> -->
-
-
-
+              <!-- payment -->
+              <li ng-show="purchaser.step == 3"></li>
+              <!-- end payment -->
 
             </ul>
 
             <hr>
 
-            <ul class="pager">
+            <ul class="pager"
+                ng-show="purchaser.step > 0">
               <li class="previous">
                 <a ng-click="decreaseStep()" ng-show="purchaser.step > 1">Previous</a>
               </li>
@@ -370,9 +349,13 @@
                 <a ng-click="increaseStep()" ng-show="purchaser.step < 5">Next</a>
               </li>
             </ul>
-          </div>
 
-          <div class="span3">
+          </div>
+          <!-- end purchasing wizard -->
+
+          <!-- basket -->
+          <div class="span3"
+                ng-show="purchaser.step > 0">
 
             <div id="basket" data-spy="affix" data-offset-top="200">
 
@@ -428,15 +411,13 @@
             <h4 style="margin-top: 35px;">What kind of number should I buy?</h4>
             <p>First impression is always important. Your number should tell you about something about you or just you!</p>
           </div>
+          <!-- end basket -->
 
         </div>
+        <!-- end steps -->
 
       </div>
       <!-- end purchaser -->
-
-
-
-
 
 
       <!-- manager -->
@@ -507,10 +488,6 @@
       <!-- end manager -->
 
 
-
-
-
-
       <!-- notifier -->
       <div class="tab-pane {{(views.notifier==true) && 'active'}}">
         <div class="tab-header">
@@ -564,10 +541,6 @@
         </div>
       </div>
       <!-- end notifier -->
-
-
-
-
 
 
       <!-- reporter -->
@@ -682,10 +655,6 @@
       <!-- end reporter -->
 
 
-
-
-
-
       <!-- guarder -->
       <div class="tab-pane {{(views.guarder==true) && 'active'}}">
         <div class="tab-header">
@@ -745,10 +714,6 @@
 
       </div>
       <!-- end guarder -->
-
-
-
-
 
 
     </div>
