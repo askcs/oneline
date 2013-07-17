@@ -340,8 +340,7 @@
 
             <hr>
 
-            <ul class="pager"
-                ng-show="purchaser.step > 0">
+            <ul class="pager" ng-show="purchaser.step > 0">
               <li class="previous">
                 <a ng-click="decreaseStep()" ng-show="purchaser.step > 1">Previous</a>
               </li>
@@ -354,8 +353,7 @@
           <!-- end purchasing wizard -->
 
           <!-- basket -->
-          <div class="span3"
-                ng-show="purchaser.step > 0">
+          <div class="span3" ng-show="purchaser.step > 0">
 
             <div id="basket" data-spy="affix" data-offset-top="200">
 
@@ -711,9 +709,17 @@
       </div>
       <!-- end guarder -->
 
-
     </div>
     <!-- end tabs content -->
+
+
+    <!-- <img style="" ng-src="img/content_canvas_shadow.png"> -->
+
+    <div id="tab-shadow" style="margin-left: 154px;">
+      <img ng-src="img/content_canvas_shadow.png">
+    </div>
+
+
 
   </div>
 </div>

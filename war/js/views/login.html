@@ -5,6 +5,8 @@
 
 		<form ng-submit="login()">
 
+			<img ng-src="img/oneline_logo_big.png">
+
 		  <h4 class="form-signin-heading">Welcome back</h4>
 
 		  <p style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register an account</a></p>
@@ -35,7 +37,8 @@
 		      ng-model="logindata.remember">Remember me
 		  </label>
 
-		  <button class="btn btn-large btn-primary" type="submit">{{ui.login.button_login}}</button>
+		  <!-- <button class="btn btn-large btn-primary" type="submit">{{ui.login.button_login}}</button> -->
+		  <a class="btn btn-large btn-primary" href="#core">{{ui.login.button_login}}</a>
 
 		  <p>
 		  	<small>
@@ -51,4 +54,3 @@
 	
 	<!-- end change pass -->
 </div>
-
