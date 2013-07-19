@@ -6968,6 +6968,14 @@ dl dd {
   margin-bottom: 15px;
 }
 
+h2 {
+  color: #646199;
+}
+
+.well h2 {
+  color: #555555;
+}
+
 .left-border-fix {
   width: 1px;
   border-left: 1px solid red;
@@ -7476,10 +7484,11 @@ ul.nav-tabs-app .active span.icomoon {
   overflow: hidden;
   height: 50px;
 }
-.tab-header h3 {
-  margin-top: 0;
+.tab-header h1 {
+  margin-top: 2px;
   color: #646199;
-  font-size: 36px;
+  font-size: 50px;
+  font-weight: bold;
 }
 
 .tabs-left .tab-content {
@@ -7624,4 +7633,13 @@ ul.breadcrumb-steps .step-active .label {
 }
 ul.breadcrumb-steps .step-active a {
   color: #e9168b;
+}
+
+.step-watermark {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #555555;
 }
