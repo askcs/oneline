@@ -51,21 +51,17 @@
         </div>
         <hr>
 
-
         <div class="row-fluid">
           <div class="span12 well">
-
-            <div style="display: inline; float: left; margin-top: 15px;">
+            <div style="display: inline; float: left; margin-top: 5px;">
               <span aria-hidden="true" 
                     class="icomoon icomoon-mobile-5" 
-                    style="font-size: 8em; margin-left: -20px; color: #646199;"></span>
+                    style="font-size: 8em; margin-right: 20px; color: #646199;"></span>
             </div>
-            <h2 style="margin-top: 35px;">What kind of number should I buy?</h2>
+            <h2 style="margin-top: 25px;">What kind of number should I buy?</h2>
             <p>First impression is always important. Your number should tell you about something about you or just you!</p>
-
           </div>
         </div>
-
 
         <!-- breadcrumbs -->
         <ul class="breadcrumb-steps" ng-show="purchaser.step > 0">
@@ -409,7 +405,6 @@
           <!-- end purchasing wizard -->
 
           <!-- basket -->
-          <!-- <div class="span3" ng-show="purchaser.step > 0"> -->
           <div class="span3">
 
             <div id="basket">
@@ -483,8 +478,6 @@
 
             <ul class="pager" ng-show="purchaser.step > 0">
 
-
-
               <li class="previous" 
                     ng-show="purchaser.step == 2">
                 <a ng-click="decreaseStep()">Number selection</a>
@@ -495,8 +488,6 @@
                 <a ng-click="decreaseStep()">Payment types</a>
               </li>
 
-
-
               <li class="next {{(!order.number) && 'disabled'}}"
                    ng-show="purchaser.step == 1">
                 <a ng-click="increaseStep()">Payment types</a>
@@ -506,8 +497,6 @@
                    ng-show="purchaser.step == 2">
                 <a ng-click="increaseStep()">User information</a>
               </li>
-
-
 
             </ul>
 
@@ -526,8 +515,20 @@
         <hr>
 
         <div class="row-fluid">
+          <div class="span12 well">
+            <div style="display: inline; float: left; margin-top: 5px;">
+              <span aria-hidden="true" 
+                    class="icomoon icomoon-phone-7" 
+                    style="font-size: 8em; margin-right: 20px; color: #646199;"></span>
+            </div>
+            <h2 style="margin-top: 25px;">Proin consequat lacus nisl</h2>
+            <p>Nulla adipiscing imperdiet dictum. Nulla sagittis augue magna, lobortis egestas massa pretium vel.</p>
+          </div>
+        </div>
 
-          <div class="span9">
+        <div class="row-fluid">
+
+          <div class="span12">
             <form class="form-inline well">
               <input type="text" class="input-medium" placeholder="Label">&nbsp;
               <input type="password" class="input-large" placeholder="Telefon number">&nbsp;
@@ -568,14 +569,6 @@
             </table>
           </div>
 
-          <div class="span3">
-            <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-phone-7" style="font-size: 10em; line-height: 1.2em;"></span>
-            </div>
-            <h4>Proin consequat lacus nisl,</h4>
-            <p>Nulla adipiscing imperdiet dictum. Nulla sagittis augue magna, lobortis egestas massa pretium vel. Nam congue malesuada nisi, sed elementum odio commodo mollis. Morbi sed enim imperdiet, suscipit leo non, ultricies massa. Proin a tincidunt urna.</p>
-          </div>
-
         </div>
 
       </div>
@@ -585,13 +578,25 @@
       <!-- notifier -->
       <div class="tab-pane {{(views.notifier==true) && 'active'}}">
         <div class="tab-header">
-          <h3 class="pull-left">Missed Call Notificationss</h3>
+          <h3 class="pull-left">Missed Call Notifications</h3>
         </div>
         <hr>
 
         <div class="row-fluid">
+          <div class="span12 well">
+            <div style="display: inline; float: left; margin-top: 5px;">
+              <span aria-hidden="true" 
+                    class="icomoon icomoon-mobile-5" 
+                    style="font-size: 8em; margin-right: 20px; color: #646199;"></span>
+            </div>
+            <h2 style="margin-top: 25px;">What kind of number should I buy?</h2>
+            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
+          </div>
+        </div>
 
-          <div class="span9">
+        <div class="row-fluid">
+
+          <div class="span12">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
 
             <form class="form-inline">
@@ -600,7 +605,7 @@
                 <tr>
                   <td>
                     <label class="checkbox">
-                      <input type="checkbox"> Email Notification
+                      <input type="checkbox">&nbsp;Email Notification
                     </label>
                   </td>
                   <td>
@@ -610,7 +615,7 @@
                 <tr>
                   <td>
                     <label class="checkbox">
-                      <input type="checkbox"> SMS Notification
+                      <input type="checkbox">&nbsp;SMS Notification
                     </label>
                   </td>
                   <td>
@@ -622,14 +627,6 @@
               <button type="submit" class="btn">Save changes</button>
             </form>
 
-          </div>
-
-          <div class="span3">
-            <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 10em; line-height: 1.2em;"></span>
-            </div>
-            <h4>What kind of number should I buy?</h4>
-            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
           </div>
 
         </div>
@@ -645,8 +642,20 @@
         <hr>
 
         <div class="row-fluid">
+          <div class="span12 well">
+            <div style="display: inline; float: left; margin-top: 5px;">
+              <span aria-hidden="true" 
+                    class="icomoon icomoon-calendar-5" 
+                    style="font-size: 8em; margin-right: 20px; color: #646199;"></span>
+            </div>
+            <h2 style="margin-top: 25px;">Quisque condimentum at nibh vel convallis</h2>
+            <p>Pellentesque eget ante non mauris aliquet iaculis quis sed orci. Curabitur quis magna ac mauris adipiscing bibendum. Duis semper semper ante.</p>
+          </div>
+        </div>
 
-          <div class="span9">
+        <div class="row-fluid">
+
+          <div class="span12">
             <p>Oneline provides all your recent calls only to you.</p>
 
             <!-- <form class="form-inline well">
@@ -734,15 +743,6 @@
 
           </div>
 
-          <div class="span3">
-            <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-calendar-5" style="font-size: 10em; line-height: 1.2em;"></span>
-            </div>
-            <h4>Quisque condimentum at nibh vel convallis.</h4>
-            <p>Duis pellentesque sagittis justo in lacinia. Sed nec dignissim metus. Nam est felis, mattis eget volutpat et, aliquet et massa.</p>
-            <p>Pellentesque eget ante non mauris aliquet iaculis quis sed orci. Curabitur quis magna ac mauris adipiscing bibendum. Duis semper semper ante. Vestibulum euismod lorem id dignissim sagittis.</p>
-          </div>
-
         </div>
 
       </div>
@@ -757,8 +757,20 @@
         <hr>
 
         <div class="row-fluid">
+          <div class="span12 well">
+            <div style="display: inline; float: left; margin-top: 5px;">
+              <span aria-hidden="true" 
+                    class="icomoon icomoon-user-block-2" 
+                    style="font-size: 8em; margin-right: 20px; color: #646199;"></span>
+            </div>
+            <h2 style="margin-top: 25px;">Aenean erat neque, dignissim non magna vitae</h2>
+            <p>Curabitur quis magna ac mauris adipiscing bibendum. Duis semper semper ante.</p>
+          </div>
+        </div>
 
-          <div class="span9">
+        <div class="row-fluid">
+
+          <div class="span12">
             <p>Oneline can block any unwanted incoming calls and let them know kindly.</p>
 
             <form class="form-inline well">
@@ -797,13 +809,6 @@
 
           </div>
 
-          <div class="span3">
-            <div style="display: block;" class="text-center">
-              <span aria-hidden="true" class="icomoon icomoon-user-block-2" style="font-size: 10em; line-height: 1.2em;"></span>
-            </div>
-            <h4>Aenean erat neque, dignissim non magna vitae</h4>
-            <p>Integer risus sapien, adipiscing sit amet quam vel, tempus feugiat libero. Nulla adipiscing imperdiet dictum. Nulla sagittis augue magna, lobortis egestas massa pretium vel. Nam congue malesuada nisi, sed elementum odio commodo mollis. Morbi sed enim imperdiet, suscipit leo non, ultricies massa. Proin a tincidunt urna.</p>
-          </div>
         </div>
 
       </div>
