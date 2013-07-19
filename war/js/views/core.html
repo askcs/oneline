@@ -129,7 +129,7 @@
                 <form class="form-horizontal">
 
                   <!-- number types -->
-                  <div class="control-group alert alert-block" style="position: relative;">
+                  <div class="control-group well" style="position: relative;">
                     <label class="control-label" for="inputEmail">Types</label>
                     <div class="controls">
                       <ul ng-repeat="package in packages" style="list-style: none; margin: 0, padding: 0;">
@@ -145,7 +145,7 @@
                   <!-- end number types -->
 
                   <!-- countries -->
-                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1) || (order.package==2)">
+                  <div class="control-group well" style="position: relative;" ng-show="(order.package==1) || (order.package==2)">
                     <label class="control-label" for="inputPassword">Country</label>
                     <div class="controls">
                       <select ng-model="order.country" 
@@ -158,7 +158,7 @@
                   <!-- end countries -->
 
                   <!-- regions local -->
-                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1)">
+                  <div class="control-group well" style="position: relative;" ng-show="(order.package==1)">
                     <label class="control-label" for="inputPassword">Regions</label>
                     <div class="controls">
                       <select ng-model="order.region" 
@@ -172,7 +172,7 @@
                   <!-- end regions local -->
 
                   <!-- numbers local -->
-                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==1) && order.region">
+                  <div class="control-group well" style="position: relative;" ng-show="(order.package==1) && order.region">
                     <label class="control-label" for="inputPassword">Numbers</label>
                     <div class="controls">
 
@@ -225,7 +225,7 @@
                   <!-- end numbers local -->
 
                   <!-- regions virtual -->
-                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2)">
+                  <div class="control-group well" style="position: relative;" ng-show="(order.package==2)">
                     <label class="control-label" for="inputPassword">Services</label>
                     <div class="controls">
                       <select ng-model="order.virtual" 
@@ -240,7 +240,7 @@
                   <!-- end regions virtual -->
 
                   <!-- ranges virtual -->
-                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual">
+                  <div class="control-group well" style="position: relative;" ng-show="(order.package==2) && order.virtual">
                     <label class="control-label" for="inputPassword">Virtual area code</label>
                     <div class="controls">
                       <ul style="list-style: none; margin: 0; padding: 0; margin-top: 5px;">
@@ -256,7 +256,7 @@
                   <!-- end ranges virtual -->
 
                   <!-- numbers virtual -->
-                  <div class="control-group alert alert-block" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
+                  <div class="control-group well" style="position: relative;" ng-show="(order.package==2) && order.virtual && order.range">
                     <label class="control-label" for="inputPassword">Numbers</label>
                     <div class="controls">
 
@@ -372,7 +372,7 @@
               <h4>Basket</h4>
               <p>Selected basket contents</p>
 
-              <div class="alert alert-block" style="margin-top: -2px;">
+              <div class="well" style="margin-top: -2px;">
                 <div ng-hide="order.package">You have not selected anything yet.</div>
 
                 <dl ng-show="order.package">
