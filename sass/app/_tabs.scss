@@ -18,7 +18,7 @@ ul.nav-tabs-app {
   li {
     text-align: center;
 
-      border-radius: none;
+      // border-radius: none;
 
     a {
       padding-top: 10px;
@@ -30,11 +30,12 @@ ul.nav-tabs-app {
       
       border: none;
 
-      border-radius: none;
+      // border-radius: none;
       
       &:hover {
         border: none;
         background-color: $purple;
+        // border-right: 1px solid white;
       }
     }
 

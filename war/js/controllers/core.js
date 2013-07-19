@@ -204,7 +204,7 @@ angular.module('WebPaige.Controllers.Core', [])
 	  /**
 	   * Switch step in default value
 	   */
-	  $scope.switchStep(0);
+	  $scope.switchStep(1);
 
 
 	  /**

@@ -51,45 +51,35 @@
         </div>
         <hr>
 
-
-        <div class="row-fluid">
-          <div class="span12 well">
-
-            <div style="display: inline; float: left; margin-top: 15px;">
-              <span aria-hidden="true" 
-                    class="icomoon icomoon-mobile-5" 
-                    style="font-size: 8em; margin-left: -20px; color: #646199;"></span>
-            </div>
-            <h2 style="margin-top: 35px;">What kind of number should I buy?</h2>
-            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
-
-          </div>
-        </div>
-
-
         <!-- breadcrumbs -->
-        <ul class="breadcrumb-steps" ng-show="purchaser.step > 0">
+        <ul class="breadcrumb"
+            ng-show="purchaser.step > 0">
 
-          <li class="{{(purchaser.step > 0) && 'step-active'}}">
+          <li>
             <span class="label">1</span>&nbsp;
-            <a ng-click="switchStep(1)">Number selection</a>
+            <a ng-click="switchStep(1)" ng-show="purchaser.step > 1">Number selection</a>
+            <span ng-show="purchaser.step < 2">Number selection</span>
+            <span class="divider">></span>
           </li>
 
-          <li class="{{(purchaser.step > 1) && 'step-active'}}">
+          <li>
             <span class="label">2</span>&nbsp;
-            <a ng-click="switchStep(2)">Abonements</a>
+            <a ng-click="switchStep(2)" ng-show="purchaser.step > 2">Abonements</a>
+            <span ng-show="purchaser.step < 3">Abonements</span>
+            <span class="divider">></span>
           </li>
 
-          <li class="{{(purchaser.step > 2) && 'step-active'}}">
+          <li>
             <span class="label">3</span>&nbsp;
-            <a ng-click="switchStep(3)">Payment</a>
+            <a ng-click="switchStep(3)" ng-show="purchaser.step > 3">Payment</a>
+            <span ng-show="purchaser.step < 4">Payment</span>
           </li>
 
         </ul>
         <!-- end breadcrumbs -->
 
         <!-- wizard welcome -->
-        <!-- <div class="row-fluid" ng-show="purchaser.step == 0">
+        <div class="row-fluid" ng-show="purchaser.step == 0">
 
           <div class="span4">
             <h4>Online business</h4>
@@ -108,13 +98,12 @@
             <p>Virtual numbers are available</p>
           </div>
 
-        </div> -->
+        </div>
         <!-- end wizard welcome -->
 
 
         <!-- steps -->
-        <!-- <div class="row-fluid" ng-show="purchaser.step > 0"> -->
-        <div class="row-fluid">
+        <div class="row-fluid" ng-show="purchaser.step > 0">
 
 
           <!-- purchasing wizard -->
@@ -364,8 +353,7 @@
           <!-- end purchasing wizard -->
 
           <!-- basket -->
-          <!-- <div class="span3" ng-show="purchaser.step > 0"> -->
-          <div class="span3">
+          <div class="span3" ng-show="purchaser.step > 0">
 
             <div id="basket" data-spy="affix" data-offset-top="200">
 
@@ -415,7 +403,11 @@
 
             </div>
 
-
+            <div style="display: inline; float: left; margin-top: 15px;">
+              <span aria-hidden="true" class="icomoon icomoon-mobile-5" style="font-size: 8em; margin-left: -20px;"></span>
+            </div>
+            <h4 style="margin-top: 35px;">What kind of number should I buy?</h4>
+            <p>First impression is always important. Your number should tell you about something about you or just you!</p>
           </div>
           <!-- end basket -->
 
