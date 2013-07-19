@@ -3588,8 +3588,11 @@ angular.module('WebPaige.Controllers.Core', [])
 			$scope.order = {
 				package: 	null,
 				country: 	$scope.defaults.country,
-				region: 	null
+				region: 	null,
+				number: 	null
 			};
+
+			$scope.switchStep(1);
 		};
 
 
