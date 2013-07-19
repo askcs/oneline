@@ -28,9 +28,11 @@ angular.module('WebPaige.Controllers.Core', [])
 	  	country: 	31
 	  	// package: 	1,
 	  	// country: 	31,
-	  	// region: 		10,
+	  	// region: 	10,
 	  	// number: 		1234567
 	  };
+
+	  $scope.numbers = Generators.list();
 
 
 		/**

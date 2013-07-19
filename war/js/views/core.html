@@ -203,16 +203,20 @@
 
 
                       <ul class="nav nav-tabs" id="myTab">
+
                         <li class="{{(tabs.normals==true) && 'active'}}">
                           <a ng-click="tabs.normals=true; tabs.premiums=false">Normals</a>
                         </li>
+
                         <li class="{{(tabs.premiums==true) && 'active'}}">
                           <a ng-click="tabs.premiums=true; tabs.normals=false;">Premiums</a>
                         </li>
+
                       </ul>
                        
-                      <div class="tab-content" style="margin-top: -21px; height: auto; overflow: hidden;">
-                        <div class="tab-pane {{(tabs.normals==true) && 'active'}}" id="normals">
+                      <div style="background-color: white; padding: 20px; margin-top: -20px; border: 1px solid #ddd; border-top: none;">
+
+                        <div ng-show="tabs.normals" id="normals">
 
                           <table class="table table-striped">
                             <tr ng-repeat="number in numbers.normals">
@@ -226,7 +230,8 @@
                           </table>
 
                         </div>
-                        <div class="tab-pane {{(tabs.premiums==true) && 'active'}}" id="premiums">
+
+                        <div ng-show="tabs.premiums" id="premiums">
                         
                           <table class="table table-striped">
                             <tr ng-repeat="number in numbers.premiums">
@@ -290,16 +295,21 @@
 
 
                       <ul class="nav nav-tabs" id="myTab">
+
                         <li class="{{(tabs.normals==true) && 'active'}}">
                           <a ng-click="tabs.normals=true; tabs.premiums=false">Normals</a>
                         </li>
+
                         <li class="{{(tabs.premiums==true) && 'active'}}">
                           <a ng-click="tabs.premiums=true; tabs.normals=false;">Premiums</a>
                         </li>
+
                       </ul>
                        
-                      <div class="tab-content" style="margin-top: -21px; height: auto; overflow: hidden;">
-                        <div class="tab-pane {{(tabs.normals==true) && 'active'}}" id="normals">
+                      <div style="background-color: white; padding: 20px; margin-top: -20px; border: 1px solid #ddd; border-top: none;">
+
+                        <!-- <div class="tab-pane {{(tabs.normals==true) && 'active'}}" id="normals"> -->
+                        <div ng-show="tabs.normals" id="normals">
 
                           <table class="table table-striped">
                             <tr ng-repeat="number in numbers.normals">
@@ -313,7 +323,9 @@
                           </table>
 
                         </div>
-                        <div class="tab-pane {{(tabs.premiums==true) && 'active'}}" id="premiums">
+
+                        <!-- <div class="tab-pane {{(tabs.premiums==true) && 'active'}}" id="premiums"> -->
+                        <div ng-show="tabs.premiums" id="premiums">
                         
                           <table class="table table-striped">
                             <tr ng-repeat="number in numbers.premiums">
