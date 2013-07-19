@@ -7056,6 +7056,19 @@ h2 {
   font-size: 11px;
 }
 
+.thumb-btn {
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid whitesmoke;
+}
+.thumb-btn:hover {
+  border: 2px solid #e9168b;
+}
+
+.thumb-btn-active {
+  border: 2px solid #e9168b;
+}
+
 /**
  * Welcoming page styles
  */
@@ -7446,6 +7459,11 @@ label {
   margin-left: 20px;
 }
 
+.nav-tabs li a:hover {
+  background-color: #646199;
+  color: white;
+}
+
 ul.nav-tabs-app li {
   text-align: center;
 }
@@ -7625,6 +7643,9 @@ ul.breadcrumb-steps li a {
   text-decoration: none;
   font-size: 16px;
   color: #555555;
+}
+ul.breadcrumb-steps li .breadcrumb-step-text {
+  font-size: 16px;
 }
 ul.breadcrumb-steps .step-active .label {
   background-color: #e9168b;

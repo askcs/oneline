@@ -21,7 +21,7 @@ body {
 
 a {
   &:hover {
-    cursor: pointer
+    cursor: pointer;
   }
 }
 
@@ -330,3 +330,20 @@ h5 {
 //     }
 //   }
 // }
+// 
+// 
+
+
+
+.thumb-btn {
+    text-align: center;
+    cursor: pointer;
+    border: 2px solid $wellBackgroundColor;
+  &:hover {
+    border: 2px solid $pink;
+  }
+}
+
+.thumb-btn-active {
+  border: 2px solid $pink;
+}

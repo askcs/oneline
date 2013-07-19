@@ -32,7 +32,7 @@ angular.module('WebPaige.Controllers.Core', [])
 	  	// number: 		1234567
 	  };
 
-	  $scope.numbers = Generators.list();
+	  // $scope.numbers = Generators.list();
 
 
 		/**
@@ -214,7 +214,7 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
 	  $scope.increaseStep = function ()
 	  {
-	  	if ($scope.purchaser.step < 5) $scope.switchStep($scope.purchaser.step + 1);
+	  	if ($scope.purchaser.step < 3 && $scope.order.number) $scope.switchStep($scope.purchaser.step + 1);
 	  };
 
 
