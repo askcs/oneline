@@ -17,3 +17,5 @@ npm-debug.log
 sass/.sass-cache/
 
 todos/
+
+.idea/

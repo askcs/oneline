@@ -265,6 +265,10 @@ angular.module('WebPaige')
     });
 
 
+//    $httpProvider.defaults.useXDomain = true;
+//    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+
     /**
      * Define interceptor
      */

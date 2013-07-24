@@ -578,7 +578,7 @@ var ui = {
 angular.module('WebPaige',[
   'ngResource',
   // modals
-  // 'WebPaige.Modals.User',
+  'WebPaige.Modals.User',
   // 'WebPaige.Modals.Dashboard',
   'WebPaige.Modals.Core',
   // 'WebPaige.Modals.Profile',
@@ -588,7 +588,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Login',
   'WebPaige.Controllers.Forgotpass',
   'WebPaige.Controllers.Register',
-  // 'WebPaige.Controllers.Logout',
+  'WebPaige.Controllers.Logout',
   // 'WebPaige.Controllers.Dashboard',
   'WebPaige.Controllers.Core',
   // 'WebPaige.Controllers.Profile',
@@ -596,11 +596,11 @@ angular.module('WebPaige',[
   // 'WebPaige.Controllers.Help',
   // services
   // 'WebPaige.Services.Timer',
-  // 'WebPaige.Services.Session',
+  'WebPaige.Services.Session',
   // 'WebPaige.Services.Dater',
   // 'WebPaige.Services.EventBus',
   // 'WebPaige.Services.Interceptor',
-  // 'WebPaige.Services.MD5',
+  'WebPaige.Services.MD5',
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
   'WebPaige.Services.Generators',
@@ -669,12 +669,6 @@ angular.module('WebPaige')
     profile: {
       meta:   profile.meta,
       title:  profile.title,
-      logos: {
-        login:  'profiles/' + profile.meta + '/img/login_logo.png',
-        app:    ''
-      },
-      background: 'profiles/' + profile.meta + '/img/login_bg.jpg', // jpg for smaller size,
-      p2000:      profile.p2000,
       mobileApp:  profile.mobileApp
     },
 
@@ -1301,6 +1295,10 @@ angular.module('WebPaige')
     });
 
 
+//    $httpProvider.defaults.useXDomain = true;
+//    delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+
     /**
      * Define interceptor
      */
@@ -1848,7 +1846,229 @@ angular.module('WebPaige')
 /**
  * Sticky timeline header
  */
-// $('#mainTimeline .timeline-frame div:first div:first').css({'top': '0px'});/*jslint node: true */
+// $('#mainTimeline .timeline-frame div:first div:first').css({'top': '0px'});'use strict';
+
+
+angular.module('WebPaige.Modals.User', ['ngResource'])
+
+
+/**
+ * User
+ */
+.factory('User', 
+[
+	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
+	function ($resource, $config, $q, $location, Storage, $rootScope) 
+	{
+	  var self = this;
+
+
+	  var User = $resource();
+
+
+	  var Login = $resource(
+	    $config.host + '/login',
+	    {
+	    },
+	    {
+	      process: {
+	        method: 'GET',
+	        params: {username:'', password:''}
+	      }
+	    }
+	  );
+
+
+	  var Logout = $resource(
+	    $config.host + '/logout',
+	    {
+	    },
+	    {
+	      process: {
+	        method: 'GET',
+	        params: {}
+	      }
+	    }
+	  );
+
+
+//	  var Resources = $resource(
+//	    $config.host + '/resources',
+//	    {
+//	    },
+//	    {
+//	      get: {
+//	        method: 'GET',
+//	        params: {}
+//	      }
+//	    }
+//	  );
+
+
+//	  var Reset = $resource(
+//	    $config.host + '/passwordReset',
+//	    {
+//	    },
+//	    {
+//	      password: {
+//	        method: 'GET',
+//	        params: {uuid: '', path:''}
+//	      }
+//	    }
+//	  );
+
+	  // var changePassword = $resource($config.host+'/passwordReset', 
+	  //   {uuid: uuid,
+	  //    pass: newpass,
+	  //    key: key});
+	  
+	  
+	  /**
+	   * TODO
+	   * RE-FACTOR
+	   * 
+	   * User login
+	   */
+	  User.prototype.password = function (uuid)
+	  {
+	    var deferred = $q.defer();
+
+	    Reset.password(
+	      {
+	        uuid: uuid.toLowerCase(),
+	        path: $location.absUrl()
+	      }, 
+	      function (result)
+	      {
+	        if (angular.equals(result, []))
+	        {
+	          deferred.resolve("ok");
+	        }
+	        else
+	        {
+	          deferred.resolve(result);
+	        };
+	      },
+	      function (error)
+	      {
+	        deferred.resolve(error);
+	      }
+	    );
+
+	    return deferred.promise;
+	  };
+
+
+	  /**
+	   * User login
+	   */
+	  User.prototype.login = function (username, password)
+	  {
+	    var deferred = $q.defer();
+
+	    Login.process({username: username, password: password},
+	      function (result) 
+	      {
+	        if (angular.equals(result, [])) 
+	        {
+	          deferred.reject("Something went wrong with login!");
+	        }
+	        else 
+	        {
+	          deferred.resolve(result);
+	        };
+	      },
+	      function (error)
+	      {
+	        deferred.resolve(error);
+	      }
+	    );
+
+	    return deferred.promise;
+	  };
+	  
+
+	  /**
+	   * RE-FACTORY
+	   * change user password
+	   */
+	  User.prototype.changePass = function (uuid, newpass, key)
+	  {
+	    var deferred = $q.defer();
+	    
+	    /**
+	     * RE-FACTORY
+	     */
+	    changePassword.get(
+	      function (result)
+	      {
+	        deferred.resolve(result);
+	      },
+	      function (error)
+	      {
+	        deferred.resolve(error);
+	      }
+	    );
+	    
+	    return deferred.promise;
+	  }
+
+
+	  /**
+	   * User logout
+	   */
+	  User.prototype.logout = function () 
+	  {    
+	    var deferred = $q.defer();
+
+	    Logout.process(null, 
+	      function (result) 
+	      {
+	        deferred.resolve(result);
+	      },
+	      function (error)
+	      {
+	        deferred.resolve({error: error});
+	      }
+	    );
+
+	    return deferred.promise;
+	  };
+
+
+	  /**
+	   * Get user resources
+	   */
+	  User.prototype.resources = function () 
+	  {    
+	    var deferred = $q.defer();
+
+	    Resources.get(null, 
+	      function (result) 
+	      {
+	        if (angular.equals(result, [])) 
+	        {
+	          deferred.reject("User has no resources!");
+	        }
+	        else 
+	        {
+	          Storage.add('resources', angular.toJson(result));
+
+	          deferred.resolve(result);
+	        }
+	      },
+	      function (error)
+	      {
+	        deferred.resolve({error: error});
+	      }
+	    );
+
+	    return deferred.promise;
+	  };
+
+	  return new User;
+	}
+]);;/*jslint node: true */
 /*global angular */
 /*global $ */
 /*global error */
@@ -2125,6 +2345,345 @@ angular.module('WebPaige.Directives', ['ngResource'])
  * @license MIT License, http://www.opensource.org/licenses/MIT
  */
 angular.module("$strap.config",[]).value("$strap.config",{}),angular.module("$strap.filters",["$strap.config"]),angular.module("$strap.directives",["$strap.config"]),angular.module("$strap",["$strap.filters","$strap.directives","$strap.config"]),angular.module("$strap.directives").directive("bsAlert",["$parse","$timeout","$compile",function(t,e,n){"use strict";return{restrict:"A",link:function(e,i,a){var o=t(a.bsAlert),r=(o.assign,o(e));a.bsAlert?e.$watch(a.bsAlert,function(t,o){r=t,i.html((t.title?"<strong>"+t.title+"</strong>&nbsp;":"")+t.content||""),t.closed&&i.hide(),n(i.contents())(e),(t.type||o.type)&&(o.type&&i.removeClass("alert-"+o.type),t.type&&i.addClass("alert-"+t.type)),(angular.isUndefined(a.closeButton)||"0"!==a.closeButton&&"false"!==a.closeButton)&&i.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>')},!0):(angular.isUndefined(a.closeButton)||"0"!==a.closeButton&&"false"!==a.closeButton)&&i.prepend('<button type="button" class="close" data-dismiss="alert">&times;</button>'),i.addClass("alert").alert(),i.hasClass("fade")&&(i.removeClass("in"),setTimeout(function(){i.addClass("in")}));var s=a.ngRepeat&&a.ngRepeat.split(" in ").pop();i.on("close",function(t){var n;s?(t.preventDefault(),i.removeClass("in"),n=function(){i.trigger("closed"),e.$parent&&e.$parent.$apply(function(){for(var t=s.split("."),n=e.$parent,i=0;t.length>i;++i)n&&(n=n[t[i]]);n&&n.splice(e.$index,1)})},$.support.transition&&i.hasClass("fade")?i.on($.support.transition.end,n):n()):r&&(t.preventDefault(),i.removeClass("in"),n=function(){i.trigger("closed"),e.$apply(function(){r.closed=!0})},$.support.transition&&i.hasClass("fade")?i.on($.support.transition.end,n):n())})}}}]),angular.module("$strap.directives").directive("bsButton",["$parse","$timeout",function(t){"use strict";return{restrict:"A",require:"?ngModel",link:function(e,n,i,a){if(a){n.parent('[data-toggle="buttons-checkbox"], [data-toggle="buttons-radio"]').length||n.attr("data-toggle","button");var o=!!e.$eval(i.ngModel);o&&n.addClass("active"),e.$watch(i.ngModel,function(t,e){var i=!!t,a=!!e;i!==a?$.fn.button.Constructor.prototype.toggle.call(r):i&&!o&&n.addClass("active")})}n.hasClass("btn")||n.on("click.button.data-api",function(){n.button("toggle")}),n.button();var r=n.data("button");r.toggle=function(){if(!a)return $.fn.button.Constructor.prototype.toggle.call(this);var i=n.parent('[data-toggle="buttons-radio"]');i.length?(n.siblings("[ng-model]").each(function(n,i){t($(i).attr("ng-model")).assign(e,!1)}),e.$digest(),a.$modelValue||(a.$setViewValue(!a.$modelValue),e.$digest())):e.$apply(function(){a.$setViewValue(!a.$modelValue)})}}}}]).directive("bsButtonsCheckbox",["$parse",function(){"use strict";return{restrict:"A",require:"?ngModel",compile:function(t){t.attr("data-toggle","buttons-checkbox").find("a, button").each(function(t,e){$(e).attr("bs-button","")})}}}]).directive("bsButtonsRadio",["$parse",function(){"use strict";return{restrict:"A",require:"?ngModel",compile:function(t,e){return t.attr("data-toggle","buttons-radio"),e.ngModel||t.find("a, button").each(function(t,e){$(e).attr("bs-button","")}),function(t,e,n,i){i&&(e.find("[value]").button().filter('[value="'+t.$eval(n.ngModel)+'"]').addClass("active"),e.on("click.button.data-api",function(e){t.$apply(function(){i.$setViewValue($(e.target).closest("button").attr("value"))})}),t.$watch(n.ngModel,function(i,a){if(i!==a){var o=e.find('[value="'+t.$eval(n.ngModel)+'"]');o.length&&$.fn.button.Constructor.prototype.toggle.call(o.data("button"))}}))}}}}]),angular.module("$strap.directives").directive("bsButtonSelect",["$parse","$timeout",function(t){"use strict";return{restrict:"A",require:"?ngModel",link:function(e,n,i,a){var o=t(i.bsButtonSelect);o.assign,a&&(n.text(e.$eval(i.ngModel)),e.$watch(i.ngModel,function(t){n.text(t)}));var r,s,l,u;n.bind("click",function(){r=o(e),s=a?e.$eval(i.ngModel):n.text(),l=r.indexOf(s),u=l>r.length-2?r[0]:r[l+1],console.warn(r,u),e.$apply(function(){n.text(u),a&&a.$setViewValue(u)})})}}}]),angular.module("$strap.directives").directive("bsDatepicker",["$timeout",function(){"use strict";var t="ontouchstart"in window&&!window.navigator.userAgent.match(/PhantomJS/i),e={"/":"[\\/]","-":"[-]",".":"[.]",dd:"(?:(?:[0-2]?[0-9]{1})|(?:[3][01]{1}))",d:"(?:(?:[0-2]?[0-9]{1})|(?:[3][01]{1}))",mm:"(?:[0]?[1-9]|[1][012])",m:"(?:[0]?[1-9]|[1][012])",yyyy:"(?:(?:[1]{1}[0-9]{1}[0-9]{1}[0-9]{1})|(?:[2]{1}[0-9]{3}))(?![[0-9]])",yy:"(?:(?:[0-9]{1}[0-9]{1}))(?![[0-9]])"};return{restrict:"A",require:"?ngModel",link:function(n,i,a,o){var r=function(t,n){n||(n={});var i=t,a=e;return angular.forEach(a,function(t,e){i=i.split(e).join(t)}),RegExp("^"+i+"$",["i"])},s=t?"yyyy/mm/dd":r(a.dateFormat||"mm/dd/yyyy");o&&o.$parsers.unshift(function(t){return!t||s.test(t)?(o.$setValidity("date",!0),t):(o.$setValidity("date",!1),void 0)});var l=i.next('[data-toggle="datepicker"]');if(l.length&&l.on("click",function(){t?i.trigger("focus"):i.datepicker("show")}),t&&"text"===i.prop("type"))i.prop("type","date"),i.on("change",function(){n.$apply(function(){o.$setViewValue(i.val())})});else{o&&i.on("changeDate",function(){n.$apply(function(){o.$setViewValue(i.val())})});var u=i.closest(".popover");u&&u.on("hide",function(){var t=i.data("datepicker");t&&(t.picker.remove(),i.data("datepicker",null))}),i.attr("data-toggle","datepicker"),i.datepicker({autoclose:!0,forceParse:a.forceParse||!1,language:a.language||"en"})}}}}]),angular.module("$strap.directives").directive("bsDropdown",["$parse","$compile",function(t,e){"use strict";var n=Array.prototype.slice,i='<ul class="dropdown-menu" role="menu" aria-labelledby="drop1"><li ng-repeat="item in items" ng-class="{divider: !!item.divider, \'dropdown-submenu\': !!item.submenu && item.submenu.length}"><a ng-hide="!!item.divider" tabindex="-1" ng-href="{{item.href}}" ng-click="{{item.click}}" target="{{item.target}}" ng-bind-html-unsafe="item.text"></a></li></ul>',a=function(t,n,a){for(var r,s,l,u=0,c=t.length;c>u;u++)(r=t[u].submenu)&&(l=a.$new(),l.items=r,s=e(i)(l),s=s.appendTo(n.children("li:nth-child("+(u+1)+")")),o(r,s,l))},o=function(){var t=n.call(arguments);setTimeout(function(){a.apply(null,t)})};return{restrict:"EA",scope:!0,link:function(n,a,r){var s=t(r.bsDropdown);n.items=s(n);var l=e(i)(n);o(n.items,l,n),l.insertAfter(a),a.addClass("dropdown-toggle").attr("data-toggle","dropdown")}}}]),angular.module("$strap.directives").directive("bsModal",["$parse","$compile","$http","$timeout","$q","$templateCache",function(t,e,n,i,a,o){"use strict";return{restrict:"A",scope:!0,link:function(r,s,l){var u=t(l.bsModal),c=(u.assign,u(r));a.when(o.get(c)||n.get(c,{cache:!0})).then(function(t){angular.isObject(t)&&(t=t.data);var n=u(r).replace(".html","").replace(/[\/|\.|:]/g,"-")+"-"+r.$id,a=$('<div class="modal hide" tabindex="-1"></div>').attr("id",n).attr("data-backdrop",l.backdrop||!0).attr("data-keyboard",l.keyboard||!0).addClass(l.modalClass?"fade "+l.modalClass:"fade").html(t);$("body").append(a),s.attr("href","#"+n).attr("data-toggle","modal"),i(function(){e(a)(r)}),r._modal=function(t){a.modal(t)},r.hide=function(){a.modal("hide")},r.show=function(){a.modal("show")},r.dismiss=r.hide})}}}]),angular.module("$strap.directives").directive("bsNavbar",["$location",function(t){"use strict";return{restrict:"A",link:function(e,n){e.$watch(function(){return t.path()},function(t){n.find("li[data-match-route]").each(function(e,n){var i=angular.element(n),a=i.attr("data-match-route"),o=RegExp("^"+a+"$",["i"]);o.test(t)?i.addClass("active"):i.removeClass("active")})})}}}]),angular.module("$strap.directives").directive("bsPopover",["$parse","$compile","$http","$timeout","$q","$templateCache",function(t,e,n,i,a,o){"use strict";return $("body").on("keyup",function(t){27===t.keyCode&&$(".popover.in").each(function(){$(this).popover("hide")})}),{restrict:"A",scope:!0,link:function(i,r,s){var l=t(s.bsPopover),u=(l.assign,l(i)),c={};angular.isObject(u)&&(c=u),a.when(c.content||o.get(u)||n.get(u,{cache:!0})).then(function(t){angular.isObject(t)&&(t=t.data),s.unique&&r.on("show",function(){$(".popover.in").each(function(){var t=$(this),e=t.data("popover");e&&!e.$element.is(r)&&t.popover("hide")})}),s.hide&&i.$watch(s.hide,function(t,e){t?n.hide():t!==e&&n.show()}),r.popover(angular.extend({},c,{content:t,html:!0}));var n=r.data("popover");n.hasContent=function(){return this.getTitle()||t},n.getPosition=function(){var t=$.fn.popover.Constructor.prototype.getPosition.apply(this,arguments);return e(this.$tip)(i),i.$digest(),this.$tip.data("popover",this),t},i._popover=function(t){r.popover(t)},i.hide=function(){r.popover("hide")},i.show=function(){r.popover("show")},i.dismiss=i.hide})}}}]),angular.module("$strap.directives").directive("bsTabs",["$parse","$compile",function(t,e){"use strict";return{restrict:"A",link:function(t,n){var i=['<ul class="nav nav-tabs">',"</ul>"],a=['<div class="tab-content">',"</div>"];n.find("[data-tab]").each(function(e){var n=angular.element(this),o="tab-"+t.$id+"-"+e,r=n.hasClass("active"),s=n.hasClass("fade"),l=t.$eval(n.data("tab"));i.splice(e+1,0,"<li"+(r?' class="active"':"")+'><a href="#'+o+'" data-toggle="tab">'+l+"</a></li>"),a.splice(e+1,0,'<div class="tab-pane '+n.attr("class")+(s&&r?" in":"")+'" id="'+o+'">'+this.innerHTML+"</div>")}),n.html(i.join("")+a.join("")),e(n.children("div.tab-content"))(t)}}}]),angular.module("$strap.directives").directive("bsTimepicker",["$timeout",function(){"use strict";var t="((?:(?:[0-1][0-9])|(?:[2][0-3])|(?:[0-9])):(?:[0-5][0-9])(?::[0-5][0-9])?(?:\\s?(?:am|AM|pm|PM))?)";return{restrict:"A",require:"?ngModel",link:function(e,n,i,a){a&&n.on("change",function(){e.$apply(function(){a.$setViewValue(n.val())})});var o=RegExp("^"+t+"$",["i"]);a.$parsers.unshift(function(t){return!t||o.test(t)?(a.$setValidity("time",!0),t):(a.$setValidity("time",!1),void 0)});var r=n.closest(".popover");r&&r.on("hide",function(){var t=n.data("timepicker");t&&(t.$widget.remove(),n.data("timepicker",null))}),n.attr("data-toggle","timepicker"),n.timepicker()}}}]),angular.module("$strap.directives").directive("bsTooltip",["$parse","$compile",function(t){"use strict";return{restrict:"A",scope:!0,link:function(e,n,i){var a=t(i.bsTooltip),o=(a.assign,a(e));e.$watch(i.bsTooltip,function(t,e){t!==e&&(o=t)}),i.unique&&n.on("show",function(){$(".tooltip.in").each(function(){var t=$(this),e=t.data("tooltip");e&&!e.$element.is(n)&&t.tooltip("hide")})}),n.tooltip({title:function(){return angular.isFunction(o)?o.apply(null,arguments):o},html:!0});var r=n.data("tooltip");r.show=function(){var t=$.Event("show");if(this.$element.trigger(t),!t.isDefaultPrevented()){var e=$.fn.tooltip.Constructor.prototype.show.apply(this,arguments);return this.tip().data("tooltip",this),e}},r.hide=function(){var t=$.Event("hide");return this.$element.trigger(t),t.isDefaultPrevented()?void 0:$.fn.tooltip.Constructor.prototype.hide.apply(this,arguments)},e._tooltip=function(t){n.tooltip(t)},e.hide=function(){n.tooltip("hide")},e.show=function(){n.tooltip("show")},e.dismiss=e.hide}}}]),angular.module("$strap.directives").directive("bsTypeahead",["$parse",function(t){"use strict";return{restrict:"A",require:"?ngModel",link:function(e,n,i,a){var o=t(i.bsTypeahead),r=(o.assign,o(e));e.$watch(i.bsTypeahead,function(t,e){t!==e&&(r=t)}),n.attr("data-provide","typeahead"),n.typeahead({source:function(){return angular.isFunction(r)?r.apply(null,arguments):r},minLength:i.minLength||1,items:i.items,updater:function(t){return a&&e.$apply(function(){a.$setViewValue(t)}),t}});var s=n.data("typeahead");s.lookup=function(){var t;return this.query=this.$element.val()||"",this.query.length<this.options.minLength?this.shown?this.hide():this:(t=$.isFunction(this.source)?this.source(this.query,$.proxy(this.process,this)):this.source,t?this.process(t):this)},"0"===i.minLength&&setTimeout(function(){n.on("focus",function(){0===n.val().length&&setTimeout(n.typeahead.bind(n,"lookup"),200)})})}}}]);;'use strict';
+
+
+angular.module('WebPaige.Services.Session', ['ngResource'])
+
+
+/**
+ * Session Service
+ */
+.factory('Session', 
+[
+  '$rootScope', '$http', 'Storage', 
+  function ($rootScope, $http, Storage)
+  {
+    return {
+      /**
+       * Check session
+       */
+      check: function()
+      {
+        var session = angular.fromJson(Storage.cookie.get('session'));
+
+        if (session)
+        {
+          this.set(session.id);
+
+          return true;
+        }
+        else
+        {
+          return false;
+        };
+      },
+
+      /**
+       * Read cookie value
+       */
+      cookie: function(session)
+      {
+        var values,
+            pairs = document.cookie.split(";");
+
+        for (var i=0; i < pairs.length; i++)
+        {
+          values = pairs[i].split("=");
+
+          if (values[0].trim() == "WebPaige.session") return angular.fromJson(values[1]);
+        };
+
+      },
+
+      /**
+       * Get session
+       * Prolong session time by every check
+       */
+      get: function(session)
+      {
+        this.check(session);
+
+        this.set(session.id);
+
+        return session.id;
+      },
+
+      /**
+       * Set session
+       */
+      set: function(sessionId)
+      {
+        var session = {
+          id: sessionId,
+          time: new Date()
+        };
+
+        Storage.cookie.add('session', angular.toJson(session));
+
+        $rootScope.session = session;
+
+        $http.defaults.headers.common['X-SESSION_ID'] = $rootScope.session.id;
+
+        return session;
+      },
+
+      /**
+       * Clear session
+       */
+      clear: function()
+      {
+        $rootScope.session = null;
+
+        $http.defaults.headers.common['X-SESSION_ID'] = null;
+      }
+    }
+  }
+]);;'use strict';
+
+
+angular.module('WebPaige.Services.MD5', ['ngResource'])
+
+
+/**
+ * MD5
+ */
+.factory('MD5', 
+  function ()
+  {
+    return function (string)
+    {
+      function RotateLeft(lValue, iShiftBits)
+      {
+        return (lValue<<iShiftBits) | (lValue>>>(32-iShiftBits));
+      }
+     
+      function AddUnsigned(lX,lY)
+      {
+        var lX4,lY4,lX8,lY8,lResult;
+        lX8 = (lX & 0x80000000);
+        lY8 = (lY & 0x80000000);
+        lX4 = (lX & 0x40000000);
+        lY4 = (lY & 0x40000000);
+        lResult = (lX & 0x3FFFFFFF)+(lY & 0x3FFFFFFF);
+
+        if (lX4 & lY4) return (lResult ^ 0x80000000 ^ lX8 ^ lY8);
+
+        if (lX4 | lY4)
+        {
+          if (lResult & 0x40000000)
+          {
+            return (lResult ^ 0xC0000000 ^ lX8 ^ lY8);
+          }
+          else
+          {
+            return (lResult ^ 0x40000000 ^ lX8 ^ lY8);
+          }
+        }
+        else
+        {
+          return (lResult ^ lX8 ^ lY8);
+        }
+      }
+     
+      function F(x,y,z) { return (x & y) | ((~x) & z) }
+      function G(x,y,z) { return (x & z) | (y & (~z)) }
+      function H(x,y,z) { return (x ^ y ^ z) }
+      function I(x,y,z) { return (y ^ (x | (~z))) }
+     
+      function FF(a,b,c,d,x,s,ac)
+      {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(F(b, c, d), x), ac));
+
+        return AddUnsigned(RotateLeft(a, s), b);
+      }
+     
+      function GG(a,b,c,d,x,s,ac)
+      {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(G(b, c, d), x), ac));
+
+        return AddUnsigned(RotateLeft(a, s), b);
+      }
+     
+      function HH(a,b,c,d,x,s,ac)
+      {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(H(b, c, d), x), ac));
+
+        return AddUnsigned(RotateLeft(a, s), b);
+      }
+     
+      function II(a,b,c,d,x,s,ac)
+      {
+        a = AddUnsigned(a, AddUnsigned(AddUnsigned(I(b, c, d), x), ac));
+
+        return AddUnsigned(RotateLeft(a, s), b);
+      }
+     
+      function ConvertToWordArray(string)
+      {
+        var lWordCount,
+            lMessageLength = string.length,
+            lNumberOfWords_temp1 = lMessageLength + 8,
+            lNumberOfWords_temp2 = (lNumberOfWords_temp1 - (lNumberOfWords_temp1 % 64)) / 64,
+            lNumberOfWords = (lNumberOfWords_temp2 + 1) * 16,
+            lWordArray = Array(lNumberOfWords - 1),
+            lBytePosition = 0,
+            lByteCount = 0;
+
+        while ( lByteCount < lMessageLength )
+        {
+          lWordCount = (lByteCount - (lByteCount % 4)) / 4;
+          lBytePosition = (lByteCount % 4)*8;
+          lWordArray[lWordCount] = (lWordArray[lWordCount] | (string.charCodeAt(lByteCount)<<lBytePosition));
+          lByteCount++;
+        }
+
+        lWordCount = (lByteCount - (lByteCount % 4)) / 4;
+        lBytePosition = (lByteCount % 4) * 8;
+        lWordArray[lWordCount] = lWordArray[lWordCount] | (0x80<<lBytePosition);
+        lWordArray[lNumberOfWords-2] = lMessageLength<<3;
+        lWordArray[lNumberOfWords-1] = lMessageLength>>>29;
+        return lWordArray;
+      }
+     
+      function WordToHex(lValue)
+      {
+        var WordToHexValue = "", 
+            WordToHexValue_temp = "",
+            lByte,
+            lCount;
+
+        for (lCount = 0; lCount<=3; lCount++)
+        {
+          lByte = (lValue>>>(lCount*8)) & 255;
+          WordToHexValue_temp = "0" + lByte.toString(16);
+          WordToHexValue = WordToHexValue + WordToHexValue_temp.substr(WordToHexValue_temp.length - 2, 2);
+        }
+
+        return WordToHexValue;
+      };
+     
+      function Utf8Encode(string)
+      {
+        string = string.replace(/\r\n/g, "\n");
+
+        var utftext = "";
+     
+        for (var n = 0; n < string.length; n++)
+        {
+          var c = string.charCodeAt(n);
+     
+          if (c < 128)
+          {
+            utftext += String.fromCharCode(c);
+          }
+          else if((c > 127) && (c < 2048))
+          {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+          }
+          else
+          {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+          }
+        }
+     
+        return utftext;
+      };
+     
+      var x = Array();
+      var k,AA,BB,CC,DD,a,b,c,d;
+      var S11=7, S12=12, S13=17, S14=22;
+      var S21=5, S22=9 , S23=14, S24=20;
+      var S31=4, S32=11, S33=16, S34=23;
+      var S41=6, S42=10, S43=15, S44=21;
+     
+      string = Utf8Encode(string);
+     
+      x = ConvertToWordArray(string);
+     
+      a = 0x67452301; b = 0xEFCDAB89; c = 0x98BADCFE; d = 0x10325476;
+     
+      for (k=0; k<x.length; k+=16)
+      {
+        AA=a; BB=b; CC=c; DD=d;
+        a=FF(a,b,c,d,x[k+0], S11,0xD76AA478);
+        d=FF(d,a,b,c,x[k+1], S12,0xE8C7B756);
+        c=FF(c,d,a,b,x[k+2], S13,0x242070DB);
+        b=FF(b,c,d,a,x[k+3], S14,0xC1BDCEEE);
+        a=FF(a,b,c,d,x[k+4], S11,0xF57C0FAF);
+        d=FF(d,a,b,c,x[k+5], S12,0x4787C62A);
+        c=FF(c,d,a,b,x[k+6], S13,0xA8304613);
+        b=FF(b,c,d,a,x[k+7], S14,0xFD469501);
+        a=FF(a,b,c,d,x[k+8], S11,0x698098D8);
+        d=FF(d,a,b,c,x[k+9], S12,0x8B44F7AF);
+        c=FF(c,d,a,b,x[k+10],S13,0xFFFF5BB1);
+        b=FF(b,c,d,a,x[k+11],S14,0x895CD7BE);
+        a=FF(a,b,c,d,x[k+12],S11,0x6B901122);
+        d=FF(d,a,b,c,x[k+13],S12,0xFD987193);
+        c=FF(c,d,a,b,x[k+14],S13,0xA679438E);
+        b=FF(b,c,d,a,x[k+15],S14,0x49B40821);
+        a=GG(a,b,c,d,x[k+1], S21,0xF61E2562);
+        d=GG(d,a,b,c,x[k+6], S22,0xC040B340);
+        c=GG(c,d,a,b,x[k+11],S23,0x265E5A51);
+        b=GG(b,c,d,a,x[k+0], S24,0xE9B6C7AA);
+        a=GG(a,b,c,d,x[k+5], S21,0xD62F105D);
+        d=GG(d,a,b,c,x[k+10],S22,0x2441453);
+        c=GG(c,d,a,b,x[k+15],S23,0xD8A1E681);
+        b=GG(b,c,d,a,x[k+4], S24,0xE7D3FBC8);
+        a=GG(a,b,c,d,x[k+9], S21,0x21E1CDE6);
+        d=GG(d,a,b,c,x[k+14],S22,0xC33707D6);
+        c=GG(c,d,a,b,x[k+3], S23,0xF4D50D87);
+        b=GG(b,c,d,a,x[k+8], S24,0x455A14ED);
+        a=GG(a,b,c,d,x[k+13],S21,0xA9E3E905);
+        d=GG(d,a,b,c,x[k+2], S22,0xFCEFA3F8);
+        c=GG(c,d,a,b,x[k+7], S23,0x676F02D9);
+        b=GG(b,c,d,a,x[k+12],S24,0x8D2A4C8A);
+        a=HH(a,b,c,d,x[k+5], S31,0xFFFA3942);
+        d=HH(d,a,b,c,x[k+8], S32,0x8771F681);
+        c=HH(c,d,a,b,x[k+11],S33,0x6D9D6122);
+        b=HH(b,c,d,a,x[k+14],S34,0xFDE5380C);
+        a=HH(a,b,c,d,x[k+1], S31,0xA4BEEA44);
+        d=HH(d,a,b,c,x[k+4], S32,0x4BDECFA9);
+        c=HH(c,d,a,b,x[k+7], S33,0xF6BB4B60);
+        b=HH(b,c,d,a,x[k+10],S34,0xBEBFBC70);
+        a=HH(a,b,c,d,x[k+13],S31,0x289B7EC6);
+        d=HH(d,a,b,c,x[k+0], S32,0xEAA127FA);
+        c=HH(c,d,a,b,x[k+3], S33,0xD4EF3085);
+        b=HH(b,c,d,a,x[k+6], S34,0x4881D05);
+        a=HH(a,b,c,d,x[k+9], S31,0xD9D4D039);
+        d=HH(d,a,b,c,x[k+12],S32,0xE6DB99E5);
+        c=HH(c,d,a,b,x[k+15],S33,0x1FA27CF8);
+        b=HH(b,c,d,a,x[k+2], S34,0xC4AC5665);
+        a=II(a,b,c,d,x[k+0], S41,0xF4292244);
+        d=II(d,a,b,c,x[k+7], S42,0x432AFF97);
+        c=II(c,d,a,b,x[k+14],S43,0xAB9423A7);
+        b=II(b,c,d,a,x[k+5], S44,0xFC93A039);
+        a=II(a,b,c,d,x[k+12],S41,0x655B59C3);
+        d=II(d,a,b,c,x[k+3], S42,0x8F0CCC92);
+        c=II(c,d,a,b,x[k+10],S43,0xFFEFF47D);
+        b=II(b,c,d,a,x[k+1], S44,0x85845DD1);
+        a=II(a,b,c,d,x[k+8], S41,0x6FA87E4F);
+        d=II(d,a,b,c,x[k+15],S42,0xFE2CE6E0);
+        c=II(c,d,a,b,x[k+6], S43,0xA3014314);
+        b=II(b,c,d,a,x[k+13],S44,0x4E0811A1);
+        a=II(a,b,c,d,x[k+4], S41,0xF7537E82);
+        d=II(d,a,b,c,x[k+11],S42,0xBD3AF235);
+        c=II(c,d,a,b,x[k+2], S43,0x2AD7D2BB);
+        b=II(b,c,d,a,x[k+9], S44,0xEB86D391);
+        a=AddUnsigned(a,AA);
+        b=AddUnsigned(b,BB);
+        c=AddUnsigned(c,CC);
+        d=AddUnsigned(d,DD);
+      }
+     
+      var temp = WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d);
+     
+      return temp.toLowerCase();
+    }
+  }
+);;'use strict';
 
 
 angular.module('WebPaige.Services.Storage', ['ngResource'])
@@ -3438,18 +3997,640 @@ angular.module('WebPaige.Controllers.Login', [])
  */
 .controller('login',
 [
-	'$rootScope', '$scope', '$location',
-	function ($rootScope, $scope, $location)
+  '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5',
+  function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5)
 	{
 		/**
 		 * Fix styles
 		 */
 		$rootScope.fixStyles();
 
-		/**
-		 * Hide header and footer
-		 */
-		// $('.navbar, #footer').hide();
+
+
+
+
+
+    /**
+     * Self this
+     */
+    var self = this;
+
+    /**
+     * Redirect to dashboard if logged in
+     */
+    // if (Session.check()) redirectToDashboard();
+
+
+    /**
+     * Set default views
+     */
+    if ($routeParams.uuid && $routeParams.key)
+    {
+      $scope.views = {
+        changePass: true,
+      };
+
+      $scope.changepass = {
+        uuid: $routeParams.uuid,
+        key:  $routeParams.key,
+      }
+    }
+    else
+    {
+      $scope.views = {
+        login: true,
+        forgot: false
+      };
+    };
+
+
+    /**
+     * KNRM users for testing
+     */
+    if ($rootScope.config.demo_users) $scope.demo_users = demo_users;
+
+
+    /**
+     * Real KNRM users for testing
+     */
+    $scope.knrmLogin = function (user)
+    {
+      $('#login button[type=submit]')
+        .text('Login..')
+        .attr('disabled', 'disabled');
+
+      self.auth(user.uuid, user.resources.askPass);
+    };
+
+
+    /**
+     * Set default alerts
+     */
+    $scope.alert = {
+      login: {
+        display: false,
+        type: '',
+        message: ''
+      },
+      forgot: {
+        display: false,
+        type: '',
+        message: ''
+      }
+    };
+
+
+    /**
+     * Init rootScope app info container
+     */
+    if (!Storage.session.get('app')) Storage.session.add('app', '{}');
+
+
+    /**
+     * TODO
+     * Lose this jQuery stuff later on!
+     *
+     * Jquery solution of toggling between login and app view
+     */
+    $('.navbar').hide();
+    $('#footer').hide();
+    $('#watermark').hide();
+//    $('body').css({
+//      'background': 'url(../' + $rootScope.config.profile.background + ') no-repeat center center fixed',
+//      'backgroundSize': 'cover'
+//    });
+
+
+    /**
+     * TODO
+     * use native JSON functions of angular and Store service
+     */
+    var logindata = angular.fromJson(Storage.get('logindata'));
+
+    if (logindata && logindata.remember) $scope.logindata = logindata;
+
+
+    /**
+     * TODO
+     * Remove unneccessary DOM manipulation
+     * Use cookies for user credentials
+     *
+     * Login trigger
+     */
+    $scope.login = function()
+    {
+      $('#alertDiv').hide();
+
+      if (!$scope.logindata ||
+        !$scope.logindata.username ||
+        !$scope.logindata.password)
+      {
+        $scope.alert = {
+          login: {
+            display: true,
+            type: 'alert-error',
+            message: $rootScope.ui.login.alert_fillfiled
+          }
+        };
+
+        $('#login button[type=submit]')
+          .text('Login')
+          .removeAttr('disabled');
+
+        return false;
+      };
+
+      $('#login button[type=submit]')
+        .text('Login..')
+        .attr('disabled', 'disabled');
+
+      Storage.add('logindata', angular.toJson({
+        username: $scope.logindata.username,
+        password: $scope.logindata.password,
+        remember: $scope.logindata.remember
+      }));
+
+      self.auth( $scope.logindata.username, MD5($scope.logindata.password ));
+    };
+
+
+    /**
+     * Authorize user
+     */
+    self.auth = function (username, password)
+    {
+      User.login(username.toLowerCase(), password)
+        .then(function (result)
+        {
+          if (result.status == 400)
+          {
+            $scope.alert = {
+              login: {
+                display: true,
+                type: 'alert-error',
+                message: $rootScope.ui.login.alert_wrongUserPass
+              }
+            };
+
+            $('#login button[type=submit]')
+              .text('Login')
+              .removeAttr('disabled');
+
+            return false;
+          }
+          else
+          {
+            Session.set(result["X-SESSION_ID"]);
+
+            console.log('login success ->', result["X-SESSION_ID"]);
+
+//            self.preloader();
+          };
+        });
+    };
+
+
+    /**
+     * TODO
+     * What happens if preloader stucks?
+     * Optimize preloader and messages
+     *
+     * Initialize preloader
+     */
+    self.preloader = function()
+    {
+      $('#login').hide();
+      $('#download').hide();
+      $('#preloader').show();
+
+      self.progress(30, $rootScope.ui.login.loading_User);
+
+      User.resources()
+        .then(function (resources)
+        {
+          if (resources.error)
+          {
+            console.warn('error ->', resources);
+          }
+          else
+          {
+            $rootScope.app.resources = resources;
+
+            self.progress(70, $rootScope.ui.login.loading_Group);
+
+            Groups.query(true)
+              .then(function (groups)
+              {
+                if (groups.error)
+                {
+                  console.warn('error ->', groups);
+                }
+                else
+                {
+                  var settings  = angular.fromJson(resources.settingsWebPaige) || {},
+                    sync      = false,
+                    parenting = false,
+                    defaults  = $rootScope.config.defaults.settingsWebPaige,
+                    _groups   = function (groups)
+                    {
+                      var _groups = {};
+                      angular.forEach(groups, function (group, index) { _groups[group.uuid] = true; });
+                      return _groups;
+                    };
+
+                  // Check if there is any settings at all
+                  if (settings != null || settings != undefined)
+                  {
+                    // check for user settigns-all
+                    if (settings.user)
+                    {
+                      // check for user-language settings
+                      if (settings.user.language)
+                      {
+                        // console.warn('user HAS language settings');
+                        $rootScope.changeLanguage(angular.fromJson(resources.settingsWebPaige).user.language);
+                        defaults.user.language = settings.user.language;
+                      }
+                      else
+                      {
+                        // console.warn('user has NO language!!');
+                        $rootScope.changeLanguage($rootScope.config.defaults.settingsWebPaige.user.language);
+                        sync = true;
+                      };
+                    }
+                    else
+                    {
+                      // console.log('NO user settings at all !!');
+                      sync = true;
+                    };
+
+                    // check for app settings-all
+                    if (settings.app)
+                    {
+                      // check for app-widget settings
+                      if (settings.app.widgets)
+                      {
+                        // check for app-widget-groups setting
+                        if (settings.app.widgets.groups)
+                        {
+                          // console.warn('user HAS app widgets groups settings');
+                          defaults.app.widgets.groups = settings.app.widgets.groups;
+                        }
+                        else
+                        {
+                          // console.warn('user has NO app widgets groups!!');
+                          defaults.app.widgets.groups = _groups(groups);
+                          sync = true;
+                        }
+                      }
+                      else
+                      {
+                        // console.warn('user has NO widget settings!!');
+                        defaults.app.widgets = { groups: _groups(groups) };
+                        sync = true;
+                      };
+
+                      // check for app group setting
+                      if (settings.app.group && settings.app.group != undefined)
+                      {
+                        // console.warn('user HAS app first group setting');
+                        defaults.app.group = settings.app.group;
+                      }
+                      else
+                      {
+                        // console.warn('user has NO first group setting!!');
+                        parenting = true;
+                        sync      = true;
+                      };
+                    }
+                    else
+                    {
+                      // console.log('NO app settings!!');
+                      defaults.app = { widgets: { groups: _groups(groups) } };
+                      sync = true;
+                    };
+                  }
+                  else
+                  {
+                    // console.log('NO SETTINGS AT ALL!!');
+                    defaults = {
+                      user: $rootScope.config.defaults.settingsWebPaige.user,
+                      app: {
+                        widgets: {
+                          groups: _groups(groups)
+                        },
+                        group: groups[0].uuid
+                      }
+                    };
+                    sync = true;
+                  };
+
+                  // sync settings with missing parts also parenting check
+                  if (sync)
+                  {
+                    if (parenting)
+                    {
+                      // console.warn('setting up parent group for the user');
+
+                      Groups.parents()
+                        .then(function (_parent)
+                        {
+                          // console.warn('parent group been fetched ->', _parent);
+
+                          if (_parent != null)
+                          {
+                            // console.warn('found parent parent -> ', _parent);
+
+                            defaults.app.group = _parent;
+                          }
+                          else
+                          {
+                            // console.warn('setting the first group in the list for user ->', groups[0].uuid);
+
+                            defaults.app.group = groups[0].uuid;
+                          };
+
+                          // console.warn('SAVE ME (with parenting) ->', defaults);
+
+                          Settings.save(resources.uuid, defaults)
+                            .then(function (setted)
+                            {
+                              User.resources()
+                                .then(function (got)
+                                {
+                                  // console.log('gotted (with setting parent group) ->', got);
+                                  $rootScope.app.resources = got;
+
+                                  finalize();
+                                })
+                            });
+
+                        });
+                    }
+                    else
+                    {
+                      // console.warn('SAVE ME ->', defaults);
+
+                      defaults.app.group = groups[0].uuid;
+
+                      Settings.save(resources.uuid, defaults)
+                        .then(function (setted)
+                        {
+                          User.resources()
+                            .then(function (got)
+                            {
+                              // console.log('gotted ->', got);
+                              $rootScope.app.resources = got;
+
+                              finalize();
+                            })
+                        });
+                    }
+                  }
+                  else
+                  {
+                    finalize();
+                  }
+                };
+              });
+          };
+        });
+    };
+
+
+    /**
+     * Finalize the preloading
+     */
+    function finalize ()
+    {
+      // console.warn( 'settings ->',
+      //               'user ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).user,
+      //               'widgets ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.widgets,
+      //               'group ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.group);
+
+      self.progress(100, $rootScope.ui.login.loading_everything);
+
+      self.redirectToDashboard();
+
+      self.getMessages();
+
+      self.getMembers();
+    }
+
+    /**
+     * TODO
+     * Implement an error handling
+     *
+     * Get members list (SILENTLY)
+     */
+    self.getMembers = function ()
+    {
+      var groups = Storage.local.groups();
+
+      Groups.query()
+        .then(function (groups)
+        {
+          var calls = [];
+
+          angular.forEach(groups, function (group, index)
+          {
+            calls.push(Groups.get(group.uuid));
+          });
+
+          $q.all(calls)
+            .then(function (result)
+            {
+              // console.warn('members ->', result);
+              Groups.uniqueMembers();
+            });
+        });
+    };
+
+
+    /**
+     * TODO
+     * Implement an error handling
+     *
+     * Get messages (SILENTLY)
+     */
+    self.getMessages = function ()
+    {
+      Messages.query()
+        .then(function (messages)
+        {
+          if (messages.error)
+          {
+            console.warn('error ->', messages);
+          }
+          else
+          {
+            $rootScope.app.unreadMessages = Messages.unreadCount();
+
+            Storage.session.unreadMessages = Messages.unreadCount();
+          };
+        });
+    };
+
+
+    /**
+     * Redirect to dashboard
+     */
+    self.redirectToDashboard = function ()
+    {
+      $location.path('/dashboard');
+
+      setTimeout(function ()
+      {
+        $('body').css({ 'background': 'none' });
+        $('.navbar').show();
+        // $('#mobile-status-bar').show();
+        // $('#notification').show();
+        if (!$rootScope.browser.mobile) $('#footer').show();
+        $('#watermark').show();
+        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
+      }, 100);
+    };
+
+
+    /**
+     * Progress bar
+     */
+    self.progress = function (ratio, message)
+    {
+      $('#preloader .progress .bar').css({ width: ratio + '%' });
+      $('#preloader span').text(message);
+    };
+
+
+    /**
+     * RE-FACTORY
+     * TODO
+     * Make button state change!
+     * Finish it!
+     *
+     * Forgot password
+     */
+    $scope.forgot = function ()
+    {
+      $('#forgot button[type=submit]').text('setting ...').attr('disabled', 'disabled');
+
+      User.password($scope.remember.id)
+        .then(function (result)
+        {
+          if (result == "ok")
+          {
+            $scope.alert = {
+              forget : {
+                display : true,
+                type : 'alert-success',
+                message : 'Please check your email to reset your password!'
+              }
+            };
+          }
+          else
+          {
+            $scope.alert = {
+              forget : {
+                display : true,
+                type : 'alert-error',
+                message : 'Error, we can not find this account !'
+              }
+            };
+          };
+
+          $('#forgot button[type=submit]')
+            .text('change password')
+            .removeAttr('disabled');
+        });
+    };
+
+
+    /**
+     * RE-FACTORY
+     * Change password
+     */
+    self.changePass =  function (uuid, newpass, key)
+    {
+      User.changePass(uuid, newpass, key)
+        .then(function (result)
+        {
+          if(result.status == 400 || result.status == 500 || result.status == 409)
+          {
+            $scope.alert = {
+              changePass : {
+                display : true,
+                type : 'alert-error',
+                message : 'Something wrong with password changing!'
+              }
+            };
+          }
+          else
+          { // successfully changed
+            $scope.alert = {
+              changePass : {
+                display : true,
+                type : 'alert-success',
+                message : 'Password changed!'
+              }
+            };
+
+            $location.path( "/message" );
+          };
+
+          $('#changePass button[type=submit]')
+            .text('change password')
+            .removeAttr('disabled');
+        })
+    };
+
+
+    /**
+     * RE-FACTORY
+     * Change password
+     */
+    $scope.changePass = function ()
+    {
+      $('#alertDiv').hide();
+
+      if (!$scope.changeData || !$scope.changeData.newPass || !$scope.changeData.retypePass)
+      {
+        $scope.alert = {
+          changePass : {
+            display : true,
+            type : 'alert-error',
+            message : 'Please fill all fields!'
+          }
+        };
+
+        $('#changePass button[type=submit]')
+          .text('change password')
+          .removeAttr('disabled');
+
+        return false;
+      }
+      else if ($scope.changeData.newPass != $scope.changeData.retypePass)
+      {
+        $scope.alert = {
+          changePass : {
+            display : true,
+            type : 'alert-error',
+            message : 'Please make the reType password is indentical !'
+          }
+        };
+
+        $('#changePass button[type=submit]')
+          .text('change password')
+          .removeAttr('disabled');
+
+        return false;
+      };
+
+      $('#changePass button[type=submit]')
+        .text('changing ...')
+        .attr('disabled', 'disabled');
+
+      self.changePass($scope.changepass.uuid, MD5($scope.changeData.newPass), $scope.changepass.key);
+    };
 
 	}
 ]);;/*jslint node: true */
@@ -3495,6 +4676,46 @@ angular.module('WebPaige.Controllers.Register', [])
 		 */
 		$rootScope.fixStyles();
 
+	}
+]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Logout', [])
+
+
+/**
+ * Logout controller
+ */
+.controller('logout', 
+[
+	'$rootScope', '$scope', '$window', 'Session', 'User', 'Storage', 
+	function ($rootScope, $scope, $window, Session, User, Storage) 
+	{
+	  $('.navbar').hide();
+	  $('#footer').hide();
+
+	  var logindata = angular.fromJson(Storage.get('logindata'));
+
+		User.logout()
+		.then(function (result)
+		{
+	    if (result.error)
+	    {
+	      console.warn('error ->', result);
+	    }
+	    else
+	    {
+	      // Storage.clearAll();
+
+	      Storage.session.clearAll();
+
+	      Storage.add('logindata', angular.toJson(logindata));
+
+	      $window.location.href = 'logout.html';
+	    };
+		});
 	}
 ]);;/*jslint node: true */
 /*global angular */

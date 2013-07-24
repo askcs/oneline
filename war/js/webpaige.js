@@ -10,7 +10,7 @@
 angular.module('WebPaige',[
   'ngResource',
   // modals
-  // 'WebPaige.Modals.User',
+  'WebPaige.Modals.User',
   // 'WebPaige.Modals.Dashboard',
   'WebPaige.Modals.Core',
   // 'WebPaige.Modals.Profile',
@@ -20,7 +20,7 @@ angular.module('WebPaige',[
   'WebPaige.Controllers.Login',
   'WebPaige.Controllers.Forgotpass',
   'WebPaige.Controllers.Register',
-  // 'WebPaige.Controllers.Logout',
+  'WebPaige.Controllers.Logout',
   // 'WebPaige.Controllers.Dashboard',
   'WebPaige.Controllers.Core',
   // 'WebPaige.Controllers.Profile',
@@ -28,11 +28,11 @@ angular.module('WebPaige',[
   // 'WebPaige.Controllers.Help',
   // services
   // 'WebPaige.Services.Timer',
-  // 'WebPaige.Services.Session',
+  'WebPaige.Services.Session',
   // 'WebPaige.Services.Dater',
   // 'WebPaige.Services.EventBus',
   // 'WebPaige.Services.Interceptor',
-  // 'WebPaige.Services.MD5',
+  'WebPaige.Services.MD5',
   'WebPaige.Services.Storage',
   'WebPaige.Services.Strings',
   'WebPaige.Services.Generators',
