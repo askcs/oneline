@@ -1076,11 +1076,11 @@ angular.module('WebPaige')
     /**
      * Logout router
      */
-    // .when('/logout',
-    // {
-    //   templateUrl: 'dist/views/logout.html',
-    //   controller: 'logout'
-    // })
+    .when('/logout',
+    {
+       templateUrl: 'dist/views/logout.html',
+       controller: 'logout'
+    })
 
 
     /**
@@ -1318,8 +1318,8 @@ angular.module('WebPaige')
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window',
-  function ($rootScope, $location, $timeout, Storage, $config, $window)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User)
   {
     /**
      * Pass config and init dynamic config values
@@ -1400,7 +1400,7 @@ angular.module('WebPaige')
     /**
      * Set important info back if refreshed
      */
-    // $rootScope.app = $rootScope.app || {};
+    $rootScope.app = $rootScope.app || {};
 
 
 
@@ -1408,7 +1408,7 @@ angular.module('WebPaige')
     /**
      * Set up resources
      */
-    // $rootScope.app.resources = angular.fromJson(Storage.get('resources'));
+    $rootScope.app.resources = User.owner.get();
 
 
 
@@ -1892,6 +1892,20 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  );
 
 
+	  var Owner = $resource(
+	    $config.host + '/accounts/contactinfos/owner',
+	    {
+	    },
+	    {
+	      get: {
+	        method:   'GET',
+	        params:   {},
+          isArray:  true
+	      }
+	    }
+	  );
+
+
 //	  var Resources = $resource(
 //	    $config.host + '/resources',
 //	    {
@@ -1976,7 +1990,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	        else 
 	        {
 	          deferred.resolve(result);
-	        };
+	        }
 	      },
 	      function (error)
 	      {
@@ -2036,35 +2050,121 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	  };
 
 
-	  /**
-	   * Get user resources
-	   */
-	  User.prototype.resources = function () 
-	  {    
-	    var deferred = $q.defer();
+    /**
+     * Get or set user resources
+     */
+    User.prototype.owner = {
+      /**
+       * Get user account from localStorage
+       */
+      get: function ()
+      {
+        angular.fromJson(Storage.get('resources'));
+      },
+      /**
+       * Set user account to localStorage
+       */
+      set: function (result)
+      {
+        var account = {};
 
-	    Resources.get(null, 
-	      function (result) 
-	      {
-	        if (angular.equals(result, [])) 
-	        {
-	          deferred.reject("User has no resources!");
-	        }
-	        else 
-	        {
-	          Storage.add('resources', angular.toJson(result));
+        angular.forEach(result, function (resource, index)
+        {
+          switch (resource.contactInfoTag)
+          {
+            case 'Name':
+              account.name = resource.contactInfo;
+              break;
+            case 'Phone':
+              account.phone = resource.contactInfo;
+              break;
+            case 'Email':
+              account.email = resource.contactInfo;
+              break;
+            case 'Address':
+              account.address = resource.contactInfo;
+              break;
+            case 'PURCHASED_NUMBER':
+              account.purchased_number = resource.contactInfo;
+              break;
+          }
+        });
 
-	          deferred.resolve(result);
-	        }
-	      },
-	      function (error)
-	      {
-	        deferred.resolve({error: error});
-	      }
-	    );
+        account.id = result[0].ownerKey;
 
-	    return deferred.promise;
-	  };
+        $rootScope.app.resources = account;
+
+        Storage.add('resources', angular.toJson(account));
+      }
+    };
+
+
+    /**
+     * Get user resources
+     */
+    User.prototype.resources = function ()
+    {
+      var deferred = $q.defer();
+
+      Owner.get(null,
+        function (result)
+        {
+          if (angular.equals(result, []))
+          {
+            deferred.reject("User has no resources!");
+          }
+          else
+          {
+            /**
+             * Process resources for storing in dom
+             */
+            User.prototype.owner.set(result);
+
+            deferred.resolve(result);
+          }
+        },
+        function (error)
+        {
+          deferred.resolve({error: error});
+        }
+      );
+
+      return deferred.promise;
+    };
+
+
+    /**
+     * Get user resources
+     */
+//    User.prototype.resources = function ()
+//    {
+//      var deferred = $q.defer();
+//
+//      Resources.get(null,
+//        function (result)
+//        {
+//          if (angular.equals(result, []))
+//          {
+//            deferred.reject("User has no resources!");
+//          }
+//          else
+//          {
+//            Storage.add('resources', angular.toJson(result));
+//
+//            deferred.resolve(result);
+//          }
+//        },
+//        function (error)
+//        {
+//          deferred.resolve({error: error});
+//        }
+//      );
+//
+//      return deferred.promise;
+//    };
+
+
+
 
 	  return new User;
 	}
@@ -4041,7 +4141,7 @@ angular.module('WebPaige.Controllers.Login', [])
         login: true,
         forgot: false
       };
-    };
+    }
 
 
     /**
@@ -4138,7 +4238,7 @@ angular.module('WebPaige.Controllers.Login', [])
           .removeAttr('disabled');
 
         return false;
-      };
+      }
 
       $('#login button[type=submit]')
         .text('Login..')
@@ -4184,8 +4284,24 @@ angular.module('WebPaige.Controllers.Login', [])
 
             console.log('login success ->', result["X-SESSION_ID"]);
 
+
+
+            User.resources()
+            .then(function (resources)
+            {
+              console.log('resources ->', resources);
+
+              /**
+               * TODO
+               * Remove redirecting directly to app later on
+               * and build pre-loading mechanism for fetching
+               * dependencies
+               */
+              self.redirectToDashboard();
+            });
+
 //            self.preloader();
-          };
+          }
         });
     };
 
@@ -4256,7 +4372,7 @@ angular.module('WebPaige.Controllers.Login', [])
                         // console.warn('user has NO language!!');
                         $rootScope.changeLanguage($rootScope.config.defaults.settingsWebPaige.user.language);
                         sync = true;
-                      };
+                      }
                     }
                     else
                     {
@@ -4301,14 +4417,14 @@ angular.module('WebPaige.Controllers.Login', [])
                         // console.warn('user has NO first group setting!!');
                         parenting = true;
                         sync      = true;
-                      };
+                      }
                     }
                     else
                     {
                       // console.log('NO app settings!!');
                       defaults.app = { widgets: { groups: _groups(groups) } };
                       sync = true;
-                    };
+                    }
                   }
                   else
                   {
@@ -4323,7 +4439,7 @@ angular.module('WebPaige.Controllers.Login', [])
                       }
                     };
                     sync = true;
-                  };
+                  }
 
                   // sync settings with missing parts also parenting check
                   if (sync)
@@ -4477,17 +4593,17 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     self.redirectToDashboard = function ()
     {
-      $location.path('/dashboard');
+      $location.path('/core');
 
       setTimeout(function ()
       {
-        $('body').css({ 'background': 'none' });
+//        $('body').css({ 'background': 'none' });
         $('.navbar').show();
         // $('#mobile-status-bar').show();
         // $('#notification').show();
         if (!$rootScope.browser.mobile) $('#footer').show();
-        $('#watermark').show();
-        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
+//        $('#watermark').show();
+//        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
       }, 100);
     };
 

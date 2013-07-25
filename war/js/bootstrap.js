@@ -12,8 +12,8 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window',
-  function ($rootScope, $location, $timeout, Storage, $config, $window)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User)
   {
     /**
      * Pass config and init dynamic config values
@@ -94,7 +94,7 @@ angular.module('WebPaige')
     /**
      * Set important info back if refreshed
      */
-    // $rootScope.app = $rootScope.app || {};
+    $rootScope.app = $rootScope.app || {};
 
 
 
@@ -102,7 +102,7 @@ angular.module('WebPaige')
     /**
      * Set up resources
      */
-    // $rootScope.app.resources = angular.fromJson(Storage.get('resources'));
+    $rootScope.app.resources = User.owner.get();
 
 
 

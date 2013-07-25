@@ -55,7 +55,7 @@ angular.module('WebPaige.Controllers.Login', [])
         login: true,
         forgot: false
       };
-    };
+    }
 
 
     /**
@@ -152,7 +152,7 @@ angular.module('WebPaige.Controllers.Login', [])
           .removeAttr('disabled');
 
         return false;
-      };
+      }
 
       $('#login button[type=submit]')
         .text('Login..')
@@ -198,8 +198,24 @@ angular.module('WebPaige.Controllers.Login', [])
 
             console.log('login success ->', result["X-SESSION_ID"]);
 
+
+
+            User.resources()
+            .then(function (resources)
+            {
+              console.log('resources ->', resources);
+
+              /**
+               * TODO
+               * Remove redirecting directly to app later on
+               * and build pre-loading mechanism for fetching
+               * dependencies
+               */
+              self.redirectToDashboard();
+            });
+
 //            self.preloader();
-          };
+          }
         });
     };
 
@@ -270,7 +286,7 @@ angular.module('WebPaige.Controllers.Login', [])
                         // console.warn('user has NO language!!');
                         $rootScope.changeLanguage($rootScope.config.defaults.settingsWebPaige.user.language);
                         sync = true;
-                      };
+                      }
                     }
                     else
                     {
@@ -315,14 +331,14 @@ angular.module('WebPaige.Controllers.Login', [])
                         // console.warn('user has NO first group setting!!');
                         parenting = true;
                         sync      = true;
-                      };
+                      }
                     }
                     else
                     {
                       // console.log('NO app settings!!');
                       defaults.app = { widgets: { groups: _groups(groups) } };
                       sync = true;
-                    };
+                    }
                   }
                   else
                   {
@@ -337,7 +353,7 @@ angular.module('WebPaige.Controllers.Login', [])
                       }
                     };
                     sync = true;
-                  };
+                  }
 
                   // sync settings with missing parts also parenting check
                   if (sync)
@@ -491,17 +507,17 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     self.redirectToDashboard = function ()
     {
-      $location.path('/dashboard');
+      $location.path('/core');
 
       setTimeout(function ()
       {
-        $('body').css({ 'background': 'none' });
+//        $('body').css({ 'background': 'none' });
         $('.navbar').show();
         // $('#mobile-status-bar').show();
         // $('#notification').show();
         if (!$rootScope.browser.mobile) $('#footer').show();
-        $('#watermark').show();
-        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
+//        $('#watermark').show();
+//        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
       }, 100);
     };
 
