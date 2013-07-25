@@ -176,7 +176,7 @@ angular.module('WebPaige.Controllers.Login', [])
       User.login(username.toLowerCase(), password)
         .then(function (result)
         {
-          if (result.status == 400)
+          if (result.status == 403)
           {
             $scope.alert = {
               login: {
