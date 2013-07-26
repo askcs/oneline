@@ -26,16 +26,14 @@ angular.module('WebPaige.Controllers.Logout', [])
 	    {
 	      console.warn('error ->', result);
 	    }
-	    else
-	    {
-	      // Storage.clearAll();
 
-	      Storage.session.clearAll();
+      // Storage.clearAll();
 
-	      Storage.add('logindata', angular.toJson(logindata));
+      Storage.session.clearAll();
 
-	      $window.location.href = 'logout.html';
-	    };
+      Storage.add('logindata', angular.toJson(logindata));
+
+      $window.location.href = 'logout.html';
 		});
 	}
 ]);

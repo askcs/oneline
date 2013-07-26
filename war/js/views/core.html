@@ -17,7 +17,7 @@
 
       <li class="{{(views.manager==true) && 'active'}}">
         <!-- <span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Connected numbers -->
-        <a ng-click="setViewTo('manager')" 
+        <a ng-click="setViewTo('manager'); connectedNumbers.list();"
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Connected numbers</a>
       </li>
 
@@ -453,7 +453,7 @@
                     <dt>Total:</dt>
                       <dd>
                         <span ng-show="order.monthly">{{prices.monthly}}€ per month</span>
-                        <span ng-show="order.yearly">{{prices.yearly}}€ per month</span>
+                        <span ng-show="order.yearly">{{prices.yearly}}€ per year</span>
                       </dd>
                   </div>
 
@@ -536,6 +536,20 @@
             </form>
 
             <!-- <h4>Numbers</h4> -->
+
+
+
+            <div ng-hide="connectedNumbersLoaded">
+              Loading connected numbers..
+            </div>
+
+            <div ng-show="connectedNumbersLoaded">
+              <ul>
+                <li ng-repeat="number in connectedNumbersList">{{number}}</li>
+              </ul>
+            </div>
+
+
             
             <table class="table table-striped">
               <thead>

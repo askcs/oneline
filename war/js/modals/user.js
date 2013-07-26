@@ -12,9 +12,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
 	function ($resource, $config, $q, $location, Storage, $rootScope) 
 	{
-	  var self = this;
-
-
 	  var User = $resource();
 
 

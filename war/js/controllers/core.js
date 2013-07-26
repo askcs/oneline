@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators',
-	function ($rootScope, $scope, $location, Generators)
+	'$rootScope', '$scope', '$location', 'Generators', 'Core',
+	function ($rootScope, $scope, $location, Generators, Core)
 	{
 		/**
 		 * Fix styles
@@ -26,10 +26,10 @@ angular.module('WebPaige.Controllers.Core', [])
 	  $scope.order = {
 	  	package: 	null,
 	  	country: 	31
-	  	// package: 	1,
-	  	// country: 	31,
+	  	// package: 1,
+	  	// country: 31,
 	  	// region: 	10,
-	  	// number: 		1234567
+	  	// number: 	1234567
 	  };
 
 	  // $scope.numbers = Generators.list();
@@ -230,7 +230,26 @@ angular.module('WebPaige.Controllers.Core', [])
 	  };
 
 
+    /**
+     * Connected numbers
+     */
+    $scope.connectedNumbers = {
+      /**
+       * List numbers
+       */
+      list: function ()
+      {
+        $scope.connectedNumbersLoaded = false;
 
+        Core.connectedNumbers.list()
+          .then(function (numbers)
+          {
+            $scope.connectedNumbersLoaded = true;
+
+            $scope.connectedNumbersList = numbers;
+          });
+      }
+    }
 
 
 	}

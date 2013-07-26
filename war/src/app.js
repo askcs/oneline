@@ -623,25 +623,25 @@ if ('localStorage' in window && window['localStorage'] !== null)
 {
   basket
     .require(
-      { url: 'libs/chosen/chosen.jquery.min.js' },
-      { url: 'libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
-      { url: 'libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
-      { url: 'libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
-      { url: 'libs/daterangepicker/1.1.0/daterangepicker.min.js' },
-      { url: 'libs/sugar/1.3.7/sugar.min.js' },
-      { url: 'libs/raphael/2.1.0/raphael-min.js' }
+      { url: 'libs/chosen/chosen.jquery.min.js' }
+//      { url: 'libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
+//      { url: 'libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
+//      { url: 'libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
+//      { url: 'libs/daterangepicker/1.1.0/daterangepicker.min.js' },
+//      { url: 'libs/sugar/1.3.7/sugar.min.js' },
+//      { url: 'libs/raphael/2.1.0/raphael-min.js' }
     )
     .then(function ()
       {
-        basket
-          .require(
-            { url: 'libs/g-raphael/0.5.1/g.raphael-min.js' },
-            { url: 'libs/g-raphael/0.5.1/g.pie-min.js' }
-          )
-          .then(function ()
-          {
-            // console.warn('basket parsed scripts..');
-        });
+//        basket
+//          .require(
+//            { url: 'libs/g-raphael/0.5.1/g.raphael-min.js' },
+//            { url: 'libs/g-raphael/0.5.1/g.pie-min.js' }
+//          )
+//          .then(function ()
+//          {
+//            // console.warn('basket parsed scripts..');
+//        });
       }
     );
 };/*jslint node: true */
@@ -1860,9 +1860,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
 	function ($resource, $config, $q, $location, Storage, $rootScope) 
 	{
-	  var self = this;
-
-
 	  var User = $resource();
 
 
@@ -2186,6 +2183,113 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 	'$rootScope', '$resource', '$config', '$q', '$http',
 	function ($rootScope, $resource, $config, $q, $http)
 	{
+    var Core = $resource();
+
+    var Contacts = $resource(
+      $config.host + '/accounts/contacts/',
+      {
+      },
+      {
+        process: {
+          method: 'GET',
+          params: {username:'', password:''}
+        }
+      }
+    );
+
+
+    var ContactInfos = $resource(
+      $config.host + '/accounts/contactinfos/:id',
+      {
+      },
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        },
+        get: {
+          method: 'GET',
+          params: {id:''}
+        },
+        create: {
+          method: 'POST',
+          params: {}
+        },
+        update: {
+          method: 'PUT',
+          params: {id:''}
+        },
+        remove: {
+          method: 'DELETE',
+          params: {id:''}
+        }
+      }
+    );
+
+
+    /**
+     * Add Member to a group
+     */
+    Core.prototype.connectedNumbers = {
+      /**
+       * List numbers
+       */
+      list: function (candidate)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.list(function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      }
+    };
+
+
+//    var Groups = $resource(
+//      $config.host + '/network/:action/:id',
+//      {
+//      },
+//      {
+//        query: {
+//          method: 'GET',
+//          params: {},
+//          isArray: true
+//        },
+//        get: {
+//          method: 'GET',
+//          params: {id:''}
+//        },
+//        save: {
+//          method: 'POST',
+//          params: {id:''}
+//        },
+//        edit: {
+//          method: 'PUT',
+//          params: {id:''}
+//        },
+//        remove: {
+//          method: 'DELETE',
+//          params: {id:''}
+//        },
+//        search: {
+//          method: 'POST',
+//          params: {id:'', action:'searchPaigeUser'},
+//          isArray: true
+//        }
+//      }
+//    );
+
+
+    return new Core;
 
 	}
 ]);;/*jslint node: true */
@@ -2490,7 +2594,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
         {
           values = pairs[i].split("=");
 
-          if (values[0].trim() == "WebPaige.session") return angular.fromJson(values[1]);
+          if (values[0].trim() == "Oneline.session") return angular.fromJson(values[1]);
         };
 
       },
@@ -4821,16 +4925,14 @@ angular.module('WebPaige.Controllers.Logout', [])
 	    {
 	      console.warn('error ->', result);
 	    }
-	    else
-	    {
-	      // Storage.clearAll();
 
-	      Storage.session.clearAll();
+      // Storage.clearAll();
 
-	      Storage.add('logindata', angular.toJson(logindata));
+      Storage.session.clearAll();
 
-	      $window.location.href = 'logout.html';
-	    };
+      Storage.add('logindata', angular.toJson(logindata));
+
+      $window.location.href = 'logout.html';
 		});
 	}
 ]);;/*jslint node: true */
@@ -4846,8 +4948,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators',
-	function ($rootScope, $scope, $location, Generators)
+	'$rootScope', '$scope', '$location', 'Generators', 'Core',
+	function ($rootScope, $scope, $location, Generators, Core)
 	{
 		/**
 		 * Fix styles
@@ -4861,10 +4963,10 @@ angular.module('WebPaige.Controllers.Core', [])
 	  $scope.order = {
 	  	package: 	null,
 	  	country: 	31
-	  	// package: 	1,
-	  	// country: 	31,
+	  	// package: 1,
+	  	// country: 31,
 	  	// region: 	10,
-	  	// number: 		1234567
+	  	// number: 	1234567
 	  };
 
 	  // $scope.numbers = Generators.list();
@@ -5065,7 +5167,26 @@ angular.module('WebPaige.Controllers.Core', [])
 	  };
 
 
+    /**
+     * Connected numbers
+     */
+    $scope.connectedNumbers = {
+      /**
+       * List numbers
+       */
+      list: function ()
+      {
+        $scope.connectedNumbersLoaded = false;
 
+        Core.connectedNumbers.list()
+          .then(function (numbers)
+          {
+            $scope.connectedNumbersLoaded = true;
+
+            $scope.connectedNumbersList = numbers;
+          });
+      }
+    }
 
 
 	}
