@@ -667,8 +667,8 @@ angular.module('WebPaige')
     demo_users: false,
 
     profile: {
-      meta:   profile.meta,
-      title:  profile.title,
+      meta:       profile.meta,
+      title:      profile.title,
       mobileApp:  profile.mobileApp
     },
 
@@ -1411,6 +1411,12 @@ angular.module('WebPaige')
     $rootScope.app.resources = User.owner.get();
 
 
+    console.log('Read session value from cookie ->', Storage.cookie.get('session'));
+
+    console.log('RootScope values ->', $rootScope.app);
+
+
+    if (!$rootScope.app.resources) angular.fromJson(Storage.get('resources'));
 
 
     /**
@@ -1429,8 +1435,8 @@ angular.module('WebPaige')
       init: function ()
       {
         $rootScope.loading = {
-          status: false,
-          message: 'Loading..'
+          status:   false,
+          message:  'Loading..'
         };
 
         // $rootScope.app.preloader = {
@@ -2579,13 +2585,13 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
         else
         {
           return false;
-        };
+        }
       },
 
       /**
        * Read cookie value
        */
-      cookie: function(session)
+      cookie: function (session)
       {
         var values,
             pairs = document.cookie.split(";");
@@ -2595,7 +2601,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
           values = pairs[i].split("=");
 
           if (values[0].trim() == "Oneline.session") return angular.fromJson(values[1]);
-        };
+        }
 
       },
 
@@ -2618,7 +2624,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
       set: function(sessionId)
       {
         var session = {
-          id: sessionId,
+          id:   sessionId,
           time: new Date()
         };
 
@@ -4331,9 +4337,9 @@ angular.module('WebPaige.Controllers.Login', [])
       {
         $scope.alert = {
           login: {
-            display: true,
-            type: 'alert-error',
-            message: $rootScope.ui.login.alert_fillfiled
+            display:  true,
+            type:     'alert-error',
+            message:  $rootScope.ui.login.alert_fillfiled
           }
         };
 
@@ -4393,7 +4399,7 @@ angular.module('WebPaige.Controllers.Login', [])
             User.resources()
             .then(function (resources)
             {
-              console.log('resources ->', resources);
+              // console.log('resources ->', resources);
 
               /**
                * TODO
@@ -4448,15 +4454,15 @@ angular.module('WebPaige.Controllers.Login', [])
                 else
                 {
                   var settings  = angular.fromJson(resources.settingsWebPaige) || {},
-                    sync      = false,
-                    parenting = false,
-                    defaults  = $rootScope.config.defaults.settingsWebPaige,
-                    _groups   = function (groups)
-                    {
-                      var _groups = {};
-                      angular.forEach(groups, function (group, index) { _groups[group.uuid] = true; });
-                      return _groups;
-                    };
+                      sync      = false,
+                      parenting = false,
+                      defaults  = $rootScope.config.defaults.settingsWebPaige,
+                      _groups   = function (groups)
+                      {
+                        var _groups = {};
+                        angular.forEach(groups, function (group, index) { _groups[group.uuid] = true; });
+                        return _groups;
+                      };
 
                   // Check if there is any settings at all
                   if (settings != null || settings != undefined)
@@ -4482,7 +4488,7 @@ angular.module('WebPaige.Controllers.Login', [])
                     {
                       // console.log('NO user settings at all !!');
                       sync = true;
-                    };
+                    }
 
                     // check for app settings-all
                     if (settings.app)
@@ -4508,7 +4514,7 @@ angular.module('WebPaige.Controllers.Login', [])
                         // console.warn('user has NO widget settings!!');
                         defaults.app.widgets = { groups: _groups(groups) };
                         sync = true;
-                      };
+                      }
 
                       // check for app group setting
                       if (settings.app.group && settings.app.group != undefined)
@@ -4568,7 +4574,7 @@ angular.module('WebPaige.Controllers.Login', [])
                             // console.warn('setting the first group in the list for user ->', groups[0].uuid);
 
                             defaults.app.group = groups[0].uuid;
-                          };
+                          }
 
                           // console.warn('SAVE ME (with parenting) ->', defaults);
 
@@ -4611,9 +4617,9 @@ angular.module('WebPaige.Controllers.Login', [])
                   {
                     finalize();
                   }
-                };
+                }
               });
-          };
+          }
         });
     };
 

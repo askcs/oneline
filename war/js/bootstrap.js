@@ -105,6 +105,12 @@ angular.module('WebPaige')
     $rootScope.app.resources = User.owner.get();
 
 
+    console.log('Read session value from cookie ->', Storage.cookie.get('session'));
+
+    console.log('RootScope values ->', $rootScope.app);
+
+
+    if (!$rootScope.app.resources) angular.fromJson(Storage.get('resources'));
 
 
     /**
@@ -123,8 +129,8 @@ angular.module('WebPaige')
       init: function ()
       {
         $rootScope.loading = {
-          status: false,
-          message: 'Loading..'
+          status:   false,
+          message:  'Loading..'
         };
 
         // $rootScope.app.preloader = {

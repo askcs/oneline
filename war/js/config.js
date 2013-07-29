@@ -21,8 +21,8 @@ angular.module('WebPaige')
     demo_users: false,
 
     profile: {
-      meta:   profile.meta,
-      title:  profile.title,
+      meta:       profile.meta,
+      title:      profile.title,
       mobileApp:  profile.mobileApp
     },
 

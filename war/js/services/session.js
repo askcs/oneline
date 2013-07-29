@@ -29,13 +29,13 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
         else
         {
           return false;
-        };
+        }
       },
 
       /**
        * Read cookie value
        */
-      cookie: function(session)
+      cookie: function (session)
       {
         var values,
             pairs = document.cookie.split(";");
@@ -45,7 +45,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
           values = pairs[i].split("=");
 
           if (values[0].trim() == "Oneline.session") return angular.fromJson(values[1]);
-        };
+        }
 
       },
 
@@ -68,7 +68,7 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
       set: function(sessionId)
       {
         var session = {
-          id: sessionId,
+          id:   sessionId,
           time: new Date()
         };
 
