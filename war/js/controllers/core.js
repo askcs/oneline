@@ -134,6 +134,13 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+    $scope.modal = {
+      content:  "Hello Modal",
+      saved:    false
+    };
+
+
+
     $scope.connection = {
       contactInfo:    '',
       contactInfoTag: ''
@@ -146,11 +153,14 @@ angular.module('WebPaige.Controllers.Core', [])
      * Connected numbers
      */
     $scope.connectedNumbers = {
+
       /**
        * List numbers
        */
       list: function ()
       {
+        $scope.connection = {};
+
         $scope.connectedNumbersLoaded = false;
 
         Core.connectedNumbers.list()
@@ -161,6 +171,7 @@ angular.module('WebPaige.Controllers.Core', [])
             $scope.connectedNumbersList = numbers;
           });
       },
+
       /**
        * Save a connected number
        */
@@ -168,21 +179,12 @@ angular.module('WebPaige.Controllers.Core', [])
       {
         var self = this;
 
-        $rootScope.statusBar.display('Adding a new number..');
+        $rootScope.statusBar.display('Saving the number..');
 
         Core.connectedNumbers.save($scope.connection)
           .then(function (result)
           {
             $rootScope.statusBar.off();
-
-            if (result.error)
-            {
-//              $rootScope.notifier.error('Error with adding a number!');
-//              console.warn('error ->', result);
-            }
-            else
-            {
-            }
 
             self.list();
           });
@@ -202,16 +204,22 @@ angular.module('WebPaige.Controllers.Core', [])
           {
             $rootScope.statusBar.off();
 
-            if (result.error)
-            {
-            }
-            else
-            {}
-
             self.list();
           })
+      },
+
+      /**
+       * Edit a number
+       */
+      edit: function (number)
+      {
+        angular.forEach($scope.connectedNumbersList, function (connection, index)
+        {
+          if (number.id === connection.id)
+            $scope.connection = connection;
+        })
       }
-    }
+    };
 
 
 
@@ -279,18 +287,20 @@ angular.module('WebPaige.Controllers.Core', [])
 	  };
 
 
+    var view;
+
 	  /**
 	   * If no params or hashes given in url
 	   */
 	  if (!$location.hash())
 	  {
-	    var view = 'purchaser';
+	    view = 'purchaser';
 
 	    $location.hash('purchaser');
 	  }
 	  else
 	  {
-	    var view = $location.hash();
+	    view = $location.hash();
 	  }
 
 
@@ -323,7 +333,8 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
 	  $scope.increaseStep = function ()
 	  {
-	  	if ($scope.purchaser.step < 3 && $scope.order.number) $scope.switchStep($scope.purchaser.step + 1);
+	  	if ($scope.purchaser.step < 3 && $scope.order.number)
+        $scope.switchStep($scope.purchaser.step + 1);
 	  };
 
 

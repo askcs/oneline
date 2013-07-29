@@ -542,7 +542,7 @@
                      class="input-large"
                      placeholder="e.g. Phone number">&nbsp;
 
-              <button type="submit" class="btn">Add</button>
+              <button type="submit" class="btn">Save</button>
 
             </form>
 
@@ -562,6 +562,8 @@
               Loading connected numbers..
               <br><br><br><br>
             </p>
+
+            <button type="button" class="btn" bs-modal="'js/views/elements/con_verification.html'">...</button>
 
 
             <table class="table table-striped" ng-show="connectedNumbersLoaded">
@@ -583,11 +585,21 @@
                   <td>{{number.label}}</td>
                   <td>{{number.contactInfo}}</td>
                   <td>
+
                     <button ng-click="connectedNumbers.remove(number)"
                             type="button"
                             class="btn btn-mini">Delete</button>&nbsp;
-                    <button ng-show="number.verified" type="button" class="btn btn-mini">Edit</button>
-                    <button ng-hide="number.verified" type="button" class="btn btn-mini">Verify</button>
+
+                    <button ng-show="number.verified"
+                            ng-click="connectedNumbers.edit(number)"
+                            type="button"
+                            class="btn btn-mini">Edit</button>
+
+                    <button ng-hide="number.verified"
+                            ng-click="connectedNumbers.verify(number)"
+                            type="button"
+                            class="btn btn-mini">Verify</button>
+
                   </td>
                 </tr>
 

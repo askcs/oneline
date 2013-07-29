@@ -16,8 +16,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 	'$rootScope', '$resource', '$config', '$q', '$http',
 	function ($rootScope, $resource, $config, $q, $http)
 	{
+    /**
+     * Empty resource
+     */
     var Core = $resource();
 
+    /**
+     * Contacts resource
+     */
     var Contacts = $resource(
       $config.host + '/accounts/contacts/',
       {
@@ -30,7 +36,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       }
     );
 
-
+    /**
+     * Contact Infos resource
+     */
     var ContactInfos = $resource(
       $config.host + '/accounts/contactinfos/:id',
       {
@@ -92,20 +100,40 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        ContactInfos.create({
+        var payload = {
           contactInfo:    connection.contactInfo,
           contactInfoTag: 'Phone',
           label:          connection.label
-          },
-          function (result)
-          {
-            deferred.resolve(result);
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
-        );
+        };
+
+        if (connection.id)
+        {
+          payload.id = connection.id;
+
+          ContactInfos.update({id: connection.id}, payload,
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+        }
+        else
+        {
+          ContactInfos.create(payload,
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+        }
 
         return deferred.promise;
       },
@@ -134,43 +162,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       }
     };
 
-
-//    var Groups = $resource(
-//      $config.host + '/network/:action/:id',
-//      {
-//      },
-//      {
-//        query: {
-//          method: 'GET',
-//          params: {},
-//          isArray: true
-//        },
-//        get: {
-//          method: 'GET',
-//          params: {id:''}
-//        },
-//        save: {
-//          method: 'POST',
-//          params: {id:''}
-//        },
-//        edit: {
-//          method: 'PUT',
-//          params: {id:''}
-//        },
-//        remove: {
-//          method: 'DELETE',
-//          params: {id:''}
-//        },
-//        search: {
-//          method: 'POST',
-//          params: {id:'', action:'searchPaigeUser'},
-//          isArray: true
-//        }
-//      }
-//    );
-
-
     return new Core;
-
 	}
 ]);

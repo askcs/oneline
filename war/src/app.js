@@ -2194,8 +2194,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 	'$rootScope', '$resource', '$config', '$q', '$http',
 	function ($rootScope, $resource, $config, $q, $http)
 	{
+    /**
+     * Empty resource
+     */
     var Core = $resource();
 
+    /**
+     * Contacts resource
+     */
     var Contacts = $resource(
       $config.host + '/accounts/contacts/',
       {
@@ -2208,7 +2214,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       }
     );
 
-
+    /**
+     * Contact Infos resource
+     */
     var ContactInfos = $resource(
       $config.host + '/accounts/contactinfos/:id',
       {
@@ -2270,20 +2278,40 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        ContactInfos.create({
+        var payload = {
           contactInfo:    connection.contactInfo,
           contactInfoTag: 'Phone',
           label:          connection.label
-          },
-          function (result)
-          {
-            deferred.resolve(result);
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
-        );
+        };
+
+        if (connection.id)
+        {
+          payload.id = connection.id;
+
+          ContactInfos.update({id: connection.id}, payload,
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+        }
+        else
+        {
+          ContactInfos.create(payload,
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+        }
 
         return deferred.promise;
       },
@@ -2312,44 +2340,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       }
     };
 
-
-//    var Groups = $resource(
-//      $config.host + '/network/:action/:id',
-//      {
-//      },
-//      {
-//        query: {
-//          method: 'GET',
-//          params: {},
-//          isArray: true
-//        },
-//        get: {
-//          method: 'GET',
-//          params: {id:''}
-//        },
-//        save: {
-//          method: 'POST',
-//          params: {id:''}
-//        },
-//        edit: {
-//          method: 'PUT',
-//          params: {id:''}
-//        },
-//        remove: {
-//          method: 'DELETE',
-//          params: {id:''}
-//        },
-//        search: {
-//          method: 'POST',
-//          params: {id:'', action:'searchPaigeUser'},
-//          isArray: true
-//        }
-//      }
-//    );
-
-
     return new Core;
-
 	}
 ]);;/*jslint node: true */
 /*global angular */
@@ -5130,6 +5121,13 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+    $scope.modal = {
+      content:  "Hello Modal",
+      saved:    false
+    };
+
+
+
     $scope.connection = {
       contactInfo:    '',
       contactInfoTag: ''
@@ -5142,11 +5140,14 @@ angular.module('WebPaige.Controllers.Core', [])
      * Connected numbers
      */
     $scope.connectedNumbers = {
+
       /**
        * List numbers
        */
       list: function ()
       {
+        $scope.connection = {};
+
         $scope.connectedNumbersLoaded = false;
 
         Core.connectedNumbers.list()
@@ -5157,6 +5158,7 @@ angular.module('WebPaige.Controllers.Core', [])
             $scope.connectedNumbersList = numbers;
           });
       },
+
       /**
        * Save a connected number
        */
@@ -5164,21 +5166,12 @@ angular.module('WebPaige.Controllers.Core', [])
       {
         var self = this;
 
-        $rootScope.statusBar.display('Adding a new number..');
+        $rootScope.statusBar.display('Saving the number..');
 
         Core.connectedNumbers.save($scope.connection)
           .then(function (result)
           {
             $rootScope.statusBar.off();
-
-            if (result.error)
-            {
-//              $rootScope.notifier.error('Error with adding a number!');
-//              console.warn('error ->', result);
-            }
-            else
-            {
-            }
 
             self.list();
           });
@@ -5198,16 +5191,22 @@ angular.module('WebPaige.Controllers.Core', [])
           {
             $rootScope.statusBar.off();
 
-            if (result.error)
-            {
-            }
-            else
-            {}
-
             self.list();
           })
+      },
+
+      /**
+       * Edit a number
+       */
+      edit: function (number)
+      {
+        angular.forEach($scope.connectedNumbersList, function (connection, index)
+        {
+          if (number.id === connection.id)
+            $scope.connection = connection;
+        })
       }
-    }
+    };
 
 
 
@@ -5275,18 +5274,20 @@ angular.module('WebPaige.Controllers.Core', [])
 	  };
 
 
+    var view;
+
 	  /**
 	   * If no params or hashes given in url
 	   */
 	  if (!$location.hash())
 	  {
-	    var view = 'purchaser';
+	    view = 'purchaser';
 
 	    $location.hash('purchaser');
 	  }
 	  else
 	  {
-	    var view = $location.hash();
+	    view = $location.hash();
 	  }
 
 
@@ -5319,7 +5320,8 @@ angular.module('WebPaige.Controllers.Core', [])
 	   */
 	  $scope.increaseStep = function ()
 	  {
-	  	if ($scope.purchaser.step < 3 && $scope.order.number) $scope.switchStep($scope.purchaser.step + 1);
+	  	if ($scope.purchaser.step < 3 && $scope.order.number)
+        $scope.switchStep($scope.purchaser.step + 1);
 	  };
 
 

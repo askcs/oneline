@@ -9,7 +9,8 @@ var profile = {
 
   host: function ()
   {
-    return ($.browser.msie) ? '/proxy/' : 'http://askfastmarket.appspot.com';
+    // return ($.browser.msie) ? '/proxy/' : 'http://askfastmarket.appspot.com';
+    return ($.browser.msie) ? '/proxy/' : 'http://askfastmarket1.appspot.com';
   },
 
   states: [
