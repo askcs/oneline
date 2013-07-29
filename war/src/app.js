@@ -1318,8 +1318,8 @@ angular.module('WebPaige')
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User',
-  function ($rootScope, $location, $timeout, Storage, $config, $window, User)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session)
   {
     /**
      * Pass config and init dynamic config values
@@ -1411,12 +1411,15 @@ angular.module('WebPaige')
     $rootScope.app.resources = User.owner.get();
 
 
-    console.log('Read session value from cookie ->', Storage.cookie.get('session'));
+    /**
+     * In any case of there is no session or neither resources stored in app cache
+     */
+    if (!$rootScope.app.resources)
+    {
+      $rootScope.app.resources = angular.fromJson(Storage.get('resources'));
 
-    console.log('RootScope values ->', $rootScope.app);
-
-
-    if (!$rootScope.app.resources) angular.fromJson(Storage.get('resources'));
+      Session.check();
+    }
 
 
     /**
@@ -2575,6 +2578,10 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
       check: function()
       {
         var session = angular.fromJson(Storage.cookie.get('session'));
+
+
+        console.warn('Fetched cookie value ->', session);
+
 
         if (session)
         {
@@ -4954,8 +4961,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators', 'Core',
-	function ($rootScope, $scope, $location, Generators, Core)
+	'$rootScope', '$scope', '$location', 'Generators', 'Core', 'Session',
+	function ($rootScope, $scope, $location, Generators, Core, Session)
 	{
 		/**
 		 * Fix styles

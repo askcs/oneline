@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators', 'Core',
-	function ($rootScope, $scope, $location, Generators, Core)
+	'$rootScope', '$scope', '$location', 'Generators', 'Core', 'Session',
+	function ($rootScope, $scope, $location, Generators, Core, Session)
 	{
 		/**
 		 * Fix styles
