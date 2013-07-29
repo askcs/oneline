@@ -132,6 +132,93 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+
+
+    $scope.connection = {
+      contactInfo:    '',
+      contactInfoTag: ''
+    };
+
+
+
+
+    /**
+     * Connected numbers
+     */
+    $scope.connectedNumbers = {
+      /**
+       * List numbers
+       */
+      list: function ()
+      {
+        $scope.connectedNumbersLoaded = false;
+
+        Core.connectedNumbers.list()
+          .then(function (numbers)
+          {
+            $scope.connectedNumbersLoaded = true;
+
+            $scope.connectedNumbersList = numbers;
+          });
+      },
+      /**
+       * Save a connected number
+       */
+      save: function ()
+      {
+        var self = this;
+
+        $rootScope.statusBar.display('Adding a new number..');
+
+        Core.connectedNumbers.save($scope.connection)
+          .then(function (result)
+          {
+            $rootScope.statusBar.off();
+
+            if (result.error)
+            {
+//              $rootScope.notifier.error('Error with adding a number!');
+//              console.warn('error ->', result);
+            }
+            else
+            {
+            }
+
+            self.list();
+          });
+      },
+
+      /**
+       * Delete a number
+       */
+      remove: function (number)
+      {
+        var self = this;
+
+        $rootScope.statusBar.display('Deleting a number..');
+
+        Core.connectedNumbers.remove(number)
+          .then(function (result)
+          {
+            $rootScope.statusBar.off();
+
+            if (result.error)
+            {
+            }
+            else
+            {}
+
+            self.list();
+          })
+      }
+    }
+
+
+
+
+
+
+
 	  /**
 	   * Tabs arranger
 	   */
@@ -156,7 +243,26 @@ angular.module('WebPaige.Controllers.Core', [])
 	    };
 
 	    $scope.views[hash] = true;
-	  };
+
+      switch (hash)
+      {
+        case 'purchaser':
+          break;
+
+        case 'manager':
+          $scope.connectedNumbers.list();
+          break;
+
+        case 'notifier':
+          break;
+
+        case 'reporter':
+          break;
+
+        case 'guarder':
+          break;
+      }
+	  }
 
 
 	  /**
@@ -228,28 +334,6 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1);
 	  };
-
-
-    /**
-     * Connected numbers
-     */
-    $scope.connectedNumbers = {
-      /**
-       * List numbers
-       */
-      list: function ()
-      {
-        $scope.connectedNumbersLoaded = false;
-
-        Core.connectedNumbers.list()
-          .then(function (numbers)
-          {
-            $scope.connectedNumbersLoaded = true;
-
-            $scope.connectedNumbersList = numbers;
-          });
-      }
-    }
 
 
 	}

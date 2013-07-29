@@ -529,30 +529,43 @@
         <div class="row-fluid">
 
           <div class="span12">
-            <form class="form-inline well">
-              <input type="text" class="input-medium" placeholder="Label">&nbsp;
-              <input type="password" class="input-large" placeholder="Telefon number">&nbsp;
+            <form class="form-inline well"
+                  ng-submit="connectedNumbers.save()">
+
+              <input ng-model="connection.label"
+                     type="text"
+                     class="input-medium"
+                     placeholder="Label">&nbsp;
+
+              <input ng-model="connection.contactInfo"
+                     type="text"
+                     class="input-large"
+                     placeholder="e.g. Phone number">&nbsp;
+
               <button type="submit" class="btn">Add</button>
+
             </form>
 
-            <!-- <h4>Numbers</h4> -->
+            <h4>Numbers</h4>
+            <hr>
 
 
 
-            <div ng-hide="connectedNumbersLoaded">
+            <!--<div class="alert">-->
+              <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+              <!--<strong>Warning!</strong> Best check yo self, you're not looking too good.-->
+            <!--</div>-->
+
+
+
+            <p ng-hide="connectedNumbersLoaded">
               Loading connected numbers..
-            </div>
-
-            <div ng-show="connectedNumbersLoaded">
-              <ul>
-                <li ng-repeat="number in connectedNumbersList">{{number}}</li>
-              </ul>
-            </div>
+              <br><br><br><br>
+            </p>
 
 
-            
-            <table class="table table-striped">
-              <thead>
+            <table class="table table-striped" ng-show="connectedNumbersLoaded">
+                <thead>
                 <tr>
                   <th style="width: 100px;"></th>
                   <th>Label</th>
@@ -561,26 +574,26 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td><span class="label label-success">Verified</span></td>
-                  <td>Home</td>
-                  <td>+31 (78) 7501234</td>
+
+                <tr ng-repeat="number in connectedNumbersList">
                   <td>
-                    <button type="button" class="btn btn-mini">Delete</button>&nbsp;
-                    <button type="button" class="btn btn-mini">Edit</button>
+                    <span ng-show="number.verified" class="label label-success">Verified</span>
+                    <span ng-hide="number.verified" class="label label-error">Not Verified</span>
+                  </td>
+                  <td>{{number.label}}</td>
+                  <td>{{number.contactInfo}}</td>
+                  <td>
+                    <button ng-click="connectedNumbers.remove(number)"
+                            type="button"
+                            class="btn btn-mini">Delete</button>&nbsp;
+                    <button ng-show="number.verified" type="button" class="btn btn-mini">Edit</button>
+                    <button ng-hide="number.verified" type="button" class="btn btn-mini">Verify</button>
                   </td>
                 </tr>
-                <tr>
-                  <td><span class="label label-warning">Pending</span></td>
-                  <td>Work</td>
-                  <td>+31 (629) 123456</td>
-                  <td>
-                    <button type="button" class="btn btn-mini">Delete</button>&nbsp;
-                    <button type="button" class="btn btn-mini">Verify</button>
-                  </td>
-                </tr>
+
               </tbody>
             </table>
+
           </div>
 
         </div>

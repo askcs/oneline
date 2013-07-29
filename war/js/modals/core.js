@@ -68,11 +68,59 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       /**
        * List numbers
        */
-      list: function (candidate)
+      list: function ()
       {
         var deferred = $q.defer();
 
         ContactInfos.list(function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Save a number
+       */
+      save: function (connection)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.create({
+          contactInfo:    connection.contactInfo,
+          contactInfoTag: 'Phone',
+          label:          connection.label
+          },
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Delete a connected number
+       */
+      remove: function (connection)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.remove({
+            id: connection.id
+          },
+          function (result)
           {
             deferred.resolve(result);
           },

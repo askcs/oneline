@@ -1473,11 +1473,11 @@ angular.module('WebPaige')
 
 
 
-    $rootScope.notification = {
-      status:   false,
-      type:     '',
-      message:  ''
-    };
+//    $rootScope.notification = {
+//      status:   false,
+//      type:     '',
+//      message:  ''
+//    };
 
 
 
@@ -1486,50 +1486,52 @@ angular.module('WebPaige')
     /**
      * Show notifications
      */
-    $rootScope.notifier =
-    {
-      init: function (status, type, message)
-      {
-        $rootScope.notification.status = true;
+//    $rootScope.notifier =
+//    {
+//      init: function (status, type, message)
+//      {
+//        $rootScope.notification.status = true;
+//
+//        if ($rootScope.browser.mobile && status == true)
+//        {
+//          $window.alert(message);
+//        }
+//        else
+//        {
+//          $rootScope.notification = {
+//            status:   status,
+//            type:     type,
+//            message:  message
+//          };
+//        }
+//      },
+//
+//      success: function (message, permanent)
+//      {
+//        console.log('success ->', message);
+//
+//        this.init(true, 'alert-success', message);
+//
+//        if (!permanent) this.destroy();
+//      },
+//
+//      error: function (message, permanent)
+//      {
+//        this.init(true, 'alert-danger', message);
+//
+//        if (!permanent) this.destroy();
+//      },
+//
+//      destroy: function ()
+//      {
+//        setTimeout(function ()
+//        {
+//          $rootScope.notification.status = false;
+//        }, 5000);
+//      }
+//    };
 
-        if ($rootScope.browser.mobile && status == true)
-        {
-          $window.alert(message);
-        }
-        else
-        {
-          $rootScope.notification = {
-            status:   status,
-            type:     type,
-            message:  message
-          };
-        }
-      },
-
-      success: function (message, permanent)
-      {
-        this.init(true, 'alert-success', message);
-
-        if (!permanent) this.destroy();
-      },
-
-      error: function (message, permanent)
-      {
-        this.init(true, 'alert-danger', message);
-
-        if (!permanent) this.destroy();
-      },
-
-      destroy: function ()
-      {
-        setTimeout(function ()
-        {
-          $rootScope.notification.status = false;
-        }, 5000);
-      }
-    };
-
-    $rootScope.notifier.init(false, '', '');
+//    $rootScope.notifier.init(false, '', '');
 
 
 
@@ -2244,11 +2246,59 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       /**
        * List numbers
        */
-      list: function (candidate)
+      list: function ()
       {
         var deferred = $q.defer();
 
         ContactInfos.list(function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Save a number
+       */
+      save: function (connection)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.create({
+          contactInfo:    connection.contactInfo,
+          contactInfoTag: 'Phone',
+          label:          connection.label
+          },
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Delete a connected number
+       */
+      remove: function (connection)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.remove({
+            id: connection.id
+          },
+          function (result)
           {
             deferred.resolve(result);
           },
@@ -2578,10 +2628,6 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
       check: function()
       {
         var session = angular.fromJson(Storage.cookie.get('session'));
-
-
-        console.warn('Fetched cookie value ->', session);
-
 
         if (session)
         {
@@ -5082,6 +5128,93 @@ angular.module('WebPaige.Controllers.Core', [])
 
 
 
+
+
+    $scope.connection = {
+      contactInfo:    '',
+      contactInfoTag: ''
+    };
+
+
+
+
+    /**
+     * Connected numbers
+     */
+    $scope.connectedNumbers = {
+      /**
+       * List numbers
+       */
+      list: function ()
+      {
+        $scope.connectedNumbersLoaded = false;
+
+        Core.connectedNumbers.list()
+          .then(function (numbers)
+          {
+            $scope.connectedNumbersLoaded = true;
+
+            $scope.connectedNumbersList = numbers;
+          });
+      },
+      /**
+       * Save a connected number
+       */
+      save: function ()
+      {
+        var self = this;
+
+        $rootScope.statusBar.display('Adding a new number..');
+
+        Core.connectedNumbers.save($scope.connection)
+          .then(function (result)
+          {
+            $rootScope.statusBar.off();
+
+            if (result.error)
+            {
+//              $rootScope.notifier.error('Error with adding a number!');
+//              console.warn('error ->', result);
+            }
+            else
+            {
+            }
+
+            self.list();
+          });
+      },
+
+      /**
+       * Delete a number
+       */
+      remove: function (number)
+      {
+        var self = this;
+
+        $rootScope.statusBar.display('Deleting a number..');
+
+        Core.connectedNumbers.remove(number)
+          .then(function (result)
+          {
+            $rootScope.statusBar.off();
+
+            if (result.error)
+            {
+            }
+            else
+            {}
+
+            self.list();
+          })
+      }
+    }
+
+
+
+
+
+
+
 	  /**
 	   * Tabs arranger
 	   */
@@ -5106,7 +5239,26 @@ angular.module('WebPaige.Controllers.Core', [])
 	    };
 
 	    $scope.views[hash] = true;
-	  };
+
+      switch (hash)
+      {
+        case 'purchaser':
+          break;
+
+        case 'manager':
+          $scope.connectedNumbers.list();
+          break;
+
+        case 'notifier':
+          break;
+
+        case 'reporter':
+          break;
+
+        case 'guarder':
+          break;
+      }
+	  }
 
 
 	  /**
@@ -5178,28 +5330,6 @@ angular.module('WebPaige.Controllers.Core', [])
 	  {
 	  	if ($scope.purchaser.step > 1) $scope.switchStep($scope.purchaser.step - 1);
 	  };
-
-
-    /**
-     * Connected numbers
-     */
-    $scope.connectedNumbers = {
-      /**
-       * List numbers
-       */
-      list: function ()
-      {
-        $scope.connectedNumbersLoaded = false;
-
-        Core.connectedNumbers.list()
-          .then(function (numbers)
-          {
-            $scope.connectedNumbersLoaded = true;
-
-            $scope.connectedNumbersList = numbers;
-          });
-      }
-    }
 
 
 	}

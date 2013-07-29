@@ -20,10 +20,6 @@ angular.module('WebPaige.Services.Session', ['ngResource'])
       {
         var session = angular.fromJson(Storage.cookie.get('session'));
 
-
-        console.warn('Fetched cookie value ->', session);
-
-
         if (session)
         {
           this.set(session.id);

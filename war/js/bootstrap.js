@@ -167,11 +167,11 @@ angular.module('WebPaige')
 
 
 
-    $rootScope.notification = {
-      status:   false,
-      type:     '',
-      message:  ''
-    };
+//    $rootScope.notification = {
+//      status:   false,
+//      type:     '',
+//      message:  ''
+//    };
 
 
 
@@ -180,50 +180,52 @@ angular.module('WebPaige')
     /**
      * Show notifications
      */
-    $rootScope.notifier =
-    {
-      init: function (status, type, message)
-      {
-        $rootScope.notification.status = true;
+//    $rootScope.notifier =
+//    {
+//      init: function (status, type, message)
+//      {
+//        $rootScope.notification.status = true;
+//
+//        if ($rootScope.browser.mobile && status == true)
+//        {
+//          $window.alert(message);
+//        }
+//        else
+//        {
+//          $rootScope.notification = {
+//            status:   status,
+//            type:     type,
+//            message:  message
+//          };
+//        }
+//      },
+//
+//      success: function (message, permanent)
+//      {
+//        console.log('success ->', message);
+//
+//        this.init(true, 'alert-success', message);
+//
+//        if (!permanent) this.destroy();
+//      },
+//
+//      error: function (message, permanent)
+//      {
+//        this.init(true, 'alert-danger', message);
+//
+//        if (!permanent) this.destroy();
+//      },
+//
+//      destroy: function ()
+//      {
+//        setTimeout(function ()
+//        {
+//          $rootScope.notification.status = false;
+//        }, 5000);
+//      }
+//    };
 
-        if ($rootScope.browser.mobile && status == true)
-        {
-          $window.alert(message);
-        }
-        else
-        {
-          $rootScope.notification = {
-            status:   status,
-            type:     type,
-            message:  message
-          };
-        }
-      },
-
-      success: function (message, permanent)
-      {
-        this.init(true, 'alert-success', message);
-
-        if (!permanent) this.destroy();
-      },
-
-      error: function (message, permanent)
-      {
-        this.init(true, 'alert-danger', message);
-
-        if (!permanent) this.destroy();
-      },
-
-      destroy: function ()
-      {
-        setTimeout(function ()
-        {
-          $rootScope.notification.status = false;
-        }, 5000);
-      }
-    };
-
-    $rootScope.notifier.init(false, '', '');
+//    $rootScope.notifier.init(false, '', '');
 
 
 
