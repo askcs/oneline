@@ -161,7 +161,10 @@
                       <ul style="list-style: none; margin: 0; padding: 0; margin-top: 5px;">
                         <li ng-repeat="package in packages" style="display: inline; float: left; margin: 0 15px 0 0;">
                           <label class="radio">
-                            <input type="radio" ng-model="order.package" ng-click="setPackage(package.id)" value="{{package.id}}">&nbsp;{{package.label}}
+                            <input type="radio"
+                                   ng-model="order.package"
+                                   ng-click="setPackage(package.id)"
+                                   value="{{package.id}}">&nbsp;{{package.label}}
                           </label>
                         </li>
                       </ul>
@@ -227,7 +230,10 @@
                             <tr ng-repeat="number in numbers.normals">
                               <td>
                                 <label class="radio">
-                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=false">&nbsp;
+                                  <input type="radio"
+                                         ng-model="order.number"
+                                         value="{{number}}"
+                                         ng-click="order.premium=false">&nbsp;
                                   +{{order.country}} ({{order.region}}) {{number}}
                                 </label>
                               </td>
@@ -242,7 +248,10 @@
                             <tr ng-repeat="number in numbers.premiums">
                               <td>
                                 <label class="radio">
-                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=true">&nbsp;
+                                  <input type="radio"
+                                         ng-model="order.number"
+                                         value="{{number}}"
+                                         ng-click="order.premium=true">&nbsp;
                                   +{{order.country}} ({{order.region}}) {{number}}
                                 </label>
                               </td>
@@ -283,7 +292,10 @@
                       <ul style="list-style: none; margin: 0; padding: 0; margin-top: 5px;">
                         <li ng-repeat="range in ranges" style="display: inline; float: left; width: 60px; margin: 0 15px 0 0;">
                           <label class="radio">
-                            <input type="radio" ng-model="order.range" value="{{range}}" ng-click="setVirtualArea()">&nbsp;{{range}}
+                            <input type="radio"
+                                   ng-model="order.range"
+                                   value="{{range}}"
+                                   ng-click="setVirtualArea()">&nbsp;{{range}}
                           </label>
                         </li>
                       </ul>
@@ -319,7 +331,10 @@
                             <tr ng-repeat="number in numbers.normals">
                               <td>
                                 <label class="radio">
-                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=false">&nbsp;
+                                  <input type="radio"
+                                         ng-model="order.number"
+                                         value="{{number}}"
+                                         ng-click="order.premium=false">&nbsp;
                                   +{{order.country}} ({{order.range}}) {{number}}
                                 </label>
                               </td>
@@ -334,7 +349,10 @@
                             <tr ng-repeat="number in numbers.premiums">
                               <td>
                                 <label class="radio">
-                                  <input type="radio" ng-model="order.number" value="{{number}}" ng-click="order.premium=true">&nbsp;
+                                  <input type="radio"
+                                         ng-model="order.number"
+                                         value="{{number}}"
+                                         ng-click="order.premium=true">&nbsp;
                                   +{{order.country}} ({{order.range}}) {{number}}
                                 </label>
                               </td>
@@ -450,11 +468,13 @@
 
                   <div ng-show="order.monthly || order.yearly">
                     <hr>
-                    <dt>Total:</dt>
+                    <dl>
+                      <dt>Total:</dt>
                       <dd>
                         <span ng-show="order.monthly">{{prices.monthly}}€ per month</span>
                         <span ng-show="order.yearly">{{prices.yearly}}€ per year</span>
                       </dd>
+                    </dl>
                   </div>
 
                 </dl>
@@ -546,9 +566,10 @@
 
             </form>
 
+            Number: {{ connection }}
+
             <h4>Numbers</h4>
             <hr>
-
 
 
             <!--<div class="alert">-->
@@ -556,7 +577,7 @@
               <!--<strong>Warning!</strong> Best check yo self, you're not looking too good.-->
             <!--</div>-->
 
-
+            List: {{ connectedNumbersList }}
 
             <p ng-hide="connectedNumbersLoaded">
               Loading connected numbers..
@@ -590,7 +611,7 @@
                             type="button"
                             class="btn btn-mini">Delete</button>&nbsp;
 
-                    <button ng-show="number.verified"
+                    <button ng-hide="number.verified"
                             ng-click="connectedNumbers.edit(number)"
                             type="button"
                             class="btn btn-mini">Edit</button>
