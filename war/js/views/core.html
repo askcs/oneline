@@ -568,9 +568,20 @@
             <hr>
 
             <!--<div class="alert">-->
-              <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
-              <!--<strong>Warning!</strong> Best check yo self, you're not looking too good.-->
+            <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
+            <!--<strong>Warning!</strong> Best check yo self, you're not looking too good.-->
             <!--</div>-->
+
+            <div class="alert alert-{{ (verified.result) && 'success' || 'error' }}"
+                 ng-show="verified.status">
+              <button type="button"
+                      class="close"
+                      ng-click="verified.status = false"
+                      data-dismiss="alert">&times;</button>
+              <span ng-show="verified.result">Number is verified and ready to use.</span>
+              <span ng-hide="verified.result">There was an error with verifiying number. Please try again. If problem resists, please get in touch
+              with us.</span>
+            </div>
 
             <p ng-hide="connectedNumbersLoaded">
               Loading connected numbers..

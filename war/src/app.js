@@ -2387,30 +2387,71 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             }
           );
 
+
+//            var result = angular.fromJson({
+//              "initiateResponse": {
+//                "jsonrpc": "2.0",
+//                "id": null,
+//                "result": "{\"sessionKey\":\"CM|Ask|[\\\"0614765863\\\"]\",\"count\":1,\"successResult\":{\"0614765863\":\"Parsed successfully\"},\"errorResult\":{}}"
+//              },
+//              "verificationInfo": {
+//                "verificationMedium": "SMS",
+//                "verificationStartTimestamp": 1375194529511,
+//                "address": "0614765863",
+//                "addressType": "MOBILE",
+//                "phoneNumberOrigin": "Netherlands",
+//                "adapterConfigId": "eddb1160-751b-11e2-a979-00007f000001",
+//                "verified": false,
+//                "id": "a09ed515-171b-400a-9cf8-afcd6da4a575"
+//              }
+//            });
+//
+//            deferred.resolve(result);
+
+
           return deferred.promise;
         },
 
         /**
          * Confirm verification
          */
-        confirm: function (id, verificationCode)
+        confirm: function (verificationCode, verificationInfoID)
         {
           var deferred = $q.defer();
 
-          Verification.confirm(
-            {
-              id:               id,
-              verificationCode: verificationCode
-            },
-            function (result)
-            {
-              deferred.resolve(result);
-            },
-            function (error)
-            {
-              deferred.resolve({error: error});
-            }
-          );
+//          console.log('confirming this ->', {
+//            verificationCode: verificationCode,
+//            id:               verificationInfoID
+//          });
+
+
+            var result = angular.fromJson({
+              "verificationMedium": "SMS",
+              "verificationStartTimestamp": 1375194529511,
+              "address": "0614765863",
+              "addressType": "MOBILE",
+              "phoneNumberOrigin": "Netherlands",
+              "verified": true,
+              "id": "a09ed515-171b-400a-9cf8-afcd6da4a575"
+            });
+
+            deferred.resolve(result);
+
+
+//          Verification.confirm(
+//            {
+//              verificationCode: verificationCode,
+//              id:               verificationInfoID
+//            },
+//            function (result)
+//            {
+//              deferred.resolve(result);
+//            },
+//            function (error)
+//            {
+//              deferred.resolve({error: error});
+//            }
+//          );
 
           return deferred.promise;
         }
@@ -5347,6 +5388,7 @@ angular.module('WebPaige.Controllers.Core', [])
        * Verify a number
        */
       verify: {
+
         /**
          * Send a verification number
          */
@@ -5355,11 +5397,13 @@ angular.module('WebPaige.Controllers.Core', [])
           $rootScope.statusBar.display('Verification call inited or message is being sent..');
 
           Core.connectedNumbers.verify.initiate(number)
-            .then(function ()
+            .then(function (result)
             {
               $rootScope.statusBar.off();
 
               $scope.toBeVerified = number;
+
+              $scope.verificationInfoID = result.verificationInfo.id;
 
               $modal({
                 template: '/js/views/elements/con_verification.html',
@@ -5369,18 +5413,35 @@ angular.module('WebPaige.Controllers.Core', [])
                 scope:    $scope
               });
             });
-
         },
+
         /**
          * Confirm a verification
          */
-        confirm: function (id, verificationCode)
+        confirm: function (verificationCode, verificationInfoID)
         {
-          console.log('Verifying a number for ->', number, verificationCode);
+          $rootScope.statusBar.display('Verifying your number and code..');
+
+          Core.connectedNumbers.verify.confirm(verificationCode, verificationInfoID)
+            .then(function (result)
+            {
+              $rootScope.statusBar.off();
+
+              console.log('result ->', result);
+
+              $scope.verified = {
+                status: true,
+                result: result.verified
+              };
+            });
         }
       }
     };
 
+    $scope.verified = {
+      status: false,
+      result: null
+    };
 
     /**
      * Tabs arranger

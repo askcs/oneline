@@ -214,6 +214,7 @@ angular.module('WebPaige.Controllers.Core', [])
        * Verify a number
        */
       verify: {
+
         /**
          * Send a verification number
          */
@@ -222,11 +223,13 @@ angular.module('WebPaige.Controllers.Core', [])
           $rootScope.statusBar.display('Verification call inited or message is being sent..');
 
           Core.connectedNumbers.verify.initiate(number)
-            .then(function ()
+            .then(function (result)
             {
               $rootScope.statusBar.off();
 
               $scope.toBeVerified = number;
+
+              $scope.verificationInfoID = result.verificationInfo.id;
 
               $modal({
                 template: '/js/views/elements/con_verification.html',
@@ -236,18 +239,35 @@ angular.module('WebPaige.Controllers.Core', [])
                 scope:    $scope
               });
             });
-
         },
+
         /**
          * Confirm a verification
          */
-        confirm: function (id, verificationCode)
+        confirm: function (verificationCode, verificationInfoID)
         {
-          console.log('Verifying a number for ->', number, verificationCode);
+          $rootScope.statusBar.display('Verifying your number and code..');
+
+          Core.connectedNumbers.verify.confirm(verificationCode, verificationInfoID)
+            .then(function (result)
+            {
+              $rootScope.statusBar.off();
+
+              console.log('result ->', result);
+
+              $scope.verified = {
+                status: true,
+                result: result.verified
+              };
+            });
         }
       }
     };
 
+    $scope.verified = {
+      status: false,
+      result: null
+    };
 
     /**
      * Tabs arranger

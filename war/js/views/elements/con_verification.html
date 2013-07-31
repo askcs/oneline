@@ -12,7 +12,8 @@
 
   <form>
     <label>Verification code</label>
-    <input type="text" ng-model="verificationCode">
+    <input type="text"
+           ng-model="verificationCode">
   </form>
 
 </div>
@@ -23,7 +24,8 @@
           ng-click="hide()">Cancel</button>
 
   <button class="btn btn-primary"
-          ng-click="connectedNumbers.verify.confirm(toBeVerified.number, verificationCode); hide();">Verify this
-    number</button>
+          ng-click="connectedNumbers.verify.confirm(verificationCode, verificationInfoID); hide();">
+    Verify number
+  </button>
 
 </div>
