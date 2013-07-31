@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators', 'Core',
-	function ($rootScope, $scope, $location, Generators, Core)
+	'$rootScope', '$scope', '$location', 'Generators', 'Core', '$modal',
+	function ($rootScope, $scope, $location, Generators, Core, $modal)
 	{
 		/**
 		 * Fix styles
@@ -31,7 +31,6 @@ angular.module('WebPaige.Controllers.Core', [])
       // region:  10,
       // number:  1234567
     };
-
     // $scope.numbers = Generators.list();
 
 
@@ -74,7 +73,6 @@ angular.module('WebPaige.Controllers.Core', [])
           yearly:   ($scope.order.premium) ? prices.yearly.premium : prices.yearly.normal
         };
       }
-
     }, true);
 
 
@@ -87,6 +85,7 @@ angular.module('WebPaige.Controllers.Core', [])
         package:  null,
         country:  $scope.defaults.country,
         region:   null,
+        virtual:  null,
         number:   null
 			};
 
@@ -126,15 +125,6 @@ angular.module('WebPaige.Controllers.Core', [])
       $scope.order.package  = Number(pack);
 
       $scope.order.number   = null;
-    };
-
-
-    /**
-     * Verification box
-     */
-    $scope.modal = {
-      content:  'Hello Modal',
-      saved:    false
     };
 
 
@@ -218,6 +208,43 @@ angular.module('WebPaige.Controllers.Core', [])
             $scope.connection = connection;
           }
         });
+      },
+
+      /**
+       * Verify a number
+       */
+      verify: {
+        /**
+         * Send a verification number
+         */
+        initiate: function (number)
+        {
+          $rootScope.statusBar.display('Verification call inited or message is being sent..');
+
+          Core.connectedNumbers.verify.initiate(number)
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+
+              $scope.toBeVerified = number;
+
+              $modal({
+                template: '/js/views/elements/con_verification.html',
+                persist:  true,
+                show:     true,
+                backdrop: 'static',
+                scope:    $scope
+              });
+            });
+
+        },
+        /**
+         * Confirm a verification
+         */
+        confirm: function (id, verificationCode)
+        {
+          console.log('Verifying a number for ->', number, verificationCode);
+        }
       }
     };
 
@@ -229,7 +256,6 @@ angular.module('WebPaige.Controllers.Core', [])
       normals:  true,
       premiums: false
     };
-
 
 
     /**
@@ -343,7 +369,5 @@ angular.module('WebPaige.Controllers.Core', [])
         $scope.switchStep($scope.purchaser.step - 1);
       }
     };
-
-
 	}
 ]);

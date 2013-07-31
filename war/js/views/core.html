@@ -8,7 +8,7 @@
 
     
     <!-- tabs -->
-    <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0px;">
+    <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0;">
 
       <li class="{{(views.purchaser==true) && 'active'}}">
         <a ng-click="resetPurchaser(); setViewTo('purchaser')" 
@@ -289,7 +289,7 @@
                         ng-show="(order.package==2) && order.virtual">
                     <label class="control-label" for="inputPassword">Virtual area code</label>
                     <div class="controls">
-                      <ul style="list-style: none; margin: 0; padding: 0; margin-top: 5px;">
+                      <ul style="list-style: none; padding: 0; margin: 5px 0 0;">
                         <li ng-repeat="range in ranges" style="display: inline; float: left; width: 60px; margin: 0 15px 0 0;">
                           <label class="radio">
                             <input type="radio"
@@ -466,16 +466,13 @@
                       <span ng-show="order.yearly">Yearly payment</span>
                     </dd>
 
-                  <div ng-show="order.monthly || order.yearly">
-                    <hr>
-                    <dl>
-                      <dt>Total:</dt>
-                      <dd>
-                        <span ng-show="order.monthly">{{prices.monthly}}€ per month</span>
-                        <span ng-show="order.yearly">{{prices.yearly}}€ per year</span>
-                      </dd>
-                    </dl>
-                  </div>
+
+                  <dt ng-show="order.monthly || order.yearly">Total:</dt>
+                    <dd ng-show="order.monthly || order.yearly">
+                      <span ng-show="order.monthly">{{prices.monthly}}€ per month</span>
+                      <span ng-show="order.yearly">{{prices.yearly}}€ per year</span>
+                    </dd>
+
 
                 </dl>
 
@@ -549,6 +546,7 @@
         <div class="row-fluid">
 
           <div class="span12">
+
             <form class="form-inline well"
                   ng-submit="connectedNumbers.save()">
 
@@ -560,31 +558,24 @@
               <input ng-model="connection.contactInfo"
                      type="text"
                      class="input-large"
-                     placeholder="e.g. Phone number">&nbsp;
+                     placeholder="e.g. Phone number…">&nbsp;
 
               <button type="submit" class="btn">Save</button>
 
             </form>
 
-            Number: {{ connection }}
-
             <h4>Numbers</h4>
             <hr>
-
 
             <!--<div class="alert">-->
               <!--<button type="button" class="close" data-dismiss="alert">&times;</button>-->
               <!--<strong>Warning!</strong> Best check yo self, you're not looking too good.-->
             <!--</div>-->
 
-            List: {{ connectedNumbersList }}
-
             <p ng-hide="connectedNumbersLoaded">
               Loading connected numbers..
               <br><br><br><br>
             </p>
-
-            <button type="button" class="btn" bs-modal="'js/views/elements/con_verification.html'">...</button>
 
 
             <table class="table table-striped" ng-show="connectedNumbersLoaded">
@@ -611,13 +602,13 @@
                             type="button"
                             class="btn btn-mini">Delete</button>&nbsp;
 
-                    <button ng-hide="number.verified"
+                    <button ng-show="number.verified"
                             ng-click="connectedNumbers.edit(number)"
                             type="button"
                             class="btn btn-mini">Edit</button>
 
                     <button ng-hide="number.verified"
-                            ng-click="connectedNumbers.verify(number)"
+                            ng-click="connectedNumbers.verify.initiate(number)"
                             type="button"
                             class="btn btn-mini">Verify</button>
 
@@ -828,9 +819,9 @@
           </div>
         </div>
 
-        <div class="alert">
-          <p>Some alert emssage</p>
-        </div>
+        <!--<div class="alert">-->
+          <!--<p>Some alert emssage</p>-->
+        <!--</div>-->
 
         <div class="row-fluid">
 

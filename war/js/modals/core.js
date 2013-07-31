@@ -13,36 +13,36 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
  */
 .factory('Core',
 [
-	'$rootScope', '$resource', '$config', '$q', '$http',
-	function ($rootScope, $resource, $config, $q, $http)
+	'$rootScope', '$resource', '$config', '$q',
+	function ($rootScope, $resource, $config, $q)
 	{
     /**
      * Empty resource
      */
     var Core = $resource();
 
+
     /**
      * Contacts resource
      */
     var Contacts = $resource(
       $config.host + '/accounts/contacts/',
-      {
-      },
+      {},
       {
         process: {
           method: 'GET',
-          params: {username:'', password:''}
+          params: {username: '', password: ''}
         }
       }
     );
+
 
     /**
      * Contact Infos resource
      */
     var ContactInfos = $resource(
       $config.host + '/accounts/contactinfos/:id',
-      {
-      },
+      {},
       {
         list: {
           method: 'GET',
@@ -51,7 +51,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         },
         get: {
           method: 'GET',
-          params: {id:''}
+          params: {id: ''}
         },
         create: {
           method: 'POST',
@@ -59,11 +59,30 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         },
         update: {
           method: 'PUT',
-          params: {id:''}
+          params: {id: ''}
         },
         remove: {
           method: 'DELETE',
-          params: {id:''}
+          params: {id: ''}
+        }
+      }
+    );
+
+
+    /**
+     * Verification resource
+     */
+    var Verification = $resource(
+      $config.host + '/products/verifyme/:action',
+      {},
+      {
+        initiate: {
+          method: 'POST',
+          params: {action: 'initiate'}
+        },
+        confirm: {
+          method: 'POST',
+          params: {action: 'verify'}
         }
       }
     );
@@ -159,6 +178,64 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         );
 
         return deferred.promise;
+      },
+
+      /**
+       * Verify a connected number
+       */
+      verify: {
+
+        /**
+         * Initiate a verification
+         */
+        initiate: function (number)
+        {
+          var deferred = $q.defer();
+
+          Verification.initiate(
+            {
+              verificationMedium: 'SMS',
+              verificationInfo: {
+                address:  number.contactInfo
+              }
+            },
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+
+          return deferred.promise;
+        },
+
+        /**
+         * Confirm verification
+         */
+        confirm: function (id, verificationCode)
+        {
+          var deferred = $q.defer();
+
+          Verification.confirm(
+            {
+              id:               id,
+              verificationCode: verificationCode
+            },
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+
+          return deferred.promise;
+        }
       }
     };
 

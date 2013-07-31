@@ -575,8 +575,9 @@ var ui = {
 /**
  * Declare app level module which depends on filters, and services
  */
-angular.module('WebPaige',[
+angular.module('WebPaige', [
   'ngResource',
+//  '$strap.directives',
   // modals
   'WebPaige.Modals.User',
   // 'WebPaige.Modals.Dashboard',
@@ -609,7 +610,6 @@ angular.module('WebPaige',[
   // 'WebPaige.Services.Offsetter',
   // directives
   'WebPaige.Directives',
-  '$strap.directives',
   // filters
   'WebPaige.Filters'
 ]);
@@ -2191,36 +2191,36 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
  */
 .factory('Core',
 [
-	'$rootScope', '$resource', '$config', '$q', '$http',
-	function ($rootScope, $resource, $config, $q, $http)
+	'$rootScope', '$resource', '$config', '$q',
+	function ($rootScope, $resource, $config, $q)
 	{
     /**
      * Empty resource
      */
     var Core = $resource();
 
+
     /**
      * Contacts resource
      */
     var Contacts = $resource(
       $config.host + '/accounts/contacts/',
-      {
-      },
+      {},
       {
         process: {
           method: 'GET',
-          params: {username:'', password:''}
+          params: {username: '', password: ''}
         }
       }
     );
+
 
     /**
      * Contact Infos resource
      */
     var ContactInfos = $resource(
       $config.host + '/accounts/contactinfos/:id',
-      {
-      },
+      {},
       {
         list: {
           method: 'GET',
@@ -2229,7 +2229,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         },
         get: {
           method: 'GET',
-          params: {id:''}
+          params: {id: ''}
         },
         create: {
           method: 'POST',
@@ -2237,11 +2237,30 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         },
         update: {
           method: 'PUT',
-          params: {id:''}
+          params: {id: ''}
         },
         remove: {
           method: 'DELETE',
-          params: {id:''}
+          params: {id: ''}
+        }
+      }
+    );
+
+
+    /**
+     * Verification resource
+     */
+    var Verification = $resource(
+      $config.host + '/products/verifyme/:action',
+      {},
+      {
+        initiate: {
+          method: 'POST',
+          params: {action: 'initiate'}
+        },
+        confirm: {
+          method: 'POST',
+          params: {action: 'verify'}
         }
       }
     );
@@ -2337,6 +2356,64 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         );
 
         return deferred.promise;
+      },
+
+      /**
+       * Verify a connected number
+       */
+      verify: {
+
+        /**
+         * Initiate a verification
+         */
+        initiate: function (number)
+        {
+          var deferred = $q.defer();
+
+          Verification.initiate(
+            {
+              verificationMedium: 'SMS',
+              verificationInfo: {
+                address:  number.contactInfo
+              }
+            },
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+
+          return deferred.promise;
+        },
+
+        /**
+         * Confirm verification
+         */
+        confirm: function (id, verificationCode)
+        {
+          var deferred = $q.defer();
+
+          Verification.confirm(
+            {
+              id:               id,
+              verificationCode: verificationCode
+            },
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
+
+          return deferred.promise;
+        }
       }
     };
 
@@ -2357,7 +2434,7 @@ angular.module('WebPaige.Directives', ['ngResource'])
 .directive('chosen',
   function ()
   {
-    var linker = function (scope,element,attr)
+    var linker = function (scope, element, attr)
     {
       scope.$watch('receviersList', function ()
       {
@@ -2378,6 +2455,76 @@ angular.module('WebPaige.Directives', ['ngResource'])
     };
   }
 )
+
+.factory('$modal', ['$rootScope', '$compile', '$http', '$timeout', '$q', '$templateCache',
+    function($rootScope, $compile, $http, $timeout, $q, $templateCache) {
+
+  var ModalFactory = function ModalFactory(options) {
+
+    function Modal(options) {
+      if(!options) options = {};
+
+      var scope = options.scope || $rootScope.$new(),
+        templateUrl = options.template;
+
+      //@todo support {title, content} object
+
+      return $q.when($templateCache.get(templateUrl) || $http.get(templateUrl, {cache: true}).then(function(res) { return res.data; }))
+        .then(function onSuccess(template) {
+
+          // Build modal object
+          var id = templateUrl.replace('.html', '').replace(/[\/|\.|:]/g, "-") + '-' + scope.$id;
+          var $modal = $('<div class="modal hide" tabindex="-1"></div>').attr('id', id).addClass('fade').html(template);
+          if(options.modalClass) $modal.addClass(options.modalClass);
+
+          $('body').append($modal);
+
+          // Compile modal content
+          $timeout(function() {
+            $compile($modal)(scope);
+          });
+
+          // Provide scope display functions
+          scope.$modal = function(name) {
+            $modal.modal(name);
+          };
+          scope.hide = function() {
+            $modal.modal('hide');
+          };
+          scope.show = function() {
+            $modal.modal('show');
+          };
+          scope.dismiss = scope.hide;
+
+          // Emit modal events
+          angular.forEach(['show', 'shown', 'hide', 'hidden'], function(name) {
+            $modal.on(name, function(ev) {
+              scope.$emit('modal-' + name, ev);
+            });
+          });
+
+          // Support autofocus attribute
+          $modal.on('shown', function(event) {
+            $('input[autofocus]', $modal).first().trigger('focus');
+          });
+
+          if(options.show) {
+            $modal.modal('show');
+          }
+
+          return $modal;
+
+        });
+
+    }
+
+    return new Modal(options);
+
+  };
+
+  return ModalFactory;
+
+}]);
 
 
 /**
@@ -2523,7 +2670,6 @@ angular.module('WebPaige.Directives', ['ngResource'])
 //     };
 //   }
 // ])
-;
 
 
 /**
@@ -4998,8 +5144,8 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('core',
 [
-	'$rootScope', '$scope', '$location', 'Generators', 'Core',
-	function ($rootScope, $scope, $location, Generators, Core)
+	'$rootScope', '$scope', '$location', 'Generators', 'Core', '$modal',
+	function ($rootScope, $scope, $location, Generators, Core, $modal)
 	{
 		/**
 		 * Fix styles
@@ -5018,7 +5164,6 @@ angular.module('WebPaige.Controllers.Core', [])
       // region:  10,
       // number:  1234567
     };
-
     // $scope.numbers = Generators.list();
 
 
@@ -5061,7 +5206,6 @@ angular.module('WebPaige.Controllers.Core', [])
           yearly:   ($scope.order.premium) ? prices.yearly.premium : prices.yearly.normal
         };
       }
-
     }, true);
 
 
@@ -5074,6 +5218,7 @@ angular.module('WebPaige.Controllers.Core', [])
         package:  null,
         country:  $scope.defaults.country,
         region:   null,
+        virtual:  null,
         number:   null
 			};
 
@@ -5113,15 +5258,6 @@ angular.module('WebPaige.Controllers.Core', [])
       $scope.order.package  = Number(pack);
 
       $scope.order.number   = null;
-    };
-
-
-    /**
-     * Verification box
-     */
-    $scope.modal = {
-      content:  'Hello Modal',
-      saved:    false
     };
 
 
@@ -5205,6 +5341,43 @@ angular.module('WebPaige.Controllers.Core', [])
             $scope.connection = connection;
           }
         });
+      },
+
+      /**
+       * Verify a number
+       */
+      verify: {
+        /**
+         * Send a verification number
+         */
+        initiate: function (number)
+        {
+          $rootScope.statusBar.display('Verification call inited or message is being sent..');
+
+          Core.connectedNumbers.verify.initiate(number)
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+
+              $scope.toBeVerified = number;
+
+              $modal({
+                template: '/js/views/elements/con_verification.html',
+                persist:  true,
+                show:     true,
+                backdrop: 'static',
+                scope:    $scope
+              });
+            });
+
+        },
+        /**
+         * Confirm a verification
+         */
+        confirm: function (id, verificationCode)
+        {
+          console.log('Verifying a number for ->', number, verificationCode);
+        }
       }
     };
 
@@ -5216,7 +5389,6 @@ angular.module('WebPaige.Controllers.Core', [])
       normals:  true,
       premiums: false
     };
-
 
 
     /**
@@ -5330,7 +5502,5 @@ angular.module('WebPaige.Controllers.Core', [])
         $scope.switchStep($scope.purchaser.step - 1);
       }
     };
-
-
 	}
 ]);

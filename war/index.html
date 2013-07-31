@@ -240,14 +240,15 @@
     <!--[if gt IE 7]><!-->
     <script src="libs/date/1.0/date.min.js"></script>
 
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.4/angular-strap.min.js"></script>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>-->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>-->
+    <!--<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/0.7.4/angular-strap.min.js"></script>-->
 
 
-    <!--<script src="libs/angular/1.0.5/angular.min.js"></script>-->
+    <script src="libs/angular/1.0.5/angular.min.js"></script>
     <script src="libs/angular/1.0.5/angular-resource.min.js"></script>
-    <!--<script src="libs/bootstrap/bootstrap.min.js"></script>-->
+    <script src="libs/angular-strap/0.7.2/angular-strap.js"></script>
+    <script src="libs/bootstrap/bootstrap.min.js"></script>
     
     <!-- <script src="dist/app.min.js"></script> -->
     <script src="src/app.js"></script>
@@ -264,7 +265,10 @@
        * Livereload only on localhost
        */
       if (location.host.split(':')[0] == 'localhost')
-        document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>');
+        document.write('<script src="http://' +
+            (location.host || 'localhost').split(':')[0] +
+            ':35729/livereload.js?snipver=1"></' +
+            'script>');
     </script>
     
     

@@ -7,8 +7,9 @@
 /**
  * Declare app level module which depends on filters, and services
  */
-angular.module('WebPaige',[
+angular.module('WebPaige', [
   'ngResource',
+//  '$strap.directives',
   // modals
   'WebPaige.Modals.User',
   // 'WebPaige.Modals.Dashboard',
@@ -41,7 +42,6 @@ angular.module('WebPaige',[
   // 'WebPaige.Services.Offsetter',
   // directives
   'WebPaige.Directives',
-  '$strap.directives',
   // filters
   'WebPaige.Filters'
 ]);
