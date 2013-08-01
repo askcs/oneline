@@ -56,7 +56,7 @@ module.exports = function (grunt)
             'war/js/controllers/register.js',
             'war/js/controllers/logout.js',
             // 'war/js/controllers/dashboard.js',
-            'war/js/controllers/core.js',
+            'war/js/controllers/coreCtrl.js',
             // 'war/js/controllers/profile.js',
             // 'war/js/controllers/settings.js',
             // 'war/js/controllers/help.js'

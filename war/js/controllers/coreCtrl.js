@@ -9,7 +9,7 @@ angular.module('WebPaige.Controllers.Core', [])
 /**
  * Core controller
  */
-.controller('core',
+.controller('coreCtrl',
 [
 	'$rootScope', '$scope', '$location', 'Generators', 'Core', '$modal',
 	function ($rootScope, $scope, $location, Generators, Core, $modal)
@@ -253,21 +253,26 @@ angular.module('WebPaige.Controllers.Core', [])
             {
               $rootScope.statusBar.off();
 
-              console.log('result ->', result);
-
               $scope.verified = {
                 status: true,
                 result: result.verified
               };
+
+              setView('manager');
             });
         }
       }
     };
 
+
+    /**
+     * connected numbers verified switch
+     */
     $scope.verified = {
       status: false,
       result: null
     };
+
 
     /**
      * Tabs arranger
@@ -277,6 +282,36 @@ angular.module('WebPaige.Controllers.Core', [])
       premiums: false
     };
 
+
+    /**
+     * Notifications
+     */
+    $scope.notifications = {
+
+      /**
+       * List notifications
+       */
+      list: function ()
+      {
+        $rootScope.statusBar.display('Getting notifications information..');
+
+        Core.notifications.list()
+          .then(function (result)
+          {
+            $rootScope.statusBar.off();
+
+            console.log('-->', result);
+          });
+      },
+
+      /**
+       * Get a notification
+       */
+      get: function (id)
+      {
+
+      }
+    };
 
     /**
      * View setter
@@ -303,6 +338,7 @@ angular.module('WebPaige.Controllers.Core', [])
         break;
 
       case 'notifier':
+        $scope.notifications.list();
         break;
 
       case 'reporter':

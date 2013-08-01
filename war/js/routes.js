@@ -9,8 +9,8 @@
 angular.module('WebPaige')
 .config(
 [
-  '$locationProvider', '$routeProvider', '$httpProvider',
-  function ($locationProvider, $routeProvider, $httpProvider)
+  '$locationProvider', '$routeProvider',
+  function ($locationProvider, $routeProvider)
   {
     /**
      * Login router
@@ -69,7 +69,7 @@ angular.module('WebPaige')
     .when('/core',
     {
       templateUrl:    'dist/views/core.html',
-      controller:     'core',
+      controller:     'coreCtrl',
       reloadOnSearch: false
     })
 

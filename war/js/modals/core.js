@@ -1,7 +1,5 @@
 /*jslint node: true */
 /*global angular */
-/*global $ */
-/*global error */
 'use strict';
 
 
@@ -25,16 +23,16 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
     /**
      * Contacts resource
      */
-    var Contacts = $resource(
-      $config.host + '/accounts/contacts/',
-      {},
-      {
-        process: {
-          method: 'GET',
-          params: {username: '', password: ''}
-        }
-      }
-    );
+//    var Contacts = $resource(
+//      $config.host + '/accounts/contacts/',
+//      {},
+//      {
+//        process: {
+//          method: 'GET',
+//          params: {username: '', password: ''}
+//        }
+//      }
+//    );
 
 
     /**
@@ -89,7 +87,80 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
-     * Add Member to a group
+     * Notifocation resource
+     */
+    var Notifications = $resource(
+      $config.host + '/settings/notifications/:id',
+      {},
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        },
+        get: {
+          method: 'GET',
+          params: {id: ''}
+        },
+        // TODO (URL should be made competible with this one)
+//        getWithnumber: {
+//          method: 'GET',
+//          params: {id: 'number' + id}
+//        },
+        create: {
+          method: 'POST',
+          params: {}
+        },
+        update: {
+          method: 'PUT',
+          params: {id: ''}
+        },
+        remove: {
+          method: 'DELETE',
+          params: {id: ''}
+        }
+      }
+    );
+
+
+    /**
+     * Notifications
+     */
+    Core.prototype.notifications = {
+
+      /**
+       * List notifications
+       */
+      list: function ()
+      {
+        var deferred = $q.defer();
+
+        Notifications.query(
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Get a particular notification
+       */
+      get: function ()
+      {
+
+      }
+    };
+
+
+    /**
+     * Connected numbers
      */
     Core.prototype.connectedNumbers = {
       /**
@@ -99,7 +170,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        ContactInfos.list(function (result)
+        ContactInfos.list(
+          function (result)
           {
             deferred.resolve(result);
           },
@@ -209,28 +281,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             }
           );
 
-
-//            var result = angular.fromJson({
-//              "initiateResponse": {
-//                "jsonrpc": "2.0",
-//                "id": null,
-//                "result": "{\"sessionKey\":\"CM|Ask|[\\\"0614765863\\\"]\",\"count\":1,\"successResult\":{\"0614765863\":\"Parsed successfully\"},\"errorResult\":{}}"
-//              },
-//              "verificationInfo": {
-//                "verificationMedium": "SMS",
-//                "verificationStartTimestamp": 1375194529511,
-//                "address": "0614765863",
-//                "addressType": "MOBILE",
-//                "phoneNumberOrigin": "Netherlands",
-//                "adapterConfigId": "eddb1160-751b-11e2-a979-00007f000001",
-//                "verified": false,
-//                "id": "a09ed515-171b-400a-9cf8-afcd6da4a575"
-//              }
-//            });
-//
-//            deferred.resolve(result);
-
-
           return deferred.promise;
         },
 
@@ -241,45 +291,26 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         {
           var deferred = $q.defer();
 
-//          console.log('confirming this ->', {
-//            verificationCode: verificationCode,
-//            id:               verificationInfoID
-//          });
-
-
-            var result = angular.fromJson({
-              "verificationMedium": "SMS",
-              "verificationStartTimestamp": 1375194529511,
-              "address": "0614765863",
-              "addressType": "MOBILE",
-              "phoneNumberOrigin": "Netherlands",
-              "verified": true,
-              "id": "a09ed515-171b-400a-9cf8-afcd6da4a575"
-            });
-
-            deferred.resolve(result);
-
-
-//          Verification.confirm(
-//            {
-//              verificationCode: verificationCode,
-//              id:               verificationInfoID
-//            },
-//            function (result)
-//            {
-//              deferred.resolve(result);
-//            },
-//            function (error)
-//            {
-//              deferred.resolve({error: error});
-//            }
-//          );
+          Verification.confirm(
+            {
+              verificationCode: verificationCode,
+              id:               verificationInfoID
+            },
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
 
           return deferred.promise;
         }
       }
     };
 
-    return new Core;
+    return new Core();
 	}
 ]);

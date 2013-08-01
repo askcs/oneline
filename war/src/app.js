@@ -1039,8 +1039,8 @@ angular.module('WebPaige')
 angular.module('WebPaige')
 .config(
 [
-  '$locationProvider', '$routeProvider', '$httpProvider',
-  function ($locationProvider, $routeProvider, $httpProvider)
+  '$locationProvider', '$routeProvider',
+  function ($locationProvider, $routeProvider)
   {
     /**
      * Login router
@@ -1099,7 +1099,7 @@ angular.module('WebPaige')
     .when('/core',
     {
       templateUrl:    'dist/views/core.html',
-      controller:     'core',
+      controller:     'coreCtrl',
       reloadOnSearch: false
     })
 
@@ -1857,7 +1857,9 @@ angular.module('WebPaige')
 /**
  * Sticky timeline header
  */
-// $('#mainTimeline .timeline-frame div:first div:first').css({'top': '0px'});'use strict';
+// $('#mainTimeline .timeline-frame div:first div:first').css({'top': '0px'});/*jslint node: true */
+/*global angular */
+'use strict';
 
 
 angular.module('WebPaige.Modals.User', ['ngResource'])
@@ -1871,191 +1873,95 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
 	function ($resource, $config, $q, $location, Storage, $rootScope) 
 	{
-	  var User = $resource();
+    var User = $resource();
 
 
-	  var Login = $resource(
-	    $config.host + '/login',
-	    {
-	    },
-	    {
-	      process: {
-	        method: 'GET',
-	        params: {username:'', password:''}
-	      }
-	    }
-	  );
+    var Login = $resource(
+      $config.host + '/login',
+      {},
+      {
+        process: {
+          method: 'GET',
+          params: {username: '', password: ''}
+        }
+      }
+    );
 
 
-	  var Logout = $resource(
-	    $config.host + '/logout',
-	    {
-	    },
-	    {
-	      process: {
-	        method: 'GET',
-	        params: {}
-	      }
-	    }
-	  );
+    var Logout = $resource(
+      $config.host + '/logout',
+      {},
+      {
+        process: {
+          method: 'GET',
+          params: {}
+        }
+      }
+    );
 
 
-	  var Owner = $resource(
-	    $config.host + '/accounts/contactinfos/owner',
-	    {
-	    },
-	    {
-	      get: {
-	        method:   'GET',
-	        params:   {},
+    var Owner = $resource(
+      $config.host + '/accounts/contactinfos/owner',
+      {},
+      {
+        get: {
+          method:   'GET',
+          params:   {},
           isArray:  true
-	      }
-	    }
-	  );
+        }
+      }
+    );
 
 
-//	  var Resources = $resource(
-//	    $config.host + '/resources',
-//	    {
-//	    },
-//	    {
-//	      get: {
-//	        method: 'GET',
-//	        params: {}
-//	      }
-//	    }
-//	  );
+    /**
+     * User login
+     */
+    User.prototype.login = function (username, password)
+    {
+      var deferred = $q.defer();
+
+      Login.process({username: username, password: password},
+        function (result)
+        {
+          if (angular.equals(result, []))
+          {
+            deferred.reject('Something went wrong with login!');
+          }
+          else
+          {
+            deferred.resolve(result);
+          }
+        },
+        function (error)
+        {
+          deferred.resolve(error);
+        }
+      );
+
+      return deferred.promise;
+    };
 
 
-//	  var Reset = $resource(
-//	    $config.host + '/passwordReset',
-//	    {
-//	    },
-//	    {
-//	      password: {
-//	        method: 'GET',
-//	        params: {uuid: '', path:''}
-//	      }
-//	    }
-//	  );
+    /**
+     * User logout
+     */
+    User.prototype.logout = function ()
+    {
+      var deferred = $q.defer();
 
-	  // var changePassword = $resource($config.host+'/passwordReset', 
-	  //   {uuid: uuid,
-	  //    pass: newpass,
-	  //    key: key});
-	  
-	  
-	  /**
-	   * TODO
-	   * RE-FACTOR
-	   * 
-	   * User login
-	   */
-	  User.prototype.password = function (uuid)
-	  {
-	    var deferred = $q.defer();
+      Logout.process(null,
+        function (result)
+        {
+          deferred.resolve(result);
+        },
+        function (error)
+        {
+          deferred.resolve({error: error});
+        }
+      );
 
-	    Reset.password(
-	      {
-	        uuid: uuid.toLowerCase(),
-	        path: $location.absUrl()
-	      }, 
-	      function (result)
-	      {
-	        if (angular.equals(result, []))
-	        {
-	          deferred.resolve("ok");
-	        }
-	        else
-	        {
-	          deferred.resolve(result);
-	        };
-	      },
-	      function (error)
-	      {
-	        deferred.resolve(error);
-	      }
-	    );
-
-	    return deferred.promise;
-	  };
-
-
-	  /**
-	   * User login
-	   */
-	  User.prototype.login = function (username, password)
-	  {
-	    var deferred = $q.defer();
-
-	    Login.process({username: username, password: password},
-	      function (result) 
-	      {
-	        if (angular.equals(result, [])) 
-	        {
-	          deferred.reject("Something went wrong with login!");
-	        }
-	        else 
-	        {
-	          deferred.resolve(result);
-	        }
-	      },
-	      function (error)
-	      {
-	        deferred.resolve(error);
-	      }
-	    );
-
-	    return deferred.promise;
-	  };
-	  
-
-	  /**
-	   * RE-FACTORY
-	   * change user password
-	   */
-	  User.prototype.changePass = function (uuid, newpass, key)
-	  {
-	    var deferred = $q.defer();
-	    
-	    /**
-	     * RE-FACTORY
-	     */
-	    changePassword.get(
-	      function (result)
-	      {
-	        deferred.resolve(result);
-	      },
-	      function (error)
-	      {
-	        deferred.resolve(error);
-	      }
-	    );
-	    
-	    return deferred.promise;
-	  }
-
-
-	  /**
-	   * User logout
-	   */
-	  User.prototype.logout = function () 
-	  {    
-	    var deferred = $q.defer();
-
-	    Logout.process(null, 
-	      function (result) 
-	      {
-	        deferred.resolve(result);
-	      },
-	      function (error)
-	      {
-	        deferred.resolve({error: error});
-	      }
-	    );
-
-	    return deferred.promise;
-	  };
+      return deferred.promise;
+    };
 
 
     /**
@@ -2076,25 +1982,25 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
       {
         var account = {};
 
-        angular.forEach(result, function (resource, index)
+        angular.forEach(result, function (resource)
         {
           switch (resource.contactInfoTag)
           {
-            case 'Name':
-              account.name = resource.contactInfo;
-              break;
-            case 'Phone':
-              account.phone = resource.contactInfo;
-              break;
-            case 'Email':
-              account.email = resource.contactInfo;
-              break;
-            case 'Address':
-              account.address = resource.contactInfo;
-              break;
-            case 'PURCHASED_NUMBER':
-              account.purchased_number = resource.contactInfo;
-              break;
+          case 'Name':
+            account.name = resource.contactInfo;
+            break;
+          case 'Phone':
+            account.phone = resource.contactInfo;
+            break;
+          case 'Email':
+            account.email = resource.contactInfo;
+            break;
+          case 'Address':
+            account.address = resource.contactInfo;
+            break;
+          case 'PURCHASED_NUMBER':
+            account.purchasedNumber = resource.contactInfo;
+            break;
           }
         });
 
@@ -2119,7 +2025,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
         {
           if (angular.equals(result, []))
           {
-            deferred.reject("User has no resources!");
+            deferred.reject('User has no resources!');
           }
           else
           {
@@ -2141,45 +2047,10 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
     };
 
 
-    /**
-     * Get user resources
-     */
-//    User.prototype.resources = function ()
-//    {
-//      var deferred = $q.defer();
-//
-//      Resources.get(null,
-//        function (result)
-//        {
-//          if (angular.equals(result, []))
-//          {
-//            deferred.reject("User has no resources!");
-//          }
-//          else
-//          {
-//            Storage.add('resources', angular.toJson(result));
-//
-//            deferred.resolve(result);
-//          }
-//        },
-//        function (error)
-//        {
-//          deferred.resolve({error: error});
-//        }
-//      );
-//
-//      return deferred.promise;
-//    };
-
-
-
-
-	  return new User;
+    return new User();
 	}
 ]);;/*jslint node: true */
 /*global angular */
-/*global $ */
-/*global error */
 'use strict';
 
 
@@ -2203,16 +2074,16 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
     /**
      * Contacts resource
      */
-    var Contacts = $resource(
-      $config.host + '/accounts/contacts/',
-      {},
-      {
-        process: {
-          method: 'GET',
-          params: {username: '', password: ''}
-        }
-      }
-    );
+//    var Contacts = $resource(
+//      $config.host + '/accounts/contacts/',
+//      {},
+//      {
+//        process: {
+//          method: 'GET',
+//          params: {username: '', password: ''}
+//        }
+//      }
+//    );
 
 
     /**
@@ -2267,7 +2138,80 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
-     * Add Member to a group
+     * Notifocation resource
+     */
+    var Notifications = $resource(
+      $config.host + '/settings/notifications/:id',
+      {},
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        },
+        get: {
+          method: 'GET',
+          params: {id: ''}
+        },
+        // TODO (URL should be made competible with this one)
+//        getWithnumber: {
+//          method: 'GET',
+//          params: {id: 'number' + id}
+//        },
+        create: {
+          method: 'POST',
+          params: {}
+        },
+        update: {
+          method: 'PUT',
+          params: {id: ''}
+        },
+        remove: {
+          method: 'DELETE',
+          params: {id: ''}
+        }
+      }
+    );
+
+
+    /**
+     * Notifications
+     */
+    Core.prototype.notifications = {
+
+      /**
+       * List notifications
+       */
+      list: function ()
+      {
+        var deferred = $q.defer();
+
+        Notifications.query(
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Get a particular notification
+       */
+      get: function ()
+      {
+
+      }
+    };
+
+
+    /**
+     * Connected numbers
      */
     Core.prototype.connectedNumbers = {
       /**
@@ -2277,7 +2221,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        ContactInfos.list(function (result)
+        ContactInfos.list(
+          function (result)
           {
             deferred.resolve(result);
           },
@@ -2387,28 +2332,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             }
           );
 
-
-//            var result = angular.fromJson({
-//              "initiateResponse": {
-//                "jsonrpc": "2.0",
-//                "id": null,
-//                "result": "{\"sessionKey\":\"CM|Ask|[\\\"0614765863\\\"]\",\"count\":1,\"successResult\":{\"0614765863\":\"Parsed successfully\"},\"errorResult\":{}}"
-//              },
-//              "verificationInfo": {
-//                "verificationMedium": "SMS",
-//                "verificationStartTimestamp": 1375194529511,
-//                "address": "0614765863",
-//                "addressType": "MOBILE",
-//                "phoneNumberOrigin": "Netherlands",
-//                "adapterConfigId": "eddb1160-751b-11e2-a979-00007f000001",
-//                "verified": false,
-//                "id": "a09ed515-171b-400a-9cf8-afcd6da4a575"
-//              }
-//            });
-//
-//            deferred.resolve(result);
-
-
           return deferred.promise;
         },
 
@@ -2419,46 +2342,27 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         {
           var deferred = $q.defer();
 
-//          console.log('confirming this ->', {
-//            verificationCode: verificationCode,
-//            id:               verificationInfoID
-//          });
-
-
-            var result = angular.fromJson({
-              "verificationMedium": "SMS",
-              "verificationStartTimestamp": 1375194529511,
-              "address": "0614765863",
-              "addressType": "MOBILE",
-              "phoneNumberOrigin": "Netherlands",
-              "verified": true,
-              "id": "a09ed515-171b-400a-9cf8-afcd6da4a575"
-            });
-
-            deferred.resolve(result);
-
-
-//          Verification.confirm(
-//            {
-//              verificationCode: verificationCode,
-//              id:               verificationInfoID
-//            },
-//            function (result)
-//            {
-//              deferred.resolve(result);
-//            },
-//            function (error)
-//            {
-//              deferred.resolve({error: error});
-//            }
-//          );
+          Verification.confirm(
+            {
+              verificationCode: verificationCode,
+              id:               verificationInfoID
+            },
+            function (result)
+            {
+              deferred.resolve(result);
+            },
+            function (error)
+            {
+              deferred.resolve({error: error});
+            }
+          );
 
           return deferred.promise;
         }
       }
     };
 
-    return new Core;
+    return new Core();
 	}
 ]);;/*jslint node: true */
 /*global angular */
@@ -5183,7 +5087,7 @@ angular.module('WebPaige.Controllers.Core', [])
 /**
  * Core controller
  */
-.controller('core',
+.controller('coreCtrl',
 [
 	'$rootScope', '$scope', '$location', 'Generators', 'Core', '$modal',
 	function ($rootScope, $scope, $location, Generators, Core, $modal)
@@ -5427,21 +5331,26 @@ angular.module('WebPaige.Controllers.Core', [])
             {
               $rootScope.statusBar.off();
 
-              console.log('result ->', result);
-
               $scope.verified = {
                 status: true,
                 result: result.verified
               };
+
+              setView('manager');
             });
         }
       }
     };
 
+
+    /**
+     * connected numbers verified switch
+     */
     $scope.verified = {
       status: false,
       result: null
     };
+
 
     /**
      * Tabs arranger
@@ -5451,6 +5360,36 @@ angular.module('WebPaige.Controllers.Core', [])
       premiums: false
     };
 
+
+    /**
+     * Notifications
+     */
+    $scope.notifications = {
+
+      /**
+       * List notifications
+       */
+      list: function ()
+      {
+        $rootScope.statusBar.display('Getting notifications information..');
+
+        Core.notifications.list()
+          .then(function (result)
+          {
+            $rootScope.statusBar.off();
+
+            console.log('-->', result);
+          });
+      },
+
+      /**
+       * Get a notification
+       */
+      get: function (id)
+      {
+
+      }
+    };
 
     /**
      * View setter
@@ -5477,6 +5416,7 @@ angular.module('WebPaige.Controllers.Core', [])
         break;
 
       case 'notifier':
+        $scope.notifications.list();
         break;
 
       case 'reporter':

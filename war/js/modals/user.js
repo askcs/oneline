@@ -1,3 +1,5 @@
+/*jslint node: true */
+/*global angular */
 'use strict';
 
 
@@ -12,191 +14,95 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
 	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
 	function ($resource, $config, $q, $location, Storage, $rootScope) 
 	{
-	  var User = $resource();
+    var User = $resource();
 
 
-	  var Login = $resource(
-	    $config.host + '/login',
-	    {
-	    },
-	    {
-	      process: {
-	        method: 'GET',
-	        params: {username:'', password:''}
-	      }
-	    }
-	  );
+    var Login = $resource(
+      $config.host + '/login',
+      {},
+      {
+        process: {
+          method: 'GET',
+          params: {username: '', password: ''}
+        }
+      }
+    );
 
 
-	  var Logout = $resource(
-	    $config.host + '/logout',
-	    {
-	    },
-	    {
-	      process: {
-	        method: 'GET',
-	        params: {}
-	      }
-	    }
-	  );
+    var Logout = $resource(
+      $config.host + '/logout',
+      {},
+      {
+        process: {
+          method: 'GET',
+          params: {}
+        }
+      }
+    );
 
 
-	  var Owner = $resource(
-	    $config.host + '/accounts/contactinfos/owner',
-	    {
-	    },
-	    {
-	      get: {
-	        method:   'GET',
-	        params:   {},
+    var Owner = $resource(
+      $config.host + '/accounts/contactinfos/owner',
+      {},
+      {
+        get: {
+          method:   'GET',
+          params:   {},
           isArray:  true
-	      }
-	    }
-	  );
+        }
+      }
+    );
 
 
-//	  var Resources = $resource(
-//	    $config.host + '/resources',
-//	    {
-//	    },
-//	    {
-//	      get: {
-//	        method: 'GET',
-//	        params: {}
-//	      }
-//	    }
-//	  );
+    /**
+     * User login
+     */
+    User.prototype.login = function (username, password)
+    {
+      var deferred = $q.defer();
+
+      Login.process({username: username, password: password},
+        function (result)
+        {
+          if (angular.equals(result, []))
+          {
+            deferred.reject('Something went wrong with login!');
+          }
+          else
+          {
+            deferred.resolve(result);
+          }
+        },
+        function (error)
+        {
+          deferred.resolve(error);
+        }
+      );
+
+      return deferred.promise;
+    };
 
 
-//	  var Reset = $resource(
-//	    $config.host + '/passwordReset',
-//	    {
-//	    },
-//	    {
-//	      password: {
-//	        method: 'GET',
-//	        params: {uuid: '', path:''}
-//	      }
-//	    }
-//	  );
+    /**
+     * User logout
+     */
+    User.prototype.logout = function ()
+    {
+      var deferred = $q.defer();
 
-	  // var changePassword = $resource($config.host+'/passwordReset', 
-	  //   {uuid: uuid,
-	  //    pass: newpass,
-	  //    key: key});
-	  
-	  
-	  /**
-	   * TODO
-	   * RE-FACTOR
-	   * 
-	   * User login
-	   */
-	  User.prototype.password = function (uuid)
-	  {
-	    var deferred = $q.defer();
+      Logout.process(null,
+        function (result)
+        {
+          deferred.resolve(result);
+        },
+        function (error)
+        {
+          deferred.resolve({error: error});
+        }
+      );
 
-	    Reset.password(
-	      {
-	        uuid: uuid.toLowerCase(),
-	        path: $location.absUrl()
-	      }, 
-	      function (result)
-	      {
-	        if (angular.equals(result, []))
-	        {
-	          deferred.resolve("ok");
-	        }
-	        else
-	        {
-	          deferred.resolve(result);
-	        };
-	      },
-	      function (error)
-	      {
-	        deferred.resolve(error);
-	      }
-	    );
-
-	    return deferred.promise;
-	  };
-
-
-	  /**
-	   * User login
-	   */
-	  User.prototype.login = function (username, password)
-	  {
-	    var deferred = $q.defer();
-
-	    Login.process({username: username, password: password},
-	      function (result) 
-	      {
-	        if (angular.equals(result, [])) 
-	        {
-	          deferred.reject("Something went wrong with login!");
-	        }
-	        else 
-	        {
-	          deferred.resolve(result);
-	        }
-	      },
-	      function (error)
-	      {
-	        deferred.resolve(error);
-	      }
-	    );
-
-	    return deferred.promise;
-	  };
-	  
-
-	  /**
-	   * RE-FACTORY
-	   * change user password
-	   */
-	  User.prototype.changePass = function (uuid, newpass, key)
-	  {
-	    var deferred = $q.defer();
-	    
-	    /**
-	     * RE-FACTORY
-	     */
-	    changePassword.get(
-	      function (result)
-	      {
-	        deferred.resolve(result);
-	      },
-	      function (error)
-	      {
-	        deferred.resolve(error);
-	      }
-	    );
-	    
-	    return deferred.promise;
-	  }
-
-
-	  /**
-	   * User logout
-	   */
-	  User.prototype.logout = function () 
-	  {    
-	    var deferred = $q.defer();
-
-	    Logout.process(null, 
-	      function (result) 
-	      {
-	        deferred.resolve(result);
-	      },
-	      function (error)
-	      {
-	        deferred.resolve({error: error});
-	      }
-	    );
-
-	    return deferred.promise;
-	  };
+      return deferred.promise;
+    };
 
 
     /**
@@ -217,25 +123,25 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
       {
         var account = {};
 
-        angular.forEach(result, function (resource, index)
+        angular.forEach(result, function (resource)
         {
           switch (resource.contactInfoTag)
           {
-            case 'Name':
-              account.name = resource.contactInfo;
-              break;
-            case 'Phone':
-              account.phone = resource.contactInfo;
-              break;
-            case 'Email':
-              account.email = resource.contactInfo;
-              break;
-            case 'Address':
-              account.address = resource.contactInfo;
-              break;
-            case 'PURCHASED_NUMBER':
-              account.purchased_number = resource.contactInfo;
-              break;
+          case 'Name':
+            account.name = resource.contactInfo;
+            break;
+          case 'Phone':
+            account.phone = resource.contactInfo;
+            break;
+          case 'Email':
+            account.email = resource.contactInfo;
+            break;
+          case 'Address':
+            account.address = resource.contactInfo;
+            break;
+          case 'PURCHASED_NUMBER':
+            account.purchasedNumber = resource.contactInfo;
+            break;
           }
         });
 
@@ -260,7 +166,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
         {
           if (angular.equals(result, []))
           {
-            deferred.reject("User has no resources!");
+            deferred.reject('User has no resources!');
           }
           else
           {
@@ -282,39 +188,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
     };
 
 
-    /**
-     * Get user resources
-     */
-//    User.prototype.resources = function ()
-//    {
-//      var deferred = $q.defer();
-//
-//      Resources.get(null,
-//        function (result)
-//        {
-//          if (angular.equals(result, []))
-//          {
-//            deferred.reject("User has no resources!");
-//          }
-//          else
-//          {
-//            Storage.add('resources', angular.toJson(result));
-//
-//            deferred.resolve(result);
-//          }
-//        },
-//        function (error)
-//        {
-//          deferred.resolve({error: error});
-//        }
-//      );
-//
-//      return deferred.promise;
-//    };
-
-
-
-
-	  return new User;
+    return new User();
 	}
 ]);

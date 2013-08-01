@@ -585,11 +585,17 @@
 
             <p ng-hide="connectedNumbersLoaded">
               Loading connected numbers..
-              <br><br><br><br>
             </p>
 
+            <div ng-show="connectedNumbersLoaded">
 
-            <table class="table table-striped" ng-show="connectedNumbersLoaded">
+              <p ng-show="(connectedNumbersList.length == 0)">
+                There are no connected numbers. Please add some.
+              </p>
+
+
+              <table class="table table-striped"
+                     ng-show="(connectedNumbersList.length > 0)">
                 <thead>
                 <tr>
                   <th style="width: 100px;"></th>
@@ -597,8 +603,8 @@
                   <th>Telefon number</th>
                   <th></th>
                 </tr>
-              </thead>
-              <tbody>
+                </thead>
+                <tbody>
 
                 <tr ng-repeat="number in connectedNumbersList">
                   <td>
@@ -626,8 +632,10 @@
                   </td>
                 </tr>
 
-              </tbody>
-            </table>
+                </tbody>
+              </table>
+
+            </div>
 
           </div>
 
@@ -671,7 +679,10 @@
                     </label>
                   </td>
                   <td>
-                    <input type="text" class="input-large" placeholder="">
+                    <input type="text"
+                           class="input-xlarge"
+                           ng-model="notification.email"
+                           placeholder="">
                   </td>
                 </tr>
                 <tr>
@@ -681,7 +692,10 @@
                     </label>
                   </td>
                   <td>
-                    <input type="text" class="input-large" placeholder="Registered mobile phone number">
+                    <input type="text"
+                           class="input-xlarge"
+                           ng-model="notification.sms"
+                           placeholder="Registered mobile phone number">
                   </td>
                 </tr>
               </table>
