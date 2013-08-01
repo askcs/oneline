@@ -60,7 +60,6 @@ module.exports = function (grunt)
             'war/js/controllers/forgotpassCtrl.js',
             'war/js/controllers/registerCtrl.js',
             'war/js/controllers/logoutCtrl.js',
-            // 'war/js/controllers/dashboard.js',
             'war/js/controllers/coreCtrl.js',
             'war/js/controllers/purchaserCtrl.js',
             'war/js/controllers/managerCtrl.js',
