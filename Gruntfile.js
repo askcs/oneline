@@ -26,15 +26,18 @@ module.exports = function (grunt)
             'war/js/config.js',
             'war/js/routes.js',
             'war/js/bootstrap.js',
+
             // modals
             'war/js/modals/user.js',
             // 'war/js/modals/dashboard.js',
             'war/js/modals/core.js',
             // 'war/js/modals/profile.js',
             // 'war/js/modals/settings.js',
+
             // directives
             'war/js/directives/directives.js',
             'war/libs/angular-strap/0.7.0/angular-strap.min.js',
+
             // services
             // 'war/js/services/timer.js',
             'war/js/services/session.js',
@@ -48,8 +51,10 @@ module.exports = function (grunt)
             // 'war/js/services/sloter.js',
             // 'war/js/services/stats.js',
             // 'war/js/services/offsetter.js',
+
             // filters
             'war/js/filters/filters.js',
+
             // controllers
             'war/js/controllers/login.js',
             'war/js/controllers/forgotpass.js',
@@ -57,6 +62,11 @@ module.exports = function (grunt)
             'war/js/controllers/logout.js',
             // 'war/js/controllers/dashboard.js',
             'war/js/controllers/coreCtrl.js',
+            'war/js/controllers/purchaserCtrl.js',
+            'war/js/controllers/managerCtrl.js',
+            'war/js/controllers/notifierCtrl.js',
+            'war/js/controllers/reporterCtrl.js',
+            'war/js/controllers/guarderCtrl.js',
             // 'war/js/controllers/profile.js',
             // 'war/js/controllers/settings.js',
             // 'war/js/controllers/help.js'

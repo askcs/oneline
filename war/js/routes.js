@@ -33,6 +33,7 @@ angular.module('WebPaige')
     })
 
 
+
     /**
      * Register router
      */

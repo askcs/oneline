@@ -11,8 +11,8 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
  */
 .factory('User', 
 [
-	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
-	function ($resource, $config, $q, $location, Storage, $rootScope) 
+	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope',
+	function ($resource, $config, $q, $location, Storage, $rootScope)
 	{
     var User = $resource();
 
@@ -45,10 +45,19 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
       $config.host + '/accounts/contactinfos/owner',
       {},
       {
+        query: {
+          method:  'GET',
+          params:  {},
+          isArray: true
+        },
+        create: {
+          method:  'POST',
+          params:  {}
+        },
         get: {
-          method:   'GET',
-          params:   {},
-          isArray:  true
+          method:  'GET',
+          params:  {tag: ''}
+          // < Name | Mobile| Fixed_Line | Email | Fax | Address | PURCHASED_NUMBER | Other >
         }
       }
     );
@@ -109,6 +118,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
      * Get or set user resources
      */
     User.prototype.owner = {
+
       /**
        * Get user account from localStorage
        */
@@ -116,6 +126,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
       {
         angular.fromJson(Storage.get('resources'));
       },
+
       /**
        * Set user account to localStorage
        */
@@ -161,7 +172,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
     {
       var deferred = $q.defer();
 
-      Owner.get(null,
+      Owner.query(null,
         function (result)
         {
           if (angular.equals(result, []))

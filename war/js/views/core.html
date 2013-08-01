@@ -3,9 +3,7 @@
 <!-- app -->
 <div class="row-fluid">
 
-
   <div class="tabbable tabs-left">
-
     
     <!-- tabs -->
     <ul class="nav nav-tabs nav-tabs-app" style="margin-right: 0;">
@@ -39,13 +37,13 @@
     </ul>
     <!-- end tabs -->
 
-
     <!-- tabs content -->
     <div class="tab-content">
 
-
       <!-- purchaser -->
-      <div class="tab-pane {{(views.purchaser==true) && 'active'}}">
+      <div ng-controller="purchaserCtrl"
+           class="tab-pane {{(views.purchaser==true) && 'active'}}">
+
         <div class="tab-header">
           <h1 class="pull-left">Buy number</h1>
         </div>
@@ -92,7 +90,6 @@
         </ul>
         <!-- end breadcrumbs -->
 
-
         <!-- wizard welcome -->
         <!-- <div class="row-fluid" ng-show="purchaser.step == 0">
 
@@ -115,7 +112,6 @@
 
         </div> -->
         <!-- end wizard welcome -->
-
 
         <!-- steps -->
         <!-- <div class="row-fluid" ng-show="purchaser.step > 0"> -->
@@ -523,9 +519,10 @@
       </div>
       <!-- end purchaser -->
 
-
       <!-- manager -->
-      <div class="tab-pane {{(views.manager==true) && 'active'}}">
+      <div ng-controller="managerCtrl"
+           class="tab-pane {{(views.manager==true) && 'active'}}">
+
         <div class="tab-header">
           <h3 class="pull-left">Add number</h3>
         </div>
@@ -644,9 +641,10 @@
       </div>
       <!-- end manager -->
 
-
       <!-- notifier -->
-      <div class="tab-pane {{(views.notifier==true) && 'active'}}">
+      <div ng-controller="notifierCtrl"
+           class="tab-pane {{(views.notifier==true) && 'active'}}">
+
         <div class="tab-header">
           <h3 class="pull-left">Missed Call Notifications</h3>
         </div>
@@ -675,26 +673,36 @@
                 <tr>
                   <td>
                     <label class="checkbox">
-                      <input type="checkbox">&nbsp;Email Notification
+                      <input type="checkbox"
+                             ng-model="notification.email.status">&nbsp;Email Notification
                     </label>
                   </td>
                   <td>
                     <input type="text"
                            class="input-xlarge"
-                           ng-model="notification.email"
+                           ng-model="notification.email.target"
                            placeholder="">
+
+                    <select
+                        ng-model="notification.email.target"
+                        ng-options="target.id as target.value for target in notification.email.targets">
+                      <option value="{{ target.id }}"
+                              ng-selected="notification.email.target">{{ target.value }}</option>
+                    </select>
+
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <label class="checkbox">
-                      <input type="checkbox">&nbsp;SMS Notification
+                      <input type="checkbox"
+                             ng-model="notification.sms.status">&nbsp;SMS Notification
                     </label>
                   </td>
                   <td>
                     <input type="text"
                            class="input-xlarge"
-                           ng-model="notification.sms"
+                           ng-model="notification.sms.target"
                            placeholder="Registered mobile phone number">
                   </td>
                 </tr>
@@ -709,9 +717,10 @@
       </div>
       <!-- end notifier -->
 
-
       <!-- reporter -->
-      <div class="tab-pane {{(views.reporter==true) && 'active'}}">
+      <div ng-controller="reporterCtrl"
+           class="tab-pane {{(views.reporter==true) && 'active'}}">
+
         <div class="tab-header">
           <h3 class="pull-left">Recent calls</h3>
         </div>
@@ -824,9 +833,10 @@
       </div>
       <!-- end reporter -->
 
-
       <!-- guarder -->
-      <div class="tab-pane {{(views.guarder==true) && 'active'}}">
+      <div ng-controller="guarderCtrl"
+           class="tab-pane {{(views.guarder==true) && 'active'}}">
+
         <div class="tab-header">
           <h3 class="pull-left">Blacklist</h3>
         </div>
@@ -897,11 +907,11 @@
     </div>
     <!-- end tabs content -->
 
+    <!--tab shadow-->
     <div id="tab-shadow" style="margin-left: 154px;">
       <img ng-src="img/content_canvas_shadow.png">
     </div>
-
-
+    <!--end tab shadow-->
 
   </div>
 </div>

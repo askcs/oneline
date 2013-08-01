@@ -11,8 +11,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
  */
 .factory('Core',
 [
-	'$rootScope', '$resource', '$config', '$q',
-	function ($rootScope, $resource, $config, $q)
+	'$rootScope', '$resource', '$config', '$q', 'User',
+	function ($rootScope, $resource, $config, $q, User)
 	{
     /**
      * Empty resource
@@ -171,6 +171,30 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         var deferred = $q.defer();
 
         ContactInfos.list(
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Get contactinfo
+       */
+      get: function (id)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.get(
+          {
+            id: id
+          },
           function (result)
           {
             deferred.resolve(result);

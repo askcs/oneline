@@ -283,6 +283,27 @@ angular.module('WebPaige.Controllers.Core', [])
     };
 
 
+    $scope.notification = {
+      sms: {
+        status: false,
+        target: null
+      },
+      email: {
+        status: false,
+        target: 2,
+        targets: [
+          {
+            id:   1,
+            value: 'testing'
+          },
+          {
+            id:   2,
+            value: 'another'
+          }
+        ]
+      }
+    };
+
     /**
      * Notifications
      */
@@ -293,21 +314,37 @@ angular.module('WebPaige.Controllers.Core', [])
        */
       list: function ()
       {
-        $rootScope.statusBar.display('Getting notifications information..');
-
-        Core.notifications.list()
-          .then(function (result)
-          {
-            $rootScope.statusBar.off();
-
-            console.log('-->', result);
-          });
+//        $rootScope.statusBar.display('Getting notifications information..');
+//
+//        Core.notifications.list()
+//          .then(function (result)
+//          {
+//            $rootScope.statusBar.off();
+//
+//            console.log('notification settings ->', result);
+//
+////            angular.forEach(result, function (setting)
+////            {
+////              if (setting.medium === 'SMS')
+////              {
+////                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
+////                  .then(function (suc)
+////                  {
+////                    $scope.notification.sms = {
+////                      status: true,
+////                      target: suc
+////                    }
+////                  });
+////              }
+////            });
+//
+//          });
       },
 
       /**
        * Get a notification
        */
-      get: function (id)
+      get: function ()
       {
 
       }
@@ -363,7 +400,6 @@ angular.module('WebPaige.Controllers.Core', [])
         setView(hash);
       });
     };
-
 
     var view;
 

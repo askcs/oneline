@@ -592,6 +592,11 @@ angular.module('WebPaige', [
   'WebPaige.Controllers.Logout',
   // 'WebPaige.Controllers.Dashboard',
   'WebPaige.Controllers.Core',
+  'WebPaige.Controllers.Purchaser',
+  'WebPaige.Controllers.Manager',
+  'WebPaige.Controllers.Notifier',
+  'WebPaige.Controllers.Reporter',
+  'WebPaige.Controllers.Guarder',
   // 'WebPaige.Controllers.Profile',
   // 'WebPaige.Controllers.Settings',
   // 'WebPaige.Controllers.Help',
@@ -1061,6 +1066,7 @@ angular.module('WebPaige')
       templateUrl: 'dist/views/forgotpass.html',
       controller: 'forgotpass'
     })
+
 
 
     /**
@@ -1870,8 +1876,8 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
  */
 .factory('User', 
 [
-	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope', 
-	function ($resource, $config, $q, $location, Storage, $rootScope) 
+	'$resource', '$config', '$q', '$location', 'Storage', '$rootScope',
+	function ($resource, $config, $q, $location, Storage, $rootScope)
 	{
     var User = $resource();
 
@@ -1904,10 +1910,19 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
       $config.host + '/accounts/contactinfos/owner',
       {},
       {
+        query: {
+          method:  'GET',
+          params:  {},
+          isArray: true
+        },
+        create: {
+          method:  'POST',
+          params:  {}
+        },
         get: {
-          method:   'GET',
-          params:   {},
-          isArray:  true
+          method:  'GET',
+          params:  {tag: ''}
+          // < Name | Mobile| Fixed_Line | Email | Fax | Address | PURCHASED_NUMBER | Other >
         }
       }
     );
@@ -1968,6 +1983,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
      * Get or set user resources
      */
     User.prototype.owner = {
+
       /**
        * Get user account from localStorage
        */
@@ -1975,6 +1991,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
       {
         angular.fromJson(Storage.get('resources'));
       },
+
       /**
        * Set user account to localStorage
        */
@@ -2020,7 +2037,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
     {
       var deferred = $q.defer();
 
-      Owner.get(null,
+      Owner.query(null,
         function (result)
         {
           if (angular.equals(result, []))
@@ -2062,8 +2079,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
  */
 .factory('Core',
 [
-	'$rootScope', '$resource', '$config', '$q',
-	function ($rootScope, $resource, $config, $q)
+	'$rootScope', '$resource', '$config', '$q', 'User',
+	function ($rootScope, $resource, $config, $q, User)
 	{
     /**
      * Empty resource
@@ -2222,6 +2239,30 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         var deferred = $q.defer();
 
         ContactInfos.list(
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Get contactinfo
+       */
+      get: function (id)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.get(
+          {
+            id: id
+          },
           function (result)
           {
             deferred.resolve(result);
@@ -4351,10 +4392,6 @@ angular.module('WebPaige.Controllers.Login', [])
 		$rootScope.fixStyles();
 
 
-
-
-
-
     /**
      * Self this
      */
@@ -4372,13 +4409,13 @@ angular.module('WebPaige.Controllers.Login', [])
     if ($routeParams.uuid && $routeParams.key)
     {
       $scope.views = {
-        changePass: true,
+        changePass: true
       };
 
       $scope.changepass = {
         uuid: $routeParams.uuid,
-        key:  $routeParams.key,
-      }
+        key:  $routeParams.key
+      };
     }
     else
     {
@@ -4390,37 +4427,18 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * KNRM users for testing
-     */
-    if ($rootScope.config.demo_users) $scope.demo_users = demo_users;
-
-
-    /**
-     * Real KNRM users for testing
-     */
-    $scope.knrmLogin = function (user)
-    {
-      $('#login button[type=submit]')
-        .text('Login..')
-        .attr('disabled', 'disabled');
-
-      self.auth(user.uuid, user.resources.askPass);
-    };
-
-
-    /**
      * Set default alerts
      */
     $scope.alert = {
       login: {
-        display: false,
-        type: '',
-        message: ''
+        display:  false,
+        type:     '',
+        message:  ''
       },
       forgot: {
-        display: false,
-        type: '',
-        message: ''
+        display:  false,
+        type:     '',
+        message:  ''
       }
     };
 
@@ -4428,7 +4446,10 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Init rootScope app info container
      */
-    if (!Storage.session.get('app')) Storage.session.add('app', '{}');
+    if (!Storage.session.get('app'))
+    {
+      Storage.session.add('app', '{}');
+    }
 
 
     /**
@@ -4439,11 +4460,7 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     $('.navbar').hide();
     $('#footer').hide();
-    $('#watermark').hide();
-//    $('body').css({
-//      'background': 'url(../' + $rootScope.config.profile.background + ') no-repeat center center fixed',
-//      'backgroundSize': 'cover'
-//    });
+    $('#preloader').hide();
 
 
     /**
@@ -4452,7 +4469,10 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     var logindata = angular.fromJson(Storage.get('logindata'));
 
-    if (logindata && logindata.remember) $scope.logindata = logindata;
+    if (logindata && logindata.remember)
+    {
+      $scope.logindata = logindata;
+    }
 
 
     /**
@@ -4495,7 +4515,7 @@ angular.module('WebPaige.Controllers.Login', [])
         remember: $scope.logindata.remember
       }));
 
-      self.auth( $scope.logindata.username, MD5($scope.logindata.password ));
+      self.auth($scope.logindata.username, MD5($scope.logindata.password));
     };
 
 
@@ -4507,13 +4527,13 @@ angular.module('WebPaige.Controllers.Login', [])
       User.login(username.toLowerCase(), password)
         .then(function (result)
         {
-          if (result.status == 403)
+          if (result.status === 403)
           {
             $scope.alert = {
               login: {
-                display: true,
-                type: 'alert-error',
-                message: $rootScope.ui.login.alert_wrongUserPass
+                display:  true,
+                type:     'alert-error',
+                message:  'Wrong username or password!'
               }
             };
 
@@ -4525,27 +4545,9 @@ angular.module('WebPaige.Controllers.Login', [])
           }
           else
           {
-            Session.set(result["X-SESSION_ID"]);
+            Session.set(result['X-SESSION_ID']);
 
-            console.log('login success ->', result["X-SESSION_ID"]);
-
-
-
-            User.resources()
-            .then(function (resources)
-            {
-              // console.log('resources ->', resources);
-
-              /**
-               * TODO
-               * Remove redirecting directly to app later on
-               * and build pre-loading mechanism for fetching
-               * dependencies
-               */
-              self.redirectToDashboard();
-            });
-
-//            self.preloader();
+            self.preloader();
           }
         });
     };
@@ -4558,203 +4560,32 @@ angular.module('WebPaige.Controllers.Login', [])
      *
      * Initialize preloader
      */
-    self.preloader = function()
+    self.preloader = function ()
     {
       $('#login').hide();
       $('#download').hide();
       $('#preloader').show();
 
-      self.progress(30, $rootScope.ui.login.loading_User);
+      self.progress(30, 'Loading user information..');
+
 
       User.resources()
         .then(function (resources)
         {
-          if (resources.error)
-          {
-            console.warn('error ->', resources);
-          }
-          else
-          {
-            $rootScope.app.resources = resources;
 
-            self.progress(70, $rootScope.ui.login.loading_Group);
+          // 1. contact infos
 
-            Groups.query(true)
-              .then(function (groups)
-              {
-                if (groups.error)
-                {
-                  console.warn('error ->', groups);
-                }
-                else
-                {
-                  var settings  = angular.fromJson(resources.settingsWebPaige) || {},
-                      sync      = false,
-                      parenting = false,
-                      defaults  = $rootScope.config.defaults.settingsWebPaige,
-                      _groups   = function (groups)
-                      {
-                        var _groups = {};
-                        angular.forEach(groups, function (group, index) { _groups[group.uuid] = true; });
-                        return _groups;
-                      };
+          // 2. get notifications settings
 
-                  // Check if there is any settings at all
-                  if (settings != null || settings != undefined)
-                  {
-                    // check for user settigns-all
-                    if (settings.user)
-                    {
-                      // check for user-language settings
-                      if (settings.user.language)
-                      {
-                        // console.warn('user HAS language settings');
-                        $rootScope.changeLanguage(angular.fromJson(resources.settingsWebPaige).user.language);
-                        defaults.user.language = settings.user.language;
-                      }
-                      else
-                      {
-                        // console.warn('user has NO language!!');
-                        $rootScope.changeLanguage($rootScope.config.defaults.settingsWebPaige.user.language);
-                        sync = true;
-                      }
-                    }
-                    else
-                    {
-                      // console.log('NO user settings at all !!');
-                      sync = true;
-                    }
+          // 3. blacklist stuff
 
-                    // check for app settings-all
-                    if (settings.app)
-                    {
-                      // check for app-widget settings
-                      if (settings.app.widgets)
-                      {
-                        // check for app-widget-groups setting
-                        if (settings.app.widgets.groups)
-                        {
-                          // console.warn('user HAS app widgets groups settings');
-                          defaults.app.widgets.groups = settings.app.widgets.groups;
-                        }
-                        else
-                        {
-                          // console.warn('user has NO app widgets groups!!');
-                          defaults.app.widgets.groups = _groups(groups);
-                          sync = true;
-                        }
-                      }
-                      else
-                      {
-                        // console.warn('user has NO widget settings!!');
-                        defaults.app.widgets = { groups: _groups(groups) };
-                        sync = true;
-                      }
-
-                      // check for app group setting
-                      if (settings.app.group && settings.app.group != undefined)
-                      {
-                        // console.warn('user HAS app first group setting');
-                        defaults.app.group = settings.app.group;
-                      }
-                      else
-                      {
-                        // console.warn('user has NO first group setting!!');
-                        parenting = true;
-                        sync      = true;
-                      }
-                    }
-                    else
-                    {
-                      // console.log('NO app settings!!');
-                      defaults.app = { widgets: { groups: _groups(groups) } };
-                      sync = true;
-                    }
-                  }
-                  else
-                  {
-                    // console.log('NO SETTINGS AT ALL!!');
-                    defaults = {
-                      user: $rootScope.config.defaults.settingsWebPaige.user,
-                      app: {
-                        widgets: {
-                          groups: _groups(groups)
-                        },
-                        group: groups[0].uuid
-                      }
-                    };
-                    sync = true;
-                  }
-
-                  // sync settings with missing parts also parenting check
-                  if (sync)
-                  {
-                    if (parenting)
-                    {
-                      // console.warn('setting up parent group for the user');
-
-                      Groups.parents()
-                        .then(function (_parent)
-                        {
-                          // console.warn('parent group been fetched ->', _parent);
-
-                          if (_parent != null)
-                          {
-                            // console.warn('found parent parent -> ', _parent);
-
-                            defaults.app.group = _parent;
-                          }
-                          else
-                          {
-                            // console.warn('setting the first group in the list for user ->', groups[0].uuid);
-
-                            defaults.app.group = groups[0].uuid;
-                          }
-
-                          // console.warn('SAVE ME (with parenting) ->', defaults);
-
-                          Settings.save(resources.uuid, defaults)
-                            .then(function (setted)
-                            {
-                              User.resources()
-                                .then(function (got)
-                                {
-                                  // console.log('gotted (with setting parent group) ->', got);
-                                  $rootScope.app.resources = got;
-
-                                  finalize();
-                                })
-                            });
-
-                        });
-                    }
-                    else
-                    {
-                      // console.warn('SAVE ME ->', defaults);
-
-                      defaults.app.group = groups[0].uuid;
-
-                      Settings.save(resources.uuid, defaults)
-                        .then(function (setted)
-                        {
-                          User.resources()
-                            .then(function (got)
-                            {
-                              // console.log('gotted ->', got);
-                              $rootScope.app.resources = got;
-
-                              finalize();
-                            })
-                        });
-                    }
-                  }
-                  else
-                  {
-                    finalize();
-                  }
-                }
-              });
-          }
+          /**
+           * TODO
+           * Remove redirecting directly to app later on
+           * and build pre-loading mechanism for fetching
+           * dependencies
+           */
+          self.redirectToDashboard();
         });
     };
 
@@ -4762,75 +4593,12 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Finalize the preloading
      */
-    function finalize ()
+    function finalize()
     {
-      // console.warn( 'settings ->',
-      //               'user ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).user,
-      //               'widgets ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.widgets,
-      //               'group ->', angular.fromJson($rootScope.app.resources.settingsWebPaige).app.group);
-
       self.progress(100, $rootScope.ui.login.loading_everything);
 
       self.redirectToDashboard();
-
-      self.getMessages();
-
-      self.getMembers();
     }
-
-    /**
-     * TODO
-     * Implement an error handling
-     *
-     * Get members list (SILENTLY)
-     */
-    self.getMembers = function ()
-    {
-      var groups = Storage.local.groups();
-
-      Groups.query()
-        .then(function (groups)
-        {
-          var calls = [];
-
-          angular.forEach(groups, function (group, index)
-          {
-            calls.push(Groups.get(group.uuid));
-          });
-
-          $q.all(calls)
-            .then(function (result)
-            {
-              // console.warn('members ->', result);
-              Groups.uniqueMembers();
-            });
-        });
-    };
-
-
-    /**
-     * TODO
-     * Implement an error handling
-     *
-     * Get messages (SILENTLY)
-     */
-    self.getMessages = function ()
-    {
-      Messages.query()
-        .then(function (messages)
-        {
-          if (messages.error)
-          {
-            console.warn('error ->', messages);
-          }
-          else
-          {
-            $rootScope.app.unreadMessages = Messages.unreadCount();
-
-            Storage.session.unreadMessages = Messages.unreadCount();
-          };
-        });
-    };
 
 
     /**
@@ -4860,137 +4628,6 @@ angular.module('WebPaige.Controllers.Login', [])
     {
       $('#preloader .progress .bar').css({ width: ratio + '%' });
       $('#preloader span').text(message);
-    };
-
-
-    /**
-     * RE-FACTORY
-     * TODO
-     * Make button state change!
-     * Finish it!
-     *
-     * Forgot password
-     */
-    $scope.forgot = function ()
-    {
-      $('#forgot button[type=submit]').text('setting ...').attr('disabled', 'disabled');
-
-      User.password($scope.remember.id)
-        .then(function (result)
-        {
-          if (result == "ok")
-          {
-            $scope.alert = {
-              forget : {
-                display : true,
-                type : 'alert-success',
-                message : 'Please check your email to reset your password!'
-              }
-            };
-          }
-          else
-          {
-            $scope.alert = {
-              forget : {
-                display : true,
-                type : 'alert-error',
-                message : 'Error, we can not find this account !'
-              }
-            };
-          };
-
-          $('#forgot button[type=submit]')
-            .text('change password')
-            .removeAttr('disabled');
-        });
-    };
-
-
-    /**
-     * RE-FACTORY
-     * Change password
-     */
-    self.changePass =  function (uuid, newpass, key)
-    {
-      User.changePass(uuid, newpass, key)
-        .then(function (result)
-        {
-          if(result.status == 400 || result.status == 500 || result.status == 409)
-          {
-            $scope.alert = {
-              changePass : {
-                display : true,
-                type : 'alert-error',
-                message : 'Something wrong with password changing!'
-              }
-            };
-          }
-          else
-          { // successfully changed
-            $scope.alert = {
-              changePass : {
-                display : true,
-                type : 'alert-success',
-                message : 'Password changed!'
-              }
-            };
-
-            $location.path( "/message" );
-          };
-
-          $('#changePass button[type=submit]')
-            .text('change password')
-            .removeAttr('disabled');
-        })
-    };
-
-
-    /**
-     * RE-FACTORY
-     * Change password
-     */
-    $scope.changePass = function ()
-    {
-      $('#alertDiv').hide();
-
-      if (!$scope.changeData || !$scope.changeData.newPass || !$scope.changeData.retypePass)
-      {
-        $scope.alert = {
-          changePass : {
-            display : true,
-            type : 'alert-error',
-            message : 'Please fill all fields!'
-          }
-        };
-
-        $('#changePass button[type=submit]')
-          .text('change password')
-          .removeAttr('disabled');
-
-        return false;
-      }
-      else if ($scope.changeData.newPass != $scope.changeData.retypePass)
-      {
-        $scope.alert = {
-          changePass : {
-            display : true,
-            type : 'alert-error',
-            message : 'Please make the reType password is indentical !'
-          }
-        };
-
-        $('#changePass button[type=submit]')
-          .text('change password')
-          .removeAttr('disabled');
-
-        return false;
-      };
-
-      $('#changePass button[type=submit]')
-        .text('changing ...')
-        .attr('disabled', 'disabled');
-
-      self.changePass($scope.changepass.uuid, MD5($scope.changeData.newPass), $scope.changepass.key);
     };
 
 	}
@@ -5361,6 +4998,27 @@ angular.module('WebPaige.Controllers.Core', [])
     };
 
 
+    $scope.notification = {
+      sms: {
+        status: false,
+        target: null
+      },
+      email: {
+        status: false,
+        target: 2,
+        targets: [
+          {
+            id:   1,
+            value: 'testing'
+          },
+          {
+            id:   2,
+            value: 'another'
+          }
+        ]
+      }
+    };
+
     /**
      * Notifications
      */
@@ -5371,21 +5029,37 @@ angular.module('WebPaige.Controllers.Core', [])
        */
       list: function ()
       {
-        $rootScope.statusBar.display('Getting notifications information..');
-
-        Core.notifications.list()
-          .then(function (result)
-          {
-            $rootScope.statusBar.off();
-
-            console.log('-->', result);
-          });
+//        $rootScope.statusBar.display('Getting notifications information..');
+//
+//        Core.notifications.list()
+//          .then(function (result)
+//          {
+//            $rootScope.statusBar.off();
+//
+//            console.log('notification settings ->', result);
+//
+////            angular.forEach(result, function (setting)
+////            {
+////              if (setting.medium === 'SMS')
+////              {
+////                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
+////                  .then(function (suc)
+////                  {
+////                    $scope.notification.sms = {
+////                      status: true,
+////                      target: suc
+////                    }
+////                  });
+////              }
+////            });
+//
+//          });
       },
 
       /**
        * Get a notification
        */
-      get: function (id)
+      get: function ()
       {
 
       }
@@ -5504,4 +5178,94 @@ angular.module('WebPaige.Controllers.Core', [])
       }
     };
 	}
-]);
+]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Purchaser', [])
+
+
+/**
+ * Purchaser controller
+ */
+  .controller('purchaserCtrl',
+  [
+    '$rootScope', '$scope',
+    function ($rootScope, $scope)
+    {
+      console.log('-->', $rootScope, $scope);
+    }
+  ]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Manager', [])
+
+
+/**
+ * Manager controller
+ */
+  .controller('managerCtrl',
+  [
+    '$rootScope', '$scope',
+    function ($rootScope, $scope)
+    {
+      console.log('-->', $rootScope, $scope);
+    }
+  ]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Notifier', [])
+
+
+/**
+ * Notifier controller
+ */
+  .controller('notifierCtrl',
+  [
+    '$rootScope', '$scope',
+    function ($rootScope, $scope)
+    {
+      console.log('-->', $rootScope, $scope);
+    }
+  ]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Reporter', [])
+
+
+/**
+ * Reporter controller
+ */
+  .controller('reporterCtrl',
+  [
+    '$rootScope', '$scope',
+    function ($rootScope, $scope)
+    {
+      console.log('-->', $rootScope, $scope);
+    }
+  ]);;/*jslint node: true */
+/*global angular */
+'use strict';
+
+
+angular.module('WebPaige.Controllers.Guarder', [])
+
+
+/**
+ * Guarder controller
+ */
+  .controller('guarderCtrl',
+  [
+    '$rootScope', '$scope',
+    function ($rootScope, $scope)
+    {
+      console.log('-->', $rootScope, $scope);
+    }
+  ]);
