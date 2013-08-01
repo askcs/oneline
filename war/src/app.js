@@ -5116,7 +5116,6 @@ angular.module('WebPaige.Controllers.Core', [])
       });
     };
 
-
     var view;
 
     /**

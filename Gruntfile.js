@@ -56,10 +56,10 @@ module.exports = function (grunt)
             'war/js/filters/filters.js',
 
             // controllers
-            'war/js/controllers/login.js',
-            'war/js/controllers/forgotpass.js',
-            'war/js/controllers/register.js',
-            'war/js/controllers/logout.js',
+            'war/js/controllers/loginCtrl.js',
+            'war/js/controllers/forgotpassCtrl.js',
+            'war/js/controllers/registerCtrl.js',
+            'war/js/controllers/logoutCtrl.js',
             // 'war/js/controllers/dashboard.js',
             'war/js/controllers/coreCtrl.js',
             'war/js/controllers/purchaserCtrl.js',
@@ -137,7 +137,7 @@ module.exports = function (grunt)
           'war/dist/views/login.html':        'war/js/views/login.html',
           'war/dist/views/forgotpass.html':   'war/js/views/forgotpass.html',
           'war/dist/views/register.html':     'war/js/views/register.html',
-          'war/dist/views/logout.html':    'war/js/views/logout.html',
+          'war/dist/views/logout.html':       'war/js/views/logout.html',
           // 'war/dist/views/dashboard.html': 'war/js/views/dashboard.html',
           'war/dist/views/core.html':         'war/js/views/core.html',
           // 'war/dist/views/profile.html':   'war/js/views/profile.html',
