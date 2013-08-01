@@ -14,6 +14,9 @@ angular.module('WebPaige.Controllers.Reporter', [])
     '$rootScope', '$scope',
     function ($rootScope, $scope)
     {
-      console.log('-->', $rootScope, $scope);
+      /**
+       * Fix styles
+       */
+      $rootScope.fixStyles();
     }
   ]);

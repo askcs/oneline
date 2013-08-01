@@ -11,15 +11,9 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('coreCtrl',
 [
-	'$rootScope', '$scope', '$location', 'Generators', 'Core', '$modal',
-	function ($rootScope, $scope, $location, Generators, Core, $modal)
+	'$rootScope', '$scope', '$location',
+	function ($rootScope, $scope, $location)
 	{
-		/**
-		 * Fix styles
-		 */
-		$rootScope.fixStyles();
-
-
     /**
      * View setter
      */
@@ -54,7 +48,6 @@ angular.module('WebPaige.Controllers.Core', [])
       case 'guarder':
         break;
       }
-
     }
 
 
@@ -94,8 +87,7 @@ angular.module('WebPaige.Controllers.Core', [])
     setView(view);
 
 
-
-    $rootScope.$on('setView', function ()
+    $rootScope.$on('setView', 'args', function ()
     {
       $scope.setViewTo(arguments[1]);
     });

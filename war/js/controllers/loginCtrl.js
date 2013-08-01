@@ -180,6 +180,11 @@ angular.module('WebPaige.Controllers.Login', [])
         });
     };
 
+    $scope.preloader = {
+      count: 0,
+      total: 1
+    };
+
 
     /**
      * TODO
@@ -200,33 +205,17 @@ angular.module('WebPaige.Controllers.Login', [])
       User.resources()
         .then(function (resources)
         {
-
-          // 1. contact infos
-
-          // 2. get notifications settings
-
-          // 3. blacklist stuff
-
-          /**
-           * TODO
-           * Remove redirecting directly to app later on
-           * and build pre-loading mechanism for fetching
-           * dependencies
-           */
           self.redirectToDashboard();
         });
+
+
+
+      // 1. contact infos
+
+      // 2. get notifications settings
+
+      // 3. blacklist stuff
     };
-
-
-    /**
-     * Finalize the preloading
-     */
-    function finalize()
-    {
-      self.progress(100, $rootScope.ui.login.loading_everything);
-
-      self.redirectToDashboard();
-    }
 
 
     /**
@@ -234,18 +223,18 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     self.redirectToDashboard = function ()
     {
-      $location.path('/core');
+      $scope.preloader.count++;
 
-      setTimeout(function ()
+      if ($scope.preloader.count === $scope.preloader.total)
       {
-//        $('body').css({ 'background': 'none' });
-        $('.navbar').show();
-        // $('#mobile-status-bar').show();
-        // $('#notification').show();
-        if (!$rootScope.browser.mobile) $('#footer').show();
-//        $('#watermark').show();
-//        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
-      }, 100);
+        $location.path('/core');
+
+        setTimeout(function ()
+        {
+          $('.navbar').show();
+          if (!$rootScope.browser.mobile) $('#footer').show();
+        }, 100);
+      }
     };
 
 

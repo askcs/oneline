@@ -4552,6 +4552,11 @@ angular.module('WebPaige.Controllers.Login', [])
         });
     };
 
+    $scope.preloader = {
+      count: 0,
+      total: 1
+    };
+
 
     /**
      * TODO
@@ -4572,33 +4577,17 @@ angular.module('WebPaige.Controllers.Login', [])
       User.resources()
         .then(function (resources)
         {
-
-          // 1. contact infos
-
-          // 2. get notifications settings
-
-          // 3. blacklist stuff
-
-          /**
-           * TODO
-           * Remove redirecting directly to app later on
-           * and build pre-loading mechanism for fetching
-           * dependencies
-           */
           self.redirectToDashboard();
         });
+
+
+
+      // 1. contact infos
+
+      // 2. get notifications settings
+
+      // 3. blacklist stuff
     };
-
-
-    /**
-     * Finalize the preloading
-     */
-    function finalize()
-    {
-      self.progress(100, $rootScope.ui.login.loading_everything);
-
-      self.redirectToDashboard();
-    }
 
 
     /**
@@ -4606,18 +4595,18 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     self.redirectToDashboard = function ()
     {
-      $location.path('/core');
+      $scope.preloader.count++;
 
-      setTimeout(function ()
+      if ($scope.preloader.count === $scope.preloader.total)
       {
-//        $('body').css({ 'background': 'none' });
-        $('.navbar').show();
-        // $('#mobile-status-bar').show();
-        // $('#notification').show();
-        if (!$rootScope.browser.mobile) $('#footer').show();
-//        $('#watermark').show();
-//        $('body').css({ 'background': 'url(../img/bg.jpg) repeat' });
-      }, 100);
+        $location.path('/core');
+
+        setTimeout(function ()
+        {
+          $('.navbar').show();
+          if (!$rootScope.browser.mobile) $('#footer').show();
+        }, 100);
+      }
     };
 
 
@@ -4726,15 +4715,9 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('coreCtrl',
 [
-	'$rootScope', '$scope', '$location', 'Generators', 'Core', '$modal',
-	function ($rootScope, $scope, $location, Generators, Core, $modal)
+	'$rootScope', '$scope', '$location',
+	function ($rootScope, $scope, $location)
 	{
-		/**
-		 * Fix styles
-		 */
-		$rootScope.fixStyles();
-
-
     /**
      * View setter
      */
@@ -4769,7 +4752,6 @@ angular.module('WebPaige.Controllers.Core', [])
       case 'guarder':
         break;
       }
-
     }
 
 
@@ -4809,8 +4791,7 @@ angular.module('WebPaige.Controllers.Core', [])
     setView(view);
 
 
-
-    $rootScope.$on('setView', function ()
+    $rootScope.$on('setView', 'args', function ()
     {
       $scope.setViewTo(arguments[1]);
     });
@@ -5283,7 +5264,10 @@ angular.module('WebPaige.Controllers.Reporter', [])
     '$rootScope', '$scope',
     function ($rootScope, $scope)
     {
-      console.log('-->', $rootScope, $scope);
+      /**
+       * Fix styles
+       */
+      $rootScope.fixStyles();
     }
   ]);;/*jslint node: true */
 /*global angular */
@@ -5301,6 +5285,9 @@ angular.module('WebPaige.Controllers.Guarder', [])
     '$rootScope', '$scope',
     function ($rootScope, $scope)
     {
-      console.log('-->', $rootScope, $scope);
+      /**
+       * Fix styles
+       */
+      $rootScope.fixStyles();
     }
   ]);
