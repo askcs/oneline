@@ -182,7 +182,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
           else
           {
             /**
-             * Process resources for storing in dom
+             * Process resources for storing in dom and localStorage
              */
             User.prototype.owner.set(result);
 

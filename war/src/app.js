@@ -2047,7 +2047,7 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
           else
           {
             /**
-             * Process resources for storing in dom
+             * Process resources for storing in dom and localStorage
              */
             User.prototype.owner.set(result);
 
@@ -2079,8 +2079,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
  */
 .factory('Core',
 [
-	'$rootScope', '$resource', '$config', '$q', 'User',
-	function ($rootScope, $resource, $config, $q, User)
+	'$rootScope', '$resource', '$config', '$q', 'Storage',
+	function ($rootScope, $resource, $config, $q, Storage)
 	{
     /**
      * Empty resource
@@ -2231,6 +2231,15 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
      * Connected numbers
      */
     Core.prototype.connectedNumbers = {
+
+      /**
+       * Get local cache for connected numbers
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('connectedNumbers'));
+      },
+
       /**
        * List numbers
        */
@@ -2241,6 +2250,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         ContactInfos.list(
           function (result)
           {
+            Storage.add('connectedNumbers', angular.toJson(result));
+
             deferred.resolve(result);
           },
           function (error)
@@ -4383,8 +4394,8 @@ angular.module('WebPaige.Controllers.Login', [])
  */
 .controller('login',
 [
-  '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5',
-  function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5)
+  '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5', 'Core',
+  function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5, Core)
 	{
 		/**
 		 * Fix styles
@@ -4554,7 +4565,7 @@ angular.module('WebPaige.Controllers.Login', [])
 
     $scope.preloader = {
       count: 0,
-      total: 1
+      total: 2
     };
 
 
@@ -4571,22 +4582,47 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#download').hide();
       $('#preloader').show();
 
-      self.progress(30, 'Loading user information..');
 
-
+      // 1. contact infos
       User.resources()
-        .then(function (resources)
+        .then(function ()
+        {
+          self.redirectToDashboard();
+        });
+
+      // 2. connected numbers
+      Core.connectedNumbers.list()
+        .then(function ()
         {
           self.redirectToDashboard();
         });
 
 
+      // 3. get notifications settings
+//      Core.notifications.list()
+//        .then(function (result)
+//        {
+//          $rootScope.statusBar.off();
+//
+//          console.log('notification settings ->', result);
+//
+//          angular.forEach(result, function (setting)
+//          {
+//            if (setting.medium === 'SMS')
+//            {
+//              Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
+//                .then(function (suc)
+//                {
+//                  $scope.notification.sms = {
+//                    status: true,
+//                    target: suc
+//                  }
+//                });
+//            }
+//          });
 
-      // 1. contact infos
 
-      // 2. get notifications settings
-
-      // 3. blacklist stuff
+      // 4. blacklist stuff
     };
 
 
@@ -4596,6 +4632,8 @@ angular.module('WebPaige.Controllers.Login', [])
     self.redirectToDashboard = function ()
     {
       $scope.preloader.count++;
+
+      self.progress((100 * $scope.preloader.count) / $scope.preloader.total);
 
       if ($scope.preloader.count === $scope.preloader.total)
       {
@@ -4613,10 +4651,9 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Progress bar
      */
-    self.progress = function (ratio, message)
+    self.progress = function (ratio)
     {
       $('#preloader .progress .bar').css({ width: ratio + '%' });
-      $('#preloader span').text(message);
     };
 
 	}
@@ -5017,15 +5054,19 @@ angular.module('WebPaige.Controllers.Manager', [])
         {
           $scope.connection = {};
 
-          $scope.connectedNumbersLoaded = false;
+//          $scope.connectedNumbersLoaded = false;
 
-          Core.connectedNumbers.list()
-            .then(function (numbers)
-            {
-              $scope.connectedNumbersLoaded = true;
+          $scope.connectedNumbersLoaded = true;
 
-              $scope.connectedNumbersList = numbers;
-            });
+          $scope.connectedNumbersList = Core.connectedNumbers.local();
+
+//          Core.connectedNumbers.list()
+//            .then(function (numbers)
+//            {
+//              $scope.connectedNumbersLoaded = true;
+//
+//              $scope.connectedNumbersList = numbers;
+//            });
         },
 
         /**

@@ -11,8 +11,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
  */
 .factory('Core',
 [
-	'$rootScope', '$resource', '$config', '$q', 'User',
-	function ($rootScope, $resource, $config, $q, User)
+	'$rootScope', '$resource', '$config', '$q', 'Storage',
+	function ($rootScope, $resource, $config, $q, Storage)
 	{
     /**
      * Empty resource
@@ -163,6 +163,15 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
      * Connected numbers
      */
     Core.prototype.connectedNumbers = {
+
+      /**
+       * Get local cache for connected numbers
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('connectedNumbers'));
+      },
+
       /**
        * List numbers
        */
@@ -173,6 +182,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         ContactInfos.list(
           function (result)
           {
+            Storage.add('connectedNumbers', angular.toJson(result));
+
             deferred.resolve(result);
           },
           function (error)

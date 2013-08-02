@@ -41,15 +41,19 @@ angular.module('WebPaige.Controllers.Manager', [])
         {
           $scope.connection = {};
 
-          $scope.connectedNumbersLoaded = false;
+//          $scope.connectedNumbersLoaded = false;
 
-          Core.connectedNumbers.list()
-            .then(function (numbers)
-            {
-              $scope.connectedNumbersLoaded = true;
+          $scope.connectedNumbersLoaded = true;
 
-              $scope.connectedNumbersList = numbers;
-            });
+          $scope.connectedNumbersList = Core.connectedNumbers.local();
+
+//          Core.connectedNumbers.list()
+//            .then(function (numbers)
+//            {
+//              $scope.connectedNumbersLoaded = true;
+//
+//              $scope.connectedNumbersList = numbers;
+//            });
         },
 
         /**

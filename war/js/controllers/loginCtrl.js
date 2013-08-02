@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Login', [])
  */
 .controller('login',
 [
-  '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5',
-  function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5)
+  '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5', 'Core',
+  function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5, Core)
 	{
 		/**
 		 * Fix styles
@@ -182,7 +182,7 @@ angular.module('WebPaige.Controllers.Login', [])
 
     $scope.preloader = {
       count: 0,
-      total: 1
+      total: 2
     };
 
 
@@ -199,22 +199,47 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#download').hide();
       $('#preloader').show();
 
-      self.progress(30, 'Loading user information..');
 
-
+      // 1. contact infos
       User.resources()
-        .then(function (resources)
+        .then(function ()
+        {
+          self.redirectToDashboard();
+        });
+
+      // 2. connected numbers
+      Core.connectedNumbers.list()
+        .then(function ()
         {
           self.redirectToDashboard();
         });
 
 
+      // 3. get notifications settings
+//      Core.notifications.list()
+//        .then(function (result)
+//        {
+//          $rootScope.statusBar.off();
+//
+//          console.log('notification settings ->', result);
+//
+//          angular.forEach(result, function (setting)
+//          {
+//            if (setting.medium === 'SMS')
+//            {
+//              Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
+//                .then(function (suc)
+//                {
+//                  $scope.notification.sms = {
+//                    status: true,
+//                    target: suc
+//                  }
+//                });
+//            }
+//          });
 
-      // 1. contact infos
 
-      // 2. get notifications settings
-
-      // 3. blacklist stuff
+      // 4. blacklist stuff
     };
 
 
@@ -224,6 +249,8 @@ angular.module('WebPaige.Controllers.Login', [])
     self.redirectToDashboard = function ()
     {
       $scope.preloader.count++;
+
+      self.progress((100 * $scope.preloader.count) / $scope.preloader.total);
 
       if ($scope.preloader.count === $scope.preloader.total)
       {
@@ -241,10 +268,9 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Progress bar
      */
-    self.progress = function (ratio, message)
+    self.progress = function (ratio)
     {
       $('#preloader .progress .bar').css({ width: ratio + '%' });
-      $('#preloader span').text(message);
     };
 
 	}
