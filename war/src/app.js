@@ -4464,9 +4464,7 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO
-     * Lose this jQuery stuff later on!
-     *
+     * TODO  Lose this jQuery stuff later on!
      * Jquery solution of toggling between login and app view
      */
     $('.navbar').hide();
@@ -4475,8 +4473,7 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO
-     * use native JSON functions of angular and Store service
+     * TODO use native JSON functions of angular and Store service
      */
     var logindata = angular.fromJson(Storage.get('logindata'));
 
@@ -4487,13 +4484,10 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO
-     * Remove unneccessary DOM manipulation
-     * Use cookies for user credentials
-     *
+     * TODO Remove unneccessary DOM manipulation Use cookies for user credentials
      * Login trigger
      */
-    $scope.login = function()
+    $scope.login = function ()
     {
       $('#alertDiv').hide();
 
@@ -4505,7 +4499,7 @@ angular.module('WebPaige.Controllers.Login', [])
           login: {
             display:  true,
             type:     'alert-error',
-            message:  $rootScope.ui.login.alert_fillfiled
+            message:  'Please fill all fields!'
           }
         };
 
@@ -4563,17 +4557,23 @@ angular.module('WebPaige.Controllers.Login', [])
         });
     };
 
+
+    /**
+     * Preloader counters
+     */
     $scope.preloader = {
-      count: 0,
-      total: 2
+      count:    0,
+      total:    2,
+      current:  0,
+      fraction: function ()
+      {
+        return Math.abs(100 / (this.total * 2));
+      }
     };
 
 
     /**
-     * TODO
-     * What happens if preloader stucks?
-     * Optimize preloader and messages
-     *
+     * TODO What happens if preloader stucks? Optimize preloader and messages
      * Initialize preloader
      */
     self.preloader = function ()
@@ -4582,20 +4582,11 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#download').hide();
       $('#preloader').show();
 
+      User.resources().then(function () { self.appInit(); });
 
-      // 1. contact infos
-      User.resources()
-        .then(function ()
-        {
-          self.redirectToDashboard();
-        });
+      self.progress();
 
-      // 2. connected numbers
-      Core.connectedNumbers.list()
-        .then(function ()
-        {
-          self.redirectToDashboard();
-        });
+      Core.connectedNumbers.list().then(function () { self.appInit(); });
 
 
       // 3. get notifications settings
@@ -4629,14 +4620,16 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Redirect to dashboard
      */
-    self.redirectToDashboard = function ()
+    self.appInit = function ()
     {
       $scope.preloader.count++;
 
-      self.progress((100 * $scope.preloader.count) / $scope.preloader.total);
+      self.progress();
 
       if ($scope.preloader.count === $scope.preloader.total)
       {
+        self.progress();
+
         $location.path('/core');
 
         setTimeout(function ()
@@ -4651,9 +4644,11 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Progress bar
      */
-    self.progress = function (ratio)
+    self.progress = function ()
     {
-      $('#preloader .progress .bar').css({ width: ratio + '%' });
+      $scope.preloader.current = $scope.preloader.current + $scope.preloader.fraction();
+
+      $('#preloader .progress .bar').css({ width: $scope.preloader.current + '%' });
     };
 
 	}
