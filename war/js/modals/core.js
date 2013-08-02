@@ -129,6 +129,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
     Core.prototype.notifications = {
 
       /**
+       * Get localStorage cache for notiticationSettings
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('notificationSettings'));
+      },
+
+      /**
        * List notifications
        */
       list: function ()
@@ -138,6 +146,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         Notifications.query(
           function (result)
           {
+            Storage.add('notificationSettings', angular.toJson(result));
+
             deferred.resolve(result);
           },
           function (error)

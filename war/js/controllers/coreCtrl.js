@@ -28,26 +28,6 @@ angular.module('WebPaige.Controllers.Core', [])
       };
 
       $scope.views[hash] = true;
-
-      switch (hash)
-      {
-      case 'purchaser':
-        break;
-
-      case 'manager':
-        $rootScope.$broadcast('connectedNumbersList');
-        break;
-
-      case 'notifier':
-        $rootScope.$broadcast('notificationsList');
-        break;
-
-      case 'reporter':
-        break;
-
-      case 'guarder':
-        break;
-      }
     }
 
 
@@ -63,6 +43,7 @@ angular.module('WebPaige.Controllers.Core', [])
         setView(hash);
       });
     };
+
 
     var view;
 
@@ -87,6 +68,9 @@ angular.module('WebPaige.Controllers.Core', [])
     setView(view);
 
 
+    /**
+     * Listen for setView broadcasts
+     */
     $rootScope.$on('setView', 'args', function ()
     {
       $scope.setViewTo(arguments[1]);

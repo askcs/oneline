@@ -11,21 +11,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
  */
   .controller('notifierCtrl',
   [
-    '$rootScope', '$scope',
-    function ($rootScope, $scope)
+    '$rootScope', '$scope', 'Core',
+    function ($rootScope, $scope, Core)
     {
       /**
        * Fix styles
        */
       $rootScope.fixStyles();
-
-      /**
-       * Listener for listing notifications
-       */
-      $rootScope.$on('notificationsList', function ()
-      {
-        $scope.notifications.list();
-      });
 
 
       $scope.notification = {
@@ -55,35 +47,43 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $scope.notifications = {
 
         /**
+         * Get local notifications
+         */
+        local: function ()
+        {
+
+        },
+
+        /**
          * List notifications
          */
         list: function ()
         {
 //        $rootScope.statusBar.display('Getting notifications information..');
-//
-//        Core.notifications.list()
-//          .then(function (result)
-//          {
+
+        Core.notifications.local()
+          .then(function (result)
+          {
 //            $rootScope.statusBar.off();
-//
-//            console.log('notification settings ->', result);
-//
-////            angular.forEach(result, function (setting)
-////            {
-////              if (setting.medium === 'SMS')
-////              {
-////                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
-////                  .then(function (suc)
-////                  {
-////                    $scope.notification.sms = {
-////                      status: true,
-////                      target: suc
-////                    }
-////                  });
-////              }
-////            });
-//
-//          });
+
+            console.log('notification settings ->', result);
+
+//            angular.forEach(result, function (setting)
+//            {
+//              if (setting.medium === 'SMS')
+//              {
+//                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
+//                  .then(function (suc)
+//                  {
+//                    $scope.notification.sms = {
+//                      status: true,
+//                      target: suc
+//                    }
+//                  });
+//              }
+//            });
+
+          });
         },
 
         /**

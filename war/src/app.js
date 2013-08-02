@@ -2197,6 +2197,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
     Core.prototype.notifications = {
 
       /**
+       * Get localStorage cache for notiticationSettings
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('notificationSettings'));
+      },
+
+      /**
        * List notifications
        */
       list: function ()
@@ -2206,6 +2214,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         Notifications.query(
           function (result)
           {
+            Storage.add('notificationSettings', angular.toJson(result));
+
             deferred.resolve(result);
           },
           function (error)
@@ -4563,7 +4573,7 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     $scope.preloader = {
       count:    0,
-      total:    2,
+      total:    3,
       current:  0,
       fraction: function ()
       {
@@ -4582,35 +4592,32 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#download').hide();
       $('#preloader').show();
 
-      User.resources().then(function () { self.appInit(); });
 
-      self.progress();
+      User.resources()
+        .then(function ()
+        {
+          self.progress('User information loaded.');
 
-      Core.connectedNumbers.list().then(function () { self.appInit(); });
+          self.appInit();
+        });
 
 
-      // 3. get notifications settings
-//      Core.notifications.list()
-//        .then(function (result)
-//        {
-//          $rootScope.statusBar.off();
-//
-//          console.log('notification settings ->', result);
-//
-//          angular.forEach(result, function (setting)
-//          {
-//            if (setting.medium === 'SMS')
-//            {
-//              Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
-//                .then(function (suc)
-//                {
-//                  $scope.notification.sms = {
-//                    status: true,
-//                    target: suc
-//                  }
-//                });
-//            }
-//          });
+      Core.connectedNumbers.list()
+        .then(function ()
+        {
+          self.progress('Connected numbers are loaded.');
+
+          self.appInit();
+        });
+
+
+      Core.notifications.list()
+        .then(function ()
+        {
+          self.progress('Notification settings loaded.');
+
+          self.appInit();
+        });
 
 
       // 4. blacklist stuff
@@ -4644,11 +4651,13 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Progress bar
      */
-    self.progress = function ()
+    self.progress = function (message)
     {
       $scope.preloader.current = $scope.preloader.current + $scope.preloader.fraction();
 
       $('#preloader .progress .bar').css({ width: $scope.preloader.current + '%' });
+
+      $('#preloader span').text(message);
     };
 
 	}
@@ -4764,26 +4773,6 @@ angular.module('WebPaige.Controllers.Core', [])
       };
 
       $scope.views[hash] = true;
-
-      switch (hash)
-      {
-      case 'purchaser':
-        break;
-
-      case 'manager':
-        $rootScope.$broadcast('connectedNumbersList');
-        break;
-
-      case 'notifier':
-        $rootScope.$broadcast('notificationsList');
-        break;
-
-      case 'reporter':
-        break;
-
-      case 'guarder':
-        break;
-      }
     }
 
 
@@ -4799,6 +4788,7 @@ angular.module('WebPaige.Controllers.Core', [])
         setView(hash);
       });
     };
+
 
     var view;
 
@@ -4823,6 +4813,9 @@ angular.module('WebPaige.Controllers.Core', [])
     setView(view);
 
 
+    /**
+     * Listen for setView broadcasts
+     */
     $rootScope.$on('setView', 'args', function ()
     {
       $scope.setViewTo(arguments[1]);
@@ -5032,8 +5025,17 @@ angular.module('WebPaige.Controllers.Manager', [])
        * Connected number container
        */
       $scope.connection = {
-        contactInfo:    '',
-        contactInfoTag: ''
+        label:        '',
+        contactInfo:  ''
+      };
+
+
+      /**
+       * Connected numbers verified switch
+       */
+      $scope.verified = {
+        status: false,
+        result: null
       };
 
 
@@ -5043,25 +5045,25 @@ angular.module('WebPaige.Controllers.Manager', [])
       $scope.connectedNumbers = {
 
         /**
+         * Get local list
+         */
+        local: function ()
+        {
+          return Core.connectedNumbers.local();
+        },
+
+        /**
          * List numbers
          */
         list: function ()
         {
-          $scope.connection = {};
+          $rootScope.statusBar.display('Getting the list of connected numbers..');
 
-//          $scope.connectedNumbersLoaded = false;
-
-          $scope.connectedNumbersLoaded = true;
-
-          $scope.connectedNumbersList = Core.connectedNumbers.local();
-
-//          Core.connectedNumbers.list()
-//            .then(function (numbers)
-//            {
-//              $scope.connectedNumbersLoaded = true;
-//
-//              $scope.connectedNumbersList = numbers;
-//            });
+          Core.connectedNumbers.list()
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+            });
         },
 
         /**
@@ -5170,21 +5172,9 @@ angular.module('WebPaige.Controllers.Manager', [])
 
 
       /**
-       * Listen for listing connected number calls from above
+       * Fetch localStorage for connectednumbersList
        */
-      $rootScope.$on('connectedNumbersList', function ()
-      {
-        $scope.connectedNumbers.list();
-      });
-
-
-      /**
-       * Connected numbers verified switch
-       */
-      $scope.verified = {
-        status: false,
-        result: null
-      };
+      $scope.connectedNumbersList = $scope.connectedNumbers.local();
     }
   ]);;/*jslint node: true */
 /*global angular */
@@ -5199,21 +5189,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
  */
   .controller('notifierCtrl',
   [
-    '$rootScope', '$scope',
-    function ($rootScope, $scope)
+    '$rootScope', '$scope', 'Core',
+    function ($rootScope, $scope, Core)
     {
       /**
        * Fix styles
        */
       $rootScope.fixStyles();
-
-      /**
-       * Listener for listing notifications
-       */
-      $rootScope.$on('notificationsList', function ()
-      {
-        $scope.notifications.list();
-      });
 
 
       $scope.notification = {
@@ -5243,35 +5225,43 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $scope.notifications = {
 
         /**
+         * Get local notifications
+         */
+        local: function ()
+        {
+
+        },
+
+        /**
          * List notifications
          */
         list: function ()
         {
 //        $rootScope.statusBar.display('Getting notifications information..');
-//
-//        Core.notifications.list()
-//          .then(function (result)
-//          {
+
+        Core.notifications.local()
+          .then(function (result)
+          {
 //            $rootScope.statusBar.off();
-//
-//            console.log('notification settings ->', result);
-//
-////            angular.forEach(result, function (setting)
-////            {
-////              if (setting.medium === 'SMS')
-////              {
-////                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
-////                  .then(function (suc)
-////                  {
-////                    $scope.notification.sms = {
-////                      status: true,
-////                      target: suc
-////                    }
-////                  });
-////              }
-////            });
-//
-//          });
+
+            console.log('notification settings ->', result);
+
+//            angular.forEach(result, function (setting)
+//            {
+//              if (setting.medium === 'SMS')
+//              {
+//                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
+//                  .then(function (suc)
+//                  {
+//                    $scope.notification.sms = {
+//                      status: true,
+//                      target: suc
+//                    }
+//                  });
+//              }
+//            });
+
+          });
         },
 
         /**

@@ -24,8 +24,17 @@ angular.module('WebPaige.Controllers.Manager', [])
        * Connected number container
        */
       $scope.connection = {
-        contactInfo:    '',
-        contactInfoTag: ''
+        label:        '',
+        contactInfo:  ''
+      };
+
+
+      /**
+       * Connected numbers verified switch
+       */
+      $scope.verified = {
+        status: false,
+        result: null
       };
 
 
@@ -35,25 +44,25 @@ angular.module('WebPaige.Controllers.Manager', [])
       $scope.connectedNumbers = {
 
         /**
+         * Get local list
+         */
+        local: function ()
+        {
+          return Core.connectedNumbers.local();
+        },
+
+        /**
          * List numbers
          */
         list: function ()
         {
-          $scope.connection = {};
+          $rootScope.statusBar.display('Getting the list of connected numbers..');
 
-//          $scope.connectedNumbersLoaded = false;
-
-          $scope.connectedNumbersLoaded = true;
-
-          $scope.connectedNumbersList = Core.connectedNumbers.local();
-
-//          Core.connectedNumbers.list()
-//            .then(function (numbers)
-//            {
-//              $scope.connectedNumbersLoaded = true;
-//
-//              $scope.connectedNumbersList = numbers;
-//            });
+          Core.connectedNumbers.list()
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+            });
         },
 
         /**
@@ -162,20 +171,8 @@ angular.module('WebPaige.Controllers.Manager', [])
 
 
       /**
-       * Listen for listing connected number calls from above
+       * Fetch localStorage for connectednumbersList
        */
-      $rootScope.$on('connectedNumbersList', function ()
-      {
-        $scope.connectedNumbers.list();
-      });
-
-
-      /**
-       * Connected numbers verified switch
-       */
-      $scope.verified = {
-        status: false,
-        result: null
-      };
+      $scope.connectedNumbersList = $scope.connectedNumbers.local();
     }
   ]);

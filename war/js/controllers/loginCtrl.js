@@ -180,7 +180,7 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     $scope.preloader = {
       count:    0,
-      total:    2,
+      total:    3,
       current:  0,
       fraction: function ()
       {
@@ -199,35 +199,32 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#download').hide();
       $('#preloader').show();
 
-      User.resources().then(function () { self.appInit(); });
 
-      self.progress();
+      User.resources()
+        .then(function ()
+        {
+          self.progress('User information loaded.');
 
-      Core.connectedNumbers.list().then(function () { self.appInit(); });
+          self.appInit();
+        });
 
 
-      // 3. get notifications settings
-//      Core.notifications.list()
-//        .then(function (result)
-//        {
-//          $rootScope.statusBar.off();
-//
-//          console.log('notification settings ->', result);
-//
-//          angular.forEach(result, function (setting)
-//          {
-//            if (setting.medium === 'SMS')
-//            {
-//              Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
-//                .then(function (suc)
-//                {
-//                  $scope.notification.sms = {
-//                    status: true,
-//                    target: suc
-//                  }
-//                });
-//            }
-//          });
+      Core.connectedNumbers.list()
+        .then(function ()
+        {
+          self.progress('Connected numbers are loaded.');
+
+          self.appInit();
+        });
+
+
+      Core.notifications.list()
+        .then(function ()
+        {
+          self.progress('Notification settings loaded.');
+
+          self.appInit();
+        });
 
 
       // 4. blacklist stuff
@@ -261,11 +258,13 @@ angular.module('WebPaige.Controllers.Login', [])
     /**
      * Progress bar
      */
-    self.progress = function ()
+    self.progress = function (message)
     {
       $scope.preloader.current = $scope.preloader.current + $scope.preloader.fraction();
 
       $('#preloader .progress .bar').css({ width: $scope.preloader.current + '%' });
+
+      $('#preloader span').text(message);
     };
 
 	}
