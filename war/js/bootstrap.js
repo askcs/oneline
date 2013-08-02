@@ -102,7 +102,7 @@ angular.module('WebPaige')
     /**
      * Set up resources
      */
-    $rootScope.app.resources = User.owner.get();
+    User.owner.process(User.owner.get());
 
 
     /**

@@ -14,21 +14,10 @@ angular.module('WebPaige.Controllers.Login', [])
   '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5', 'Core',
   function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5, Core)
 	{
-		/**
-		 * Fix styles
-		 */
-		$rootScope.fixStyles();
-
-
     /**
      * Self this
      */
     var self = this;
-
-    /**
-     * Redirect to dashboard if logged in
-     */
-    // if (Session.check()) redirectToDashboard();
 
 
     /**
@@ -81,7 +70,8 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO  Lose this jQuery stuff later on!
+     * TODO (Lose this jQuery stuff later on!)
+     *
      * Jquery solution of toggling between login and app view
      */
     $('.navbar').hide();
@@ -90,7 +80,7 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO use native JSON functions of angular and Store service
+     * TODO (Use native JSON functions of angular and Store service)
      */
     var logindata = angular.fromJson(Storage.get('logindata'));
 
@@ -99,9 +89,11 @@ angular.module('WebPaige.Controllers.Login', [])
       $scope.logindata = logindata;
     }
 
+    var loginBtn = $('#login button[type=submit]');
+
 
     /**
-     * TODO Remove unneccessary DOM manipulation Use cookies for user credentials
+     * TODO (Remove unneccessary DOM manipulation Use cookies for user credentials)
      * Login trigger
      */
     $scope.login = function ()
@@ -120,14 +112,14 @@ angular.module('WebPaige.Controllers.Login', [])
           }
         };
 
-        $('#login button[type=submit]')
+        loginBtn
           .text('Login')
           .removeAttr('disabled');
 
         return false;
       }
 
-      $('#login button[type=submit]')
+      loginBtn
         .text('Login..')
         .attr('disabled', 'disabled');
 
@@ -159,7 +151,7 @@ angular.module('WebPaige.Controllers.Login', [])
               }
             };
 
-            $('#login button[type=submit]')
+            loginBtn
               .text('Login')
               .removeAttr('disabled');
 
@@ -190,7 +182,8 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO What happens if preloader stucks? Optimize preloader and messages
+     * TODO (What happens if preloader stucks? Optimize preloader and messages)
+     *
      * Initialize preloader
      */
     self.preloader = function ()
@@ -203,7 +196,7 @@ angular.module('WebPaige.Controllers.Login', [])
       User.resources()
         .then(function ()
         {
-          self.progress('User information loaded.');
+          self.progress('User information loaded');
 
           self.appInit();
         });
@@ -212,7 +205,7 @@ angular.module('WebPaige.Controllers.Login', [])
       Core.connectedNumbers.list()
         .then(function ()
         {
-          self.progress('Connected numbers are loaded.');
+          self.progress('Connected numbers are loaded');
 
           self.appInit();
         });
@@ -221,7 +214,7 @@ angular.module('WebPaige.Controllers.Login', [])
       Core.notifications.list()
         .then(function ()
         {
-          self.progress('Notification settings loaded.');
+          self.progress('Notification settings loaded');
 
           self.appInit();
         });
@@ -249,7 +242,11 @@ angular.module('WebPaige.Controllers.Login', [])
         setTimeout(function ()
         {
           $('.navbar').show();
-          if (!$rootScope.browser.mobile) $('#footer').show();
+
+          if (!$rootScope.browser.mobile)
+          {
+            $('#footer').show();
+          }
         }, 100);
       }
     };

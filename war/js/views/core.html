@@ -575,59 +575,51 @@
               with us.</span>
             </div>
 
-            <p ng-hide="connectedNumbersLoaded">
-              Loading connected numbers..
+            <p ng-show="(connectedNumbersList.length == 0)">
+              There are no connected numbers. Please add some.
             </p>
 
-            <div ng-show="connectedNumbersLoaded">
 
-              <p ng-show="(connectedNumbersList.length == 0)">
-                There are no connected numbers. Please add some.
-              </p>
+            <table class="table table-striped"
+                   ng-show="(connectedNumbersList.length > 0)">
+              <thead>
+              <tr>
+                <th style="width: 100px;"></th>
+                <th>Label</th>
+                <th>Telefon number</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
 
+              <tr ng-repeat="number in connectedNumbersList">
+                <td>
+                  <span ng-show="number.verified" class="label label-success">Verified</span>
+                  <span ng-hide="number.verified" class="label label-error">Not Verified</span>
+                </td>
+                <td>{{number.label}}</td>
+                <td>{{number.contactInfo}}</td>
+                <td>
 
-              <table class="table table-striped"
-                     ng-show="(connectedNumbersList.length > 0)">
-                <thead>
-                <tr>
-                  <th style="width: 100px;"></th>
-                  <th>Label</th>
-                  <th>Telefon number</th>
-                  <th></th>
-                </tr>
-                </thead>
-                <tbody>
+                  <button ng-click="connectedNumbers.remove(number)"
+                          type="button"
+                          class="btn btn-mini">Delete</button>&nbsp;
 
-                <tr ng-repeat="number in connectedNumbersList">
-                  <td>
-                    <span ng-show="number.verified" class="label label-success">Verified</span>
-                    <span ng-hide="number.verified" class="label label-error">Not Verified</span>
-                  </td>
-                  <td>{{number.label}}</td>
-                  <td>{{number.contactInfo}}</td>
-                  <td>
+                  <button ng-show="number.verified"
+                          ng-click="connectedNumbers.edit(number)"
+                          type="button"
+                          class="btn btn-mini">Edit</button>
 
-                    <button ng-click="connectedNumbers.remove(number)"
-                            type="button"
-                            class="btn btn-mini">Delete</button>&nbsp;
+                  <button ng-hide="number.verified"
+                          ng-click="connectedNumbers.verify.initiate(number)"
+                          type="button"
+                          class="btn btn-mini">Verify</button>
 
-                    <button ng-show="number.verified"
-                            ng-click="connectedNumbers.edit(number)"
-                            type="button"
-                            class="btn btn-mini">Edit</button>
+                </td>
+              </tr>
 
-                    <button ng-hide="number.verified"
-                            ng-click="connectedNumbers.verify.initiate(number)"
-                            type="button"
-                            class="btn btn-mini">Verify</button>
-
-                  </td>
-                </tr>
-
-                </tbody>
-              </table>
-
-            </div>
+              </tbody>
+            </table>
 
           </div>
 
@@ -673,18 +665,12 @@
                     </label>
                   </td>
                   <td>
-                    <input type="text"
-                           class="input-xlarge"
-                           ng-model="notification.email.target"
-                           placeholder="">
-
                     <select
                         ng-model="notification.email.target"
                         ng-options="target.id as target.value for target in notification.email.targets">
                       <option value="{{ target.id }}"
                               ng-selected="notification.email.target">{{ target.value }}</option>
                     </select>
-
                   </td>
                 </tr>
                 <tr>
@@ -695,10 +681,12 @@
                     </label>
                   </td>
                   <td>
-                    <input type="text"
-                           class="input-xlarge"
-                           ng-model="notification.sms.target"
-                           placeholder="Registered mobile phone number">
+                    <select
+                        ng-model="notification.sms.target"
+                        ng-options="target.id as target.value for target in notification.sms.targets">
+                      <option value="{{ target.id }}"
+                              ng-selected="notification.sms.target">{{ target.value }}</option>
+                    </select>
                   </td>
                 </tr>
               </table>

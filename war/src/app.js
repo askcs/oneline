@@ -1414,7 +1414,7 @@ angular.module('WebPaige')
     /**
      * Set up resources
      */
-    $rootScope.app.resources = User.owner.get();
+    User.owner.process(User.owner.get());
 
 
     /**
@@ -1989,13 +1989,23 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
        */
       get: function ()
       {
-        angular.fromJson(Storage.get('resources'));
+        return angular.fromJson(Storage.get('resources'));
       },
 
       /**
        * Set user account to localStorage
        */
       set: function (result)
+      {
+        Storage.add('resources', angular.toJson(result));
+
+        this.process(result);
+      },
+
+      /**
+       * Process back-end returned data for app itself
+       */
+      process: function (result)
       {
         var account = {};
 
@@ -2024,8 +2034,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
         account.id = result[0].ownerKey;
 
         $rootScope.app.resources = account;
-
-        Storage.add('resources', angular.toJson(account));
       }
     };
 
@@ -4407,21 +4415,10 @@ angular.module('WebPaige.Controllers.Login', [])
   '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5', 'Core',
   function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5, Core)
 	{
-		/**
-		 * Fix styles
-		 */
-		$rootScope.fixStyles();
-
-
     /**
      * Self this
      */
     var self = this;
-
-    /**
-     * Redirect to dashboard if logged in
-     */
-    // if (Session.check()) redirectToDashboard();
 
 
     /**
@@ -4474,7 +4471,8 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO  Lose this jQuery stuff later on!
+     * TODO (Lose this jQuery stuff later on!)
+     *
      * Jquery solution of toggling between login and app view
      */
     $('.navbar').hide();
@@ -4483,7 +4481,7 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO use native JSON functions of angular and Store service
+     * TODO (Use native JSON functions of angular and Store service)
      */
     var logindata = angular.fromJson(Storage.get('logindata'));
 
@@ -4492,9 +4490,11 @@ angular.module('WebPaige.Controllers.Login', [])
       $scope.logindata = logindata;
     }
 
+    var loginBtn = $('#login button[type=submit]');
+
 
     /**
-     * TODO Remove unneccessary DOM manipulation Use cookies for user credentials
+     * TODO (Remove unneccessary DOM manipulation Use cookies for user credentials)
      * Login trigger
      */
     $scope.login = function ()
@@ -4513,14 +4513,14 @@ angular.module('WebPaige.Controllers.Login', [])
           }
         };
 
-        $('#login button[type=submit]')
+        loginBtn
           .text('Login')
           .removeAttr('disabled');
 
         return false;
       }
 
-      $('#login button[type=submit]')
+      loginBtn
         .text('Login..')
         .attr('disabled', 'disabled');
 
@@ -4552,7 +4552,7 @@ angular.module('WebPaige.Controllers.Login', [])
               }
             };
 
-            $('#login button[type=submit]')
+            loginBtn
               .text('Login')
               .removeAttr('disabled');
 
@@ -4583,7 +4583,8 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * TODO What happens if preloader stucks? Optimize preloader and messages
+     * TODO (What happens if preloader stucks? Optimize preloader and messages)
+     *
      * Initialize preloader
      */
     self.preloader = function ()
@@ -4596,7 +4597,7 @@ angular.module('WebPaige.Controllers.Login', [])
       User.resources()
         .then(function ()
         {
-          self.progress('User information loaded.');
+          self.progress('User information loaded');
 
           self.appInit();
         });
@@ -4605,7 +4606,7 @@ angular.module('WebPaige.Controllers.Login', [])
       Core.connectedNumbers.list()
         .then(function ()
         {
-          self.progress('Connected numbers are loaded.');
+          self.progress('Connected numbers are loaded');
 
           self.appInit();
         });
@@ -4614,7 +4615,7 @@ angular.module('WebPaige.Controllers.Login', [])
       Core.notifications.list()
         .then(function ()
         {
-          self.progress('Notification settings loaded.');
+          self.progress('Notification settings loaded');
 
           self.appInit();
         });
@@ -4642,7 +4643,11 @@ angular.module('WebPaige.Controllers.Login', [])
         setTimeout(function ()
         {
           $('.navbar').show();
-          if (!$rootScope.browser.mobile) $('#footer').show();
+
+          if (!$rootScope.browser.mobile)
+          {
+            $('#footer').show();
+          }
         }, 100);
       }
     };
@@ -5189,8 +5194,8 @@ angular.module('WebPaige.Controllers.Notifier', [])
  */
   .controller('notifierCtrl',
   [
-    '$rootScope', '$scope', 'Core',
-    function ($rootScope, $scope, Core)
+    '$rootScope', '$scope', 'Core', 'User',
+    function ($rootScope, $scope, Core, User)
     {
       /**
        * Fix styles
@@ -5198,37 +5203,83 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $rootScope.fixStyles();
 
 
-      $scope.notification = {
-        sms: {
-          status: false,
-          target: null
-        },
-        email: {
-          status: false,
-          target: 2,
-          targets: [
-            {
-              id:   1,
-              value: 'testing'
-            },
-            {
-              id:   2,
-              value: 'another'
-            }
-          ]
-        }
-      };
-
       /**
        * Notifications
        */
       $scope.notifications = {
 
         /**
+         * Check status of notification setting
+         */
+        build: function ()
+        {
+          var phones = [],
+              emails = [];
+
+          angular.forEach(User.owner.get(), function (node)
+          {
+            if (node.contactInfoTag === 'Phone')
+            {
+              phones.push(node);
+            }
+
+            if (node.contactInfoTag === 'Email')
+            {
+              emails.push(node);
+            }
+          });
+
+          angular.forEach(Core.connectedNumbers.local(), function (node)
+          {
+            if (node.contactInfoTag === 'Phone')
+            {
+              phones.push(node);
+            }
+
+            if (node.contactInfoTag === 'Email')
+            {
+              emails.push(node);
+            }
+          });
+
+          $scope.notification = {
+            sms: {
+              status:   false,
+              target:   phones[0].id,
+              targets:  []
+            },
+            email: {
+              status:   false,
+              target:   emails[0].id,
+              targets:  []
+            }
+          };
+
+          angular.forEach(emails, function (email)
+          {
+            $scope.notification.email.targets.push({
+              id:     email.id,
+              value:  email.contactInfo
+            });
+          });
+
+          angular.forEach(phones, function (phone)
+          {
+            $scope.notification.sms.targets.push({
+              id:     phone.id,
+              value:  phone.contactInfo
+            });
+          });
+        },
+
+        /**
          * Get local notifications
          */
         local: function ()
         {
+          $scope.notificationSettings = Core.notifications.local();
+
+          this.build();
 
         },
 
@@ -5237,31 +5288,15 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         list: function ()
         {
-//        $rootScope.statusBar.display('Getting notifications information..');
+          $rootScope.statusBar.display('Getting notifications information..');
 
-        Core.notifications.local()
-          .then(function (result)
-          {
-//            $rootScope.statusBar.off();
+          Core.notifications.list()
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
 
-            console.log('notification settings ->', result);
-
-//            angular.forEach(result, function (setting)
-//            {
-//              if (setting.medium === 'SMS')
-//              {
-//                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
-//                  .then(function (suc)
-//                  {
-//                    $scope.notification.sms = {
-//                      status: true,
-//                      target: suc
-//                    }
-//                  });
-//              }
-//            });
-
-          });
+              this.local();
+            });
         },
 
         /**
@@ -5272,6 +5307,12 @@ angular.module('WebPaige.Controllers.Notifier', [])
 
         }
       };
+
+
+      /**
+       * Initiate setup
+       */
+      $scope.notifications.local();
 
     }
   ]);;/*jslint node: true */

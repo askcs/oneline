@@ -11,8 +11,8 @@ angular.module('WebPaige.Controllers.Notifier', [])
  */
   .controller('notifierCtrl',
   [
-    '$rootScope', '$scope', 'Core',
-    function ($rootScope, $scope, Core)
+    '$rootScope', '$scope', 'Core', 'User',
+    function ($rootScope, $scope, Core, User)
     {
       /**
        * Fix styles
@@ -20,37 +20,83 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $rootScope.fixStyles();
 
 
-      $scope.notification = {
-        sms: {
-          status: false,
-          target: null
-        },
-        email: {
-          status: false,
-          target: 2,
-          targets: [
-            {
-              id:   1,
-              value: 'testing'
-            },
-            {
-              id:   2,
-              value: 'another'
-            }
-          ]
-        }
-      };
-
       /**
        * Notifications
        */
       $scope.notifications = {
 
         /**
+         * Check status of notification setting
+         */
+        build: function ()
+        {
+          var phones = [],
+              emails = [];
+
+          angular.forEach(User.owner.get(), function (node)
+          {
+            if (node.contactInfoTag === 'Phone')
+            {
+              phones.push(node);
+            }
+
+            if (node.contactInfoTag === 'Email')
+            {
+              emails.push(node);
+            }
+          });
+
+          angular.forEach(Core.connectedNumbers.local(), function (node)
+          {
+            if (node.contactInfoTag === 'Phone')
+            {
+              phones.push(node);
+            }
+
+            if (node.contactInfoTag === 'Email')
+            {
+              emails.push(node);
+            }
+          });
+
+          $scope.notification = {
+            sms: {
+              status:   false,
+              target:   phones[0].id,
+              targets:  []
+            },
+            email: {
+              status:   false,
+              target:   emails[0].id,
+              targets:  []
+            }
+          };
+
+          angular.forEach(emails, function (email)
+          {
+            $scope.notification.email.targets.push({
+              id:     email.id,
+              value:  email.contactInfo
+            });
+          });
+
+          angular.forEach(phones, function (phone)
+          {
+            $scope.notification.sms.targets.push({
+              id:     phone.id,
+              value:  phone.contactInfo
+            });
+          });
+        },
+
+        /**
          * Get local notifications
          */
         local: function ()
         {
+          $scope.notificationSettings = Core.notifications.local();
+
+          this.build();
 
         },
 
@@ -59,31 +105,15 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         list: function ()
         {
-//        $rootScope.statusBar.display('Getting notifications information..');
+          $rootScope.statusBar.display('Getting notifications information..');
 
-        Core.notifications.local()
-          .then(function (result)
-          {
-//            $rootScope.statusBar.off();
+          Core.notifications.list()
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
 
-            console.log('notification settings ->', result);
-
-//            angular.forEach(result, function (setting)
-//            {
-//              if (setting.medium === 'SMS')
-//              {
-//                Core.connectedNumbers.get({ id: setting.targetContactInfos[0] })
-//                  .then(function (suc)
-//                  {
-//                    $scope.notification.sms = {
-//                      status: true,
-//                      target: suc
-//                    }
-//                  });
-//              }
-//            });
-
-          });
+              this.local();
+            });
         },
 
         /**
@@ -94,6 +124,12 @@ angular.module('WebPaige.Controllers.Notifier', [])
 
         }
       };
+
+
+      /**
+       * Initiate setup
+       */
+      $scope.notifications.local();
 
     }
   ]);

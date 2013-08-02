@@ -124,13 +124,23 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
        */
       get: function ()
       {
-        angular.fromJson(Storage.get('resources'));
+        return angular.fromJson(Storage.get('resources'));
       },
 
       /**
        * Set user account to localStorage
        */
       set: function (result)
+      {
+        Storage.add('resources', angular.toJson(result));
+
+        this.process(result);
+      },
+
+      /**
+       * Process back-end returned data for app itself
+       */
+      process: function (result)
       {
         var account = {};
 
@@ -159,8 +169,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
         account.id = result[0].ownerKey;
 
         $rootScope.app.resources = account;
-
-        Storage.add('resources', angular.toJson(account));
       }
     };
 
