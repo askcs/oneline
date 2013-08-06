@@ -33,6 +33,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
           var phones = [],
               emails = [];
 
+          // Compile from owner
           angular.forEach(User.owner.get(), function (node)
           {
             if (node.contactInfoTag === 'Phone')
@@ -46,6 +47,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
             }
           });
 
+          // Compile from connected numbers
           angular.forEach(Core.connectedNumbers.local(), function (node)
           {
             if (node.contactInfoTag === 'Phone')
@@ -59,6 +61,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
             }
           });
 
+          // Build notification list object
           $scope.notification = {
             sms: {
               status:   false,
@@ -72,6 +75,23 @@ angular.module('WebPaige.Controllers.Notifier', [])
             }
           };
 
+          // Setup selected ones
+          angular.forEach($scope.notificationSettings, function (setting)
+          {
+            if (setting.medium === 'Email')
+            {
+              $scope.notification.email.status = true;
+              $scope.notification.email.target = setting.targetContactInfos[0];
+            }
+
+            if (setting.medium === 'SMS')
+            {
+              $scope.notification.sms.status = true;
+              $scope.notification.sms.target = setting.targetContactInfos[0];
+            }
+          });
+
+          // Build list of emails
           angular.forEach(emails, function (email)
           {
             $scope.notification.email.targets.push({
@@ -80,6 +100,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
             });
           });
 
+          // Build list of phones
           angular.forEach(phones, function (phone)
           {
             $scope.notification.sms.targets.push({
@@ -87,6 +108,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
               value:  phone.contactInfo
             });
           });
+
         },
 
         /**
@@ -122,6 +144,14 @@ angular.module('WebPaige.Controllers.Notifier', [])
         get: function ()
         {
 
+        },
+
+        /**
+         * Save notification settings
+         */
+        save: function ()
+        {
+          console.warn('saving for ->', $scope.notification);
         }
       };
 

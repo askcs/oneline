@@ -142,33 +142,36 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
        */
       process: function (result)
       {
-        var account = {};
-
-        angular.forEach(result, function (resource)
+        if (result)
         {
-          switch (resource.contactInfoTag)
+          var account = {};
+
+          angular.forEach(result, function (resource)
           {
-          case 'Name':
-            account.name = resource.contactInfo;
-            break;
-          case 'Phone':
-            account.phone = resource.contactInfo;
-            break;
-          case 'Email':
-            account.email = resource.contactInfo;
-            break;
-          case 'Address':
-            account.address = resource.contactInfo;
-            break;
-          case 'PURCHASED_NUMBER':
-            account.purchasedNumber = resource.contactInfo;
-            break;
-          }
-        });
+            switch (resource.contactInfoTag)
+            {
+              case 'Name':
+                account.name = resource.contactInfo;
+                break;
+              case 'Phone':
+                account.phone = resource.contactInfo;
+                break;
+              case 'Email':
+                account.email = resource.contactInfo;
+                break;
+              case 'Address':
+                account.address = resource.contactInfo;
+                break;
+              case 'PURCHASED_NUMBER':
+                account.purchasedNumber = resource.contactInfo;
+                break;
+            }
+          });
 
-        account.id = result[0].ownerKey;
+          account.id = result[0].ownerKey;
 
-        $rootScope.app.resources = account;
+          $rootScope.app.resources = account;
+        }
       }
     };
 

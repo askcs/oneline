@@ -1084,19 +1084,9 @@ angular.module('WebPaige')
      */
     .when('/logout',
     {
-       templateUrl: 'dist/views/logout.html',
-       controller: 'logout'
+      templateUrl: 'dist/views/logout.html',
+      controller: 'logout'
     })
-
-
-    /**
-     * Dashboard router
-     */
-    // .when('/dashboard',
-    // {
-    //   templateUrl: 'dist/views/dashboard.html',
-    //   controller: 'dashboard'
-    // })
 
 
     /**
@@ -1111,204 +1101,11 @@ angular.module('WebPaige')
 
 
     /**
-     * Profile router
-     */
-    // .when('/profile',
-    // {
-    //   templateUrl: 'dist/views/profile.html',
-    //   controller: 'profile'
-    // })
-
-
-    /**
-     * Settings router
-     */
-    // .when('/settings',
-    // {
-    //   templateUrl: 'dist/views/settings.html',
-    //   controller: 'settings'
-    // })
-
-
-    /**
-     * Planboard router
-     */
-    // .when('/planboard',
-    // {
-    //   templateUrl: 'dist/views/planboard.html',
-    //   controller: 'planboard',
-    //   resolve: {
-    //     data:
-    //     [
-    //       '$route', 'Slots', 'Storage', 'Dater',
-    //       function ($route, Slots, Storage, Dater)
-    //       {
-    //         var periods = Storage.local.periods(),
-    //             current = Dater.current.week(),
-    //             initial = periods.weeks[current],
-    //             groups  = Storage.local.groups(),
-    //             settings = Storage.local.settings();
-
-    //         return  Slots.all({
-    //                   groupId:  settings.app.group,
-    //                   division: 'all',
-    //                   stamps: {
-    //                     start:  initial.first.timeStamp,
-    //                     end:    initial.last.timeStamp
-    //                   },
-    //                   month: Dater.current.month(),
-    //                   layouts: {
-    //                     user:     true,
-    //                     group:    true,
-    //                     members:  false
-    //                   }
-    //                 });
-    //       }
-    //     ]
-    //   },
-    //   reloadOnSearch: false
-    // })
-
-
-    /**
-     * Messages router
-     */
-    // .when('/messages',
-    // {
-    //   templateUrl: 'dist/views/messages.html',
-    //   controller: 'messages',
-    //   resolve: {
-    //     data: [
-    //       '$route', 'Messages',
-    //       function ($route, Messages)
-    //       {
-    //         return Messages.query();
-    //       }
-    //     ]
-    //   },
-    //   reloadOnSearch: false
-    // })
-
-
-    /**
-     * Groups router
-     */
-    // .when('/groups',
-    // {
-    //   templateUrl: 'dist/views/groups.html',
-    //   controller: 'groups',
-    //   resolve: {
-    //     data: [
-    //       'Groups',
-    //       function (Groups)
-    //       {
-    //         return Groups.query();
-    //       }
-    //     ]
-    //   },
-    //   reloadOnSearch: false
-    // })
-
-
-    /**
-     * Profile (user specific) router
-     */
-    // .when('/profile/:userId',
-    // {
-    //   templateUrl: 'dist/views/profile.html',
-    //   controller: 'profile',
-    //   resolve: {
-    //     data: [
-    //       '$rootScope', 'Profile', '$route', '$location', 'Dater',
-    //       function ($rootScope, Profile, $route, $location, Dater)
-    //       {
-    //         if ($route.current.params.userId != $rootScope.app.resources.uuid)
-    //         {
-    //           var periods = Dater.getPeriods(),
-    //               current = Dater.current.week(),
-    //               ranges  = {
-    //                 start:  periods.weeks[current].first.timeStamp / 1000,
-    //                 end:    periods.weeks[current].last.timeStamp / 1000
-    //               };
-
-    //           return Profile.getWithSlots($route.current.params.userId, false, ranges);
-    //         }
-    //         else
-    //         {
-    //           return Profile.get($route.current.params.userId, false);
-    //         }
-    //       }
-    //     ]
-    //   },
-    //   reloadOnSearch: false
-    // })
-
-
-    /**
-     * Profile (user hiself) router
-     */
-    // .when('/profile',
-    // {
-    //   templateUrl: 'dist/views/profile.html',
-    //   controller: 'profile',
-    //   resolve: {
-    //     data: [
-    //       '$rootScope', '$route', '$location',
-    //       function ($rootScope, $route, $location)
-    //       {
-    //         if (!$route.current.params.userId || !$location.hash())
-    //           $location.path('/profile/' + $rootScope.app.resources.uuid).hash('profile');
-    //       }
-    //     ]
-    //   }
-    // })
-
-
-    /**
-     * Settings router
-     */
-    // .when('/settings',
-    // {
-    //   templateUrl: 'dist/views/settings.html',
-    //   controller: 'settings',
-    //   resolve: {
-    //     data: [
-    //       'Settings',
-    //       function (Settings)
-    //       {
-    //         return angular.fromJson(Settings.get());
-    //       }
-    //     ]
-    //   }
-    // })
-
-
-    /**
-     * Help router
-     */
-    // .when('/help',
-    // {
-    //   templateUrl: 'dist/views/help.html',
-    //   controller: 'help'
-    // })
-
-
-    /**
      * Router fallback
      */
     .otherwise({
       redirectTo: '/login'
     });
-
-
-//    $httpProvider.defaults.useXDomain = true;
-//    delete $httpProvider.defaults.headers.common['X-Requested-With'];
-
-
-    /**
-     * Define interceptor
-     */
-    // $httpProvider.responseInterceptors.push('Interceptor');
   }
 ]);;/*jslint node: true */
 /*global angular */
@@ -2007,33 +1804,36 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
        */
       process: function (result)
       {
-        var account = {};
-
-        angular.forEach(result, function (resource)
+        if (result)
         {
-          switch (resource.contactInfoTag)
+          var account = {};
+
+          angular.forEach(result, function (resource)
           {
-          case 'Name':
-            account.name = resource.contactInfo;
-            break;
-          case 'Phone':
-            account.phone = resource.contactInfo;
-            break;
-          case 'Email':
-            account.email = resource.contactInfo;
-            break;
-          case 'Address':
-            account.address = resource.contactInfo;
-            break;
-          case 'PURCHASED_NUMBER':
-            account.purchasedNumber = resource.contactInfo;
-            break;
-          }
-        });
+            switch (resource.contactInfoTag)
+            {
+              case 'Name':
+                account.name = resource.contactInfo;
+                break;
+              case 'Phone':
+                account.phone = resource.contactInfo;
+                break;
+              case 'Email':
+                account.email = resource.contactInfo;
+                break;
+              case 'Address':
+                account.address = resource.contactInfo;
+                break;
+              case 'PURCHASED_NUMBER':
+                account.purchasedNumber = resource.contactInfo;
+                break;
+            }
+          });
 
-        account.id = result[0].ownerKey;
+          account.id = result[0].ownerKey;
 
-        $rootScope.app.resources = account;
+          $rootScope.app.resources = account;
+        }
       }
     };
 
@@ -4422,29 +4222,6 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * Set default views
-     */
-    if ($routeParams.uuid && $routeParams.key)
-    {
-      $scope.views = {
-        changePass: true
-      };
-
-      $scope.changepass = {
-        uuid: $routeParams.uuid,
-        key:  $routeParams.key
-      };
-    }
-    else
-    {
-      $scope.views = {
-        login: true,
-        forgot: false
-      };
-    }
-
-
-    /**
      * Set default alerts
      */
     $scope.alert = {
@@ -4594,6 +4371,9 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#preloader').show();
 
 
+      self.progress('Loading app related information..');
+
+
       User.resources()
         .then(function ()
         {
@@ -4730,6 +4510,8 @@ angular.module('WebPaige.Controllers.Logout', [])
 	  $('#footer').hide();
 
 	  var logindata = angular.fromJson(Storage.get('logindata'));
+
+    Storage.clearAll();
 
 		User.logout()
 		.then(function (result)
@@ -5216,6 +4998,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
           var phones = [],
               emails = [];
 
+          // Compile from owner
           angular.forEach(User.owner.get(), function (node)
           {
             if (node.contactInfoTag === 'Phone')
@@ -5229,6 +5012,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
             }
           });
 
+          // Compile from connected numbers
           angular.forEach(Core.connectedNumbers.local(), function (node)
           {
             if (node.contactInfoTag === 'Phone')
@@ -5242,6 +5026,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
             }
           });
 
+          // Build notification list object
           $scope.notification = {
             sms: {
               status:   false,
@@ -5255,6 +5040,23 @@ angular.module('WebPaige.Controllers.Notifier', [])
             }
           };
 
+          // Setup selected ones
+          angular.forEach($scope.notificationSettings, function (setting)
+          {
+            if (setting.medium === 'Email')
+            {
+              $scope.notification.email.status = true;
+              $scope.notification.email.target = setting.targetContactInfos[0];
+            }
+
+            if (setting.medium === 'SMS')
+            {
+              $scope.notification.sms.status = true;
+              $scope.notification.sms.target = setting.targetContactInfos[0];
+            }
+          });
+
+          // Build list of emails
           angular.forEach(emails, function (email)
           {
             $scope.notification.email.targets.push({
@@ -5263,6 +5065,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
             });
           });
 
+          // Build list of phones
           angular.forEach(phones, function (phone)
           {
             $scope.notification.sms.targets.push({
@@ -5270,6 +5073,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
               value:  phone.contactInfo
             });
           });
+
         },
 
         /**
@@ -5305,6 +5109,14 @@ angular.module('WebPaige.Controllers.Notifier', [])
         get: function ()
         {
 
+        },
+
+        /**
+         * Save notification settings
+         */
+        save: function ()
+        {
+          console.warn('saving for ->', $scope.notification);
         }
       };
 

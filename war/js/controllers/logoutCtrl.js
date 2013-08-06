@@ -19,6 +19,8 @@ angular.module('WebPaige.Controllers.Logout', [])
 
 	  var logindata = angular.fromJson(Storage.get('logindata'));
 
+    Storage.clearAll();
+
 		User.logout()
 		.then(function (result)
 		{

@@ -21,29 +21,6 @@ angular.module('WebPaige.Controllers.Login', [])
 
 
     /**
-     * Set default views
-     */
-    if ($routeParams.uuid && $routeParams.key)
-    {
-      $scope.views = {
-        changePass: true
-      };
-
-      $scope.changepass = {
-        uuid: $routeParams.uuid,
-        key:  $routeParams.key
-      };
-    }
-    else
-    {
-      $scope.views = {
-        login: true,
-        forgot: false
-      };
-    }
-
-
-    /**
      * Set default alerts
      */
     $scope.alert = {
@@ -191,6 +168,9 @@ angular.module('WebPaige.Controllers.Login', [])
       $('#login').hide();
       $('#download').hide();
       $('#preloader').show();
+
+
+      self.progress('Loading app related information..');
 
 
       User.resources()

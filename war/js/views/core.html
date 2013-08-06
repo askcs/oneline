@@ -654,7 +654,8 @@
           <div class="span12">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
 
-            <form class="form-inline">
+            <form class="form-inline"
+                  ng-submit="notifications.save()">
 
               <table class="table table-striped">
                 <tr>
@@ -667,7 +668,8 @@
                   <td>
                     <select
                         ng-model="notification.email.target"
-                        ng-options="target.id as target.value for target in notification.email.targets">
+                        ng-options="target.id as target.value for target in notification.email.targets"
+                        ng-disabled="!notification.email.status">
                       <option value="{{ target.id }}"
                               ng-selected="notification.email.target">{{ target.value }}</option>
                     </select>
@@ -683,7 +685,8 @@
                   <td>
                     <select
                         ng-model="notification.sms.target"
-                        ng-options="target.id as target.value for target in notification.sms.targets">
+                        ng-options="target.id as target.value for target in notification.sms.targets"
+                        ng-disabled="!notification.sms.status">
                       <option value="{{ target.id }}"
                               ng-selected="notification.sms.target">{{ target.value }}</option>
                     </select>
