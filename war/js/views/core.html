@@ -850,10 +850,21 @@
           <div class="span12">
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
 
-            <form class="form-inline well">
-              <input type="text" class="input-medium" placeholder="Label">&nbsp;
-              <input type="password" class="input-large" placeholder="Telefon number">&nbsp;
+            <form class="form-inline well"
+                  ng-submit="blacklists.save()">
+
+              <input ng-model="blacklist.label"
+                     type="text"
+                     class="input-medium"
+                     placeholder="Label">&nbsp;
+
+              <input ng-model="blacklist.contactInfo"
+                     type="text"
+                     class="input-large"
+                     placeholder="e.g. Phone number…">&nbsp;
+
               <button type="submit" class="btn">Add to blacklist</button>
+
             </form>
 
             <h4>Numbers</h4>
@@ -866,7 +877,6 @@
                    ng-show="(data.blacklist.length > 0)">
               <thead>
               <tr>
-                <th style="width: 100px;"></th>
                 <th>Label</th>
                 <th>Telefon number</th>
                 <th></th>
@@ -875,59 +885,17 @@
               <tbody>
 
               <tr ng-repeat="number in data.blacklist">
-                <td>
-                  <span ng-show="number.verified" class="label label-success">Verified</span>
-                  <span ng-hide="number.verified" class="label label-error">Not Verified</span>
-                </td>
                 <td>{{number.label}}</td>
                 <td>{{number.contactInfo}}</td>
                 <td>
-
-                  <button ng-click="connections.remove(number)"
+                  <button ng-click="blacklists.remove(number)"
                           type="button"
-                          class="btn btn-mini">Delete</button>&nbsp;
-
-                  <button ng-show="number.verified"
-                          ng-click="connections.edit(number)"
-                          type="button"
-                          class="btn btn-mini">Edit</button>
-
-                  <button ng-hide="number.verified"
-                          ng-click="connections.verify.initiate(number)"
-                          type="button"
-                          class="btn btn-mini">Verify</button>
-
+                          class="btn btn-mini">Allow</button>
                 </td>
               </tr>
 
               </tbody>
             </table>
-            
-            <!--<table class="table table-striped">-->
-              <!--<thead>-->
-                <!--<tr>-->
-                  <!--<th>Label</th>-->
-                  <!--<th>Telefon number</th>-->
-                  <!--<th></th>-->
-                <!--</tr>-->
-              <!--</thead>-->
-              <!--<tbody>-->
-                <!--<tr>-->
-                  <!--<td>Home</td>-->
-                  <!--<td>+31 (78) 7501234</td>-->
-                  <!--<td>-->
-                    <!--<button type="button" class="btn btn-mini">Allow</button>-->
-                  <!--</td>-->
-                <!--</tr>-->
-                <!--<tr>-->
-                  <!--<td>Work</td>-->
-                  <!--<td>+31 (629) 123456</td>-->
-                  <!--<td>-->
-                    <!--<button type="button" class="btn btn-mini">Allow</button>-->
-                  <!--</td>-->
-                <!--</tr>-->
-              <!--</tbody>-->
-            <!--</table>-->
 
           </div>
 

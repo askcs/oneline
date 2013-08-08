@@ -118,6 +118,10 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         get: {
           method: 'GET',
           params: {id: ''}
+        },
+        update: {
+          method: 'PUT',
+          params: {id: ''}
         }
       }
     );
@@ -157,6 +161,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         );
 
         return deferred.promise;
+      },
+
+      /**
+       * Update a setting
+       */
+      update: function (options)
+      {
+
       }
     };
 
@@ -383,7 +395,70 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         );
 
         return deferred.promise;
+      },
+
+      /**
+       * Update groups
+       */
+      update: function (group)
+      {
+        var deferred = $q.defer();
+
+        Groups.update({id: group.id}, {
+            contactInfoIds: group.list
+          },
+          function (result)
+          {
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
       }
+    };
+
+    /**
+     * Blacklists
+     */
+    Core.prototype.blacklists = {
+
+      /**
+       * List blacklists
+       */
+      list: function ()
+      {
+
+      },
+
+      save: function (blacklisted)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.create({
+            contactInfo:    blacklisted.contactInfo,
+            contactInfoTag: 'Phone',
+            label:          blacklisted.label
+          },
+          function (result)
+          {
+            console.log('it is created');
+
+            deferred.resolve(result);
+
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      }
+
     };
 
 
@@ -411,8 +486,10 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             blacklist   = {},
             settings    = {},
             account     = {},
+            groups      = {},
             phones      = [],
-            emails      = [];
+            emails      = [],
+            tmp         = [];
 
         // Initialize root container
         $rootScope.data = {};
@@ -428,25 +505,25 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         {
           switch (resource.contactInfoTag)
           {
-            case 'Name':
-              account.name = resource.contactInfo;
-              break;
-            case 'Phone':
-              account.phone = resource.contactInfo;
+          case 'Name':
+            account.name = resource.contactInfo;
+            break;
+          case 'Phone':
+            account.phone = resource.contactInfo;
 
-              nodes[resource.id] = resource;
-              break;
-            case 'Email':
-              account.email = resource.contactInfo;
+            nodes[resource.id] = resource;
+            break;
+          case 'Email':
+            account.email = resource.contactInfo;
 
-              nodes[resource.id] = resource;
-              break;
-            case 'Address':
-              account.address = resource.contactInfo;
-              break;
-            case 'PURCHASED_NUMBER':
-              account.purchasedNumber = resource.contactInfo;
-              break;
+            nodes[resource.id] = resource;
+            break;
+          case 'Address':
+            account.address = resource.contactInfo;
+            break;
+          case 'PURCHASED_NUMBER':
+            account.purchasedNumber = resource.contactInfo;
+            break;
           }
         });
 
@@ -455,6 +532,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
         // Get blacklisted items
         var blacklisted = raws.groups[0].contactInfoIds;
+
+        // Build blacklisted group node
+        groups.blacklist = raws.groups[0];
 
         // Pass connections
         connections = nodes;
@@ -466,6 +546,19 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
           delete connections[listed];
         });
+
+        // Watch for parked blacklist items
+//        if ($rootScope.data.tmp && $rootScope.data.tmp.length > 0)
+//        {
+//          console.log('there is one ! ->', $rootScope.data.tmp);
+//
+//          angular.forEach($rootScope.data.tmp, function (blacklisted)
+//          {
+//            blacklist[blacklisted.id] = blacklisted;
+//          });
+//
+//          $rootScope.data.tmp = [];
+//        }
 
         // Arrayize connections
         var cons = [];
@@ -516,6 +609,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         {
           if (setting.medium === 'Email')
           {
+            settings.email.id     = setting.id;
             settings.email.status = true;
             settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
                                       undefined :
@@ -524,6 +618,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
           if (setting.medium === 'SMS')
           {
+            settings.sms.id     = setting.id;
             settings.sms.status = true;
             settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
                                     undefined :
@@ -554,8 +649,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           account:      account,
           connections:  connections,
           blacklist:    blacklist,
-          settings:     settings
+          settings:     settings,
+          groups:       groups,
+          tmp:          tmp
         };
+
+        console.warn('data ->', $rootScope.data);
 
         return true;
       }

@@ -35,7 +35,8 @@
     <link rel="stylesheet" href="dist/app.css">
 
     <!-- jquery -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>-->
+    <script src="libs/jquery/1.9.1/jquery-1.9.1.min.js"></script>
     <script src="dist/plugins.min.js"></script>
 
     <!-- profile configs -->
@@ -81,16 +82,16 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <i class="icon-user icon-white"></i> {{app.resources.name}} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="#profile"><i class="icon-thumbs-up"></i> Invite and refer</a>
-                  </li>
-                  <li>
-                    <a href="#settings"><i class="icon-user"></i> Account Settings</a>
-                  </li>
-                  <li>
-                    <a href="#settings"><i class="icon-question-sign"></i> Help</a>
-                  </li>
-                  <li class="divider"></li>
+                  <!--<li>-->
+                    <!--<a href="#profile"><i class="icon-thumbs-up"></i> Invite and refer</a>-->
+                  <!--</li>-->
+                  <!--<li>-->
+                    <!--<a href="#settings"><i class="icon-user"></i> Account Settings</a>-->
+                  <!--</li>-->
+                  <!--<li>-->
+                    <!--<a href="#settings"><i class="icon-question-sign"></i> Help</a>-->
+                  <!--</li>-->
+                  <!--<li class="divider"></li>-->
                   <li>
                     <a href="#logout"><i class="icon-off"></i> Logout</a>
                   </li>
@@ -102,18 +103,18 @@
 
             <!-- mobile or tablet version -->
             <ul class="nav pull-right" ng-show="browser.mobile" style="{{(browser.landscape) && 'margin-right:-20px'}}">
-              <li>
-                <a href="#profile">
-                  <i class="icon-user icon-white" ng-hide="browser.portrait || browser.screen.width < 768"></i>
-                  <span ng-show="browser.portrait || browser.screen.width < 768">Profile</span>
-                </a>
-              </li>
-              <li>
-                <a href="#settings">
-                  <i class="icon-wrench icon-white" ng-hide="browser.portrait || browser.screen.width < 768"></i>
-                  <span ng-show="browser.portrait || browser.screen.width < 768">Settings</span>
-                </a>
-              </li>
+              <!--<li>-->
+                <!--<a href="#profile">-->
+                  <!--<i class="icon-user icon-white" ng-hide="browser.portrait || browser.screen.width < 768"></i>-->
+                  <!--<span ng-show="browser.portrait || browser.screen.width < 768">Profile</span>-->
+                <!--</a>-->
+              <!--</li>-->
+              <!--<li>-->
+                <!--<a href="#settings">-->
+                  <!--<i class="icon-wrench icon-white" ng-hide="browser.portrait || browser.screen.width < 768"></i>-->
+                  <!--<span ng-show="browser.portrait || browser.screen.width < 768">Settings</span>-->
+                <!--</a>-->
+              <!--</li>-->
               <li>
                 <a href="#logout">
                   <i class="icon-off icon-white" ng-hide="browser.portrait || browser.screen.width < 768"></i>

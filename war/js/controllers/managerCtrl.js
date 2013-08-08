@@ -62,6 +62,8 @@ angular.module('WebPaige.Controllers.Manager', [])
             .then(function ()
             {
               $rootScope.statusBar.off();
+
+              Core.factory.process();
             });
         },
 

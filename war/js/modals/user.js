@@ -166,7 +166,11 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
                 break;
             }
           });
-          account.id = result[0].ownerKey;
+
+          if (result[0])
+          {
+            account.id = result[0].ownerKey;
+          }
 
           // TODO (Remove this later on)
           $rootScope.app.resources = account;
