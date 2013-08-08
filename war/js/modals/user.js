@@ -149,21 +149,21 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
           {
             switch (resource.contactInfoTag)
             {
-              case 'Name':
-                account.name = resource.contactInfo;
-                break;
-              case 'Phone':
-                account.phone = resource.contactInfo;
-                break;
-              case 'Email':
-                account.email = resource.contactInfo;
-                break;
-              case 'Address':
-                account.address = resource.contactInfo;
-                break;
-              case 'PURCHASED_NUMBER':
-                account.purchasedNumber = resource.contactInfo;
-                break;
+            case 'Name':
+              account.name = resource.contactInfo;
+              break;
+            case 'Phone':
+              account.phone = resource.contactInfo;
+              break;
+            case 'Email':
+              account.email = resource.contactInfo;
+              break;
+            case 'Address':
+              account.address = resource.contactInfo;
+              break;
+            case 'PURCHASED_NUMBER':
+              account.purchasedNumber = resource.contactInfo;
+              break;
             }
           });
 

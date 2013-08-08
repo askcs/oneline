@@ -434,6 +434,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
       },
 
+      /**
+       * Block a number
+       */
       save: function (blacklisted)
       {
         var deferred = $q.defer();
@@ -445,8 +448,30 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           },
           function (result)
           {
-            console.log('it is created');
+            deferred.resolve(result);
 
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Allow a blacklisted number
+       */
+      remove: function (number)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.remove({
+            id: number.id
+          },
+          function (result)
+          {
             deferred.resolve(result);
 
           },
@@ -529,6 +554,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
         // Setup user id
         account.id = raws.resources[0].ownerKey;
+
+        // TODO (Remove this later on)
+        $rootScope.app.resources = account;
 
         // Get blacklisted items
         var blacklisted = raws.groups[0].contactInfoIds;

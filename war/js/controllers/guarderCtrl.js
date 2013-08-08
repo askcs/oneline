@@ -26,6 +26,12 @@ angular.module('WebPaige.Controllers.Guarder', [])
       $scope.blacklist = {};
 
 
+//      Core.groups.update({
+//        id:   $rootScope.data.groups.blacklist.id,
+//        list: [20003]
+//      });
+
+
       /**
        * Blacklists
        */
@@ -101,8 +107,46 @@ angular.module('WebPaige.Controllers.Guarder', [])
         /**
          * Remove a blacklisted number
          */
-        remove: function ()
+        remove: function (number)
         {
+          var self = this,
+              list = [];
+
+          $rootScope.statusBar.display('Allowing a blacklisted number..');
+
+          angular.forEach($rootScope.data.blacklist, function (listed)
+          {
+            if (listed.id !== number.id)
+            {
+              list.push(listed)
+            }
+          });
+
+          console.log('list ->', list);
+
+          Core.blacklists.remove(number)
+            .then(function (result)
+            {
+              $rootScope.statusBar.display('Updating blacklist group..');
+
+              var lids = [];
+
+              angular.forEach(list, function (l)
+              {
+                lids.push(l.id);
+              });
+
+              // Update blacklist group
+              Core.groups.update({
+                id:   $rootScope.data.groups.blacklist.id,
+                list: lids
+              }).then(function ()
+                {
+                  $rootScope.statusBar.off();
+
+                  self.list();
+                });
+            });
 
         }
       };

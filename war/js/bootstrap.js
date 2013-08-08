@@ -12,8 +12,8 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session', 'Core',
-  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session, Core)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session', 'Core', '$http',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session, Core, $http)
   {
     /**
      * Pass config and init dynamic config values
@@ -106,6 +106,8 @@ angular.module('WebPaige')
      * Set up resources
      */
     User.owner.process(User.owner.get());
+
+    $http.defaults.headers.common['X-SESSION_ID'] = angular.fromJson(Storage.cookie.get('session')).id;
 
 
     /**

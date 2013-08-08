@@ -1121,8 +1121,8 @@ angular.module('WebPaige')
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session', 'Core',
-  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session, Core)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session', 'Core', '$http',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session, Core, $http)
   {
     /**
      * Pass config and init dynamic config values
@@ -1215,6 +1215,8 @@ angular.module('WebPaige')
      * Set up resources
      */
     User.owner.process(User.owner.get());
+
+    $http.defaults.headers.common['X-SESSION_ID'] = angular.fromJson(Storage.cookie.get('session')).id;
 
 
     /**
@@ -1814,21 +1816,21 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
           {
             switch (resource.contactInfoTag)
             {
-              case 'Name':
-                account.name = resource.contactInfo;
-                break;
-              case 'Phone':
-                account.phone = resource.contactInfo;
-                break;
-              case 'Email':
-                account.email = resource.contactInfo;
-                break;
-              case 'Address':
-                account.address = resource.contactInfo;
-                break;
-              case 'PURCHASED_NUMBER':
-                account.purchasedNumber = resource.contactInfo;
-                break;
+            case 'Name':
+              account.name = resource.contactInfo;
+              break;
+            case 'Phone':
+              account.phone = resource.contactInfo;
+              break;
+            case 'Email':
+              account.email = resource.contactInfo;
+              break;
+            case 'Address':
+              account.address = resource.contactInfo;
+              break;
+            case 'PURCHASED_NUMBER':
+              account.purchasedNumber = resource.contactInfo;
+              break;
             }
           });
 
@@ -2316,6 +2318,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
       },
 
+      /**
+       * Block a number
+       */
       save: function (blacklisted)
       {
         var deferred = $q.defer();
@@ -2327,8 +2332,30 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           },
           function (result)
           {
-            console.log('it is created');
+            deferred.resolve(result);
 
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Allow a blacklisted number
+       */
+      remove: function (number)
+      {
+        var deferred = $q.defer();
+
+        ContactInfos.remove({
+            id: number.id
+          },
+          function (result)
+          {
             deferred.resolve(result);
 
           },
@@ -2411,6 +2438,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
         // Setup user id
         account.id = raws.resources[0].ownerKey;
+
+        // TODO (Remove this later on)
+        $rootScope.app.resources = account;
 
         // Get blacklisted items
         var blacklisted = raws.groups[0].contactInfoIds;
@@ -5541,6 +5571,12 @@ angular.module('WebPaige.Controllers.Guarder', [])
       $scope.blacklist = {};
 
 
+//      Core.groups.update({
+//        id:   $rootScope.data.groups.blacklist.id,
+//        list: [20003]
+//      });
+
+
       /**
        * Blacklists
        */
@@ -5616,8 +5652,46 @@ angular.module('WebPaige.Controllers.Guarder', [])
         /**
          * Remove a blacklisted number
          */
-        remove: function ()
+        remove: function (number)
         {
+          var self = this,
+              list = [];
+
+          $rootScope.statusBar.display('Allowing a blacklisted number..');
+
+          angular.forEach($rootScope.data.blacklist, function (listed)
+          {
+            if (listed.id !== number.id)
+            {
+              list.push(listed)
+            }
+          });
+
+          console.log('list ->', list);
+
+          Core.blacklists.remove(number)
+            .then(function (result)
+            {
+              $rootScope.statusBar.display('Updating blacklist group..');
+
+              var lids = [];
+
+              angular.forEach(list, function (l)
+              {
+                lids.push(l.id);
+              });
+
+              // Update blacklist group
+              Core.groups.update({
+                id:   $rootScope.data.groups.blacklist.id,
+                list: lids
+              }).then(function ()
+                {
+                  $rootScope.statusBar.off();
+
+                  self.list();
+                });
+            });
 
         }
       };
