@@ -168,11 +168,5 @@ angular.module('WebPaige.Controllers.Manager', [])
           }
         }
       };
-
-
-      /**
-       * Fetch localStorage for connectionsList
-       */
-      $scope.connectionsList = $rootScope;
     }
   ]);

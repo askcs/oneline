@@ -5182,12 +5182,6 @@ angular.module('WebPaige.Controllers.Manager', [])
           }
         }
       };
-
-
-      /**
-       * Fetch localStorage for connectionsList
-       */
-      $scope.connectionsList = $rootScope;
     }
   ]);;/*jslint node: true */
 /*global angular */
@@ -5217,22 +5211,11 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $scope.settings = {
 
         /**
-         * Check status of notification setting
-         */
-        build: function ()
-        {
-
-        },
-
-        /**
          * Get local notifications
          */
         local: function ()
         {
           $scope.notificationSettings = Core.settings.local();
-
-          this.build();
-
         },
 
         /**

@@ -661,16 +661,16 @@
                   <td>
                     <label class="checkbox">
                       <input type="checkbox"
-                             ng-model="notification.email.status">&nbsp;Email Notification
+                             ng-model="data.settings.email.status">&nbsp;Email Notification
                     </label>
                   </td>
                   <td>
                     <select
-                        ng-model="notification.email.target"
-                        ng-options="target.id as target.value for target in notification.email.targets"
-                        ng-disabled="!notification.email.status">
+                        ng-model="data.settings.email.target"
+                        ng-options="target.id as target.value for target in data.settings.email.targets"
+                        ng-disabled="!data.settings.email.status">
                       <option value="{{ target.id }}"
-                              ng-selected="notification.email.target">{{ target.value }}</option>
+                              ng-selected="data.settings.email.target">{{ target.value }}</option>
                     </select>
                   </td>
                 </tr>
@@ -678,16 +678,16 @@
                   <td>
                     <label class="checkbox">
                       <input type="checkbox"
-                             ng-model="notification.sms.status">&nbsp;SMS Notification
+                             ng-model="data.settings.sms.status">&nbsp;SMS Notification
                     </label>
                   </td>
                   <td>
                     <select
-                        ng-model="notification.sms.target"
-                        ng-options="target.id as target.value for target in notification.sms.targets"
-                        ng-disabled="!notification.sms.status">
+                        ng-model="data.settings.sms.target"
+                        ng-options="target.id as target.value for target in data.settings.sms.targets"
+                        ng-disabled="!data.settings.sms.status">
                       <option value="{{ target.id }}"
-                              ng-selected="notification.sms.target">{{ target.value }}</option>
+                              ng-selected="data.settings.sms.target">{{ target.value }}</option>
                     </select>
                   </td>
                 </tr>
@@ -695,6 +695,8 @@
 
               <button type="submit" class="btn">Save changes</button>
             </form>
+
+            <br><br><br>
 
           </div>
 
@@ -854,33 +856,78 @@
               <button type="submit" class="btn">Add to blacklist</button>
             </form>
 
-            <!-- <h4>Numbers</h4> -->
-            
-            <table class="table table-striped">
+            <h4>Numbers</h4>
+
+            <p ng-show="(data.blacklist.length == 0)">
+              There are no blacklisted numbers.
+            </p>
+
+            <table class="table table-striped"
+                   ng-show="(data.blacklist.length > 0)">
               <thead>
-                <tr>
-                  <th>Label</th>
-                  <th>Telefon number</th>
-                  <th></th>
-                </tr>
+              <tr>
+                <th style="width: 100px;"></th>
+                <th>Label</th>
+                <th>Telefon number</th>
+                <th></th>
+              </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>Home</td>
-                  <td>+31 (78) 7501234</td>
-                  <td>
-                    <button type="button" class="btn btn-mini">Allow</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Work</td>
-                  <td>+31 (629) 123456</td>
-                  <td>
-                    <button type="button" class="btn btn-mini">Allow</button>
-                  </td>
-                </tr>
+
+              <tr ng-repeat="number in data.blacklist">
+                <td>
+                  <span ng-show="number.verified" class="label label-success">Verified</span>
+                  <span ng-hide="number.verified" class="label label-error">Not Verified</span>
+                </td>
+                <td>{{number.label}}</td>
+                <td>{{number.contactInfo}}</td>
+                <td>
+
+                  <button ng-click="connections.remove(number)"
+                          type="button"
+                          class="btn btn-mini">Delete</button>&nbsp;
+
+                  <button ng-show="number.verified"
+                          ng-click="connections.edit(number)"
+                          type="button"
+                          class="btn btn-mini">Edit</button>
+
+                  <button ng-hide="number.verified"
+                          ng-click="connections.verify.initiate(number)"
+                          type="button"
+                          class="btn btn-mini">Verify</button>
+
+                </td>
+              </tr>
+
               </tbody>
             </table>
+            
+            <!--<table class="table table-striped">-->
+              <!--<thead>-->
+                <!--<tr>-->
+                  <!--<th>Label</th>-->
+                  <!--<th>Telefon number</th>-->
+                  <!--<th></th>-->
+                <!--</tr>-->
+              <!--</thead>-->
+              <!--<tbody>-->
+                <!--<tr>-->
+                  <!--<td>Home</td>-->
+                  <!--<td>+31 (78) 7501234</td>-->
+                  <!--<td>-->
+                    <!--<button type="button" class="btn btn-mini">Allow</button>-->
+                  <!--</td>-->
+                <!--</tr>-->
+                <!--<tr>-->
+                  <!--<td>Work</td>-->
+                  <!--<td>+31 (629) 123456</td>-->
+                  <!--<td>-->
+                    <!--<button type="button" class="btn btn-mini">Allow</button>-->
+                  <!--</td>-->
+                <!--</tr>-->
+              <!--</tbody>-->
+            <!--</table>-->
 
           </div>
 

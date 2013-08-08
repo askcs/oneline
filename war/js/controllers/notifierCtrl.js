@@ -26,22 +26,11 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $scope.settings = {
 
         /**
-         * Check status of notification setting
-         */
-        build: function ()
-        {
-
-        },
-
-        /**
          * Get local notifications
          */
         local: function ()
         {
           $scope.notificationSettings = Core.settings.local();
-
-          this.build();
-
         },
 
         /**
