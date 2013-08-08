@@ -145,7 +145,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
         if (result)
         {
           var account = {};
-
           angular.forEach(result, function (resource)
           {
             switch (resource.contactInfoTag)
@@ -167,9 +166,9 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
                 break;
             }
           });
-
           account.id = result[0].ownerKey;
 
+          // TODO (Remove this later on)
           $rootScope.app.resources = account;
         }
       }

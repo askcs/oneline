@@ -14,20 +14,20 @@ angular.module('WebPaige.Controllers.Logout', [])
 	'$rootScope', '$scope', '$window', 'Session', 'User', 'Storage', 
 	function ($rootScope, $scope, $window, Session, User, Storage) 
 	{
-	  $('.navbar').hide();
-	  $('#footer').hide();
+    $('.navbar').hide();
+    $('#footer').hide();
 
-	  var logindata = angular.fromJson(Storage.get('logindata'));
+    var logindata = angular.fromJson(Storage.get('logindata'));
 
     Storage.clearAll();
 
 		User.logout()
 		.then(function (result)
 		{
-	    if (result.error)
-	    {
-	      console.warn('error ->', result);
-	    }
+      if (result.error)
+      {
+        console.warn('error ->', result);
+      }
 
       // Storage.clearAll();
 

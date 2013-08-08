@@ -23,91 +23,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
       /**
        * Notifications
        */
-      $scope.notifications = {
+      $scope.settings = {
 
         /**
          * Check status of notification setting
          */
         build: function ()
         {
-          var phones = [],
-              emails = [];
-
-          // Compile from owner
-          angular.forEach(User.owner.get(), function (node)
-          {
-            if (node.contactInfoTag === 'Phone')
-            {
-              phones.push(node);
-            }
-
-            if (node.contactInfoTag === 'Email')
-            {
-              emails.push(node);
-            }
-          });
-
-          // Compile from connected numbers
-          angular.forEach(Core.connectedNumbers.local(), function (node)
-          {
-            if (node.contactInfoTag === 'Phone')
-            {
-              phones.push(node);
-            }
-
-            if (node.contactInfoTag === 'Email')
-            {
-              emails.push(node);
-            }
-          });
-
-          // Build notification list object
-          $scope.notification = {
-            sms: {
-              status:   false,
-              target:   phones[0].id,
-              targets:  []
-            },
-            email: {
-              status:   false,
-              target:   emails[0].id,
-              targets:  []
-            }
-          };
-
-          // Setup selected ones
-          angular.forEach($scope.notificationSettings, function (setting)
-          {
-            if (setting.medium === 'Email')
-            {
-              $scope.notification.email.status = true;
-              $scope.notification.email.target = setting.targetContactInfos[0];
-            }
-
-            if (setting.medium === 'SMS')
-            {
-              $scope.notification.sms.status = true;
-              $scope.notification.sms.target = setting.targetContactInfos[0];
-            }
-          });
-
-          // Build list of emails
-          angular.forEach(emails, function (email)
-          {
-            $scope.notification.email.targets.push({
-              id:     email.id,
-              value:  email.contactInfo
-            });
-          });
-
-          // Build list of phones
-          angular.forEach(phones, function (phone)
-          {
-            $scope.notification.sms.targets.push({
-              id:     phone.id,
-              value:  phone.contactInfo
-            });
-          });
 
         },
 
@@ -116,7 +38,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         local: function ()
         {
-          $scope.notificationSettings = Core.notifications.local();
+          $scope.notificationSettings = Core.settings.local();
 
           this.build();
 
@@ -129,7 +51,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
         {
           $rootScope.statusBar.display('Getting notifications information..');
 
-          Core.notifications.list()
+          Core.settings.list()
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -141,9 +63,84 @@ angular.module('WebPaige.Controllers.Notifier', [])
         /**
          * Get a notification
          */
-        get: function ()
+        get: function (type)
         {
+          var i;
 
+          for (i = 0; i < $scope.notificationSettings.length; i++)
+          {
+            if ($scope.notificationSettings[i].medium === type)
+            {
+              return $scope.notificationSettings[i].targetContactInfos[0];
+            }
+          }
+
+          return false;
+        },
+
+        /**
+         * Process settings
+         */
+        process: function (settings)
+        {
+          console.log('changing these settings ->', settings);
+
+          if (settings.removed.length > 0)
+          {
+            console.log('there are some removals');
+          }
+        },
+
+        /**
+         * Change a setting
+         */
+        update: function (type, id)
+        {
+          console.log('updating for ->', type, id);
+
+          $rootScope.statusBar.display('Getting notifications information..');
+
+          Core.settings.list()
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+
+              this.local();
+            });
+        },
+
+        /**
+         * Delete a setting
+         */
+        remove: function (type)
+        {
+          console.log('deleting for ->', type);
+        },
+
+        /**
+         * Add a setting
+         */
+        add: function (type, id)
+        {
+          console.log('creating for ->', type, id);
+        },
+
+        /**
+         * Check whether a setting already exists
+         */
+        exists: function (type)
+        {
+          var exists = false;
+
+          angular.forEach($scope.notificationSettings, function (setting)
+          {
+            if (setting.medium === type)
+            {
+              exists = true;
+            }
+          });
+
+          return exists;
         },
 
         /**
@@ -151,7 +148,61 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         save: function ()
         {
-          console.warn('saving for ->', $scope.notification);
+          var settings = {
+            changed: [],
+            added:   [],
+            removed: []
+          };
+
+          /**
+           * SMS setting
+           */
+          if ($scope.notification.sms.status)
+          {
+            if (this.exists('SMS'))
+            {
+              if ($scope.notification.sms.target !== this.get('SMS'))
+              {
+                settings.changed.push('SMS', $scope.notification.sms.target);
+              }
+            }
+            else
+            {
+              settings.added.push('SMS', $scope.notification.sms.target);
+            }
+          }
+          else
+          {
+            if (this.exists('SMS'))
+            {
+              settings.removed.push('SMS');
+            }
+          }
+
+          /**
+           * Email setting
+           */
+          if ($scope.notification.email.status)
+          {
+            if (this.exists('Email'))
+            {
+              if ($scope.notification.email.target !== this.get('Email'))
+              {
+                settings.changed.push('Email', $scope.notification.email.target);
+              }
+            }
+            else
+            {
+              settings.added.push('Email', $scope.notification.email.target);
+            }
+          }
+          else
+          {
+            if (this.exists('Email'))
+            {
+              settings.removed.push('Email');
+            }
+          }
         }
       };
 
@@ -159,7 +210,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
       /**
        * Initiate setup
        */
-      $scope.notifications.local();
+      $scope.settings.local();
 
     }
   ]);

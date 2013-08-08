@@ -36,8 +36,6 @@
 
     <!-- jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-    <!--<script src="libs/jquery/1.9.1/jquery-1.9.1.min.js"></script>-->
-    <script src="libs/rsvp/1.0.0/rsvp.min.js"></script>
     <script src="dist/plugins.min.js"></script>
 
     <!-- profile configs -->
@@ -50,17 +48,6 @@
     
     <!-- compability tests and css fixers -->
     <script src="libs/modernizr/2.6.2/modernizr-2.6.2.min.js"></script>
-
-    
-    <script type="text/javascript">
-      $(document).ready(function ()
-      {
-        $(".chzn-select").chosen();
-        $(".chzn-select-deselect").chosen({allow_single_deselect:true});
-
-        // $('#basket').affix();
-      });
-    </script>
     
   </head>
   <body>
@@ -86,9 +73,9 @@
             <!-- desktop version -->
             <ul class="nav pull-right" ng-hide="browser.mobile">
 
-              <li>
-                <a href="#profile"><i class="icon-shopping-cart icon-white"></i> Credits: 10 EUR</a>
-              </li>
+              <!--<li>-->
+                <!--<a href="#profile"><i class="icon-shopping-cart icon-white"></i> Credits: 10 EUR</a>-->
+              <!--</li>-->
 
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -109,10 +96,6 @@
                   </li>
                 </ul>
               </li>
-
-              <!-- <li id="fullscreener" ng-show="config.fullscreen && browser.webkit">
-                <a ng-click="fullScreen()"><i class="icon-fullscreen icon-white"></i></a>
-              </li> -->
 
             </ul>
             <!-- end desktop version -->

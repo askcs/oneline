@@ -21,21 +21,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
-     * Contacts resource
-     */
-//    var Contacts = $resource(
-//      $config.host + '/accounts/contacts/',
-//      {},
-//      {
-//        process: {
-//          method: 'GET',
-//          params: {username: '', password: ''}
-//        }
-//      }
-//    );
-
-
-    /**
      * Contact Infos resource
      */
     var ContactInfos = $resource(
@@ -87,9 +72,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
-     * Notifocation resource
+     * Settings resource
      */
-    var Notifications = $resource(
+    var Settings = $resource(
       $config.host + '/settings/notifications/:id',
       {},
       {
@@ -102,11 +87,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           method: 'GET',
           params: {id: ''}
         },
-        // TODO (URL should be made competible with this one)
-//        getWithnumber: {
-//          method: 'GET',
-//          params: {id: 'number' + id}
-//        },
         create: {
           method: 'POST',
           params: {}
@@ -124,16 +104,36 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
+     * Group resource
+     */
+    var Groups = $resource(
+      $config.host + '/accounts/groups/:id',
+      {},
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        },
+        get: {
+          method: 'GET',
+          params: {id: ''}
+        }
+      }
+    );
+
+
+    /**
      * Notifications
      */
-    Core.prototype.notifications = {
+    Core.prototype.settings = {
 
       /**
-       * Get localStorage cache for notiticationSettings
+       * Get localStorage cache for settings
        */
       local: function ()
       {
-        return angular.fromJson(Storage.get('notificationSettings'));
+        return angular.fromJson(Storage.get('settings'));
       },
 
       /**
@@ -143,10 +143,10 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        Notifications.query(
+        Settings.query(
           function (result)
           {
-            Storage.add('notificationSettings', angular.toJson(result));
+            Storage.add('settings', angular.toJson(result));
 
             deferred.resolve(result);
           },
@@ -157,14 +157,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         );
 
         return deferred.promise;
-      },
-
-      /**
-       * Get a particular notification
-       */
-      get: function ()
-      {
-
       }
     };
 
@@ -172,14 +164,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
     /**
      * Connected numbers
      */
-    Core.prototype.connectedNumbers = {
+    Core.prototype.connections = {
 
       /**
        * Get local cache for connected numbers
        */
       local: function ()
       {
-        return angular.fromJson(Storage.get('connectedNumbers'));
+        return angular.fromJson(Storage.get('connections'));
       },
 
       /**
@@ -192,7 +184,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         ContactInfos.list(
           function (result)
           {
-            Storage.add('connectedNumbers', angular.toJson(result));
+            Storage.add('connections', angular.toJson(result));
 
             deferred.resolve(result);
           },
@@ -355,6 +347,220 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         }
       }
     };
+
+
+    /**
+     * Groups
+     */
+    Core.prototype.groups = {
+
+      /**
+       * Get localStorage value of groups
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('groups'));
+      },
+
+      /**
+       * List groups
+       */
+      list: function ()
+      {
+        var deferred = $q.defer();
+
+        Groups.query(
+          function (result)
+          {
+            Storage.add('groups', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      }
+    };
+
+
+    /**
+     * Data factory
+     */
+    Core.prototype.factory = {
+
+      /**
+       * Process data
+       */
+      process: function ()
+      {
+        // Prepare raw data
+        var raws = {
+            resources:    angular.fromJson(Storage.get('resources')),
+            groups:       angular.fromJson(Storage.get('groups')),
+            connections:  angular.fromJson(Storage.get('connections')),
+            settings:     angular.fromJson(Storage.get('settings'))
+          };
+
+        // Prepare containers
+        var nodes       = {},
+            connections = {},
+            blacklist   = {},
+            settings    = {},
+            account     = {},
+            phones      = [],
+            emails      = [];
+
+        // Initialize root container
+        $rootScope.data = {};
+
+        // Compile contactinfos
+        angular.forEach(raws.connections, function (connection)
+        {
+          nodes[connection.id] = connection;
+        });
+
+        // Process resources information
+        angular.forEach(raws.resources, function (resource)
+        {
+          switch (resource.contactInfoTag)
+          {
+            case 'Name':
+              account.name = resource.contactInfo;
+              break;
+            case 'Phone':
+              account.phone = resource.contactInfo;
+
+              nodes[resource.id] = resource;
+              break;
+            case 'Email':
+              account.email = resource.contactInfo;
+
+              nodes[resource.id] = resource;
+              break;
+            case 'Address':
+              account.address = resource.contactInfo;
+              break;
+            case 'PURCHASED_NUMBER':
+              account.purchasedNumber = resource.contactInfo;
+              break;
+          }
+        });
+
+        // Setup user id
+        account.id = raws.resources[0].ownerKey;
+
+        // Get blacklisted items
+        var blacklisted = raws.groups[0].contactInfoIds;
+
+        // Pass connections
+        connections = nodes;
+
+        // Compile blacklist
+        angular.forEach(blacklisted, function (listed)
+        {
+          blacklist[listed] = nodes[listed];
+
+          delete connections[listed];
+        });
+
+        // Arrayize connections
+        var cons = [];
+        angular.forEach(connections, function (connection)
+        {
+          cons.push(connection);
+        });
+        connections = cons;
+
+        // Arrayize blacklist
+        var blacs = [];
+        angular.forEach(blacklist, function (listed)
+        {
+          blacs.push(listed);
+        });
+        blacklist = blacs;
+
+        // Process settings
+        angular.forEach(nodes, function (node)
+        {
+          if (node.contactInfoTag === 'Phone')
+          {
+            phones.push(node);
+          }
+
+          if (node.contactInfoTag === 'Email')
+          {
+            emails.push(node);
+          }
+        });
+
+        // Build notification list object
+        settings = {
+          sms: {
+            status:   false,
+            target:   phones[0].id,
+            targets:  []
+          },
+          email: {
+            status:   false,
+            target:   emails[0].id,
+            targets:  []
+          }
+        };
+
+        // Setup selected ones
+        angular.forEach(raws.settings, function (setting)
+        {
+          if (setting.medium === 'Email')
+          {
+            settings.email.status = true;
+            settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
+                                      undefined :
+                                      setting.targetContactInfos[0];
+          }
+
+          if (setting.medium === 'SMS')
+          {
+            settings.sms.status = true;
+            settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
+                                    undefined :
+                                    setting.targetContactInfos[0];
+          }
+        });
+
+        // Build list of emails
+        angular.forEach(emails, function (email)
+        {
+          settings.email.targets.push({
+            id:     email.id,
+            value:  email.contactInfo
+          });
+        });
+
+        // Build list of phones
+        angular.forEach(phones, function (phone)
+        {
+          settings.sms.targets.push({
+            id:     phone.id,
+            value:  phone.contactInfo
+          });
+        });
+
+        // Pass data
+        $rootScope.data = {
+          account:      account,
+          connections:  connections,
+          blacklist:    blacklist,
+          settings:     settings
+        };
+
+        return true;
+      }
+    };
+
 
     return new Core();
 	}

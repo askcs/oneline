@@ -41,14 +41,14 @@ angular.module('WebPaige.Controllers.Manager', [])
       /**
        * Connected numbers
        */
-      $scope.connectedNumbers = {
+      $scope.connections = {
 
         /**
          * Get local list
          */
         local: function ()
         {
-          return Core.connectedNumbers.local();
+          return Core.connections.local();
         },
 
         /**
@@ -58,7 +58,7 @@ angular.module('WebPaige.Controllers.Manager', [])
         {
           $rootScope.statusBar.display('Getting the list of connected numbers..');
 
-          Core.connectedNumbers.list()
+          Core.connections.list()
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -74,7 +74,7 @@ angular.module('WebPaige.Controllers.Manager', [])
 
           $rootScope.statusBar.display('Saving the number..');
 
-          Core.connectedNumbers.save($scope.connection)
+          Core.connections.save($scope.connection)
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -92,7 +92,7 @@ angular.module('WebPaige.Controllers.Manager', [])
 
           $rootScope.statusBar.display('Deleting a number..');
 
-          Core.connectedNumbers.remove(number)
+          Core.connections.remove(number)
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -106,7 +106,7 @@ angular.module('WebPaige.Controllers.Manager', [])
          */
         edit: function (number)
         {
-          angular.forEach($scope.connectedNumbersList, function (connection)
+          angular.forEach($scope.connectionsList, function (connection)
           {
             if (number.id === connection.id)
             {
@@ -127,7 +127,7 @@ angular.module('WebPaige.Controllers.Manager', [])
           {
             $rootScope.statusBar.display('Verification call inited or message is being sent..');
 
-            Core.connectedNumbers.verify.initiate(number)
+            Core.connections.verify.initiate(number)
               .then(function (result)
               {
                 $rootScope.statusBar.off();
@@ -153,7 +153,7 @@ angular.module('WebPaige.Controllers.Manager', [])
           {
             $rootScope.statusBar.display('Verifying your number and code..');
 
-            Core.connectedNumbers.verify.confirm(verificationCode, verificationInfoID)
+            Core.connections.verify.confirm(verificationCode, verificationInfoID)
               .then(function (result)
               {
                 $rootScope.statusBar.off();
@@ -171,8 +171,8 @@ angular.module('WebPaige.Controllers.Manager', [])
 
 
       /**
-       * Fetch localStorage for connectednumbersList
+       * Fetch localStorage for connectionsList
        */
-      $scope.connectedNumbersList = $scope.connectedNumbers.local();
+      $scope.connectionsList = $rootScope;
     }
   ]);

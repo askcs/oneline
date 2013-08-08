@@ -73,9 +73,9 @@ module.exports = function (grunt)
           'war/src/plugins.js': [
             'war/js/plugins/console.js',
             'war/js/plugins/browser.js',
-            'war/js/plugins/os.js',
-            'war/js/plugins/basket.js',
-            'war/js/plugins/screenfull.js'
+            'war/js/plugins/os.js'
+//            'war/js/plugins/basket.js',
+//            'war/js/plugins/screenfull.js'
           ]
         }
       }

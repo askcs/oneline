@@ -11,9 +11,18 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('coreCtrl',
 [
-	'$rootScope', '$scope', '$location',
-	function ($rootScope, $scope, $location)
+	'$rootScope', '$scope', '$location', 'Core',
+	function ($rootScope, $scope, $location, Core)
 	{
+
+
+
+
+    Core.factory.process();
+
+
+
+
     /**
      * View setter
      */
@@ -52,9 +61,9 @@ angular.module('WebPaige.Controllers.Core', [])
      */
     if (!$location.hash())
     {
-      view = 'purchaser';
+      view = 'manager';
 
-      $location.hash('purchaser');
+      $location.hash('manager');
     }
     else
     {

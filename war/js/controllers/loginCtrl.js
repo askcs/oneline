@@ -149,7 +149,7 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     $scope.preloader = {
       count:    0,
-      total:    3,
+      total:    4,
       current:  0,
       fraction: function ()
       {
@@ -182,7 +182,7 @@ angular.module('WebPaige.Controllers.Login', [])
         });
 
 
-      Core.connectedNumbers.list()
+      Core.connections.list()
         .then(function ()
         {
           self.progress('Connected numbers are loaded');
@@ -191,7 +191,7 @@ angular.module('WebPaige.Controllers.Login', [])
         });
 
 
-      Core.notifications.list()
+      Core.settings.list()
         .then(function ()
         {
           self.progress('Notification settings loaded');
@@ -200,7 +200,13 @@ angular.module('WebPaige.Controllers.Login', [])
         });
 
 
-      // 4. blacklist stuff
+      Core.groups.list()
+        .then(function ()
+        {
+          self.progress('Groups loaded');
+
+          self.appInit();
+        });
     };
 
 
@@ -215,19 +221,22 @@ angular.module('WebPaige.Controllers.Login', [])
 
       if ($scope.preloader.count === $scope.preloader.total)
       {
-        self.progress();
-
-        $location.path('/core');
-
-        setTimeout(function ()
+        if (Core.factory.process())
         {
-          $('.navbar').show();
+          self.progress();
 
-          if (!$rootScope.browser.mobile)
+          $location.path('/core');
+
+          setTimeout(function ()
           {
-            $('#footer').show();
-          }
-        }, 100);
+            $('.navbar').show();
+
+            if (!$rootScope.browser.mobile)
+            {
+              $('#footer').show();
+            }
+          }, 100);
+        }
       }
     };
 

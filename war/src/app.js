@@ -620,36 +620,36 @@ angular.module('WebPaige', [
 ]);
 
 
-/**
- * Fetch libraries with AMD (if they are not present) and save in localStorage
- * If a library is presnet it wont be fetched from server
- */
-if ('localStorage' in window && window['localStorage'] !== null)
-{
-  basket
-    .require(
-      { url: 'libs/chosen/chosen.jquery.min.js' }
-//      { url: 'libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
-//      { url: 'libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
-//      { url: 'libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
-//      { url: 'libs/daterangepicker/1.1.0/daterangepicker.min.js' },
-//      { url: 'libs/sugar/1.3.7/sugar.min.js' },
-//      { url: 'libs/raphael/2.1.0/raphael-min.js' }
-    )
-    .then(function ()
-      {
-//        basket
-//          .require(
-//            { url: 'libs/g-raphael/0.5.1/g.raphael-min.js' },
-//            { url: 'libs/g-raphael/0.5.1/g.pie-min.js' }
-//          )
-//          .then(function ()
-//          {
-//            // console.warn('basket parsed scripts..');
-//        });
-      }
-    );
-};/*jslint node: true */
+///**
+// * Fetch libraries with AMD (if they are not present) and save in localStorage
+// * If a library is presnet it wont be fetched from server
+// */
+//if ('localStorage' in window && window['localStorage'] !== null)
+//{
+//  basket
+//    .require(
+//      { url: 'libs/chosen/chosen.jquery.min.js' }
+////      { url: 'libs/chaps/timeline/2.4.0/timeline_modified.min.js' },
+////      { url: 'libs/bootstrap-datepicker/bootstrap-datepicker.min.js' },
+////      { url: 'libs/bootstrap-timepicker/bootstrap-timepicker.min.js' },
+////      { url: 'libs/daterangepicker/1.1.0/daterangepicker.min.js' },
+////      { url: 'libs/sugar/1.3.7/sugar.min.js' },
+////      { url: 'libs/raphael/2.1.0/raphael-min.js' }
+//    )
+//    .then(function ()
+//      {
+////        basket
+////          .require(
+////            { url: 'libs/g-raphael/0.5.1/g.raphael-min.js' },
+////            { url: 'libs/g-raphael/0.5.1/g.pie-min.js' }
+////          )
+////          .then(function ()
+////          {
+////            // console.warn('basket parsed scripts..');
+////        });
+//      }
+//    );
+//};/*jslint node: true */
 /*global angular */
 /*global profile */
 'use strict';
@@ -1121,8 +1121,8 @@ angular.module('WebPaige')
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session',
-  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session', 'Core',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session, Core)
   {
     /**
      * Pass config and init dynamic config values
@@ -1130,6 +1130,9 @@ angular.module('WebPaige')
     $rootScope.config = $config;
 
     $rootScope.config.init();
+
+
+
 
 
     /**
@@ -1807,7 +1810,6 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
         if (result)
         {
           var account = {};
-
           angular.forEach(result, function (resource)
           {
             switch (resource.contactInfoTag)
@@ -1829,9 +1831,9 @@ angular.module('WebPaige.Modals.User', ['ngResource'])
                 break;
             }
           });
-
           account.id = result[0].ownerKey;
 
+          // TODO (Remove this later on)
           $rootScope.app.resources = account;
         }
       }
@@ -1897,21 +1899,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
-     * Contacts resource
-     */
-//    var Contacts = $resource(
-//      $config.host + '/accounts/contacts/',
-//      {},
-//      {
-//        process: {
-//          method: 'GET',
-//          params: {username: '', password: ''}
-//        }
-//      }
-//    );
-
-
-    /**
      * Contact Infos resource
      */
     var ContactInfos = $resource(
@@ -1963,9 +1950,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
-     * Notifocation resource
+     * Settings resource
      */
-    var Notifications = $resource(
+    var Settings = $resource(
       $config.host + '/settings/notifications/:id',
       {},
       {
@@ -1978,11 +1965,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           method: 'GET',
           params: {id: ''}
         },
-        // TODO (URL should be made competible with this one)
-//        getWithnumber: {
-//          method: 'GET',
-//          params: {id: 'number' + id}
-//        },
         create: {
           method: 'POST',
           params: {}
@@ -2000,16 +1982,36 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
+     * Group resource
+     */
+    var Groups = $resource(
+      $config.host + '/accounts/groups/:id',
+      {},
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        },
+        get: {
+          method: 'GET',
+          params: {id: ''}
+        }
+      }
+    );
+
+
+    /**
      * Notifications
      */
-    Core.prototype.notifications = {
+    Core.prototype.settings = {
 
       /**
-       * Get localStorage cache for notiticationSettings
+       * Get localStorage cache for settings
        */
       local: function ()
       {
-        return angular.fromJson(Storage.get('notificationSettings'));
+        return angular.fromJson(Storage.get('settings'));
       },
 
       /**
@@ -2019,10 +2021,10 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        Notifications.query(
+        Settings.query(
           function (result)
           {
-            Storage.add('notificationSettings', angular.toJson(result));
+            Storage.add('settings', angular.toJson(result));
 
             deferred.resolve(result);
           },
@@ -2033,14 +2035,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         );
 
         return deferred.promise;
-      },
-
-      /**
-       * Get a particular notification
-       */
-      get: function ()
-      {
-
       }
     };
 
@@ -2048,14 +2042,14 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
     /**
      * Connected numbers
      */
-    Core.prototype.connectedNumbers = {
+    Core.prototype.connections = {
 
       /**
        * Get local cache for connected numbers
        */
       local: function ()
       {
-        return angular.fromJson(Storage.get('connectedNumbers'));
+        return angular.fromJson(Storage.get('connections'));
       },
 
       /**
@@ -2068,7 +2062,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         ContactInfos.list(
           function (result)
           {
-            Storage.add('connectedNumbers', angular.toJson(result));
+            Storage.add('connections', angular.toJson(result));
 
             deferred.resolve(result);
           },
@@ -2231,6 +2225,220 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         }
       }
     };
+
+
+    /**
+     * Groups
+     */
+    Core.prototype.groups = {
+
+      /**
+       * Get localStorage value of groups
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('groups'));
+      },
+
+      /**
+       * List groups
+       */
+      list: function ()
+      {
+        var deferred = $q.defer();
+
+        Groups.query(
+          function (result)
+          {
+            Storage.add('groups', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      }
+    };
+
+
+    /**
+     * Data factory
+     */
+    Core.prototype.factory = {
+
+      /**
+       * Process data
+       */
+      process: function ()
+      {
+        // Prepare raw data
+        var raws = {
+            resources:    angular.fromJson(Storage.get('resources')),
+            groups:       angular.fromJson(Storage.get('groups')),
+            connections:  angular.fromJson(Storage.get('connections')),
+            settings:     angular.fromJson(Storage.get('settings'))
+          };
+
+        // Prepare containers
+        var nodes       = {},
+            connections = {},
+            blacklist   = {},
+            settings    = {},
+            account     = {},
+            phones      = [],
+            emails      = [];
+
+        // Initialize root container
+        $rootScope.data = {};
+
+        // Compile contactinfos
+        angular.forEach(raws.connections, function (connection)
+        {
+          nodes[connection.id] = connection;
+        });
+
+        // Process resources information
+        angular.forEach(raws.resources, function (resource)
+        {
+          switch (resource.contactInfoTag)
+          {
+            case 'Name':
+              account.name = resource.contactInfo;
+              break;
+            case 'Phone':
+              account.phone = resource.contactInfo;
+
+              nodes[resource.id] = resource;
+              break;
+            case 'Email':
+              account.email = resource.contactInfo;
+
+              nodes[resource.id] = resource;
+              break;
+            case 'Address':
+              account.address = resource.contactInfo;
+              break;
+            case 'PURCHASED_NUMBER':
+              account.purchasedNumber = resource.contactInfo;
+              break;
+          }
+        });
+
+        // Setup user id
+        account.id = raws.resources[0].ownerKey;
+
+        // Get blacklisted items
+        var blacklisted = raws.groups[0].contactInfoIds;
+
+        // Pass connections
+        connections = nodes;
+
+        // Compile blacklist
+        angular.forEach(blacklisted, function (listed)
+        {
+          blacklist[listed] = nodes[listed];
+
+          delete connections[listed];
+        });
+
+        // Arrayize connections
+        var cons = [];
+        angular.forEach(connections, function (connection)
+        {
+          cons.push(connection);
+        });
+        connections = cons;
+
+        // Arrayize blacklist
+        var blacs = [];
+        angular.forEach(blacklist, function (listed)
+        {
+          blacs.push(listed);
+        });
+        blacklist = blacs;
+
+        // Process settings
+        angular.forEach(nodes, function (node)
+        {
+          if (node.contactInfoTag === 'Phone')
+          {
+            phones.push(node);
+          }
+
+          if (node.contactInfoTag === 'Email')
+          {
+            emails.push(node);
+          }
+        });
+
+        // Build notification list object
+        settings = {
+          sms: {
+            status:   false,
+            target:   phones[0].id,
+            targets:  []
+          },
+          email: {
+            status:   false,
+            target:   emails[0].id,
+            targets:  []
+          }
+        };
+
+        // Setup selected ones
+        angular.forEach(raws.settings, function (setting)
+        {
+          if (setting.medium === 'Email')
+          {
+            settings.email.status = true;
+            settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
+                                      undefined :
+                                      setting.targetContactInfos[0];
+          }
+
+          if (setting.medium === 'SMS')
+          {
+            settings.sms.status = true;
+            settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
+                                    undefined :
+                                    setting.targetContactInfos[0];
+          }
+        });
+
+        // Build list of emails
+        angular.forEach(emails, function (email)
+        {
+          settings.email.targets.push({
+            id:     email.id,
+            value:  email.contactInfo
+          });
+        });
+
+        // Build list of phones
+        angular.forEach(phones, function (phone)
+        {
+          settings.sms.targets.push({
+            id:     phone.id,
+            value:  phone.contactInfo
+          });
+        });
+
+        // Pass data
+        $rootScope.data = {
+          account:      account,
+          connections:  connections,
+          blacklist:    blacklist,
+          settings:     settings
+        };
+
+        return true;
+      }
+    };
+
 
     return new Core();
 	}
@@ -4350,7 +4558,7 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     $scope.preloader = {
       count:    0,
-      total:    3,
+      total:    4,
       current:  0,
       fraction: function ()
       {
@@ -4383,7 +4591,7 @@ angular.module('WebPaige.Controllers.Login', [])
         });
 
 
-      Core.connectedNumbers.list()
+      Core.connections.list()
         .then(function ()
         {
           self.progress('Connected numbers are loaded');
@@ -4392,7 +4600,7 @@ angular.module('WebPaige.Controllers.Login', [])
         });
 
 
-      Core.notifications.list()
+      Core.settings.list()
         .then(function ()
         {
           self.progress('Notification settings loaded');
@@ -4401,7 +4609,13 @@ angular.module('WebPaige.Controllers.Login', [])
         });
 
 
-      // 4. blacklist stuff
+      Core.groups.list()
+        .then(function ()
+        {
+          self.progress('Groups loaded');
+
+          self.appInit();
+        });
     };
 
 
@@ -4416,19 +4630,22 @@ angular.module('WebPaige.Controllers.Login', [])
 
       if ($scope.preloader.count === $scope.preloader.total)
       {
-        self.progress();
-
-        $location.path('/core');
-
-        setTimeout(function ()
+        if (Core.factory.process())
         {
-          $('.navbar').show();
+          self.progress();
 
-          if (!$rootScope.browser.mobile)
+          $location.path('/core');
+
+          setTimeout(function ()
           {
-            $('#footer').show();
-          }
-        }, 100);
+            $('.navbar').show();
+
+            if (!$rootScope.browser.mobile)
+            {
+              $('#footer').show();
+            }
+          }, 100);
+        }
       }
     };
 
@@ -4506,20 +4723,20 @@ angular.module('WebPaige.Controllers.Logout', [])
 	'$rootScope', '$scope', '$window', 'Session', 'User', 'Storage', 
 	function ($rootScope, $scope, $window, Session, User, Storage) 
 	{
-	  $('.navbar').hide();
-	  $('#footer').hide();
+    $('.navbar').hide();
+    $('#footer').hide();
 
-	  var logindata = angular.fromJson(Storage.get('logindata'));
+    var logindata = angular.fromJson(Storage.get('logindata'));
 
     Storage.clearAll();
 
 		User.logout()
 		.then(function (result)
 		{
-	    if (result.error)
-	    {
-	      console.warn('error ->', result);
-	    }
+      if (result.error)
+      {
+        console.warn('error ->', result);
+      }
 
       // Storage.clearAll();
 
@@ -4543,9 +4760,18 @@ angular.module('WebPaige.Controllers.Core', [])
  */
 .controller('coreCtrl',
 [
-	'$rootScope', '$scope', '$location',
-	function ($rootScope, $scope, $location)
+	'$rootScope', '$scope', '$location', 'Core',
+	function ($rootScope, $scope, $location, Core)
 	{
+
+
+
+
+    Core.factory.process();
+
+
+
+
     /**
      * View setter
      */
@@ -4584,9 +4810,9 @@ angular.module('WebPaige.Controllers.Core', [])
      */
     if (!$location.hash())
     {
-      view = 'purchaser';
+      view = 'manager';
 
-      $location.hash('purchaser');
+      $location.hash('manager');
     }
     else
     {
@@ -4829,14 +5055,14 @@ angular.module('WebPaige.Controllers.Manager', [])
       /**
        * Connected numbers
        */
-      $scope.connectedNumbers = {
+      $scope.connections = {
 
         /**
          * Get local list
          */
         local: function ()
         {
-          return Core.connectedNumbers.local();
+          return Core.connections.local();
         },
 
         /**
@@ -4846,7 +5072,7 @@ angular.module('WebPaige.Controllers.Manager', [])
         {
           $rootScope.statusBar.display('Getting the list of connected numbers..');
 
-          Core.connectedNumbers.list()
+          Core.connections.list()
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -4862,7 +5088,7 @@ angular.module('WebPaige.Controllers.Manager', [])
 
           $rootScope.statusBar.display('Saving the number..');
 
-          Core.connectedNumbers.save($scope.connection)
+          Core.connections.save($scope.connection)
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -4880,7 +5106,7 @@ angular.module('WebPaige.Controllers.Manager', [])
 
           $rootScope.statusBar.display('Deleting a number..');
 
-          Core.connectedNumbers.remove(number)
+          Core.connections.remove(number)
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -4894,7 +5120,7 @@ angular.module('WebPaige.Controllers.Manager', [])
          */
         edit: function (number)
         {
-          angular.forEach($scope.connectedNumbersList, function (connection)
+          angular.forEach($scope.connectionsList, function (connection)
           {
             if (number.id === connection.id)
             {
@@ -4915,7 +5141,7 @@ angular.module('WebPaige.Controllers.Manager', [])
           {
             $rootScope.statusBar.display('Verification call inited or message is being sent..');
 
-            Core.connectedNumbers.verify.initiate(number)
+            Core.connections.verify.initiate(number)
               .then(function (result)
               {
                 $rootScope.statusBar.off();
@@ -4941,7 +5167,7 @@ angular.module('WebPaige.Controllers.Manager', [])
           {
             $rootScope.statusBar.display('Verifying your number and code..');
 
-            Core.connectedNumbers.verify.confirm(verificationCode, verificationInfoID)
+            Core.connections.verify.confirm(verificationCode, verificationInfoID)
               .then(function (result)
               {
                 $rootScope.statusBar.off();
@@ -4959,9 +5185,9 @@ angular.module('WebPaige.Controllers.Manager', [])
 
 
       /**
-       * Fetch localStorage for connectednumbersList
+       * Fetch localStorage for connectionsList
        */
-      $scope.connectedNumbersList = $scope.connectedNumbers.local();
+      $scope.connectionsList = $rootScope;
     }
   ]);;/*jslint node: true */
 /*global angular */
@@ -4988,91 +5214,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
       /**
        * Notifications
        */
-      $scope.notifications = {
+      $scope.settings = {
 
         /**
          * Check status of notification setting
          */
         build: function ()
         {
-          var phones = [],
-              emails = [];
-
-          // Compile from owner
-          angular.forEach(User.owner.get(), function (node)
-          {
-            if (node.contactInfoTag === 'Phone')
-            {
-              phones.push(node);
-            }
-
-            if (node.contactInfoTag === 'Email')
-            {
-              emails.push(node);
-            }
-          });
-
-          // Compile from connected numbers
-          angular.forEach(Core.connectedNumbers.local(), function (node)
-          {
-            if (node.contactInfoTag === 'Phone')
-            {
-              phones.push(node);
-            }
-
-            if (node.contactInfoTag === 'Email')
-            {
-              emails.push(node);
-            }
-          });
-
-          // Build notification list object
-          $scope.notification = {
-            sms: {
-              status:   false,
-              target:   phones[0].id,
-              targets:  []
-            },
-            email: {
-              status:   false,
-              target:   emails[0].id,
-              targets:  []
-            }
-          };
-
-          // Setup selected ones
-          angular.forEach($scope.notificationSettings, function (setting)
-          {
-            if (setting.medium === 'Email')
-            {
-              $scope.notification.email.status = true;
-              $scope.notification.email.target = setting.targetContactInfos[0];
-            }
-
-            if (setting.medium === 'SMS')
-            {
-              $scope.notification.sms.status = true;
-              $scope.notification.sms.target = setting.targetContactInfos[0];
-            }
-          });
-
-          // Build list of emails
-          angular.forEach(emails, function (email)
-          {
-            $scope.notification.email.targets.push({
-              id:     email.id,
-              value:  email.contactInfo
-            });
-          });
-
-          // Build list of phones
-          angular.forEach(phones, function (phone)
-          {
-            $scope.notification.sms.targets.push({
-              id:     phone.id,
-              value:  phone.contactInfo
-            });
-          });
 
         },
 
@@ -5081,7 +5229,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         local: function ()
         {
-          $scope.notificationSettings = Core.notifications.local();
+          $scope.notificationSettings = Core.settings.local();
 
           this.build();
 
@@ -5094,7 +5242,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
         {
           $rootScope.statusBar.display('Getting notifications information..');
 
-          Core.notifications.list()
+          Core.settings.list()
             .then(function ()
             {
               $rootScope.statusBar.off();
@@ -5106,9 +5254,84 @@ angular.module('WebPaige.Controllers.Notifier', [])
         /**
          * Get a notification
          */
-        get: function ()
+        get: function (type)
         {
+          var i;
 
+          for (i = 0; i < $scope.notificationSettings.length; i++)
+          {
+            if ($scope.notificationSettings[i].medium === type)
+            {
+              return $scope.notificationSettings[i].targetContactInfos[0];
+            }
+          }
+
+          return false;
+        },
+
+        /**
+         * Process settings
+         */
+        process: function (settings)
+        {
+          console.log('changing these settings ->', settings);
+
+          if (settings.removed.length > 0)
+          {
+            console.log('there are some removals');
+          }
+        },
+
+        /**
+         * Change a setting
+         */
+        update: function (type, id)
+        {
+          console.log('updating for ->', type, id);
+
+          $rootScope.statusBar.display('Getting notifications information..');
+
+          Core.settings.list()
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+
+              this.local();
+            });
+        },
+
+        /**
+         * Delete a setting
+         */
+        remove: function (type)
+        {
+          console.log('deleting for ->', type);
+        },
+
+        /**
+         * Add a setting
+         */
+        add: function (type, id)
+        {
+          console.log('creating for ->', type, id);
+        },
+
+        /**
+         * Check whether a setting already exists
+         */
+        exists: function (type)
+        {
+          var exists = false;
+
+          angular.forEach($scope.notificationSettings, function (setting)
+          {
+            if (setting.medium === type)
+            {
+              exists = true;
+            }
+          });
+
+          return exists;
         },
 
         /**
@@ -5116,7 +5339,61 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         save: function ()
         {
-          console.warn('saving for ->', $scope.notification);
+          var settings = {
+            changed: [],
+            added:   [],
+            removed: []
+          };
+
+          /**
+           * SMS setting
+           */
+          if ($scope.notification.sms.status)
+          {
+            if (this.exists('SMS'))
+            {
+              if ($scope.notification.sms.target !== this.get('SMS'))
+              {
+                settings.changed.push('SMS', $scope.notification.sms.target);
+              }
+            }
+            else
+            {
+              settings.added.push('SMS', $scope.notification.sms.target);
+            }
+          }
+          else
+          {
+            if (this.exists('SMS'))
+            {
+              settings.removed.push('SMS');
+            }
+          }
+
+          /**
+           * Email setting
+           */
+          if ($scope.notification.email.status)
+          {
+            if (this.exists('Email'))
+            {
+              if ($scope.notification.email.target !== this.get('Email'))
+              {
+                settings.changed.push('Email', $scope.notification.email.target);
+              }
+            }
+            else
+            {
+              settings.added.push('Email', $scope.notification.email.target);
+            }
+          }
+          else
+          {
+            if (this.exists('Email'))
+            {
+              settings.removed.push('Email');
+            }
+          }
         }
       };
 
@@ -5124,7 +5401,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
       /**
        * Initiate setup
        */
-      $scope.notifications.local();
+      $scope.settings.local();
 
     }
   ]);;/*jslint node: true */

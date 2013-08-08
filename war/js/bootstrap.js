@@ -12,8 +12,8 @@
 angular.module('WebPaige')
 .run(
 [
-  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session',
-  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session)
+  '$rootScope', '$location', '$timeout', 'Storage', '$config', '$window', 'User', 'Session', 'Core',
+  function ($rootScope, $location, $timeout, Storage, $config, $window, User, Session, Core)
   {
     /**
      * Pass config and init dynamic config values
@@ -21,6 +21,9 @@ angular.module('WebPaige')
     $rootScope.config = $config;
 
     $rootScope.config.init();
+
+
+
 
 
     /**
