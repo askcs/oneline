@@ -622,12 +622,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         settings = {
           sms: {
             status:   false,
-            target:   phones[0].id,
+            target:   null,
             targets:  []
           },
           email: {
             status:   false,
-            target:   emails[0].id,
+            target:   null,
             targets:  []
           }
         };
@@ -638,7 +638,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           if (setting.medium === 'Email')
           {
             settings.email.id     = setting.id;
-            settings.email.status = true;
+
+            settings.email.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
+
             settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
                                       undefined :
                                       setting.targetContactInfos[0];
@@ -647,7 +649,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           if (setting.medium === 'SMS')
           {
             settings.sms.id     = setting.id;
-            settings.sms.status = true;
+
+            settings.sms.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
+
             settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
                                     undefined :
                                     setting.targetContactInfos[0];

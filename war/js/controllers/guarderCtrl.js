@@ -71,37 +71,40 @@ angular.module('WebPaige.Controllers.Guarder', [])
          */
         save: function ()
         {
-          var self = this;
+          if ($scope.blacklist.label !== undefined || $scope.blacklist.contactInfo !== undefined)
+          {
+            var self = this;
 
-          $rootScope.statusBar.display('Adding a blacklisted number..');
+            $rootScope.statusBar.display('Adding a blacklisted number..');
 
-          Core.blacklists.save($scope.blacklist)
-            .then(function (result)
-            {
-              $rootScope.statusBar.display('Updating blacklist group..');
-
-              // Populate blacklist
-              var list = [];
-              angular.forEach($rootScope.data.blacklist, function (listed)
+            Core.blacklists.save($scope.blacklist)
+              .then(function (result)
               {
-                list.push(listed.id);
-              });
-              list.push(result.id);
+                $rootScope.statusBar.display('Updating blacklist group..');
 
-              // Park node temporarily
+                // Populate blacklist
+                var list = [];
+                angular.forEach($rootScope.data.blacklist, function (listed)
+                {
+                  list.push(listed.id);
+                });
+                list.push(result.id);
+
+                // Park node temporarily
 //              $rootScope.data.tmp.push(result);
 
-              // Update blacklist group
-              Core.groups.update({
-                id:   $rootScope.data.groups.blacklist.id,
-                list: list
-              }).then(function ()
-                {
-                  $rootScope.statusBar.off();
+                // Update blacklist group
+                Core.groups.update({
+                  id:   $rootScope.data.groups.blacklist.id,
+                  list: list
+                }).then(function ()
+                  {
+                    $rootScope.statusBar.off();
 
-                  self.list();
-                });
-            });
+                    self.list();
+                  });
+              });
+          }
         },
 
         /**

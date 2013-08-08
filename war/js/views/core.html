@@ -557,6 +557,13 @@
                      class="input-large"
                      placeholder="e.g. Phone number…">&nbsp;
 
+              <select ng-model="connection.contactInfoTag"
+                      class="span2"
+                      style="margin-right: 5px;">
+                <option value="Email">Email</option>
+                <option value="Phone" selected>Phone</option>
+              </select>
+
               <button type="submit" class="btn">Save</button>
 
             </form>

@@ -72,17 +72,22 @@ angular.module('WebPaige.Controllers.Manager', [])
          */
         save: function ()
         {
-          var self = this;
+          if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
+          {
+            var self = this;
 
-          $rootScope.statusBar.display('Saving the number..');
+            $rootScope.statusBar.display('Saving the number..');
 
-          Core.connections.save($scope.connection)
-            .then(function ()
-            {
-              $rootScope.statusBar.off();
+            Core.connections.save($scope.connection)
+              .then(function ()
+              {
+                $rootScope.statusBar.off();
 
-              self.list();
-            });
+                $scope.connection = {};
+
+                self.list();
+              });
+          }
         },
 
         /**
@@ -108,7 +113,7 @@ angular.module('WebPaige.Controllers.Manager', [])
          */
         edit: function (number)
         {
-          angular.forEach($scope.connectionsList, function (connection)
+          angular.forEach($rootScope.data.connections, function (connection)
           {
             if (number.id === connection.id)
             {

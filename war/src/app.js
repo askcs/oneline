@@ -2506,12 +2506,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         settings = {
           sms: {
             status:   false,
-            target:   phones[0].id,
+            target:   null,
             targets:  []
           },
           email: {
             status:   false,
-            target:   emails[0].id,
+            target:   null,
             targets:  []
           }
         };
@@ -2522,7 +2522,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           if (setting.medium === 'Email')
           {
             settings.email.id     = setting.id;
-            settings.email.status = true;
+
+            settings.email.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
+
             settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
                                       undefined :
                                       setting.targetContactInfos[0];
@@ -2531,7 +2533,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           if (setting.medium === 'SMS')
           {
             settings.sms.id     = setting.id;
-            settings.sms.status = true;
+
+            settings.sms.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
+
             settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
                                     undefined :
                                     setting.targetContactInfos[0];
@@ -5219,17 +5223,22 @@ angular.module('WebPaige.Controllers.Manager', [])
          */
         save: function ()
         {
-          var self = this;
+          if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
+          {
+            var self = this;
 
-          $rootScope.statusBar.display('Saving the number..');
+            $rootScope.statusBar.display('Saving the number..');
 
-          Core.connections.save($scope.connection)
-            .then(function ()
-            {
-              $rootScope.statusBar.off();
+            Core.connections.save($scope.connection)
+              .then(function ()
+              {
+                $rootScope.statusBar.off();
 
-              self.list();
-            });
+                $scope.connection = {};
+
+                self.list();
+              });
+          }
         },
 
         /**
@@ -5255,7 +5264,7 @@ angular.module('WebPaige.Controllers.Manager', [])
          */
         edit: function (number)
         {
-          angular.forEach($scope.connectionsList, function (connection)
+          angular.forEach($rootScope.data.connections, function (connection)
           {
             if (number.id === connection.id)
             {
@@ -5616,37 +5625,40 @@ angular.module('WebPaige.Controllers.Guarder', [])
          */
         save: function ()
         {
-          var self = this;
+          if ($scope.blacklist.label !== undefined || $scope.blacklist.contactInfo !== undefined)
+          {
+            var self = this;
 
-          $rootScope.statusBar.display('Adding a blacklisted number..');
+            $rootScope.statusBar.display('Adding a blacklisted number..');
 
-          Core.blacklists.save($scope.blacklist)
-            .then(function (result)
-            {
-              $rootScope.statusBar.display('Updating blacklist group..');
-
-              // Populate blacklist
-              var list = [];
-              angular.forEach($rootScope.data.blacklist, function (listed)
+            Core.blacklists.save($scope.blacklist)
+              .then(function (result)
               {
-                list.push(listed.id);
-              });
-              list.push(result.id);
+                $rootScope.statusBar.display('Updating blacklist group..');
 
-              // Park node temporarily
+                // Populate blacklist
+                var list = [];
+                angular.forEach($rootScope.data.blacklist, function (listed)
+                {
+                  list.push(listed.id);
+                });
+                list.push(result.id);
+
+                // Park node temporarily
 //              $rootScope.data.tmp.push(result);
 
-              // Update blacklist group
-              Core.groups.update({
-                id:   $rootScope.data.groups.blacklist.id,
-                list: list
-              }).then(function ()
-                {
-                  $rootScope.statusBar.off();
+                // Update blacklist group
+                Core.groups.update({
+                  id:   $rootScope.data.groups.blacklist.id,
+                  list: list
+                }).then(function ()
+                  {
+                    $rootScope.statusBar.off();
 
-                  self.list();
-                });
-            });
+                    self.list();
+                  });
+              });
+          }
         },
 
         /**
