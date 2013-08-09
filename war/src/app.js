@@ -1216,7 +1216,10 @@ angular.module('WebPaige')
      */
     User.owner.process(User.owner.get());
 
-    $http.defaults.headers.common['X-SESSION_ID'] = angular.fromJson(Storage.cookie.get('session')).id;
+    if (angular.fromJson(Storage.cookie.get('session')))
+    {
+      $http.defaults.headers.common['X-SESSION_ID'] = angular.fromJson(Storage.cookie.get('session')).id;
+    }
 
 
     /**
@@ -2050,12 +2053,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       /**
        * Update a setting
        */
-      update: function (setting)
+      update: function (settings)
       {
         var deferred = $q.defer();
 
-        Settings.update({id: setting.id}, {
-            targetContactInfos: setting.target
+        Settings.update({id: settings.id}, {
+            targetContactInfos: settings.target
           },
           function (result)
           {
@@ -2068,6 +2071,67 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             deferred.resolve({error: error});
           }
         );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Save settings
+       */
+      save: function (settings)
+      {
+        var deferred  = $q.defer(),
+            calls     = [],
+            setting   = {
+              sms:    [],
+              email:  []
+            };
+
+        if (!settings.added.sms.status)
+        {
+          if (!settings.removed.sms)
+          {
+            setting.sms = settings.changed.sms.value;
+          }
+        }
+        else
+        {
+          setting.sms = settings.added.sms.value;
+        }
+
+        if (!settings.added.email.status)
+        {
+          if (!settings.removed.email)
+          {
+            setting.email = settings.changed.email.value;
+          }
+        }
+        else
+        {
+          setting.email = settings.added.email.value;
+        }
+
+        if (setting.sms)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.sms.id,
+            target: setting.sms
+          }));
+        }
+
+        if (setting.email)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.email.id,
+            target: setting.email
+          }));
+        }
+
+        $q.all(calls)
+          .then(function (result)
+          {
+            deferred.resolve(result);
+          });
 
         return deferred.promise;
       }
@@ -2556,54 +2620,26 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         {
           if (setting.medium === 'Email')
           {
-            console.warn('email set ->', setting);
-
             settings.email.id     = setting.id;
-
-            // settings.email.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
 
             settings.email.status = !!((setting.targetContactInfos.length > 0));
 
-//            settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
-//                                      undefined :
-//                                      setting.targetContactInfos[0];
-
-            if (setting.targetContactInfos.length > 0)
-            {
-              settings.email.target = nodes[setting.targetContactInfos[0]];
-            }
-            else
-            {
-              settings.email.target = settings.email.targets[0].id;
-            }
+            settings.email.original = settings.email.target = (setting.targetContactInfos.length > 0) ?
+                                      nodes[setting.targetContactInfos[0]].id :
+                                      settings.email.targets[0].id;
           }
 
           if (setting.medium === 'SMS')
           {
-            console.warn('sms set ->', setting);
-
             settings.sms.id     = setting.id;
-
-            // settings.sms.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
 
             settings.sms.status = !!((setting.targetContactInfos.length > 0));
 
-//            settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
-//                                    undefined :
-//                                    setting.targetContactInfos[0];
-
-            if (setting.targetContactInfos.length > 0)
-            {
-              settings.sms.target = nodes[setting.targetContactInfos[0]];
-            }
-            else
-            {
-              settings.sms.target = settings.sms.targets[0].id;
-            }
+            settings.sms.original = settings.sms.target = (setting.targetContactInfos.length > 0) ?
+                                    nodes[setting.targetContactInfos[0]].id :
+                                    settings.sms.targets[0].id;
           }
         });
-
-        console.log('settings ->', settings);
 
         // Pass data
         $rootScope.data = {
@@ -2611,8 +2647,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           connections:  connections,
           blacklist:    blacklist,
           settings:     settings,
-          groups:       groups,
-          tmp:          tmp
+          groups:       groups
         };
 
         console.warn('data ->', $rootScope.data);
@@ -5396,7 +5431,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
 
 //      Core.settings.update({
 //        id:   27004,
-//        target: []
+//        target: [4001]
+//      });
+//
+//
+//      Core.settings.update({
+//        id:   24003,
+//        target: [3001]
 //      });
 
 
@@ -5425,7 +5466,9 @@ angular.module('WebPaige.Controllers.Notifier', [])
             {
               $rootScope.statusBar.off();
 
-              this.local();
+//              this.local();
+
+              Core.factory.process();
             });
         },
 
@@ -5434,17 +5477,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         get: function (type)
         {
-          var i;
-
-          for (i = 0; i < $scope.notificationSettings.length; i++)
-          {
-            if ($scope.notificationSettings[i].medium === type)
-            {
-              return $scope.notificationSettings[i].targetContactInfos[0];
-            }
-          }
-
-          return false;
+          return $rootScope.data.settings[type].original;
         },
 
         /**
@@ -5495,6 +5528,8 @@ angular.module('WebPaige.Controllers.Notifier', [])
         },
 
         /**
+         * TODO (Always assume that setting exists)
+         *
          * Check whether a setting already exists
          */
         exists: function (type)
@@ -5517,61 +5552,111 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         save: function ()
         {
+          var self = this;
+
           var settings = {
-            changed: [],
-            added:   [],
-            removed: []
-          };
+              changed: {
+                sms: {
+                  status: false
+                },
+                email: {
+                  status: false
+                }
+              },
+              added: {
+                sms: {
+                  status: false
+                },
+                email: {
+                  status: false
+                }
+              },
+              removed: {
+                sms:    false,
+                email:  false
+              }
+            },
+            tmp = {
+              sms:    [],
+              email:  []
+            };
 
           /**
            * SMS setting
            */
-          if ($scope.notification.sms.status)
+          if ($rootScope.data.settings.sms.status)
           {
-            if (this.exists('SMS'))
+            if ($rootScope.data.settings.sms.target !== this.get('sms'))
             {
-              if ($scope.notification.sms.target !== this.get('SMS'))
-              {
-                settings.changed.push('SMS', $scope.notification.sms.target);
-              }
+              tmp.sms.push($rootScope.data.settings.sms.target);
+
+              settings.changed.sms = {
+                status: true,
+                value:  tmp.sms
+              };
             }
             else
             {
-              settings.added.push('SMS', $scope.notification.sms.target);
+              tmp.sms.push($rootScope.data.settings.sms.target);
+
+              settings.added.sms = {
+                status: true,
+                value:  tmp.sms
+              };
             }
           }
           else
           {
-            if (this.exists('SMS'))
-            {
-              settings.removed.push('SMS');
-            }
+            settings.removed.sms = true;
           }
 
           /**
            * Email setting
            */
-          if ($scope.notification.email.status)
+          if ($rootScope.data.settings.email.status)
           {
-            if (this.exists('Email'))
+            if ($rootScope.data.settings.email.target !== this.get('email'))
             {
-              if ($scope.notification.email.target !== this.get('Email'))
-              {
-                settings.changed.push('Email', $scope.notification.email.target);
-              }
+              tmp.email.push($rootScope.data.settings.email.target);
+
+              settings.changed.email = {
+                status: true,
+                value:  tmp.email
+              };
             }
             else
             {
-              settings.added.push('Email', $scope.notification.email.target);
+              tmp.email.push($rootScope.data.settings.email.target);
+
+              settings.added.email = {
+                status: true,
+                value:  tmp.email
+              };
             }
           }
           else
           {
-            if (this.exists('Email'))
-            {
-              settings.removed.push('Email');
-            }
+            settings.removed.email = true;
           }
+
+          $rootScope.statusBar.display('Changing notifications settings..');
+
+          Core.settings.save(settings)
+            .then(function ()
+            {
+              self.list();
+            });
+
+//          if (settings.changed.sms.status || settings.changed.email.status ||
+//              settings.added.sms.status || settings.added.email.status ||
+//              settings.removed.sms || settings.removed.email)
+//          {
+//            console.warn('smth changed', settings);
+//          }
+//          else
+//          {
+//            console.log('not!!');
+//          }
         }
       };
 

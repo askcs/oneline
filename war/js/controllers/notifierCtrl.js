@@ -22,7 +22,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
 
 //      Core.settings.update({
 //        id:   27004,
-//        target: []
+//        target: [4001]
+//      });
+//
+//
+//      Core.settings.update({
+//        id:   24003,
+//        target: [3001]
 //      });
 
 
@@ -51,7 +57,9 @@ angular.module('WebPaige.Controllers.Notifier', [])
             {
               $rootScope.statusBar.off();
 
-              this.local();
+//              this.local();
+
+              Core.factory.process();
             });
         },
 
@@ -60,17 +68,7 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         get: function (type)
         {
-          var i;
-
-          for (i = 0; i < $scope.notificationSettings.length; i++)
-          {
-            if ($scope.notificationSettings[i].medium === type)
-            {
-              return $scope.notificationSettings[i].targetContactInfos[0];
-            }
-          }
-
-          return false;
+          return $rootScope.data.settings[type].original;
         },
 
         /**
@@ -121,6 +119,8 @@ angular.module('WebPaige.Controllers.Notifier', [])
         },
 
         /**
+         * TODO (Always assume that setting exists)
+         *
          * Check whether a setting already exists
          */
         exists: function (type)
@@ -143,61 +143,111 @@ angular.module('WebPaige.Controllers.Notifier', [])
          */
         save: function ()
         {
+          var self = this;
+
           var settings = {
-            changed: [],
-            added:   [],
-            removed: []
-          };
+              changed: {
+                sms: {
+                  status: false
+                },
+                email: {
+                  status: false
+                }
+              },
+              added: {
+                sms: {
+                  status: false
+                },
+                email: {
+                  status: false
+                }
+              },
+              removed: {
+                sms:    false,
+                email:  false
+              }
+            },
+            tmp = {
+              sms:    [],
+              email:  []
+            };
 
           /**
            * SMS setting
            */
-          if ($scope.notification.sms.status)
+          if ($rootScope.data.settings.sms.status)
           {
-            if (this.exists('SMS'))
+            if ($rootScope.data.settings.sms.target !== this.get('sms'))
             {
-              if ($scope.notification.sms.target !== this.get('SMS'))
-              {
-                settings.changed.push('SMS', $scope.notification.sms.target);
-              }
+              tmp.sms.push($rootScope.data.settings.sms.target);
+
+              settings.changed.sms = {
+                status: true,
+                value:  tmp.sms
+              };
             }
             else
             {
-              settings.added.push('SMS', $scope.notification.sms.target);
+              tmp.sms.push($rootScope.data.settings.sms.target);
+
+              settings.added.sms = {
+                status: true,
+                value:  tmp.sms
+              };
             }
           }
           else
           {
-            if (this.exists('SMS'))
-            {
-              settings.removed.push('SMS');
-            }
+            settings.removed.sms = true;
           }
 
           /**
            * Email setting
            */
-          if ($scope.notification.email.status)
+          if ($rootScope.data.settings.email.status)
           {
-            if (this.exists('Email'))
+            if ($rootScope.data.settings.email.target !== this.get('email'))
             {
-              if ($scope.notification.email.target !== this.get('Email'))
-              {
-                settings.changed.push('Email', $scope.notification.email.target);
-              }
+              tmp.email.push($rootScope.data.settings.email.target);
+
+              settings.changed.email = {
+                status: true,
+                value:  tmp.email
+              };
             }
             else
             {
-              settings.added.push('Email', $scope.notification.email.target);
+              tmp.email.push($rootScope.data.settings.email.target);
+
+              settings.added.email = {
+                status: true,
+                value:  tmp.email
+              };
             }
           }
           else
           {
-            if (this.exists('Email'))
-            {
-              settings.removed.push('Email');
-            }
+            settings.removed.email = true;
           }
+
+          $rootScope.statusBar.display('Changing notifications settings..');
+
+          Core.settings.save(settings)
+            .then(function ()
+            {
+              self.list();
+            });
+
+//          if (settings.changed.sms.status || settings.changed.email.status ||
+//              settings.added.sms.status || settings.added.email.status ||
+//              settings.removed.sms || settings.removed.email)
+//          {
+//            console.warn('smth changed', settings);
+//          }
+//          else
+//          {
+//            console.log('not!!');
+//          }
         }
       };
 

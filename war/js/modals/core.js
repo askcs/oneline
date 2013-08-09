@@ -166,12 +166,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       /**
        * Update a setting
        */
-      update: function (setting)
+      update: function (settings)
       {
         var deferred = $q.defer();
 
-        Settings.update({id: setting.id}, {
-            targetContactInfos: setting.target
+        Settings.update({id: settings.id}, {
+            targetContactInfos: settings.target
           },
           function (result)
           {
@@ -184,6 +184,67 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             deferred.resolve({error: error});
           }
         );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Save settings
+       */
+      save: function (settings)
+      {
+        var deferred  = $q.defer(),
+            calls     = [],
+            setting   = {
+              sms:    [],
+              email:  []
+            };
+
+        if (!settings.added.sms.status)
+        {
+          if (!settings.removed.sms)
+          {
+            setting.sms = settings.changed.sms.value;
+          }
+        }
+        else
+        {
+          setting.sms = settings.added.sms.value;
+        }
+
+        if (!settings.added.email.status)
+        {
+          if (!settings.removed.email)
+          {
+            setting.email = settings.changed.email.value;
+          }
+        }
+        else
+        {
+          setting.email = settings.added.email.value;
+        }
+
+        if (setting.sms)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.sms.id,
+            target: setting.sms
+          }));
+        }
+
+        if (setting.email)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.email.id,
+            target: setting.email
+          }));
+        }
+
+        $q.all(calls)
+          .then(function (result)
+          {
+            deferred.resolve(result);
+          });
 
         return deferred.promise;
       }
@@ -672,54 +733,26 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         {
           if (setting.medium === 'Email')
           {
-            console.warn('email set ->', setting);
-
             settings.email.id     = setting.id;
-
-            // settings.email.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
 
             settings.email.status = !!((setting.targetContactInfos.length > 0));
 
-//            settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
-//                                      undefined :
-//                                      setting.targetContactInfos[0];
-
-            if (setting.targetContactInfos.length > 0)
-            {
-              settings.email.target = nodes[setting.targetContactInfos[0]];
-            }
-            else
-            {
-              settings.email.target = settings.email.targets[0].id;
-            }
+            settings.email.original = settings.email.target = (setting.targetContactInfos.length > 0) ?
+                                      nodes[setting.targetContactInfos[0]].id :
+                                      settings.email.targets[0].id;
           }
 
           if (setting.medium === 'SMS')
           {
-            console.warn('sms set ->', setting);
-
             settings.sms.id     = setting.id;
-
-            // settings.sms.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
 
             settings.sms.status = !!((setting.targetContactInfos.length > 0));
 
-//            settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
-//                                    undefined :
-//                                    setting.targetContactInfos[0];
-
-            if (setting.targetContactInfos.length > 0)
-            {
-              settings.sms.target = nodes[setting.targetContactInfos[0]];
-            }
-            else
-            {
-              settings.sms.target = settings.sms.targets[0].id;
-            }
+            settings.sms.original = settings.sms.target = (setting.targetContactInfos.length > 0) ?
+                                    nodes[setting.targetContactInfos[0]].id :
+                                    settings.sms.targets[0].id;
           }
         });
-
-        console.log('settings ->', settings);
 
         // Pass data
         $rootScope.data = {
@@ -727,8 +760,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           connections:  connections,
           blacklist:    blacklist,
           settings:     settings,
-          groups:       groups,
-          tmp:          tmp
+          groups:       groups
         };
 
         console.warn('data ->', $rootScope.data);

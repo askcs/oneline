@@ -107,7 +107,10 @@ angular.module('WebPaige')
      */
     User.owner.process(User.owner.get());
 
-    $http.defaults.headers.common['X-SESSION_ID'] = angular.fromJson(Storage.cookie.get('session')).id;
+    if (angular.fromJson(Storage.cookie.get('session')))
+    {
+      $http.defaults.headers.common['X-SESSION_ID'] = angular.fromJson(Storage.cookie.get('session')).id;
+    }
 
 
     /**
