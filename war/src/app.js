@@ -2050,9 +2050,26 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       /**
        * Update a setting
        */
-      update: function (options)
+      update: function (setting)
       {
+        var deferred = $q.defer();
 
+        Settings.update({id: setting.id}, {
+            targetContactInfos: setting.target
+          },
+          function (result)
+          {
+            Storage.add('settings', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
       }
     };
 
@@ -2516,32 +2533,6 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
           }
         };
 
-        // Setup selected ones
-        angular.forEach(raws.settings, function (setting)
-        {
-          if (setting.medium === 'Email')
-          {
-            settings.email.id     = setting.id;
-
-            settings.email.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
-
-            settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
-                                      undefined :
-                                      setting.targetContactInfos[0];
-          }
-
-          if (setting.medium === 'SMS')
-          {
-            settings.sms.id     = setting.id;
-
-            settings.sms.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
-
-            settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
-                                    undefined :
-                                    setting.targetContactInfos[0];
-          }
-        });
-
         // Build list of emails
         angular.forEach(emails, function (email)
         {
@@ -2559,6 +2550,60 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             value:  phone.contactInfo
           });
         });
+
+        // Setup selected ones
+        angular.forEach(raws.settings, function (setting)
+        {
+          if (setting.medium === 'Email')
+          {
+            console.warn('email set ->', setting);
+
+            settings.email.id     = setting.id;
+
+            // settings.email.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
+
+            settings.email.status = !!((setting.targetContactInfos.length > 0));
+
+//            settings.email.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
+//                                      undefined :
+//                                      setting.targetContactInfos[0];
+
+            if (setting.targetContactInfos.length > 0)
+            {
+              settings.email.target = nodes[setting.targetContactInfos[0]];
+            }
+            else
+            {
+              settings.email.target = settings.email.targets[0].id;
+            }
+          }
+
+          if (setting.medium === 'SMS')
+          {
+            console.warn('sms set ->', setting);
+
+            settings.sms.id     = setting.id;
+
+            // settings.sms.status = !!((!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0));
+
+            settings.sms.status = !!((setting.targetContactInfos.length > 0));
+
+//            settings.sms.target = (!setting.targetContactInfos[0] || setting.targetContactInfos[0] < 0) ?
+//                                    undefined :
+//                                    setting.targetContactInfos[0];
+
+            if (setting.targetContactInfos.length > 0)
+            {
+              settings.sms.target = nodes[setting.targetContactInfos[0]];
+            }
+            else
+            {
+              settings.sms.target = settings.sms.targets[0].id;
+            }
+          }
+        });
+
+        console.log('settings ->', settings);
 
         // Pass data
         $rootScope.data = {
@@ -5340,13 +5385,19 @@ angular.module('WebPaige.Controllers.Notifier', [])
  */
   .controller('notifierCtrl',
   [
-    '$rootScope', '$scope', 'Core', 'User',
-    function ($rootScope, $scope, Core, User)
+    '$rootScope', '$scope', 'Core',
+    function ($rootScope, $scope, Core)
     {
       /**
        * Fix styles
        */
       $rootScope.fixStyles();
+
+
+//      Core.settings.update({
+//        id:   27004,
+//        target: []
+//      });
 
 
       /**
@@ -5617,7 +5668,6 @@ angular.module('WebPaige.Controllers.Guarder', [])
                   Core.factory.process();
                 });
             });
-
         },
 
         /**
@@ -5679,10 +5729,8 @@ angular.module('WebPaige.Controllers.Guarder', [])
             }
           });
 
-          console.log('list ->', list);
-
           Core.blacklists.remove(number)
-            .then(function (result)
+            .then(function ()
             {
               $rootScope.statusBar.display('Updating blacklist group..');
 
@@ -5704,7 +5752,6 @@ angular.module('WebPaige.Controllers.Guarder', [])
                   self.list();
                 });
             });
-
         }
       };
     }

@@ -63,7 +63,6 @@ angular.module('WebPaige.Controllers.Guarder', [])
                   Core.factory.process();
                 });
             });
-
         },
 
         /**
@@ -125,10 +124,8 @@ angular.module('WebPaige.Controllers.Guarder', [])
             }
           });
 
-          console.log('list ->', list);
-
           Core.blacklists.remove(number)
-            .then(function (result)
+            .then(function ()
             {
               $rootScope.statusBar.display('Updating blacklist group..');
 
@@ -150,7 +147,6 @@ angular.module('WebPaige.Controllers.Guarder', [])
                   self.list();
                 });
             });
-
         }
       };
     }

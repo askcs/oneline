@@ -11,13 +11,19 @@ angular.module('WebPaige.Controllers.Notifier', [])
  */
   .controller('notifierCtrl',
   [
-    '$rootScope', '$scope', 'Core', 'User',
-    function ($rootScope, $scope, Core, User)
+    '$rootScope', '$scope', 'Core',
+    function ($rootScope, $scope, Core)
     {
       /**
        * Fix styles
        */
       $rootScope.fixStyles();
+
+
+//      Core.settings.update({
+//        id:   27004,
+//        target: []
+//      });
 
 
       /**
