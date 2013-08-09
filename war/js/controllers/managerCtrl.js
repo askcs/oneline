@@ -24,8 +24,9 @@ angular.module('WebPaige.Controllers.Manager', [])
        * Connected number container
        */
       $scope.connection = {
-        label:        '',
-        contactInfo:  ''
+        label:            '',
+        contactInfo:      '',
+        contactInfoTag:   'Phone'
       };
 
 
@@ -83,7 +84,11 @@ angular.module('WebPaige.Controllers.Manager', [])
               {
                 $rootScope.statusBar.off();
 
-                $scope.connection = {};
+                $scope.connection = {
+                  label:            '',
+                  contactInfo:      '',
+                  contactInfoTag:   'Phone'
+                };
 
                 self.list();
               });
@@ -137,6 +142,8 @@ angular.module('WebPaige.Controllers.Manager', [])
             Core.connections.verify.initiate(number)
               .then(function (result)
               {
+                console.log('result ->', result);
+
                 $rootScope.statusBar.off();
 
                 $scope.toBeVerified = number;
@@ -169,6 +176,8 @@ angular.module('WebPaige.Controllers.Manager', [])
                   status: true,
                   result: result.verified
                 };
+
+                Core.factory.process();
 
                 $rootScope.$emit('setView', 'manager');
               });

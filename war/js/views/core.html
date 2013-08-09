@@ -592,7 +592,8 @@
               <tr>
                 <th style="width: 100px;"></th>
                 <th>Label</th>
-                <th>Telefon number</th>
+                <th>Connection</th>
+                <th>Type</th>
                 <th></th>
               </tr>
               </thead>
@@ -605,6 +606,7 @@
                 </td>
                 <td>{{number.label}}</td>
                 <td>{{number.contactInfo}}</td>
+                <td>{{number.contactInfoTag}}</td>
                 <td>
 
                   <button ng-click="connections.remove(number)"

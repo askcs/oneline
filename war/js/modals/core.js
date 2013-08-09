@@ -320,7 +320,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
         var payload = {
           contactInfo:    connection.contactInfo,
-          contactInfoTag: 'Phone',
+          contactInfoTag: connection.contactInfoTag,
           label:          connection.label
         };
 
@@ -393,7 +393,7 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
           Verification.initiate(
             {
-              verificationMedium: 'SMS',
+              verificationMedium: (number.contactInfoTag === 'Email') ? 'Email' : 'SMS',
               verificationInfo: {
                 address:  number.contactInfo
               }

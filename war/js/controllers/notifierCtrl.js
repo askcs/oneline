@@ -22,13 +22,13 @@ angular.module('WebPaige.Controllers.Notifier', [])
 
 //      Core.settings.update({
 //        id:   27004,
-//        target: [4001]
+//        target: []
 //      });
 //
 //
 //      Core.settings.update({
 //        id:   24003,
-//        target: [3001]
+//        target: []
 //      });
 
 
