@@ -611,7 +611,8 @@
 
                   <button ng-click="connections.remove(number)"
                           type="button"
-                          class="btn btn-mini">Delete</button>&nbsp;
+                          class="btn btn-mini"
+                          ng-hide="(number.contactKey==data.account.contactKey)">Delete</button>&nbsp;
 
                   <button ng-show="number.verified"
                           ng-click="connections.edit(number)"

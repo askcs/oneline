@@ -2478,8 +2478,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
             account     = {},
             groups      = {},
             phones      = [],
-            emails      = [],
-            tmp         = [];
+            emails      = [];
+            // ,
+            // tmp         = [];
 
         // Initialize root container
         $rootScope.data = {};
@@ -2518,7 +2519,8 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         });
 
         // Setup user id
-        account.id = raws.resources[0].ownerKey;
+        account.id          = raws.resources[0].ownerKey;
+        account.contactKey  = raws.resources[0].contactKey;
 
         // TODO (Remove this later on)
         $rootScope.app.resources = account;
@@ -2624,8 +2626,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
             settings.email.status = !!((setting.targetContactInfos.length > 0));
 
+            var emailSetting = (nodes[setting.targetContactInfos[0]]) ?
+                                nodes[setting.targetContactInfos[0]].id :
+                                settings.email.targets[0].id;
+
             settings.email.original = settings.email.target = (setting.targetContactInfos.length > 0) ?
-                                      nodes[setting.targetContactInfos[0]].id :
+                                      emailSetting :
                                       settings.email.targets[0].id;
           }
 
@@ -2635,8 +2641,12 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
             settings.sms.status = !!((setting.targetContactInfos.length > 0));
 
+            var smsSetting = (nodes[setting.targetContactInfos[0]]) ?
+                              nodes[setting.targetContactInfos[0]].id :
+                              settings.sms.targets[0].id;
+
             settings.sms.original = settings.sms.target = (setting.targetContactInfos.length > 0) ?
-                                    nodes[setting.targetContactInfos[0]].id :
+                                    smsSetting :
                                     settings.sms.targets[0].id;
           }
         });
@@ -5438,16 +5448,21 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $rootScope.fixStyles();
 
 
+
+
 //      Core.settings.update({
 //        id:   27004,
 //        target: []
 //      });
-//
-//
+
+
+
 //      Core.settings.update({
 //        id:   24003,
 //        target: []
 //      });
+
+
 
 
       /**

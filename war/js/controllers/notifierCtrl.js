@@ -20,16 +20,21 @@ angular.module('WebPaige.Controllers.Notifier', [])
       $rootScope.fixStyles();
 
 
+
+
 //      Core.settings.update({
 //        id:   27004,
 //        target: []
 //      });
-//
-//
+
+
+
 //      Core.settings.update({
 //        id:   24003,
 //        target: []
 //      });
+
+
 
 
       /**
