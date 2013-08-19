@@ -184,5 +184,6 @@ angular.module('WebPaige.Controllers.Manager', [])
           }
         }
       };
+
     }
   ]);

@@ -2015,6 +2015,146 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
+     * Logs
+     */
+    var Logs = $resource(
+      $config.host + '/log',
+      {},
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        }
+      }
+    );
+
+
+    /**
+     * Logs
+     */
+    Core.prototype.logs = {
+
+      /**
+       * Get localStorage cache for settings
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('settings'));
+      },
+
+      /**
+       * List notifications
+       */
+      list: function ()
+      {
+        var deferred = $q.defer();
+
+        Logs.query(
+          function (result)
+          {
+            // Storage.add('settings', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Update a setting
+       */
+      update: function (settings)
+      {
+        var deferred = $q.defer();
+
+        Settings.update({id: settings.id}, {
+            targetContactInfos: settings.target
+          },
+          function (result)
+          {
+            Storage.add('settings', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Save settings
+       */
+      save: function (settings)
+      {
+        var deferred  = $q.defer(),
+          calls     = [],
+          setting   = {
+            sms:    [],
+            email:  []
+          };
+
+        if (!settings.added.sms.status)
+        {
+          if (!settings.removed.sms)
+          {
+            setting.sms = settings.changed.sms.value;
+          }
+        }
+        else
+        {
+          setting.sms = settings.added.sms.value;
+        }
+
+        if (!settings.added.email.status)
+        {
+          if (!settings.removed.email)
+          {
+            setting.email = settings.changed.email.value;
+          }
+        }
+        else
+        {
+          setting.email = settings.added.email.value;
+        }
+
+        if (setting.sms)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.sms.id,
+            target: setting.sms
+          }));
+        }
+
+        if (setting.email)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.email.id,
+            target: setting.email
+          }));
+        }
+
+        $q.all(calls)
+          .then(function (result)
+          {
+            deferred.resolve(result);
+          });
+
+        return deferred.promise;
+      }
+    };
+
+
+    /**
      * Notifications
      */
     Core.prototype.settings = {
@@ -2081,11 +2221,11 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       save: function (settings)
       {
         var deferred  = $q.defer(),
-            calls     = [],
-            setting   = {
-              sms:    [],
-              email:  []
-            };
+          calls     = [],
+          setting   = {
+            sms:    [],
+            email:  []
+          };
 
         if (!settings.added.sms.status)
         {
@@ -5425,6 +5565,7 @@ angular.module('WebPaige.Controllers.Manager', [])
           }
         }
       };
+
     }
   ]);;/*jslint node: true */
 /*global angular */
@@ -5704,13 +5845,115 @@ angular.module('WebPaige.Controllers.Reporter', [])
  */
   .controller('reporterCtrl',
   [
-    '$rootScope', '$scope',
-    function ($rootScope, $scope)
+    '$rootScope', '$scope', 'Core',
+    function ($rootScope, $scope, Core)
     {
       /**
        * Fix styles
        */
       $rootScope.fixStyles();
+
+
+      $scope.logs = [];
+
+
+      /**
+       * Connected numbers
+       */
+      $scope.logs = {
+
+        /**
+         * Get local list
+         */
+        local: function ()
+        {
+          return Core.connections.local();
+        },
+
+        /**
+         * List numbers
+         */
+        list: function ()
+        {
+          $rootScope.statusBar.display('Getting the list of recent calls..');
+
+          $scope.logsLoading = true;
+
+          Core.logs.list()
+            .then(function (logs)
+            {
+              $rootScope.statusBar.off();
+
+              $scope.logsLoading = false;
+
+              $scope.logs = logs;
+
+              // Core.factory.process();
+            });
+        },
+
+        /**
+         * Save a connected number
+         */
+        save: function ()
+        {
+          if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
+          {
+            var self = this;
+
+            $rootScope.statusBar.display('Saving the number..');
+
+            Core.connections.save($scope.connection)
+              .then(function ()
+              {
+                $rootScope.statusBar.off();
+
+                $scope.connection = {
+                  label:            '',
+                  contactInfo:      '',
+                  contactInfoTag:   'Phone'
+                };
+
+                self.list();
+              });
+          }
+        },
+
+        /**
+         * Delete a number
+         */
+        remove: function (number)
+        {
+          var self = this;
+
+          $rootScope.statusBar.display('Deleting a number..');
+
+          Core.connections.remove(number)
+            .then(function ()
+            {
+              $rootScope.statusBar.off();
+
+              self.list();
+            });
+        },
+
+        /**
+         * Edit a number
+         */
+        edit: function (number)
+        {
+          angular.forEach($rootScope.data.connections, function (connection)
+          {
+            if (number.id === connection.id)
+            {
+              $scope.connection = connection;
+            }
+          });
+        }
+      };
+
+      $scope.logs.list();
+
     }
   ]);;/*jslint node: true */
 /*global angular */

@@ -128,6 +128,146 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
 
 
     /**
+     * Logs
+     */
+    var Logs = $resource(
+      $config.host + '/log',
+      {},
+      {
+        list: {
+          method: 'GET',
+          params: {},
+          isArray: true
+        }
+      }
+    );
+
+
+    /**
+     * Logs
+     */
+    Core.prototype.logs = {
+
+      /**
+       * Get localStorage cache for settings
+       */
+      local: function ()
+      {
+        return angular.fromJson(Storage.get('settings'));
+      },
+
+      /**
+       * List notifications
+       */
+      list: function ()
+      {
+        var deferred = $q.defer();
+
+        Logs.query(
+          function (result)
+          {
+            // Storage.add('settings', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Update a setting
+       */
+      update: function (settings)
+      {
+        var deferred = $q.defer();
+
+        Settings.update({id: settings.id}, {
+            targetContactInfos: settings.target
+          },
+          function (result)
+          {
+            Storage.add('settings', angular.toJson(result));
+
+            deferred.resolve(result);
+          },
+          function (error)
+          {
+            deferred.resolve({error: error});
+          }
+        );
+
+        return deferred.promise;
+      },
+
+      /**
+       * Save settings
+       */
+      save: function (settings)
+      {
+        var deferred  = $q.defer(),
+          calls     = [],
+          setting   = {
+            sms:    [],
+            email:  []
+          };
+
+        if (!settings.added.sms.status)
+        {
+          if (!settings.removed.sms)
+          {
+            setting.sms = settings.changed.sms.value;
+          }
+        }
+        else
+        {
+          setting.sms = settings.added.sms.value;
+        }
+
+        if (!settings.added.email.status)
+        {
+          if (!settings.removed.email)
+          {
+            setting.email = settings.changed.email.value;
+          }
+        }
+        else
+        {
+          setting.email = settings.added.email.value;
+        }
+
+        if (setting.sms)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.sms.id,
+            target: setting.sms
+          }));
+        }
+
+        if (setting.email)
+        {
+          calls.push(Core.prototype.settings.update({
+            id:     $rootScope.data.settings.email.id,
+            target: setting.email
+          }));
+        }
+
+        $q.all(calls)
+          .then(function (result)
+          {
+            deferred.resolve(result);
+          });
+
+        return deferred.promise;
+      }
+    };
+
+
+    /**
      * Notifications
      */
     Core.prototype.settings = {
@@ -194,11 +334,11 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       save: function (settings)
       {
         var deferred  = $q.defer(),
-            calls     = [],
-            setting   = {
-              sms:    [],
-              email:  []
-            };
+          calls     = [],
+          setting   = {
+            sms:    [],
+            email:  []
+          };
 
         if (!settings.added.sms.status)
         {
