@@ -2050,17 +2050,24 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        Logs.query(
-          function (result)
-          {
-            // Storage.add('settings', angular.toJson(result));
+//        Logs.query(
+//          function (result)
+//          {
+//            // Storage.add('settings', angular.toJson(result));
+//
+//            deferred.resolve(result);
+//          },
+//          function (error)
+//          {
+//            deferred.resolve({error: error});
+//          }
+//        );
 
-            deferred.resolve(result);
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
+        deferred.resolve(
+          [
+            {"id":52001,"scenarioId":1,"startTime":1,"endTime":1,"address":"0643002549","type":"phone","callState":"answered"},
+            {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0643023456","type":"phone","callState":"answered"},
+          ]
         );
 
         return deferred.promise;
@@ -4057,6 +4064,35 @@ angular.module('WebPaige.Filters', ['ngResource'])
 
 
 
+/**
+ * Calculate time in displayable format
+ */
+.filter('calculateTime',
+	function ()
+	{
+		return function (secs)
+		{
+      var hours   = Math.floor(secs / (60 * 60)),
+          dmin    = secs % (60 * 60),
+          minutes = Math.floor(dmin / 60),
+          dsec    = dmin % 60,
+          seconds = Math.ceil(dsec),
+          n       = function (n)
+                    {
+                      return n > 9 ? '' + n : '0' + n;
+                    };
+
+      return n(hours) + ':' + n(minutes) + ':' + n(seconds);
+		};
+	}
+)
+
+
+
+
+
+
+
 
 
 
@@ -4458,19 +4494,19 @@ angular.module('WebPaige.Filters', ['ngResource'])
 /**
  * Convert timeStamps to dates
  */
-// .filter('nicelyDate', 
-// [
-// 	'$rootScope', 
-// 	function ($rootScope)
-// 	{
-// 	 	return function (date)
-// 	 	{
-// 	 		if (typeof date == 'string') date = Number(date);
+.filter('nicelyDate',
+[
+	'$rootScope',
+	function ($rootScope)
+	{
+	 	return function (date)
+	 	{
+	 		if (typeof date == 'string') date = Number(date);
 
-// 	 		return new Date(date).toString($rootScope.config.formats.datetime);
-// 	 	};
-// 	}
-// ])
+	 		return new Date(date).toString($rootScope.config.formats.datetime);
+	 	};
+	}
+])
 
 
 

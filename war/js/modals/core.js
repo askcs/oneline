@@ -163,17 +163,24 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
       {
         var deferred = $q.defer();
 
-        Logs.query(
-          function (result)
-          {
-            // Storage.add('settings', angular.toJson(result));
+//        Logs.query(
+//          function (result)
+//          {
+//            // Storage.add('settings', angular.toJson(result));
+//
+//            deferred.resolve(result);
+//          },
+//          function (error)
+//          {
+//            deferred.resolve({error: error});
+//          }
+//        );
 
-            deferred.resolve(result);
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
+        deferred.resolve(
+          [
+            {"id":52001,"scenarioId":1,"startTime":1,"endTime":1,"address":"0643002549","type":"phone","callState":"answered"},
+            {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0643023456","type":"phone","callState":"answered"},
+          ]
         );
 
         return deferred.promise;

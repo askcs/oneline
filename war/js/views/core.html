@@ -737,8 +737,14 @@
 
         <div class="row-fluid">
 
-          <div class="span12">
-            <p>Oneline provides all your recent calls only to you.</p>
+          <div class="span12"
+               style="min-height: 230px;">
+
+            <p ng-hide="logsLoading">Oneline provides all your recent calls only to you.</p>
+
+            <p ng-show="logsLoading">
+              Loading recent calls
+            </p>
 
             <!-- <form class="form-inline well">
               <div class="control-group pull-left" style="margin-right: 5px">
@@ -764,12 +770,6 @@
 
             <!-- <h4>Numbers</h4> -->
 
-            <p ng-show="logsLoading"
-                style="height: 200px;">
-              <hr>
-              Loading recent calls
-            </p>
-
             <table class="table table-striped"
                    ng-hide="logsLoading">
               <thead>
@@ -786,8 +786,8 @@
               <tr ng-repeat="log in logs">
                 <td><span class="label label-warning">{{ log.callState }}</span></td>
                 <td>{{ log.address }}</td>
-                <td></td>
-                <td>{{ log.endTime - log.startTime }}</td>
+                <td>{{ log.startTime | nicelyDate }}</td>
+                <td>{{ log.endTime - log.startTime | calculateTime }}</td>
                 <td>
                   <div class="btn-group">
                     <button type="button" class="btn btn-mini">Block</button>
