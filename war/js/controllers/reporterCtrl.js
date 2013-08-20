@@ -22,6 +22,11 @@ angular.module('WebPaige.Controllers.Reporter', [])
 
       $scope.logs = [];
 
+      $scope.pushMe = function ()
+      {
+        console.log('pushed');
+      };
+
 
       /**
        * Connected numbers
@@ -43,6 +48,8 @@ angular.module('WebPaige.Controllers.Reporter', [])
         {
           $rootScope.statusBar.display('Getting the list of recent calls..');
 
+          console.log('getting the list of recents');
+
           $scope.logsLoading = true;
 
           Core.logs.list()
@@ -52,69 +59,101 @@ angular.module('WebPaige.Controllers.Reporter', [])
 
               $scope.logsLoading = false;
 
-              $scope.logs = logs;
+              angular.forEach(logs, function (log)
+              {
+                angular.forEach($rootScope.data.blacklist, function (id)
+                {
+                  log.blocked = !!(log.address == id.contactInfo);
+                });
+              });
+
+              $scope.logsList = logs;
 
               // Core.factory.process();
             });
         },
 
         /**
-         * Save a connected number
+         * Block a recent number
          */
-        save: function ()
-        {
-          if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
-          {
-            var self = this;
-
-            $rootScope.statusBar.display('Saving the number..');
-
-            Core.connections.save($scope.connection)
-              .then(function ()
-              {
-                $rootScope.statusBar.off();
-
-                $scope.connection = {
-                  label:            '',
-                  contactInfo:      '',
-                  contactInfoTag:   'Phone'
-                };
-
-                self.list();
-              });
-          }
-        },
-
-        /**
-         * Delete a number
-         */
-        remove: function (number)
+        block: function (log)
         {
           var self = this;
 
-          $rootScope.statusBar.display('Deleting a number..');
+          $rootScope.statusBar.display('Adding a blacklisted number..');
 
-          Core.connections.remove(number)
-            .then(function ()
+          Core.blacklists.save({
+            contactInfo: log.address,
+            label: 'From Logs'
+          })
+            .then(function (result)
             {
-              $rootScope.statusBar.off();
+              $rootScope.statusBar.display('Updating blacklist group..');
 
-              self.list();
+              // Populate blacklist
+              var list = [];
+              angular.forEach($rootScope.data.blacklist, function (listed)
+              {
+                list.push(listed.id);
+              });
+              list.push(result.id);
+
+              // Park node temporarily
+//              $rootScope.data.tmp.push(result);
+
+              // Update blacklist group
+              Core.groups.update({
+                id:   $rootScope.data.groups.blacklist.id,
+                list: list
+              }).then(function ()
+                {
+                  $rootScope.statusBar.off();
+
+                  console.log('coming to here');
+
+                  $scope.logs.list();
+
+                  $rootScope.$broadcast('refreshBlockedNumbers');
+                });
             });
         },
 
         /**
-         * Edit a number
+         * Allow a number
          */
-        edit: function (number)
+        allow: function (log)
         {
-          angular.forEach($rootScope.data.connections, function (connection)
-          {
-            if (number.id === connection.id)
-            {
-              $scope.connection = connection;
-            }
-          });
+          console.log('allow log ->', log);
+
+//          $rootScope.statusBar.display('Adding a blacklisted number..');
+//
+//          Core.blacklists.save($scope.blacklist)
+//            .then(function (result)
+//            {
+//              $rootScope.statusBar.display('Updating blacklist group..');
+//
+//              // Populate blacklist
+//              var list = [];
+//              angular.forEach($rootScope.data.blacklist, function (listed)
+//              {
+//                list.push(listed.id);
+//              });
+//              list.push(result.id);
+//
+//              // Park node temporarily
+////              $rootScope.data.tmp.push(result);
+//
+//              // Update blacklist group
+//              Core.groups.update({
+//                id:   $rootScope.data.groups.blacklist.id,
+//                list: list
+//              }).then(function ()
+//                {
+//                  $rootScope.statusBar.off();
+//
+//                  self.list();
+//                });
+//            });
         }
       };
 

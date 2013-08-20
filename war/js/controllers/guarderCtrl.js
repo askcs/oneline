@@ -149,5 +149,14 @@ angular.module('WebPaige.Controllers.Guarder', [])
             });
         }
       };
+
+
+      /**
+       * Block number listener
+       */
+      $rootScope.$on('refreshBlockedNumbers', function ()
+      {
+        $scope.blacklists.list();
+      });
     }
   ]);

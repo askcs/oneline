@@ -179,95 +179,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         deferred.resolve(
           [
             {"id":52001,"scenarioId":1,"startTime":1,"endTime":1,"address":"0643002549","type":"phone","callState":"answered"},
-            {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0643023456","type":"phone","callState":"answered"},
+            {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0629143143","type":"phone","callState":"answered"},
           ]
         );
-
-        return deferred.promise;
-      },
-
-      /**
-       * Update a setting
-       */
-      update: function (settings)
-      {
-        var deferred = $q.defer();
-
-        Settings.update({id: settings.id}, {
-            targetContactInfos: settings.target
-          },
-          function (result)
-          {
-            Storage.add('settings', angular.toJson(result));
-
-            deferred.resolve(result);
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
-        );
-
-        return deferred.promise;
-      },
-
-      /**
-       * Save settings
-       */
-      save: function (settings)
-      {
-        var deferred  = $q.defer(),
-          calls     = [],
-          setting   = {
-            sms:    [],
-            email:  []
-          };
-
-        if (!settings.added.sms.status)
-        {
-          if (!settings.removed.sms)
-          {
-            setting.sms = settings.changed.sms.value;
-          }
-        }
-        else
-        {
-          setting.sms = settings.added.sms.value;
-        }
-
-        if (!settings.added.email.status)
-        {
-          if (!settings.removed.email)
-          {
-            setting.email = settings.changed.email.value;
-          }
-        }
-        else
-        {
-          setting.email = settings.added.email.value;
-        }
-
-        if (setting.sms)
-        {
-          calls.push(Core.prototype.settings.update({
-            id:     $rootScope.data.settings.sms.id,
-            target: setting.sms
-          }));
-        }
-
-        if (setting.email)
-        {
-          calls.push(Core.prototype.settings.update({
-            id:     $rootScope.data.settings.email.id,
-            target: setting.email
-          }));
-        }
-
-        $q.all(calls)
-          .then(function (result)
-          {
-            deferred.resolve(result);
-          });
 
         return deferred.promise;
       }

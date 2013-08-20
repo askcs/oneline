@@ -2066,95 +2066,9 @@ angular.module('WebPaige.Modals.Core', ['ngResource'])
         deferred.resolve(
           [
             {"id":52001,"scenarioId":1,"startTime":1,"endTime":1,"address":"0643002549","type":"phone","callState":"answered"},
-            {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0643023456","type":"phone","callState":"answered"},
+            {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0629143143","type":"phone","callState":"answered"},
           ]
         );
-
-        return deferred.promise;
-      },
-
-      /**
-       * Update a setting
-       */
-      update: function (settings)
-      {
-        var deferred = $q.defer();
-
-        Settings.update({id: settings.id}, {
-            targetContactInfos: settings.target
-          },
-          function (result)
-          {
-            Storage.add('settings', angular.toJson(result));
-
-            deferred.resolve(result);
-          },
-          function (error)
-          {
-            deferred.resolve({error: error});
-          }
-        );
-
-        return deferred.promise;
-      },
-
-      /**
-       * Save settings
-       */
-      save: function (settings)
-      {
-        var deferred  = $q.defer(),
-          calls     = [],
-          setting   = {
-            sms:    [],
-            email:  []
-          };
-
-        if (!settings.added.sms.status)
-        {
-          if (!settings.removed.sms)
-          {
-            setting.sms = settings.changed.sms.value;
-          }
-        }
-        else
-        {
-          setting.sms = settings.added.sms.value;
-        }
-
-        if (!settings.added.email.status)
-        {
-          if (!settings.removed.email)
-          {
-            setting.email = settings.changed.email.value;
-          }
-        }
-        else
-        {
-          setting.email = settings.added.email.value;
-        }
-
-        if (setting.sms)
-        {
-          calls.push(Core.prototype.settings.update({
-            id:     $rootScope.data.settings.sms.id,
-            target: setting.sms
-          }));
-        }
-
-        if (setting.email)
-        {
-          calls.push(Core.prototype.settings.update({
-            id:     $rootScope.data.settings.email.id,
-            target: setting.email
-          }));
-        }
-
-        $q.all(calls)
-          .then(function (result)
-          {
-            deferred.resolve(result);
-          });
 
         return deferred.promise;
       }
@@ -5892,6 +5806,11 @@ angular.module('WebPaige.Controllers.Reporter', [])
 
       $scope.logs = [];
 
+      $scope.pushMe = function ()
+      {
+        console.log('pushed');
+      };
+
 
       /**
        * Connected numbers
@@ -5913,6 +5832,8 @@ angular.module('WebPaige.Controllers.Reporter', [])
         {
           $rootScope.statusBar.display('Getting the list of recent calls..');
 
+          console.log('getting the list of recents');
+
           $scope.logsLoading = true;
 
           Core.logs.list()
@@ -5922,69 +5843,101 @@ angular.module('WebPaige.Controllers.Reporter', [])
 
               $scope.logsLoading = false;
 
-              $scope.logs = logs;
+              angular.forEach(logs, function (log)
+              {
+                angular.forEach($rootScope.data.blacklist, function (id)
+                {
+                  log.blocked = !!(log.address == id.contactInfo);
+                });
+              });
+
+              $scope.logsList = logs;
 
               // Core.factory.process();
             });
         },
 
         /**
-         * Save a connected number
+         * Block a recent number
          */
-        save: function ()
-        {
-          if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
-          {
-            var self = this;
-
-            $rootScope.statusBar.display('Saving the number..');
-
-            Core.connections.save($scope.connection)
-              .then(function ()
-              {
-                $rootScope.statusBar.off();
-
-                $scope.connection = {
-                  label:            '',
-                  contactInfo:      '',
-                  contactInfoTag:   'Phone'
-                };
-
-                self.list();
-              });
-          }
-        },
-
-        /**
-         * Delete a number
-         */
-        remove: function (number)
+        block: function (log)
         {
           var self = this;
 
-          $rootScope.statusBar.display('Deleting a number..');
+          $rootScope.statusBar.display('Adding a blacklisted number..');
 
-          Core.connections.remove(number)
-            .then(function ()
+          Core.blacklists.save({
+            contactInfo: log.address,
+            label: 'From Logs'
+          })
+            .then(function (result)
             {
-              $rootScope.statusBar.off();
+              $rootScope.statusBar.display('Updating blacklist group..');
 
-              self.list();
+              // Populate blacklist
+              var list = [];
+              angular.forEach($rootScope.data.blacklist, function (listed)
+              {
+                list.push(listed.id);
+              });
+              list.push(result.id);
+
+              // Park node temporarily
+//              $rootScope.data.tmp.push(result);
+
+              // Update blacklist group
+              Core.groups.update({
+                id:   $rootScope.data.groups.blacklist.id,
+                list: list
+              }).then(function ()
+                {
+                  $rootScope.statusBar.off();
+
+                  console.log('coming to here');
+
+                  $scope.logs.list();
+
+                  $rootScope.$broadcast('refreshBlockedNumbers');
+                });
             });
         },
 
         /**
-         * Edit a number
+         * Allow a number
          */
-        edit: function (number)
+        allow: function (log)
         {
-          angular.forEach($rootScope.data.connections, function (connection)
-          {
-            if (number.id === connection.id)
-            {
-              $scope.connection = connection;
-            }
-          });
+          console.log('allow log ->', log);
+
+//          $rootScope.statusBar.display('Adding a blacklisted number..');
+//
+//          Core.blacklists.save($scope.blacklist)
+//            .then(function (result)
+//            {
+//              $rootScope.statusBar.display('Updating blacklist group..');
+//
+//              // Populate blacklist
+//              var list = [];
+//              angular.forEach($rootScope.data.blacklist, function (listed)
+//              {
+//                list.push(listed.id);
+//              });
+//              list.push(result.id);
+//
+//              // Park node temporarily
+////              $rootScope.data.tmp.push(result);
+//
+//              // Update blacklist group
+//              Core.groups.update({
+//                id:   $rootScope.data.groups.blacklist.id,
+//                list: list
+//              }).then(function ()
+//                {
+//                  $rootScope.statusBar.off();
+//
+//                  self.list();
+//                });
+//            });
         }
       };
 
@@ -6142,5 +6095,14 @@ angular.module('WebPaige.Controllers.Guarder', [])
             });
         }
       };
+
+
+      /**
+       * Block number listener
+       */
+      $rootScope.$on('refreshBlockedNumbers', function ()
+      {
+        $scope.blacklists.list();
+      });
     }
   ]);

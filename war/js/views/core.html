@@ -25,7 +25,7 @@
       </li>
 
       <li class="{{(views.reporter==true) && 'active'}}">
-        <a ng-click="setViewTo('reporter')" 
+        <a ng-click="setViewTo('reporter')"
             data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span> Call list</a>
       </li>
 
@@ -660,7 +660,8 @@
 
         <div class="row-fluid">
 
-          <div class="span12">
+          <div class="span12"
+               style="min-height: 230px;">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
 
             <form class="form-inline"
@@ -705,8 +706,6 @@
 
               <button type="submit" class="btn">Save changes</button>
             </form>
-
-            <br><br><br>
 
           </div>
 
@@ -783,15 +782,20 @@
               </thead>
               <tbody>
 
-              <tr ng-repeat="log in logs">
+              <tr ng-repeat="log in logsList">
                 <td><span class="label label-warning">{{ log.callState }}</span></td>
                 <td>{{ log.address }}</td>
                 <td>{{ log.startTime | nicelyDate }}</td>
                 <td>{{ log.endTime - log.startTime | calculateTime }}</td>
                 <td>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-mini">Block</button>
-                  </div>
+                  <button type="button"
+                          class="btn btn-mini"
+                          ng-click="logs.block(log)"
+                          ng-hide="log.blocked">Block</button>
+                  <button type="button"
+                          class="btn btn-mini"
+                          ng-click="logs.allow(log)"
+                          ng-show="log.blocked">Allow</button>
                 </td>
               </tr>
 
@@ -938,7 +942,8 @@
 
         <div class="row-fluid">
 
-          <div class="span12">
+          <div class="span12"
+               style="min-height: 234px;">
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
 
             <form class="form-inline well"
