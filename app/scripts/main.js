@@ -8,12 +8,17 @@ require.config (
     paths: {
       angular:  '../vendors/angular/angular',
       jquery:   '../vendors/jquery/jquery.min',
-      domReady: '../vendors/requirejs-domready/domReady'
+      domReady: '../vendors/requirejs-domready/domReady',
+      bootstrap:'../vendors/bootstrap-sass/dist/js/bootstrap.min'
     },
     shim: {
       angular: {
         deps:     ['jquery'],
         exports:  'angular'
+      },
+      bootstrap: {
+        deps:   ['jquery'],
+        exports:'bootstrap'
       }
     }
   }
@@ -22,57 +27,33 @@ require.config (
 require (
   [
     'angular',
-    'app',
     'domReady',
-    'run',
     'config',
+    'app',
+    'routes',
+    'run',
+
     'controllers/home',
     'controllers/partial1',
     'controllers/partial2',
+
     'directives/appVersion',
+
     'filters/interpolate',
+
     'services/version',
-    'services/user'
-    // Any individual controller, service, directive or filter file
-    // that you add will need to be pulled in here.
+    'services/user',
+
+    'bootstrap'
+//    'pouch'
   ],
-  function (angular, app, domReady)
+  function (angular, domReady)
   {
     'use strict';
 
-    // $('html').removeAttr('ng-app');
-
-    app.config(
-      [
-        '$routeProvider',
-        function ($routeProvider)
-        {
-          $routeProvider
-            .when('/home',
-            {
-              templateUrl:  'views/home.html',
-              controller:   'home'
-            })
-            .when('/partial1',
-            {
-              templateUrl:  'views/partial1.html',
-              controller:   'partial1'
-            })
-            .when('/partial2',
-            {
-              templateUrl:  'views/partial2.html',
-              controller:   'partial2'
-            })
-            .otherwise({
-              redirectTo: '/home'
-            });
-        }
-      ]
-    );
-
     domReady(function ()
       {
-        angular.bootstrap(document, ['MyApp']);
+        angular.bootstrap(document, ['Oneline']);
       }
     );
 

@@ -11,7 +11,7 @@ define(
   ],
   function (angular)
   {
-    return angular.module('MyApp',
+    return angular.module('Oneline',
       [
         'controllers',
         'services',
