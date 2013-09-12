@@ -15,7 +15,7 @@ html,body {
 
 
 body {
-  // background: url(../img/bg.jpg) repeat;
+  // background: url(../images/bg.jpg) repeat;
 }
 
 
@@ -40,7 +40,7 @@ h1 {
 }
 
 h2 {
-  color: $purple;
+  // color: $purple;
 }
 
 h3 {
@@ -56,7 +56,7 @@ h5 {
 }
 
 .well h2 {
-  color: $textColor;
+  color: $text-color;
 }
 
 .left-border-fix {
@@ -126,7 +126,7 @@ h5 {
 
 .navbar {
   .badge-success {
-    background-color: $btnSuccessBackground;
+    background-color: $btn-success-bg;
   }
 }
 
@@ -338,12 +338,14 @@ h5 {
 .thumb-btn {
     text-align: center;
     cursor: pointer;
-    border: 2px solid $wellBackgroundColor;
+    border: 2px solid $well-bg;
   &:hover {
-    border: 2px solid $pink;
+    // border: 2px solid $pink;
+    border: 2px solid pink;
   }
 }
 
 .thumb-btn-active {
-  border: 2px solid $pink;
+  // border: 2px solid $pink;
+  border: 2px solid pink;
 }

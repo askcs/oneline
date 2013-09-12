@@ -3,6 +3,17 @@ $iconWhiteSpritePath: "../images/glyphicons-halflings-white.png";
 
 @import "bootstrap-sass/lib/bootstrap";
 
-@import "docs";
-@import "sticky";
-@import "app";
+
+@import "app/entypo";
+@import "app/icomoon";
+
+@import "app/styles";
+@import "app/login";
+@import "app/forms";
+@import "app/frame";
+@import "app/tabs";
+
+@import "app/queries";
+
+
+@import "app/purchaser";

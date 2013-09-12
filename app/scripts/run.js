@@ -81,10 +81,12 @@ define(
           /**
            * Default language and change language
            */
-          /*
-          $rootScope.changeLanguage = function (lang) { $rootScope.ui = ui[lang]; };
-          $rootScope.ui = ui[$rootScope.config.lang];
-          */
+          $rootScope.changeLanguage = function (lang)
+                                      {
+                                        $rootScope.ui = config.ui[lang];
+                                      };
+
+          $rootScope.ui = config.ui[$rootScope.config.lang];
 
 
 
@@ -264,7 +266,7 @@ define(
           //   {
           //     var notification =  $window.webkitNotifications.createNotification(
           //                           location.protocol + "//" + location.hostname + (location.port && ":" + location.port) +
-          //                           '/js/profiles/' + config.profile.meta + '/img/ico/apple-touch-icon-144x144-precomposed.png',
+          //                           '/js/profiles/' + config.profile.meta + '/images/ico/apple-touch-icon-144x144-precomposed.png',
           //                           title,
           //                           message
           //                         );

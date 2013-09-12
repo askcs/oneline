@@ -4,12 +4,12 @@
 define(
   [
     'angular',
-    'angular-resource',
     'modals/modals',
     'controllers/controllers',
     'services/services',
     'filters/filters',
-    'directives/directives'
+    'directives/directives',
+    'angular-resource'
   ],
   function (angular)
   {

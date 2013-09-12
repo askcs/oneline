@@ -6,12 +6,12 @@ define(
 
     controllers.controller ('login',
       [
-        '$rootScope', '$location', '$q', '$scope', 'Session', 'User', 'Storage', '$routeParams', 'MD5', 'Core',
-        function ($rootScope, $location, $q, $scope, Session, User, Storage, $routeParams, MD5, Core)
+        '$rootScope', '$location', '$q', '$scope', 'Session', 'Storage', '$routeParams', 'MD5', 'Core',
+        function ($rootScope, $location, $q, $scope, Session, Storage, $routeParams, MD5, Core)
         {
 
 
-
+          console.log('User 2 ->', Core);
 
 
           /**

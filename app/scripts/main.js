@@ -5,24 +5,29 @@ if (window.location.port == '8080')
 
 require.config(
   {
-    paths: {
-      angular:  '../vendors/angular/angular',
-      jquery:   '../vendors/jquery/jquery.min',
-      domReady: '../vendors/requirejs-domready/domReady',
-      bootstrap:'../vendors/bootstrap-sass/dist/js/bootstrap.min',
+    paths:
+    {
+      angular:            '../vendors/angular/angular.min',
+      jquery:             '../vendors/jquery/jquery.min',
+      domReady:           '../vendors/requirejs-domready/domReady',
+      bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min'
     },
-    shim: {
-      angular: {
+    shim:
+    {
+      angular:
+      {
         deps:     ['jquery'],
         exports:  'angular'
       },
-      'angular-resource': {
+      'angular-resource':
+      {
         deps:     ['angular']
       },
-      bootstrap: {
-        deps:   ['jquery'],
-        exports:'bootstrap'
+      bootstrap:
+      {
+        deps:     ['jquery'],
+        exports:  'bootstrap'
       }
     }
   }

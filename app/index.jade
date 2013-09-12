@@ -1,28 +1,125 @@
 extends layout
 
 block navbar
-  .navbar.navbar-inverse.navbar-fixed-top.bs-docs-nav
-    .container
-      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.bs-navbar-collapse')
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.navbar-brand(href='#/home') Home
-      .nav-collapse.collapse.bs-navbar-collapse
-        ul.nav.navbar-nav
-          li
-            a(href='#/partial1') Partial1
-          li
-            a(href='#/partial2') Partial2
+  .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
+                                                  bs-navbar='bs-navbar')
+    .navbar-inner
+      .container-fluid
+        a.btn.btn-navbar(data-toggle='collapse',
+                          data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='#dashboard') {{config.profile.title}}
+        .nav-collapse.collapse
+          ul.nav.pull-right(ng-hide='browser.mobile')
+            li.dropdown
+              a.dropdown-toggle(href='#',
+                                data-toggle='dropdown')
+                i.icon-user.icon-white
+                | {{app.resources.name}}
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='#logout')
+                    i.icon-off
+                    | Logout
+          ul.nav.pull-right(ng-show='browser.mobile')
+            li
+              a(href='#logout')
+                i.icon-off.icon-white(ng-hide='ng-hide',
+                                      browser.portrait='browser.portrait',
+                                      browser.screen.width='browser.screen.width')
+                span(ng-show='ng-show',
+                      browser.portrait='browser.portrait',
+                      browser.screen.width='browser.screen.width')
+
+
+
+
+block loading
+  #loading.ng-cloak(ng-show='loadingBig')
+    div(ng-show='loaderIcons.general')
+      span.entypo ⏳
+      p {{ui.loading.general}}...
+    div(ng-show='loaderIcons.dashboard')
+      span.entypo ◴
+      p
+        | {{ui.loading.general}}
+        br
+        | {{ui.loading.dashboard}}
+    div(ng-show='loaderIcons.planboard')
+      span.entypo 
+      p
+        | {{ui.loading.general}}
+        br
+        | {{ui.loading.planboard}}
+    div(ng-show='loaderIcons.messages')
+      span.entypo 
+      p
+        | {{ui.loading.general}}
+        br
+        | {{ui.loading.messages}}
+    div(ng-show='loaderIcons.groups')
+      span.entypo 
+      p
+        | {{ui.loading.general}}
+        br
+        | {{ui.loading.groups}}
+    div(ng-show='loaderIcons.profile')
+      span.entypo 
+      p
+        | {{ui.loading.general}}
+        br
+        | {{ui.loading.profile}}
+    div(ng-show='loaderIcons.settings')
+      span.entypo ⚒
+      p
+        | {{ui.loading.general}}
+        br
+        | {{ui.loading.settings}}
+
+
+
+
+
+
+block notification
+  #notification.alert(ng-show='notification.status')
+    button.close(type='button', ng-click='notification.status = false') ×
+    | {{notification.message}}
+
+
+
+
+
+
+
+block mobile-status-bar
+  #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
+    img(src='images/ajax-loader.gif')
+    small {{loading.message}}
+
+
+
+
 
 block footer
-  footer
-    .container
-      p.text-muted.credit.pull-left
-        | Some footer text
-        a(href='#')  and a link
-      p.text-muted.pull-right(style='margin-top:20px')
-        | {{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}
+  #footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
+    img(ng-src='images/footer_ribbon.png',
+        style='width: 175px; display: block; margin: -158px auto 0 auto;')
+    .container-fluid
+      #copyrights
+        img(ng-src='images/ask_fast_logo.png',
+            style='margin-top: 5px;')
+      p.muted(ng-show='loading.status')
+        img(src='images/ajax-loader.gif')
+        small
+          span(ng-show='app.preloader.status') {{app.preloader.count}}%
+          | {{loading.message}}
+
+
+
 
 block icons
   link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
@@ -30,6 +127,9 @@ block icons
   link(rel='apple-touch-icon-precomposed', sizes='72x72', href='icons/apple-touch-icon-72-precomposed.png')
   link(rel='apple-touch-icon-precomposed', href='icons/apple-touch-icon-57-precomposed.png')
   link(rel='shortcut icon', href='icons/favicon.png')
+
+
+
 
 block iestuff
   //if lt IE 7
@@ -42,6 +142,9 @@ block iestuff
   //if lt IE 9
     script(src='vendors/es5-shim/es5-shim.js')
     script(src='vendors/json3/lib/json3.min.js')
+
+
+
 
 block analytics
   // Google Analytics: change UA-XXXXX-X to be your site's ID.

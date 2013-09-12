@@ -23,6 +23,8 @@
     font-size: 22px;
     padding-bottom: 15px;
   }
+
+  display: none;
 }
 
 
@@ -92,21 +94,5 @@
         margin: 0 auto;
       }
     }
-  }
-}
-
-
-#demo_users {
-  position: absolute;
-  right: 20px;
-  bottom: 0;
-
-  ul {
-    margin: 0;
-    padding: 0;
-    list-style-type: none; 
-  }
-
-  li {  
   }
 }
