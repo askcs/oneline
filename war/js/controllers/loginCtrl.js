@@ -149,7 +149,7 @@ angular.module('WebPaige.Controllers.Login', [])
      */
     $scope.preloader = {
       count:    0,
-      total:    4,
+      total:    2,
       current:  0,
       fraction: function ()
       {
@@ -173,13 +173,13 @@ angular.module('WebPaige.Controllers.Login', [])
       self.progress('Loading app related information..');
 
 
-      User.resources()
-        .then(function ()
-        {
-          self.progress('User information loaded');
-
-          self.appInit();
-        });
+//      User.resources()
+//        .then(function ()
+//        {
+//          self.progress('User information loaded');
+//
+//          self.appInit();
+//        });
 
 
       Core.connections.list()

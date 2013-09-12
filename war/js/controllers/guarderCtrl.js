@@ -83,10 +83,12 @@ angular.module('WebPaige.Controllers.Guarder', [])
 
                 // Populate blacklist
                 var list = [];
+
                 angular.forEach($rootScope.data.blacklist, function (listed)
                 {
                   list.push(listed.id);
                 });
+
                 list.push(result.id);
 
                 // Park node temporarily
