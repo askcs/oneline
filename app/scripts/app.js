@@ -4,6 +4,8 @@
 define(
   [
     'angular',
+    'angular-resource',
+    'modals/modals',
     'controllers/controllers',
     'services/services',
     'filters/filters',
@@ -13,10 +15,12 @@ define(
   {
     return angular.module('Oneline',
       [
+        'modals',
         'controllers',
         'services',
         'filters',
-        'directives'
+        'directives',
+        'ngResource'
       ]);
   }
 );

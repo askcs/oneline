@@ -1,0 +1,1 @@
+define(["controllers/controllers","config"],function(e,t){e.controller("forgotPass",["$rootScope","$scope","$location",function(e,t,n){e.fixStyles()}])});

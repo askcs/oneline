@@ -1463,7 +1463,7 @@ angular.module('ngMockE2E', ['ng']).config(function($provide) {
  * on the `ngMockE2E` and your application modules and defines the fake backend:
  *
  * <pre>
- *   myAppDev = angular.module('myAppDev', ['myApp', 'ngMockE2E']);
+ *   OnelineDev = angular.module('OnelineDev', ['Oneline', 'ngMockE2E']);
  *   OnelineDev.run(function($httpBackend) {
  *     phones = [{name: 'phone1'}, {name: 'phone2'}];
  *

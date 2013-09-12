@@ -3,18 +3,22 @@ if (window.location.port == '8080')
   document.getElementsByTagName('html')[0].setAttribute('ng-app');
 }
 
-require.config (
+require.config(
   {
     paths: {
       angular:  '../vendors/angular/angular',
       jquery:   '../vendors/jquery/jquery.min',
       domReady: '../vendors/requirejs-domready/domReady',
-      bootstrap:'../vendors/bootstrap-sass/dist/js/bootstrap.min'
+      bootstrap:'../vendors/bootstrap-sass/dist/js/bootstrap.min',
+      'angular-resource': '../vendors/angular-resource/angular-resource.min'
     },
     shim: {
       angular: {
         deps:     ['jquery'],
         exports:  'angular'
+      },
+      'angular-resource': {
+        deps:     ['angular']
       },
       bootstrap: {
         deps:   ['jquery'],
@@ -24,25 +28,45 @@ require.config (
   }
 );
 
-require (
+require(
   [
     'angular',
     'domReady',
+
+    'angular-resource',
+
     'config',
     'app',
     'routes',
     'run',
 
-    'controllers/home',
-    'controllers/partial1',
-    'controllers/partial2',
+    'modals/user',
+    'modals/core',
+
+    'controllers/login',
+    'controllers/forgotPass',
+    'controllers/register',
+    'controllers/logout',
+    'controllers/core',
+    // 'controllers/purchaser',
+    'controllers/manager',
+    'controllers/notifier',
+    'controllers/reporter',
+    'controllers/guarder',
 
     'directives/appVersion',
 
     'filters/interpolate',
+    'filters/all',
 
     'services/version',
     'services/user',
+
+    'services/session',
+    'services/md5',
+    'services/storage',
+    'services/strings',
+    'services/generators',
 
     'bootstrap'
 //    'pouch'

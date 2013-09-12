@@ -12,25 +12,73 @@ define(
         '$routeProvider',
         function ($routeProvider)
         {
+
+
+
+
+          /**
+           * Login router
+           */
           $routeProvider
-            .when('/home',
+            .when('/login',
             {
-              templateUrl:  'views/home.html',
-              controller:   'home'
+              templateUrl: 'views/login.html',
+              controller: 'login'
             })
-            .when('/partial1',
+
+
+          /**
+           * Forgot password router
+           */
+            .when('/forgotpass',
             {
-              templateUrl:  'views/partial1.html',
-              controller:   'partial1'
+              templateUrl: 'views/forgotpass.html',
+              controller: 'forgotpass'
             })
-            .when('/partial2',
+
+
+
+          /**
+           * Register router
+           */
+            .when('/register',
             {
-              templateUrl:  'views/partial2.html',
-              controller:   'partial2'
+              templateUrl: 'views/register.html',
+              controller: 'register'
             })
+
+
+          /**
+           * Logout router
+           */
+            .when('/logout',
+            {
+              templateUrl: 'views/logout.html',
+              controller: 'logout'
+            })
+
+
+          /**
+           * Core router
+           */
+            .when('/core',
+            {
+              templateUrl:    'views/core.html',
+              controller:     'coreCtrl',
+              reloadOnSearch: false
+            })
+
+
+          /**
+           * Router fallback
+           */
             .otherwise({
-              redirectTo: '/home'
+              redirectTo: '/login'
             });
+
+
+
+
         }
       ]
     );

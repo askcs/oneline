@@ -1,0 +1,30 @@
+#welcome
+  // loginForm
+  #login.boxed
+    form(ng-submit='login()')
+      img(ng-src='images/oneline_logo_big.png')
+      h4.form-signin-heading Register an account
+      // alert login
+      .alert.{{alert.login.type}}(ng-show='alert.login.display')
+        button.close(type='button', ng-click='alert.login=false') ×
+        | {{alert.login.message}}
+      // end login password
+      input(type='text', ng-model='logindata.username', placeholder='Mobile number', autofocus='autofocus')
+      input(type='text', ng-model='logindata.username', placeholder='Name')
+      input(type='text', ng-model='logindata.username', placeholder='Email')
+      input(type='text', ng-model='logindata.username', placeholder='Password')
+      input(type='text', ng-model='logindata.username', placeholder='Retype password')
+      label.checkbox.span3(style='margin-left: -10px;')
+        input(type='checkbox', ng-model='logindata.remember')
+        span(style='font-size: 12px;')
+          | I agree to the
+          a(href='terms.html', target='_blank') Terms of Service
+          | and
+          a(href='privacy.html', target='_blank') Privacy Policy
+      button.btn.btn-large.btn-primary(type='submit') Register
+      p
+        small
+          a(href='#login') login
+      span.version v{{config.version}}
+  // end loginForm
+  // end change pass

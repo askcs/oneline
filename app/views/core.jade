@@ -1,0 +1,166 @@
+br
+br
+// app
+.row-fluid
+ .tabbable.tabs-left
+   // tabs
+   ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+     li.{{(views.manager==true).&&.'active'}}
+       // <span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Connected numbers
+       a(ng-click='setViewTo("manager"); connections.list();', data-toggle='tab')
+         span.icomoon.icomoon-contact-add(aria-hidden='true')
+         | Connections
+     li.{{(views.notifier==true).&&.'active'}}
+       a(ng-click='setViewTo("notifier")', data-toggle='tab')
+         span.icomoon.icomoon-bullhorn-2(aria-hidden='true')
+         | Notification settings
+     li.{{(views.reporter==true).&&.'active'}}
+       a(ng-click='setViewTo("reporter")', data-toggle='tab')
+         span.icomoon.icomoon-file-10(aria-hidden='true')
+         | Call list
+     li.{{(views.guarder==true).&&.'active'}}
+       a(ng-click='setViewTo("guarder")', data-toggle='tab')
+         span.icomoon.icomoon-thumbs-up-5(aria-hidden='true')
+         | Blacklist
+   // end tabs
+   // tabs content
+   .tab-content
+     // purchaser
+     // end purchaser
+     // manager
+     .tab-pane.{{(views.manager==true).&&.'active'}}(ng-controller='managerCtrl')
+       .tab-header
+         h3.pull-left Add a connection
+       hr
+       .row-fluid
+         .span12
+           form.form-inline.well(ng-submit='connections.save()')
+             input.input-medium(ng-model='connection.label', type='text', placeholder='Label')
+             input.input-large(ng-model='connection.contactInfo', type='text', placeholder='e.g. Phone number…')
+             select.span2(ng-model='connection.contactInfoTag', style='margin-right: 5px;')
+               option(value='Email') Email
+               option(value='Phone', selected='selected') Phone
+             button.btn(type='submit') Save
+           h4 Numbers
+           hr
+           .alert.alert-{{.(verified.result).&&.'success'.||.'error'.}}(ng-show='verified.status')
+             button.close(type='button', ng-click='verified.status = false', data-dismiss='alert') ×
+             span(ng-show='verified.result') Number is verified and ready to use.
+             span(ng-hide='verified.result')
+               | There was an error with verifiying number. Please try again. If problem resists, please get in touch
+               | with us.
+           p(ng-show='(data.connections.length == 0)')
+             | There are no connected numbers. Please add some.
+           table.table.table-striped(ng-show='ng-show')
+             | 0)"
+             thead
+               tr
+                 th(style='width: 100px;')
+                 th Label
+                 th Connection
+                 th Type
+                 th
+             tbody
+               tr(ng-repeat='number in data.connections')
+                 td
+                   span.label.label-success(ng-show='number.verified') Verified
+                   span.label.label-error(ng-hide='number.verified') Not Verified
+                 td {{number.label}}
+                 td {{number.contactInfo}}
+                 td {{number.contactInfoTag}}
+                 td
+                   button.btn.btn-mini(ng-click='connections.remove(number)', type='button', ng-hide='(number.contactKey==data.account.contactKey)') Delete
+                   button.btn.btn-mini(ng-click='connections.edit(number)', type='button') Edit
+                   button.btn.btn-mini(ng-hide='number.verified', ng-click='connections.verify.initiate(number)', type='button', style='margin-left: 5px;') Verify
+     // end manager
+     // notifier
+     .tab-pane.{{(views.notifier==true).&&.'active'}}(ng-controller='notifierCtrl')
+       .tab-header
+         h3.pull-left Missed Call Notifications
+       hr
+       .row-fluid
+         .span12(style='min-height: 230px;')
+           p Your smart secretary can send notifcations about your missed calls.
+           form.form-inline(ng-submit='settings.save()')
+             table.table.table-striped
+               tr
+                 td
+                   label.checkbox
+                     input(type='checkbox', ng-model='data.settings.email.status')
+                     | Email Notification
+                 td
+                   select(ng-model='data.settings.email.target', ng-options='target.id as target.value for target in data.settings.email.targets', ng-disabled='!data.settings.email.status')
+                     option(value='{{ target.id }}', ng-selected='data.settings.email.target') {{ target.value }}
+               tr
+                 td
+                   label.checkbox
+                     input(type='checkbox', ng-model='data.settings.sms.status')
+                     | SMS Notification
+                 td
+                   select(ng-model='data.settings.sms.target', ng-options='target.id as target.value for target in data.settings.sms.targets', ng-disabled='!data.settings.sms.status')
+                     option(value='{{ target.id }}', ng-selected='data.settings.sms.target') {{ target.value }}
+             button.btn(type='submit') Save changes
+     // end notifier
+     // reporter
+     .tab-pane.{{(views.reporter==true).&&.'active'}}(ng-controller='reporterCtrl')
+       .tab-header
+         h3.pull-left Recent calls
+       hr
+       .row-fluid
+         .span12(style='min-height: 230px;')
+           p(ng-hide='logsLoading') Oneline provides all your recent calls only to you.
+           p(ng-show='logsLoading')
+             | Loading recent calls
+           table.table.table-striped(ng-hide='logsLoading')
+             thead
+               tr
+                 th Call type
+                 th From
+                 th Date
+                 th Duration
+                 th
+             tbody
+               tr(ng-repeat='log in logsList')
+                 td
+                   span.label.label-warning {{ log.callState }}
+                 td {{ log.address }}
+                 td {{ log.startTime | nicelyDate }}
+                 td {{ log.endTime - log.startTime | calculateTime }}
+                 td
+                   button.btn.btn-mini(type='button', ng-click='logs.block(log)', ng-hide='log.blocked') Block
+                   button.btn.btn-mini(type='button', ng-click='logs.allow(log)', ng-show='log.blocked') Allow
+     // end reporter
+     // guarder
+     .tab-pane.{{(views.guarder==true).&&.'active'}}(ng-controller='guarderCtrl')
+       .tab-header
+         h3.pull-left Blacklist
+       hr
+       .row-fluid
+         .span12(style='min-height: 234px;')
+           p Oneline can block any unwanted incoming calls and let them know kindly
+           form.form-inline.well(ng-submit='blacklists.save()')
+             input.input-medium(ng-model='blacklist.label', type='text', placeholder='Label')
+             input.input-large(ng-model='blacklist.contactInfo', type='text', placeholder='e.g. Phone number…')
+             button.btn(type='submit') Add to blacklist
+           h4 Numbers
+           p(ng-show='(data.blacklist.length == 0)')
+             | There are no blacklisted numbers.
+           table.table.table-striped(ng-show='ng-show')
+             | 0)"
+             thead
+               tr
+                 th Label
+                 th Telefon number
+                 th
+             tbody
+               tr(ng-repeat='number in data.blacklist')
+                 td {{number.label}}
+                 td {{number.contactInfo}}
+                 td
+                   button.btn.btn-mini(ng-click='blacklists.remove(number)', type='button') Allow
+     // end guarder
+   // end tabs content
+   // tab shadow
+   #tab-shadow(style='margin-left: 154px;')
+     img(ng-src='images/content_canvas_shadow.png')
+   // end tab shadow
