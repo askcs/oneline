@@ -21,6 +21,8 @@ define(
 
           Storage.clearAll();
 
+          document.cookie = "WebPaige.session=''; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+
           User.logout()
             .then(function (result)
             {
@@ -35,7 +37,7 @@ define(
 
               Storage.add('logindata', angular.toJson(logindata));
 
-              $window.location.href = 'logout.html';
+              $window.location.href = 'index.html';
             });
 
 

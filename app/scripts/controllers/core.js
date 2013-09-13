@@ -14,7 +14,7 @@ define(
 
 
 
-          Core.factory.process();
+          // Core.factory.process();
 
 
 

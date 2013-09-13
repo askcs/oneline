@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icons/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="icons/favicon.png">
-    <link rel="stylesheet" href="styles/6dcaf286.main.css">
+    <link rel="stylesheet" href="styles/83a3ade2.main.css">
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -32,24 +32,43 @@
     <script src="vendors/es5-shim/es5-shim.js"></script>
     <script src="vendors/json3/lib/json3.min.js"></script>
     <![endif]-->
-    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="bs-navbar" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
-      <div class="navbar-inner">
-        <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#dashboard" class="brand">{{config.profile.title}}</a>
-          <div class="nav-collapse collapse">
-            <ul ng-hide="browser.mobile" class="nav pull-right">
-              <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i>{{app.resources.name}}<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#logout"><i class="icon-off"></i>Logout</a></li>
-                </ul>
-              </li>
-            </ul>
-            <ul ng-show="browser.mobile" class="nav pull-right">
-              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768"></span></a></li>
-            </ul>
-          </div>
-        </div>
+    <nav role="navigation" class="navbar navbar-default">
+      <div class="navbar-header">
+        <button type="button" data-toggle="collapse" data-target=".navbar-ex1-collapse" class="navbar-toggle"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">Brand</a>
       </div>
-    </div>
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li><a href="#">Separated link</a></li>
+              <li><a href="#">One more separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+        <form role="search" class="navbar-form navbar-left">
+          <div class="form-group">
+            <input type="text" placeholder="Search" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Link</a></li>
+          <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="#">Action</a></li>
+              <li><a href="#">Another action</a></li>
+              <li><a href="#">Something else here</a></li>
+              <li><a href="#">Separated link</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
     <div id="loading" ng-show="loadingBig" class="ng-cloak">
       <div ng-show="loaderIcons.general"><span class="entypo">⏳</span>
         <p>{{ui.loading.general}}...</p>
@@ -73,11 +92,11 @@
         <p>{{ui.loading.general}}<br>{{ui.loading.settings}}</p>
       </div>
     </div>
-    <div id="notification" ng-show="notification.status" class="alert">
+    <div id="notification" ng-show="notification.status" class="alert ng-cloak">
       <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
     </div>
     <div id="wrap">
-      <div class="container-fluid">
+      <div class="container">
         <div ng-view="ng-view"></div>
       </div>
       <div id="push"></div>
@@ -90,6 +109,6 @@
       </div>
     </div>
     <!-- block analytics-->
-    <script data-main="scripts/571d7704.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/ebb3b81d.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

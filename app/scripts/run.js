@@ -491,12 +491,13 @@ define(
               {
                 // console.log('content is taller than tabs ->', $this);
                 // $('.tabs-left .nav-tabs').css( { height: contentHeight } );
-              };
+              }
             });
 
             /**
              * Correct icon-font-library icons for mac and linux
              */
+            /*
             if ($.os.mac || $.os.linux)
             {
               $('.nav-tabs-app li a span').css({
@@ -509,6 +510,7 @@ define(
               //   display: 'none'
               // });
             }
+            */
 
           };
 

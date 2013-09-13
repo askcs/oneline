@@ -4,7 +4,7 @@ define(
   {
     'use strict';
 
-    controllers.controller ('purchaser',
+    controllers.controller('purchaser',
       [
         '$rootScope', '$scope', 'Generators',
         function ($rootScope, $scope, Generators)

@@ -4,7 +4,7 @@ define(
   {
     'use strict';
 
-    controllers.controller ('guarder',
+    controllers.controller('guarder',
       [
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
@@ -15,7 +15,7 @@ define(
           /**
            * Fix styles
            */
-          $rootScope.fixStyles();
+          // $rootScope.fixStyles();
 
 
           /**
@@ -156,7 +156,7 @@ define(
            */
           $rootScope.$on('refreshBlockedNumbers', function ()
           {
-            $scope.blacklists.list();
+            // $scope.blacklists.list();
           });
 
 

@@ -4,10 +4,11 @@ define(
   {
     'use strict';
 
-    controllers.controller ('manager',
+    controllers.controller('manager',
       [
-        '$rootScope', '$scope', '$modal', 'Core',
-        function ($rootScope, $scope, $modal, Core)
+        // TODO: add $modal later on
+        '$rootScope', '$scope', 'Core',
+        function ($rootScope, $scope, Core)
         {
 
 
@@ -15,7 +16,7 @@ define(
           /**
            * Fix styles
            */
-          $rootScope.fixStyles();
+          // $rootScope.fixStyles();
 
 
           /**

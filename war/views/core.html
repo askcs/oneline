@@ -1,33 +1,24 @@
 <br><br>
-<!-- app-->
-<div class="row-fluid">
+<div class="row">
   <div class="tabbable tabs-left">
-    <!-- tabs-->
-    <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
-      <li>.{{(views.manager==true).&&.'active'}}
-        <!-- <span aria-hidden="true" class="icomoon icomoon-contact-add"></span> Connected numbers--><a ng-click="setViewTo(&quot;manager&quot;); connections.list();" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span>Connections</a>
-      </li>
-      <li>.{{(views.notifier==true).&&.'active'}}<a ng-click="setViewTo(&quot;notifier&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span>Notification settings</a></li>
-      <li>.{{(views.reporter==true).&&.'active'}}<a ng-click="setViewTo(&quot;reporter&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span>Call list</a></li>
-      <li>.{{(views.guarder==true).&&.'active'}}<a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span>Blacklist</a></li>
+    <ul class="nav nav-tabs nav-tabs-app">
+      <li class="{{(views.manager==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;manager&quot;); connections.list();" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span>Connections</a></li>
+      <li class="{{(views.notifier==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;notifier&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span>Notification settings</a></li>
+      <li class="{{(views.reporter==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;reporter&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span>Call list</a></li>
+      <li class="{{(views.guarder==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span>Blacklist</a></li>
     </ul>
-    <!-- end tabs-->
-    <!-- tabs content-->
     <div class="tab-content">
-      <!-- purchaser-->
-      <!-- end purchaser-->
-      <!-- manager-->
-      <div class="tab-pane">.{{(views.manager==true).&&.'active'}}(ng-controller='managerCtrl')
+      <div ng-controller="manager" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Add a connection</h3>
         </div>
         <hr>
-        <div class="row-fluid">
-          <div class="span12">
-            <form ng-submit="connections.save()" class="form-inline well">
-              <input ng-model="connection.label" type="text" placeholder="Label" class="input-medium">
+        <div class="row">
+          <div style="padding: 5px 30px" class="col-md-12">
+            <form role="form" ng-submit="connections.save()" class="form-inline well">
+              <input ng-model="connection.label" type="text" placeholder="Label">
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
-              <select ng-model="connection.contactInfoTag" style="margin-right: 5px" class="span2">
+              <select ng-model="connection.contactInfoTag" style="margin-right: 5px" class="col-md-2">
                 <option value="Email">Email</option>
                 <option value="Phone" selected="selected">Phone</option>
               </select>
@@ -35,13 +26,13 @@
             </form>
             <h4>Numbers</h4>
             <hr>
-            <div class="alert alert-">{{.(verified.result).&&.'success'.||.'error'.}}(ng-show='verified.status')
+            <div ng-show="verified.status" class="alert alert-{{(verified.result) &amp;&amp; 'success' || 'error' }}">
               <button type="button" ng-click="verified.status = false" data-dismiss="alert" class="close">×</button><span ng-show="verified.result">Number is verified and ready to use.</span><span ng-hide="verified.result">
                 There was an error with verifiying number. Please try again. If problem resists, please get in touch
                 with us.</span>
             </div>
             <p ng-show="(data.connections.length == 0)">There are no connected numbers. Please add some.</p>
-            <table ng-show="ng-show" class="table table-striped">0)"
+            <table ng-show="ng-show" class="table table-striped">
               <thead>
                 <tr>
                   <th style="width: 100px"></th>
@@ -68,60 +59,54 @@
           </div>
         </div>
       </div>
-      <!-- end manager-->
-      <!-- notifier-->
-      <div class="tab-pane">.{{(views.notifier==true).&&.'active'}}(ng-controller='notifierCtrl')
+      <div ng-controller="notifier" class="tab-pane {{(views.notifier==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Missed Call Notifications</h3>
         </div>
         <hr>
-        <div class="row-fluid">
-          <div style="min-height: 230px" class="span12">
+        <div class="row">
+          <div style="padding: 5px 30px" class="col-md-12">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
-            <form ng-submit="settings.save()" class="form-inline">
-              <table class="table table-striped">
-                <tr>
-                  <td>
-                    <label class="checkbox">
-                      <input type="checkbox" ng-model="data.settings.email.status">Email Notification
-                    </label>
-                  </td>
-                  <td>
-                    <select ng-model="data.settings.email.target" ng-options="target.id as target.value for target in data.settings.email.targets" ng-disabled="!data.settings.email.status">
-                      <option value="{{ target.id }}" ng-selected="data.settings.email.target">{{ target.value }}</option>
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <label class="checkbox">
-                      <input type="checkbox" ng-model="data.settings.sms.status">SMS Notification
-                    </label>
-                  </td>
-                  <td>
-                    <select ng-model="data.settings.sms.target" ng-options="target.id as target.value for target in data.settings.sms.targets" ng-disabled="!data.settings.sms.status">
-                      <option value="{{ target.id }}" ng-selected="data.settings.sms.target">{{ target.value }}</option>
-                    </select>
-                  </td>
-                </tr>
-              </table>
-              <button type="submit" class="btn">Save changes</button>
-            </form>
+            <table style="width: 99%" class="table table-striped">
+              <tr>
+                <td>
+                  <label class="checkbox">
+                    <input type="checkbox" ng-model="data.settings.email.status">Email Notification
+                  </label>
+                </td>
+                <td>
+                  <select ng-model="data.settings.email.target" ng-options="target.id as target.value for target in data.settings.email.targets" ng-disabled="!data.settings.email.status">
+                    <option value="{{ target.id }}" ng-selected="data.settings.email.target">{{ target.value }}</option>
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <label class="checkbox">
+                    <input type="checkbox" ng-model="data.settings.sms.status">SMS Notification
+                  </label>
+                </td>
+                <td>
+                  <select ng-model="data.settings.sms.target" ng-options="target.id as target.value for target in data.settings.sms.targets" ng-disabled="!data.settings.sms.status">
+                    <option value="{{ target.id }}" ng-selected="data.settings.sms.target">{{ target.value }}</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+            <button type="submit" ng-click="settings.save()" class="btn">Save changes</button>
           </div>
         </div>
       </div>
-      <!-- end notifier-->
-      <!-- reporter-->
-      <div class="tab-pane">.{{(views.reporter==true).&&.'active'}}(ng-controller='reporterCtrl')
+      <div ng-controller="reporter" class="tab-pane {{(views.reporter==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Recent calls</h3>
         </div>
         <hr>
-        <div class="row-fluid">
-          <div style="min-height: 230px" class="span12">
+        <div class="row">
+          <div style="padding: 5px 30px" class="col-md-12">
             <p ng-hide="logsLoading">Oneline provides all your recent calls only to you.</p>
             <p ng-show="logsLoading">Loading recent calls</p>
-            <table ng-hide="logsLoading" class="table table-striped">
+            <table style="width: 99%" ng-hide="logsLoading" class="table table-striped">
               <thead>
                 <tr>
                   <th>Call type</th>
@@ -147,15 +132,13 @@
           </div>
         </div>
       </div>
-      <!-- end reporter-->
-      <!-- guarder-->
-      <div class="tab-pane">.{{(views.guarder==true).&&.'active'}}(ng-controller='guarderCtrl')
+      <div ng-controller="guarder" class="tab-pane {{(views.guarder==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Blacklist</h3>
         </div>
         <hr>
-        <div class="row-fluid">
-          <div style="min-height: 234px" class="span12">
+        <div class="row">
+          <div style="padding: 5px 30px" class="col-md-12">
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
             <form ng-submit="blacklists.save()" class="form-inline well">
               <input ng-model="blacklist.label" type="text" placeholder="Label" class="input-medium">
@@ -164,7 +147,7 @@
             </form>
             <h4>Numbers</h4>
             <p ng-show="(data.blacklist.length == 0)">There are no blacklisted numbers.</p>
-            <table ng-show="ng-show" class="table table-striped">0)"
+            <table ng-show="ng-show" class="table table-striped">
               <thead>
                 <tr>
                   <th>Label</th>
@@ -185,11 +168,8 @@
           </div>
         </div>
       </div>
-      <!-- end guarder-->
     </div>
-    <!-- end tabs content-->
-    <!-- tab shadow-->
-    <div id="tab-shadow" style="margin-left: 154px"><img ng-src="images/content_canvas_shadow.png"></div>
-    <!-- end tab shadow-->
   </div>
 </div>
+<!--   #tab-shadow(style='margin-left: 154px;')-->
+<!--     img(ng-src='images/content_canvas_shadow.png')-->

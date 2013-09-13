@@ -4,7 +4,7 @@ define(
   {
     'use strict';
 
-    controllers.controller ('reporter',
+    controllers.controller('reporter',
       [
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
@@ -16,7 +16,7 @@ define(
           /**
            * Fix styles
            */
-          $rootScope.fixStyles();
+          // $rootScope.fixStyles();
 
 
           $scope.logs = [];
@@ -156,7 +156,7 @@ define(
             }
           };
 
-          $scope.logs.list();
+          // $scope.logs.list();
 
 
 

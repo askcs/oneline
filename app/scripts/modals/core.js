@@ -175,7 +175,7 @@ define(
               deferred.resolve(
                 [
                   {"id":52001,"scenarioId":1,"startTime":1,"endTime":1,"address":"0643002549","type":"phone","callState":"answered"},
-                  {"id":52001,"scenarioId":1,"startTime":1,"endTime":324,"address":"0629143143","type":"phone","callState":"answered"},
+                  {"id":52002,"scenarioId":1,"startTime":1,"endTime":324,"address":"0629143143","type":"phone","callState":"answered"},
                 ]
               );
 
@@ -689,8 +689,10 @@ define(
               });
 
               // Setup user id
-              account.id          = raws.resources[0].ownerKey;
-              account.contactKey  = raws.resources[0].contactKey;
+
+              // TODO: Fix this later on!
+              // account.id          = raws.resources[0].ownerKey;
+              // account.contactKey  = raws.resources[0].contactKey;
 
               // TODO (Remove this later on)
               $rootScope.app.resources = account;

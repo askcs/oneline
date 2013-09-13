@@ -33,7 +33,7 @@ define(
             .when('/core',
             {
               templateUrl:    'views/core.html',
-              controller:     'coreCtrl',
+              controller:     'core',
               reloadOnSearch: false
             })
             .otherwise({

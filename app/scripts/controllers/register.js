@@ -4,7 +4,7 @@ define(
   {
     'use strict';
 
-    controllers.controller ('register',
+    controllers.controller('register',
       [
         '$scope',
         function ($scope)
@@ -15,7 +15,7 @@ define(
           /**
            * Fix styles
            */
-          $rootScope.fixStyles();
+          // $rootScope.fixStyles();
 
 
 
