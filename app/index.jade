@@ -1,5 +1,7 @@
 extends layout
 
+
+
 block navbar
   .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
                                                   bs-navbar='bs-navbar')
@@ -27,12 +29,10 @@ block navbar
           ul.nav.pull-right(ng-show='browser.mobile')
             li
               a(href='#logout')
-                i.icon-off.icon-white(ng-hide='ng-hide',
-                                      browser.portrait='browser.portrait',
-                                      browser.screen.width='browser.screen.width')
-                span(ng-show='ng-show',
-                      browser.portrait='browser.portrait',
-                      browser.screen.width='browser.screen.width')
+                i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768')
+
+
 
 
 
@@ -84,6 +84,8 @@ block loading
 
 
 
+
+
 block notification
   #notification.alert(ng-show='notification.status')
     button.close(type='button', ng-click='notification.status = false') ×
@@ -95,10 +97,14 @@ block notification
 
 
 
+
+
 block mobile-status-bar
   #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
     img(src='images/ajax-loader.gif')
     small {{loading.message}}
+
+
 
 
 
@@ -121,12 +127,16 @@ block footer
 
 
 
+
+
 block icons
   link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
   link(rel='apple-touch-icon-precomposed', sizes='114x114', href='icons/apple-touch-icon-114-precomposed.png')
   link(rel='apple-touch-icon-precomposed', sizes='72x72', href='icons/apple-touch-icon-72-precomposed.png')
   link(rel='apple-touch-icon-precomposed', href='icons/apple-touch-icon-57-precomposed.png')
   link(rel='shortcut icon', href='icons/favicon.png')
+
+
 
 
 
@@ -142,6 +152,8 @@ block iestuff
   //if lt IE 9
     script(src='vendors/es5-shim/es5-shim.js')
     script(src='vendors/json3/lib/json3.min.js')
+
+
 
 
 

@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="icons/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="icons/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="icons/favicon.png">
-    <link rel="stylesheet" href="styles/a75d1f50.main.css">
+    <link rel="stylesheet" href="styles/6dcaf286.main.css">
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -32,27 +32,64 @@
     <script src="vendors/es5-shim/es5-shim.js"></script>
     <script src="vendors/json3/lib/json3.min.js"></script>
     <![endif]-->
-    <div id="wrap">
-      <div class="navbar navbar-inverse navbar-fixed-top bs-docs-nav">
-        <div class="container">
-          <button type="button" data-toggle="collapse" data-target=".bs-navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#/home" class="navbar-brand">Home</a>
-          <div class="nav-collapse collapse bs-navbar-collapse">
-            <ul class="nav navbar-nav">
-              <li><a href="#/partial1">Partial1</a></li>
-              <li><a href="#/partial2">Partial2</a></li>
+    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="bs-navbar" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
+      <div class="navbar-inner">
+        <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#dashboard" class="brand">{{config.profile.title}}</a>
+          <div class="nav-collapse collapse">
+            <ul ng-hide="browser.mobile" class="nav pull-right">
+              <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i>{{app.resources.name}}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#logout"><i class="icon-off"></i>Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul ng-show="browser.mobile" class="nav pull-right">
+              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768"></span></a></li>
             </ul>
           </div>
         </div>
       </div>
-      <div ng-view="" class="container"></div>
     </div>
-    <footer>
-      <div class="container">
-        <p class="text-muted credit pull-left">Some footer text<a href="#"> and a link</a></p>
-        <p style="margin-top:20px" class="text-muted pull-right">{{ 'Current version is v%VERSION%. Released: %RELEASED%' | interpolate }}</p>
+    <div id="loading" ng-show="loadingBig" class="ng-cloak">
+      <div ng-show="loaderIcons.general"><span class="entypo">⏳</span>
+        <p>{{ui.loading.general}}...</p>
       </div>
-    </footer>
+      <div ng-show="loaderIcons.dashboard"><span class="entypo">◴</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.dashboard}}</p>
+      </div>
+      <div ng-show="loaderIcons.planboard"><span class="entypo"></span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.planboard}}</p>
+      </div>
+      <div ng-show="loaderIcons.messages"><span class="entypo"></span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.messages}}</p>
+      </div>
+      <div ng-show="loaderIcons.groups"><span class="entypo"></span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.groups}}</p>
+      </div>
+      <div ng-show="loaderIcons.profile"><span class="entypo"></span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.profile}}</p>
+      </div>
+      <div ng-show="loaderIcons.settings"><span class="entypo">⚒</span>
+        <p>{{ui.loading.general}}<br>{{ui.loading.settings}}</p>
+      </div>
+    </div>
+    <div id="notification" ng-show="notification.status" class="alert">
+      <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
+    </div>
+    <div id="wrap">
+      <div class="container-fluid">
+        <div ng-view="ng-view"></div>
+      </div>
+      <div id="push"></div>
+    </div>
+    <div id="mobile-status-bar" ng-show="loading.status &amp;&amp; browser.mobile" class="ng-cloak"><img src="images/fba8e680.ajax-loader.gif"><small>{{loading.message}}</small></div>
+    <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak"><img ng-src="images/4bf4d149.footer_ribbon.png" style="width: 175px; display: block; margin: -158px auto 0 auto">
+      <div class="container-fluid">
+        <div id="copyrights"><img ng-src="images/dc5fab6e.ask_fast_logo.png" style="margin-top: 5px"></div>
+        <p ng-show="loading.status" class="muted"><img src="images/fba8e680.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
+      </div>
+    </div>
     <!-- block analytics-->
-    <script data-main="scripts/9e45d02d.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/571d7704.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

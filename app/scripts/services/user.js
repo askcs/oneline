@@ -4,7 +4,7 @@ define(
   {
     'use strict';
 
-    services.factory('User',
+    services.factory('User2',
       [
         function ()
         {

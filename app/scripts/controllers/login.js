@@ -1,18 +1,14 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers', 'config', 'modals/user'],
+  function (controllers, config, User)
   {
     'use strict';
 
     controllers.controller ('login',
       [
-        '$rootScope', '$location', '$q', '$scope', 'Session', 'Storage', '$routeParams', 'MD5', 'Core',
-        function ($rootScope, $location, $q, $scope, Session, Storage, $routeParams, MD5, Core)
+        '$rootScope', '$location', '$q', '$scope', 'Session', 'Storage', '$routeParams', 'MD5', 'Core', 'User',
+        function ($rootScope, $location, $q, $scope, Session, Storage, $routeParams, MD5, Core, User)
         {
-
-
-          console.log('User 2 ->', Core);
-
 
           /**
            * Self this

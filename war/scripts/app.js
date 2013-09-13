@@ -1,1 +1,1 @@
-define(["angular","angular-resource","modals/modals","controllers/controllers","services/services","filters/filters","directives/directives"],function(e){return e.module("Oneline",["modals","controllers","services","filters","directives","ngResource"])});
+define(["angular","modals/modals","controllers/controllers","services/services","filters/filters","directives/directives","angular-resource"],function(e){return e.module("Oneline",["modals","controllers","services","filters","directives","ngResource"])});

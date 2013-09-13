@@ -21,7 +21,7 @@ define(
 
 
           var Login = $resource(
-            $config.host + '/login',
+            config.host + '/login',
             {},
             {
               process: {
@@ -33,7 +33,7 @@ define(
 
 
           var Logout = $resource(
-            $config.host + '/logout',
+            config.host + '/logout',
             {},
             {
               process: {
@@ -45,7 +45,7 @@ define(
 
 
           var Owner = $resource(
-            $config.host + '/accounts/contactinfos/owner',
+            config.host + '/accounts/contactinfos/owner',
             {},
             {
               query: {
