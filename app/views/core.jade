@@ -151,7 +151,7 @@ br
           .span12(style='min-height: 230px;')
             p(ng-hide='logsLoading') Oneline provides all your recent calls only to you.
             p(ng-show='logsLoading')
-              | Loading recent calls
+              | Loading recent calls..
             table.table.table-striped(ng-hide='logsLoading')
               thead
                 tr
@@ -186,7 +186,9 @@ br
         hr
         .row-fluid
           .span12(style='min-height: 234px;')
+
             p Oneline can block any unwanted incoming calls and let them know kindly
+
             form.form-inline.well(ng-submit='blacklists.save()')
               input.input-medium(ng-model='blacklist.label',
                                   type='text',
@@ -195,9 +197,11 @@ br
                                 type='text',
                                 placeholder='e.g. Phone number…')
               button.btn(type='submit') Add to blacklist
+
             h4 Numbers
-            p(ng-show='(data.blacklist.length == 0)')
+            p(ng-show='(data.blacklist.list.length == 0)')
               | There are no blacklisted numbers.
+
             table.table.table-striped(ng-show='ng-show')
               thead
                 tr
@@ -205,7 +209,7 @@ br
                   th Telefon number
                   th
               tbody
-                tr(ng-repeat='number in data.blacklist')
+                tr(ng-repeat='number in data.blacklist.list')
                   td {{number.label}}
                   td {{number.contactInfo}}
                   td
