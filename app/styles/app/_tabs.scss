@@ -1,67 +1,3 @@
-
-// Clear any floats
-.tabbable {
-  // @include clearfix();
-  *zoom: 1;
-  &:before,
-  &:after {
-    display: table;
-    content: "";
-    // Fixes Opera/contenteditable bug:
-    // http://nicolasgallagher.com/micro-clearfix-hack/#comment-36952
-    line-height: 0;
-  }
-  &:after {
-    clear: both;
-  }
-}
-
-// Remove border on bottom, left, right
-.tabs-left > .nav-tabs {
-  border-bottom: 0;
-}
-// LEFT & RIGHT
-// ------------
-
-// Common styles
-.tabs-left > .nav-tabs > li {
-  float: none;
-}
-.tabs-left > .nav-tabs > li > a {
-  min-width: 74px;
-  margin-right: 0;
-  margin-bottom: 3px;
-}
-
-// Tabs on the left
-.tabs-left > .nav-tabs {
-  float: left;
-  margin-right: 19px;
-  border-right: 1px solid #ddd;
-}
-.tabs-left > .nav-tabs > li > a {
-  margin-right: -1px;
-  // @include border-radius(4px 0 0 4px);
-  -webkit-border-radius: 4px 0 0 4px;
-  -moz-border-radius: 4px 0 0 4px;
-  border-radius: 4px 0 0 4px;
-}
-.tabs-left > .nav-tabs > li > a:hover,
-.tabs-left > .nav-tabs > li > a:focus {
-  border-color: $gray-lighter #ddd $gray-lighter $gray-lighter;
-  padding-right: -10px;
-}
-.tabs-left > .nav-tabs .active > a,
-.tabs-left > .nav-tabs .active > a:hover,
-.tabs-left > .nav-tabs .active > a:focus {
-  border-color: #ddd transparent #ddd #ddd;
-  *border-right-color: white;
-}
-
-
-
-
-
 .navbar {
   ul.pull-right {
     li {
@@ -82,10 +18,8 @@
   li {
     a {
       &:hover {
-        background-color: purple;
-        // background-color: $purple;
-        color: white;
-        // color: $white;
+        background-color: $purple;
+        color: $white;
       }
     }
   }
@@ -111,8 +45,7 @@ ul.nav-tabs-app {
       
       &:hover {
         border: none;
-        // background-color: $purple;
-        background-color: purple;
+        background-color: $purple;
         // border-right: 1px solid white;
       }
     }
@@ -137,11 +70,11 @@ ul.nav-tabs-app {
 
   .active {
     a {
-      color: purple;
+      color: $purple;
     }
 
     span.icomoon {
-      color: purple
+      color: $purple
     }
   }
 }
@@ -152,7 +85,7 @@ ul.nav-tabs-app {
 
   h1 {
     margin-top: 2px;
-    color: purple;
+    color: $purple;
     font-size: 50px;
     font-weight: bold;
   }
@@ -160,9 +93,7 @@ ul.nav-tabs-app {
 
 .tabs-left {
   .tab-content {
-    background-color: white;
-
-    margin-left: 153px;
+    background-color: none;
     // border-left: 1px solid #ddd;
   }
 }

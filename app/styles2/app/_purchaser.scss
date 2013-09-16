@@ -14,8 +14,8 @@ ul.breadcrumb-steps {
 			border-radius: 30px;
 			width: 17px;
 			height: 20px;
-			background-color: $grayLighter;
-			border: 2px solid $pink;
+			background-color: $gray-lighter;
+			border: 2px solid pink;
 			padding: 5px 0 0 7px;
 			margin-right: 3px;
 			font-size: 18px;
@@ -27,7 +27,7 @@ ul.breadcrumb-steps {
 			margin-top: 10px;
 			text-decoration: none;
 			font-size: 16px;
-			color: $textColor;
+			color: $text-color;
 		}
 
 		.breadcrumb-step-text {
@@ -38,13 +38,13 @@ ul.breadcrumb-steps {
 	.step-active {
 
 		.label {		
-			background-color: $pink;
-			border: 2px solid $pink;
-			color: $white;
+			background-color: pink;
+			border: 2px solid pink;
+			color: white;
 		}
 
 		a {
-			color: $pink;
+			color: pink;
 		}
 	}
 

@@ -1,14 +1,14 @@
 .navbar {
   z-index: 100;
 
-  .brand {
-    margin-top: 0px;
+  .navbar-brand {
+    margin-top: 5px;
     margin-bottom: 0;
     // margin-left: 20px;
     padding-bottom: 0;
-    height: 30px;
-    width: 102px;
-    background: url(../img/oneline_logo_small.png) no-repeat;
+    height: 60px;
+    width: 120px;
+    background: url(../images/oneline_logo_small.png) no-repeat;
     background-position: 20px 9px;
     text-indent: -9999px;
     color: #f5f4ee;
@@ -30,12 +30,9 @@
   height: 100%;
   /* Negative indent footer by it's height */
 
-  .container-fluid {
-    padding-top: 60px;
-    padding-bottom: 40px;
-  }
-
   .container {
+    // padding-top: 60px;
+    padding-bottom: 40px;
     padding-top: 75px;
   }
 }
@@ -106,9 +103,10 @@
   background-color: white;
   z-index: 100;
 
-  border-top: 4px solid $red;
+  // border-top: 4px solid $red;
+  border-top: 4px solid red;
 
-  .container-fluid {
+  .container {
     display: table;
     padding-top: 10px;
     height: 100%;
@@ -198,7 +196,7 @@
 .page-header {
   overflow: hidden;
   min-height: 40px;
-  border-bottom: 1px solid $hrBorder;
+  border-bottom: 1px solid $hr-border;
 
   h2 {
     display: inline;

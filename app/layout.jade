@@ -15,9 +15,12 @@ html.no-js(lang='en')
     meta(name='description', content='')
     meta(name='viewport', content='width=device-width')
     block icons
-    // build:css({.tmp,app}) styles/main.css
-    link(rel='stylesheet', href='styles/main.css')
-    // endbuild
+    // //build:css({.tmp,app}) styles/main.css
+    // link(rel='stylesheet', href='styles/main.css')
+    // //endbuild
+    link(rel='stylesheet', href='styles/bootstrap.css')
+    link(rel='stylesheet', href='styles/responsive.css')
+    link(rel='stylesheet', href='styles/app.css')
   body
     block iestuff
     block navbar
