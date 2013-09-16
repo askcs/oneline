@@ -9,13 +9,13 @@
     </ul>
     <div class="tab-content">
       <!-- manager-->
-      <div ng-controller="managerCtrl" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
+      <div ng-controller="manager" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Add a connection</h3>
         </div>
         <hr>
         <div class="row-fluid">
-          <div class="span12">
+          <div style="min-height: 234px" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-medium">
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
@@ -62,7 +62,7 @@
       </div>
       <!-- end manager-->
       <!-- notifier-->
-      <div ng-controller="notifierCtrl" class="tab-pane {{(views.notifier==true) &amp;&amp; 'active'}}">
+      <div ng-controller="notifier" class="tab-pane {{(views.notifier==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Missed Call Notifications</h3>
         </div>
@@ -104,7 +104,7 @@
       </div>
       <!-- end notifier-->
       <!-- reporter-->
-      <div ng-controller="reporterCtrl" class="tab-pane {{(views.reporter==true) &amp;&amp; 'active'}}">
+      <div ng-controller="reporter" class="tab-pane {{(views.reporter==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Recent calls</h3>
         </div>
@@ -141,7 +141,7 @@
       </div>
       <!-- end reporter-->
       <!-- guarder-->
-      <div ng-controller="guarderCtrl" class="tab-pane {{(views.guarder==true) &amp;&amp; 'active'}}">
+      <div ng-controller="guarder" class="tab-pane {{(views.guarder==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Blacklist</h3>
         </div>
@@ -180,7 +180,7 @@
       <!-- end guarder-->
     </div>
     <!-- tab shadow-->
-    <div id="tab-shadow" style="margin-left: 154px"><img ng-src="img/content_canvas_shadow.png"></div>
+    <div id="tab-shadow" style="margin-left: 154px"><img ng-src="images/content_canvas_shadow.png"></div>
     <!-- end tab shadow-->
   </div>
 </div>

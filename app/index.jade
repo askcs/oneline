@@ -24,17 +24,12 @@ block navbar
                 li
                   a(href='#logout')
                     i.icon-off
-                    | Logout
+                    |  Logout
           ul.nav.pull-right(ng-show='browser.mobile')
             li
               a(href='#logout')
-                i.icon-off.icon-white(
-                  ng-hide='ng-hide',
-                  browser.portrait='browser.portrait',
-                  browser.screen.width='browser.screen.width')
-                span(ng-show='ng-show',
-                      browser.portrait='browser.portrait',
-                      browser.screen.width='browser.screen.width')
+                i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768')
 
 
 block loading

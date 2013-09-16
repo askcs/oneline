@@ -1,19 +1,24 @@
 #welcome
-  // loginForm
+
   #login.boxed
     form(ng-submit='login()')
+
       img(ng-src='images/oneline_logo_big.png')
+
       h4.form-signin-heading Register an account
-      // alert login
-      .alert.{{alert.login.type}}(ng-show='alert.login.display')
-        button.close(type='button', ng-click='alert.login=false') ×
+
+      .alert(ng-show='alert.login.display',
+              class="{{alert.login.type}}")
+        button.close(type='button',
+                    ng-click='alert.login=false') ×
         | {{alert.login.message}}
-      // end login password
+
       input(type='text', ng-model='logindata.username', placeholder='Mobile number', autofocus='autofocus')
       input(type='text', ng-model='logindata.username', placeholder='Name')
       input(type='text', ng-model='logindata.username', placeholder='Email')
       input(type='text', ng-model='logindata.username', placeholder='Password')
       input(type='text', ng-model='logindata.username', placeholder='Retype password')
+
       label.checkbox.span3(style='margin-left: -10px;')
         input(type='checkbox', ng-model='logindata.remember')
         span(style='font-size: 12px;')
@@ -25,6 +30,4 @@
       p
         small
           a(href='#login') login
-      span.version v{{config.version}}
-  // end loginForm
-  // end change pass
+      // span.version v{{config.version}}

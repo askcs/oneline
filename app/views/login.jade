@@ -7,24 +7,22 @@
       .bar
     span.muted
 
+
   #login.boxed
     form(ng-submit='login()')
-
       img(ng-src='images/oneline_logo_big.png')
-
       h4.form-signin-heading Welcome back
       p(style='font-size: 12px; margin-bottom: 25px;')
         a(href='#register') Register an account
-
       .alert(ng-show='alert.login.display')
         button.close(type='button',
                       ng-click='alert.login=false') ×
         | {{alert.login.message}}
 
       input(type='text',
-                  ng-model='logindata.username',
-                  placeholder='Mobile number',
-                  autofocus='autofocus')
+            ng-model='logindata.username',
+            placeholder='Mobile number',
+            autofocus='autofocus')
 
       input(type='password',
             ng-model='logindata.password',
@@ -41,4 +39,4 @@
         small
           a(href='#forgotpass') {{ui.login.forgot_password}}
 
-      span.version v{{config.app.version}}
+      // span.version v{{config.app.version}}
