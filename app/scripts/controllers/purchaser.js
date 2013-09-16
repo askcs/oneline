@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
@@ -9,16 +9,9 @@ define(
         '$rootScope', '$scope', 'Generators',
         function ($rootScope, $scope, Generators)
         {
-
-          /**
-           * Fix styles
-           */
           $rootScope.fixStyles();
 
 
-          /**
-           * General order container
-           */
           $scope.order = {
             package:  null,
             country:  31
@@ -31,26 +24,17 @@ define(
           // $scope.numbers = Generators.list();
 
 
-          /**
-           * Tabs arranger
-           */
           $scope.tabs = {
             normals:  true,
             premiums: false
           };
 
 
-          /**
-           * Pass containers
-           */
           $scope.packages   = $rootScope.config.packages;
           $scope.countries  = $rootScope.config.countries;
           $scope.virtuals   = $rootScope.config.virtuals;
 
 
-          /**
-           * Set defaults
-           */
           $scope.defaults = {
             package:  1,
             country:  31
@@ -59,9 +43,6 @@ define(
           $scope.order.country = $scope.defaults.country;
 
 
-          /**
-           * Watcher on -order- container
-           */
           $scope.$watch('order', function ()
           {
             $scope.regions	= $rootScope.config.regions[$scope.order.country];
@@ -82,9 +63,6 @@ define(
           }, true);
 
 
-          /**
-           * Reset purchaser
-           */
           $scope.resetPurchaser = function ()
           {
             $scope.order = {
@@ -99,33 +77,20 @@ define(
           };
 
 
-          /**
-           * Set region
-           */
           $scope.setRegion = function ()
           {
             if ($scope.order.region)
-            {
               $scope.numbers = Generators.list();
-            }
           };
 
 
-          /**
-           * Set virtual area code
-           */
           $scope.setVirtualArea = function ()
           {
             if ($scope.order.virtual)
-            {
               $scope.numbers = Generators.list();
-            }
           };
 
 
-          /**
-           * Set number type
-           */
           $scope.setPackage = function (pack)
           {
             $scope.order.package  = Number(pack);
@@ -134,42 +99,26 @@ define(
           };
 
 
-          /**
-           * Switch step
-           */
           $scope.switchStep = function (step)
           {
             $scope.purchaser = {step: step};
           };
 
 
-          /**
-           * Switch step in default value
-           */
           $scope.switchStep(1);
 
 
-          /**
-           * Go further in steps
-           */
           $scope.increaseStep = function ()
           {
             if ($scope.purchaser.step < 3 && $scope.order.number)
-            {
               $scope.switchStep($scope.purchaser.step + 1);
-            }
           };
 
 
-          /**
-           * Go back in steps
-           */
           $scope.decreaseStep = function ()
           {
             if ($scope.purchaser.step > 1)
-            {
               $scope.switchStep($scope.purchaser.step - 1);
-            }
           };
 
         }

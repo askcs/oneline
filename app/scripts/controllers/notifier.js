@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
@@ -9,39 +9,16 @@ define(
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
         {
-          /**
-           * Fix styles
-           */
           $rootScope.fixStyles();
 
-          /*
-          Core.settings.update({
-            id:   27004,
-            target: []
-          });
 
-          Core.settings.update({
-            id:   24003,
-            target: []
-          });
-          */
-
-          /**
-           * Notifications
-           */
           $scope.settings = {
 
-            /**
-             * Get local notifications
-             */
             local: function ()
             {
               $scope.notificationSettings = Core.settings.local();
             },
 
-            /**
-             * List notifications
-             */
             list: function ()
             {
               $rootScope.statusBar.display('Getting notifications information..');
@@ -51,36 +28,23 @@ define(
                 {
                   $rootScope.statusBar.off();
 
-//              this.local();
-
                   Core.factory.process();
                 });
             },
 
-            /**
-             * Get a notification
-             */
             get: function (type)
             {
               return $rootScope.data.settings[type].original;
             },
 
-            /**
-             * Process settings
-             */
             process: function (settings)
             {
               console.log('changing these settings ->', settings);
 
               if (settings.removed.length > 0)
-              {
                 console.log('there are some removals');
-              }
             },
 
-            /**
-             * Change a setting
-             */
             update: function (type, id)
             {
               console.log('updating for ->', type, id);
@@ -96,27 +60,17 @@ define(
                 });
             },
 
-            /**
-             * Delete a setting
-             */
             remove: function (type)
             {
               console.log('deleting for ->', type);
             },
 
-            /**
-             * Add a setting
-             */
             add: function (type, id)
             {
               console.log('creating for ->', type, id);
             },
 
-            /**
-             * TODO (Always assume that setting exists)
-             *
-             * Check whether a setting already exists
-             */
+            // TODO: Always assume that setting exists
             exists: function (type)
             {
               var exists = false;
@@ -132,9 +86,6 @@ define(
               return exists;
             },
 
-            /**
-             * Save notification settings
-             */
             save: function ()
             {
               var self = this;
@@ -166,9 +117,6 @@ define(
                   email:  []
                 };
 
-              /**
-               * SMS setting
-               */
               if ($rootScope.data.settings.sms.status)
               {
                 if ($rootScope.data.settings.sms.target !== this.get('sms'))
@@ -195,9 +143,6 @@ define(
                 settings.removed.sms = true;
               }
 
-              /**
-               * Email setting
-               */
               if ($rootScope.data.settings.email.status)
               {
                 if ($rootScope.data.settings.email.target !== this.get('email'))
@@ -231,27 +176,10 @@ define(
                 {
                   self.list();
                 });
-
-//          if (settings.changed.sms.status || settings.changed.email.status ||
-//              settings.added.sms.status || settings.added.email.status ||
-//              settings.removed.sms || settings.removed.email)
-//          {
-//            console.warn('smth changed', settings);
-//          }
-//          else
-//          {
-//            console.log('not!!');
-//          }
             }
           };
 
-
-          /**
-           * Initiate setup
-           */
-          // $scope.settings.local();
-
-
+          $scope.settings.local();
         }
       ]
     );

@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
@@ -9,37 +9,14 @@ define(
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
         {
-          /**
-           * Fix styles
-           */
           $rootScope.fixStyles();
 
-          /**
-           * Reset
-           */
+
           $scope.blacklist = {};
 
-          /*
-          Core.groups.update({
-            id:   $rootScope.data.groups.blacklist.id,
-            list: [20003]
-          });
-          */
 
-          /**
-           * Blacklists
-           */
           $scope.blacklists = {
 
-            /**
-             * Get the locals
-             */
-            local: function ()
-            {},
-
-            /**
-             * List blacklists
-             */
             list: function ()
             {
               $rootScope.statusBar.display('Getting the list of blacklisted numbers..');
@@ -59,9 +36,6 @@ define(
                 });
             },
 
-            /**
-             * Save a blacklisted number
-             */
             save: function ()
             {
               if ($scope.blacklist.label !== undefined || $scope.blacklist.contactInfo !== undefined)
@@ -75,20 +49,12 @@ define(
                   {
                     $rootScope.statusBar.display('Updating blacklist group..');
 
-                    // Populate blacklist
                     var list = [];
 
-                    angular.forEach($rootScope.data.blacklist, function (listed)
-                    {
-                      list.push(listed.id);
-                    });
+                    angular.forEach($rootScope.data.blacklist, function (listed) { list.push(listed.id); });
 
                     list.push(result.id);
 
-                    // Park node temporarily
-//              $rootScope.data.tmp.push(result);
-
-                    // Update blacklist group
                     Core.groups.update({
                       id:   $rootScope.data.groups.blacklist.id,
                       list: list
@@ -102,22 +68,16 @@ define(
               }
             },
 
-            /**
-             * Remove a blacklisted number
-             */
             remove: function (number)
             {
               var self = this,
-                list = [];
+                  list = [];
 
               $rootScope.statusBar.display('Allowing a blacklisted number..');
 
               angular.forEach($rootScope.data.blacklist, function (listed)
               {
-                if (listed.id !== number.id)
-                {
-                  list.push(listed)
-                }
+                if (listed.id !== number.id) { list.push(listed); }
               });
 
               Core.blacklists.remove(number)
@@ -127,12 +87,8 @@ define(
 
                   var lids = [];
 
-                  angular.forEach(list, function (l)
-                  {
-                    lids.push(l.id);
-                  });
+                  angular.forEach(list, function (l) { lids.push(l.id); });
 
-                  // Update blacklist group
                   Core.groups.update({
                     id:   $rootScope.data.groups.blacklist.id,
                     list: lids
@@ -147,15 +103,10 @@ define(
           };
 
 
-          /**
-           * Block number listener
-           */
           $rootScope.$on('refreshBlockedNumbers', function ()
           {
             // $scope.blacklists.list();
           });
-
-
         }
       ]
     );

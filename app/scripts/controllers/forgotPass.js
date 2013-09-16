@@ -1,18 +1,15 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
-    controllers.controller ('forgotPass',
+    controllers.controller('forgotPass',
       [
-        '$rootScope', '$scope', '$location',
-        function ($rootScope, $scope, $location)
+        '$rootScope', '$scope',
+        function ($rootScope, $scope)
         {
-          /**
-           * Fix styles
-           */
-          $rootScope.fixStyles();
+          // $rootScope.fixStyles();
         }
       ]
     );

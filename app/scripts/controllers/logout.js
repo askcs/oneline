@@ -1,19 +1,15 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
-    controllers.controller ('logout',
+    controllers.controller('logout',
       [
         '$rootScope', '$scope', '$window', 'Session', 'User', 'Storage',
         function ($rootScope, $scope, $window, Session, User, Storage)
         {
-
-
-
-
-
+          // TODO: Lose jQuery stuff
           $('.navbar').hide();
           $('#footer').hide();
 
@@ -26,10 +22,7 @@ define(
           User.logout()
             .then(function (result)
             {
-              if (result.error)
-              {
-                console.warn('error ->', result);
-              }
+              if (result.error) { console.warn('error ->', result); }
 
               // Storage.clearAll();
 
@@ -39,11 +32,6 @@ define(
 
               $window.location.href = 'index.html';
             });
-
-
-
-
-
         }
       ]
     );

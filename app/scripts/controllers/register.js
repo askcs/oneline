@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
@@ -9,9 +9,6 @@ define(
         '$scope',
         function ($scope)
         {
-          /**
-           * Fix styles
-           */
           // $rootScope.fixStyles();
         }
       ]

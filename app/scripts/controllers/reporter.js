@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
@@ -9,42 +9,22 @@ define(
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
         {
-
-          /**
-           * Fix styles
-           */
-          // $rootScope.fixStyles();
+          $rootScope.fixStyles();
 
 
           $scope.logs = [];
 
-          $scope.pushMe = function ()
-          {
-            console.log('pushed');
-          };
 
-
-          /**
-           * Connected numbers
-           */
           $scope.logs = {
 
-            /**
-             * Get local list
-             */
             local: function ()
             {
               return Core.connections.local();
             },
 
-            /**
-             * List numbers
-             */
             list: function ()
             {
               $rootScope.statusBar.display('Getting the list of recent calls..');
-
-              console.log('getting the list of recents');
 
               $scope.logsLoading = true;
 
@@ -69,9 +49,6 @@ define(
                 });
             },
 
-            /**
-             * Block a recent number
-             */
             block: function (log)
             {
               var self = this;
@@ -86,7 +63,6 @@ define(
                 {
                   $rootScope.statusBar.display('Updating blacklist group..');
 
-                  // Populate blacklist
                   var list = [];
 
                   angular.forEach($rootScope.data.blacklist, function (listed)
@@ -96,18 +72,12 @@ define(
 
                   list.push(result.id);
 
-                  // Park node temporarily
-//              $rootScope.data.tmp.push(result);
-
-                  // Update blacklist group
                   Core.groups.update({
                     id:   $rootScope.data.groups.blacklist.id,
                     list: list
                   }).then(function ()
                     {
                       $rootScope.statusBar.off();
-
-                      // console.log('coming to here');
 
                       $scope.logs.list();
 
@@ -116,12 +86,8 @@ define(
                 });
             },
 
-            /**
-             * Allow a number
-             */
             allow: function (log)
             {
-              console.log('allow log ->', log);
 
 //          $rootScope.statusBar.display('Adding a blacklisted number..');
 //
@@ -155,9 +121,8 @@ define(
             }
           };
 
+
           $scope.logs.list();
-
-
         }
       ]
     );
