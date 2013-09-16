@@ -10,27 +10,47 @@ html.no-js(lang='en')
   // <![endif]
   head
     meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    meta(http-equiv='X-UA-Compatible',
+          content='IE=edge,chrome=1')
+
     title Oneline
-    meta(name='description', content='')
-    meta(name='viewport', content='width=device-width')
+
+    meta(name='description',
+          content='')
+    meta(name='viewport',
+          content='width=device-width')
+
     block icons
-    // //build:css({.tmp,app}) styles/main.css
-    // link(rel='stylesheet', href='styles/main.css')
-    // //endbuild
-    link(rel='stylesheet', href='styles/bootstrap.css')
-    link(rel='stylesheet', href='styles/responsive.css')
-    link(rel='stylesheet', href='styles/app.css')
+
+    // build:css({.tmp,app}) styles/bootstrap.css
+    link(rel='stylesheet',
+          href='styles/bootstrap.css')
+    // endbuild
+    // build:css({.tmp,app}) styles/responsive.css
+    link(rel='stylesheet',
+          href='styles/responsive.css')
+    // endbuild
+    // build:css({.tmp,app}) styles/app.css
+    link(rel='stylesheet',
+          href='styles/app.css')
+    // endbuild
+
   body
+
     block iestuff
     block navbar
     block loading
     block notification
+
     #wrap
-      .container
+      .container-fluid
         div(ng-view='ng-view')
       #push
+
     block mobile-status-bar
     block footer
+
     // block analytics
-    script(data-main='scripts/main', src='vendors/requirejs/require.js')
+
+    script(data-main='scripts/main',
+            src='vendors/requirejs/require.js')
