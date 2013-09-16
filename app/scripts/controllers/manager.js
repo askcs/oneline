@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config'],
-  function (controllers, config)
+  ['controllers/controllers'],
+  function (controllers)
   {
     'use strict';
 
@@ -10,18 +10,9 @@ define(
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
         {
+          $rootScope.fixStyles();
 
 
-
-          /**
-           * Fix styles
-           */
-          // $rootScope.fixStyles();
-
-
-          /**
-           * Connected number container
-           */
           $scope.connection = {
             label:            '',
             contactInfo:      '',
@@ -29,31 +20,19 @@ define(
           };
 
 
-          /**
-           * Connected numbers verified switch
-           */
           $scope.verified = {
             status: false,
             result: null
           };
 
 
-          /**
-           * Connected numbers
-           */
           $scope.connections = {
 
-            /**
-             * Get local list
-             */
             local: function ()
             {
               return Core.connections.local();
             },
 
-            /**
-             * List numbers
-             */
             list: function ()
             {
               $rootScope.statusBar.display('Getting the list of connected numbers..');
@@ -67,9 +46,6 @@ define(
                 });
             },
 
-            /**
-             * Save a connected number
-             */
             save: function ()
             {
               if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
@@ -94,9 +70,6 @@ define(
               }
             },
 
-            /**
-             * Delete a number
-             */
             remove: function (number)
             {
               var self = this;
@@ -112,28 +85,15 @@ define(
                 });
             },
 
-            /**
-             * Edit a number
-             */
             edit: function (number)
             {
               angular.forEach($rootScope.data.connections, function (connection)
               {
-                if (number.id === connection.id)
-                {
-                  $scope.connection = connection;
-                }
+                if (number.id === connection.id) { $scope.connection = connection; }
               });
             },
 
-            /**
-             * Verify a number
-             */
             verify: {
-
-              /**
-               * Send a verification number
-               */
               initiate: function (number)
               {
                 $rootScope.statusBar.display('Verification call inited or message is being sent..');
@@ -159,9 +119,6 @@ define(
                   });
               },
 
-              /**
-               * Confirm a verification
-               */
               confirm: function (verificationCode, verificationInfoID)
               {
                 $rootScope.statusBar.display('Verifying your number and code..');
@@ -183,14 +140,6 @@ define(
               }
             }
           };
-
-
-
-
-
-
-
-
 
         }
       ]

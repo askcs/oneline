@@ -9,16 +9,10 @@ define(
         '$rootScope', '$scope', '$location',
         function ($rootScope, $scope, $location)
         {
-
-
           /**
            * Fix styles
            */
           $rootScope.fixStyles();
-
-
-
-
         }
       ]
     );

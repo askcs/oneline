@@ -9,16 +9,10 @@ define(
         '$rootScope', '$resource', '$q', 'Storage',
         function ($rootScope, $resource, $q, Storage)
         {
-
-          /**
-           * Empty resource
-           */
           var Core = $resource();
 
 
-          /**
-           * Contact Infos resource
-           */
+
           var ContactInfos = $resource(
             config.host + '/accounts/contactinfos/:id',
             {},
@@ -48,9 +42,7 @@ define(
           );
 
 
-          /**
-           * Verification resource
-           */
+
           var Verification = $resource(
             config.host + '/products/verifyme/:action',
             {},
@@ -67,9 +59,7 @@ define(
           );
 
 
-          /**
-           * Settings resource
-           */
+
           var Settings = $resource(
             config.host + '/settings/notifications/:id',
             {},
@@ -99,9 +89,7 @@ define(
           );
 
 
-          /**
-           * Group resource
-           */
+
           var Groups = $resource(
             config.host + '/accounts/groups/:id',
             {},
@@ -123,9 +111,7 @@ define(
           );
 
 
-          /**
-           * Logs
-           */
+
           var Logs = $resource(
             config.host + '/log',
             {},
@@ -139,22 +125,14 @@ define(
           );
 
 
-          /**
-           * Logs
-           */
+
           Core.prototype.logs = {
 
-            /**
-             * Get localStorage cache for settings
-             */
             local: function ()
             {
               return angular.fromJson(Storage.get('settings'));
             },
 
-            /**
-             * List notifications
-             */
             list: function ()
             {
               var deferred = $q.defer();
@@ -174,8 +152,24 @@ define(
 
               deferred.resolve(
                 [
-                  {"id":52001,"scenarioId":1,"startTime":1,"endTime":1,"address":"0643002549","type":"phone","callState":"answered"},
-                  {"id":52002,"scenarioId":1,"startTime":1,"endTime":324,"address":"0629143143","type":"phone","callState":"answered"},
+                  {
+                    "id": 52001,
+                    "scenarioId": 1,
+                    "startTime": 1,
+                    "endTime": 1,
+                    "address": "0643002549",
+                    "type": "phone",
+                    "callState": "answered"
+                  },
+                  {
+                    "id": 52002,
+                    "scenarioId": 1,
+                    "startTime": 1,
+                    "endTime": 324,
+                    "address": "0629143143",
+                    "type": "phone",
+                    "callState": "answered"
+                  }
                 ]
               );
 
@@ -184,22 +178,14 @@ define(
           };
 
 
-          /**
-           * Notifications
-           */
+
           Core.prototype.settings = {
 
-            /**
-             * Get localStorage cache for settings
-             */
             local: function ()
             {
               return angular.fromJson(Storage.get('settings'));
             },
 
-            /**
-             * List notifications
-             */
             list: function ()
             {
               var deferred = $q.defer();
@@ -220,14 +206,13 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Update a setting
-             */
             update: function (settings)
             {
               var deferred = $q.defer();
 
-              Settings.update({id: settings.id}, {
+              Settings.update(
+                {id: settings.id},
+                {
                   targetContactInfos: settings.target
                 },
                 function (result)
@@ -245,17 +230,14 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Save settings
-             */
             save: function (settings)
             {
               var deferred  = $q.defer(),
-                calls     = [],
-                setting   = {
-                  sms:    [],
-                  email:  []
-                };
+                  calls     = [],
+                  setting   = {
+                sms:    [],
+                email:  []
+              };
 
               if (!settings.added.sms.status)
               {
@@ -308,22 +290,14 @@ define(
           };
 
 
-          /**
-           * Connected numbers
-           */
+
           Core.prototype.connections = {
 
-            /**
-             * Get local cache for connected numbers
-             */
             local: function ()
             {
               return angular.fromJson(Storage.get('connections'));
             },
 
-            /**
-             * List numbers
-             */
             list: function ()
             {
               var deferred = $q.defer();
@@ -344,9 +318,6 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Get contactinfo
-             */
             get: function (id)
             {
               var deferred = $q.defer();
@@ -368,9 +339,6 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Save a number
-             */
             save: function (connection)
             {
               var deferred = $q.defer();
@@ -413,9 +381,6 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Delete a connected number
-             */
             remove: function (connection)
             {
               var deferred = $q.defer();
@@ -436,14 +401,7 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Verify a connected number
-             */
             verify: {
-
-              /**
-               * Initiate a verification
-               */
               initiate: function (number)
               {
                 var deferred = $q.defer();
@@ -468,9 +426,6 @@ define(
                 return deferred.promise;
               },
 
-              /**
-               * Confirm verification
-               */
               confirm: function (verificationCode, verificationInfoID)
               {
                 var deferred = $q.defer();
@@ -496,22 +451,14 @@ define(
           };
 
 
-          /**
-           * Groups
-           */
+
           Core.prototype.groups = {
 
-            /**
-             * Get localStorage value of groups
-             */
             local: function ()
             {
               return angular.fromJson(Storage.get('groups'));
             },
 
-            /**
-             * List groups
-             */
             list: function ()
             {
               var deferred = $q.defer();
@@ -532,14 +479,13 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Update groups
-             */
             update: function (group)
             {
               var deferred = $q.defer();
 
-              Groups.update({id: group.id}, {
+              Groups.update(
+                {id: group.id},
+                {
                   contactInfoIds: group.list
                 },
                 function (result)
@@ -556,22 +502,10 @@ define(
             }
           };
 
-          /**
-           * Blacklists
-           */
+
+
           Core.prototype.blacklists = {
 
-            /**
-             * List blacklists
-             */
-            list: function ()
-            {
-
-            },
-
-            /**
-             * Block a number
-             */
             save: function (blacklisted)
             {
               var deferred = $q.defer();
@@ -595,9 +529,6 @@ define(
               return deferred.promise;
             },
 
-            /**
-             * Allow a blacklisted number
-             */
             remove: function (number)
             {
               var deferred = $q.defer();
@@ -622,217 +553,165 @@ define(
           };
 
 
-          /**
-           * Data factory
-           */
+
           Core.prototype.factory = {
 
-            /**
-             * Process data
-             */
             process: function ()
             {
-              // Prepare raw data
               var raws = {
-                resources:    angular.fromJson(Storage.get('resources')),
-                groups:       angular.fromJson(Storage.get('groups')),
-                connections:  angular.fromJson(Storage.get('connections')),
-                settings:     angular.fromJson(Storage.get('settings'))
-              };
+                  groups:       angular.fromJson(Storage.get('groups')),
+                  connections:  angular.fromJson(Storage.get('connections')),
+                  settings:     angular.fromJson(Storage.get('settings'))
+                },
+                data  = {
+                  account:    {},
+                  connected:  {},
+                  blacklist:  {},
+                  settings:   {
+                    sms: {
+                      status:   false,
+                      target:   null,
+                      targets:  []
+                    },
+                    email: {
+                      status:   false,
+                      target:   null,
+                      targets:  []
+                    }
+                  }
+                },
+                phones  = [],
+                emails  = [],
+                nodes   = {};
 
-              // Prepare containers
-              var nodes       = {},
-                connections = {},
-                blacklist   = {},
-                settings    = {},
-                account     = {},
-                groups      = {},
-                phones      = [],
-                emails      = [];
-              // ,
-              // tmp         = [];
-
-              // Initialize root container
               $rootScope.data = {};
 
-              // Compile contactinfos
               angular.forEach(raws.connections, function (connection)
               {
                 nodes[connection.id] = connection;
               });
 
-              // Process resources information
-              angular.forEach(raws.resources, function (resource)
+              angular.forEach(raws.groups, function (group)
               {
-                switch (resource.contactInfoTag)
+                switch (group.name)
                 {
-                  case 'Name':
-                    account.name = resource.contactInfo;
-                    break;
-                  case 'Phone':
-                    account.phone = resource.contactInfo;
+                case 'ConnectedNumbers':
+                  data.connected = {group: group};
+                  break;
 
-                    nodes[resource.id] = resource;
-                    break;
-                  case 'Email':
-                    account.email = resource.contactInfo;
-
-                    nodes[resource.id] = resource;
-                    break;
-                  case 'Address':
-                    account.address = resource.contactInfo;
-                    break;
-                  case 'PURCHASED_NUMBER':
-                    account.purchasedNumber = resource.contactInfo;
-                    break;
+                case 'BlackList':
+                  data.blacklist = {group: group};
+                  break;
                 }
               });
 
-              // Setup user id
-
-              // TODO: Fix this later on!
-              // account.id          = raws.resources[0].ownerKey;
-              // account.contactKey  = raws.resources[0].contactKey;
-
-              // TODO (Remove this later on)
-              $rootScope.app.resources = account;
-
-              // Get blacklisted items
-              var blacklisted = raws.groups[0].contactInfoIds;
-
-              // Build blacklisted group node
-              groups.blacklist = raws.groups[0];
-
-              // Pass connections
-              connections = nodes;
-
-              // Compile blacklist
-              angular.forEach(blacklisted, function (listed)
+              angular.forEach(raws.connections, function (connection)
               {
-                blacklist[listed] = nodes[listed];
+                switch (connection.contactInfoTag)
+                {
+                case 'Name':
+                  data.account.name = connection.contactInfo;
+                  break;
 
-                delete connections[listed];
+                case 'Phone':
+                  data.account.phone = connection.contactInfo;
+                  nodes[connection.id] = connection;
+                  break;
+
+                case 'Email':
+                  data.account.email = connection.contactInfo;
+                  nodes[connection.id] = connection;
+                  break;
+
+                case 'Address':
+                  data.account.address = connection.contactInfo;
+                  break;
+
+                case 'PURCHASED_NUMBER':
+                  data.account.purchasedNumber = connection.contactInfo;
+                  break;
+                }
               });
+              $rootScope.app.resources = data.account;
 
-              // Watch for parked blacklist items
-//        if ($rootScope.data.tmp && $rootScope.data.tmp.length > 0)
-//        {
-//          console.log('there is one ! ->', $rootScope.data.tmp);
-//
-//          angular.forEach($rootScope.data.tmp, function (blacklisted)
-//          {
-//            blacklist[blacklisted.id] = blacklisted;
-//          });
-//
-//          $rootScope.data.tmp = [];
-//        }
-
-              // Arrayize connections
-              var cons = [];
-              angular.forEach(connections, function (connection)
-              {
-                cons.push(connection);
-              });
-              connections = cons;
-
-              // Arrayize blacklist
-              var blacs = [];
-              angular.forEach(blacklist, function (listed)
-              {
-                blacs.push(listed);
-              });
-              blacklist = blacs;
-
-              // Process settings
               angular.forEach(nodes, function (node)
               {
-                if (node.contactInfoTag === 'Phone')
+                switch (node.contactInfoTag)
                 {
+                case 'Phone':
                   phones.push(node);
-                }
+                  break;
 
-                if (node.contactInfoTag === 'Email')
-                {
-                  emails.push(node);
+                case 'Email':
+                  emails.push(node)
+                  break;
                 }
               });
 
-              // Build notification list object
-              settings = {
-                sms: {
-                  status:   false,
-                  target:   null,
-                  targets:  []
-                },
-                email: {
-                  status:   false,
-                  target:   null,
-                  targets:  []
-                }
-              };
-
-              // Build list of emails
               angular.forEach(emails, function (email)
               {
-                settings.email.targets.push({
+                data.settings.email.targets.push({
                   id:     email.id,
                   value:  email.contactInfo
                 });
               });
 
-              // Build list of phones
               angular.forEach(phones, function (phone)
               {
-                settings.sms.targets.push({
+                data.settings.sms.targets.push({
                   id:     phone.id,
                   value:  phone.contactInfo
                 });
               });
 
-              // Setup selected ones
               angular.forEach(raws.settings, function (setting)
               {
-                if (setting.medium === 'Email')
+                switch (setting.medium)
                 {
-                  settings.email.id     = setting.id;
+                case 'Email':
+                  data.settings.email.id = setting.id;
 
-                  settings.email.status = !!((setting.targetContactInfos.length > 0));
+                  data.settings.email.status = !!((setting.targetContactInfos.length > 0));
 
                   var emailSetting = (nodes[setting.targetContactInfos[0]]) ?
                     nodes[setting.targetContactInfos[0]].id :
-                    settings.email.targets[0].id;
+                    data.settings.email.targets[0].id;
 
-                  settings.email.original = settings.email.target = (setting.targetContactInfos.length > 0) ?
+                  data.settings.email.original = data.settings.email.target = (setting.targetContactInfos.length > 0) ?
                     emailSetting :
-                    settings.email.targets[0].id;
-                }
+                    data.settings.email.targets[0].id;
+                  break;
 
-                if (setting.medium === 'SMS')
-                {
-                  settings.sms.id     = setting.id;
+                case 'SMS':
+                  data.settings.sms.id  = setting.id;
 
-                  settings.sms.status = !!((setting.targetContactInfos.length > 0));
+                  data.settings.sms.status = !!((setting.targetContactInfos.length > 0));
 
                   var smsSetting = (nodes[setting.targetContactInfos[0]]) ?
                     nodes[setting.targetContactInfos[0]].id :
-                    settings.sms.targets[0].id;
+                    data.settings.sms.targets[0].id;
 
-                  settings.sms.original = settings.sms.target = (setting.targetContactInfos.length > 0) ?
+                  data.settings.sms.original = data.settings.sms.target = (setting.targetContactInfos.length > 0) ?
                     smsSetting :
-                    settings.sms.targets[0].id;
+                    data.settings.sms.targets[0].id;
+                  break;
                 }
               });
 
-              // Pass data
-              $rootScope.data = {
-                account:      account,
-                connections:  connections,
-                blacklist:    blacklist,
-                settings:     settings,
-                groups:       groups
-              };
+              data.connected.list = [];
+              angular.forEach(data.connected.contactInfoIds, function (node)
+              {
+                data.connected.list.push(node);
+              });
 
-              console.warn('data ->', $rootScope.data);
+              data.blacklist.list = [];
+              angular.forEach(data.blacklist.contactInfoIds, function (node)
+              {
+                data.blacklist.list.push(node);
+              });
+
+              $rootScope.data = data;
+              // console.info('data ->', $rootScope.data);
 
               return true;
             }
@@ -840,15 +719,6 @@ define(
 
 
           return new Core();
-
-
-
-
-
-
-
-
-
         }
       ]
     );

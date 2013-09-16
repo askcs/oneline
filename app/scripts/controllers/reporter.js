@@ -10,9 +10,6 @@ define(
         function ($rootScope, $scope, Core)
         {
 
-
-
-
           /**
            * Fix styles
            */
@@ -91,10 +88,12 @@ define(
 
                   // Populate blacklist
                   var list = [];
+
                   angular.forEach($rootScope.data.blacklist, function (listed)
                   {
                     list.push(listed.id);
                   });
+
                   list.push(result.id);
 
                   // Park node temporarily
@@ -108,7 +107,7 @@ define(
                     {
                       $rootScope.statusBar.off();
 
-                      console.log('coming to here');
+                      // console.log('coming to here');
 
                       $scope.logs.list();
 
@@ -156,19 +155,7 @@ define(
             }
           };
 
-          // $scope.logs.list();
-
-
-
-
-
-
-
-
-
-
-
-
+          $scope.logs.list();
 
 
         }

@@ -3,6 +3,9 @@ br
 .row-fluid
   .tabbable.tabs-left
 
+
+
+
     ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
 
       li(class="{{(views.manager==true) && 'active'}}")
@@ -29,9 +32,14 @@ br
           span.icomoon.icomoon-thumbs-up-5(aria-hidden='true')
           | Blacklist
 
+
+
+
     .tab-content
 
-      // manager
+
+
+
       .tab-pane(ng-controller='manager',
                 class="{{(views.manager==true) && 'active'}}")
         .tab-header
@@ -40,20 +48,16 @@ br
         .row-fluid
           .span12(style='min-height: 234px;')
             form.form-inline.well(ng-submit='connections.save()')
-              input.input-medium(ng-model='connection.label',
+              input.input-large(ng-model='connection.label',
                                   type='text',
                                   placeholder='Label')
               input.input-large(ng-model='connection.contactInfo',
                                 type='text',
                                 placeholder='e.g. Phone number…')
-              select.span2(ng-model='connection.contactInfoTag',
-                            style='margin-right: 5px;')
-                option(value='Email') Email
-                option(value='Phone',
-                        selected='selected') Phone
               button.btn(type='submit') Save
             h4 Numbers
             hr
+
             .alert(ng-show='verified.status',
                    style="alert-{{(verified.result) && 'success' || 'error'}}")
               button.close(type='button',
@@ -63,8 +67,10 @@ br
               span(ng-hide='verified.result')
                 | There was an error with verifiying number. Please try again. If problem resists, please get in touch
                 | with us.
-            p(ng-show='(data.connections.length == 0)')
+
+            p(ng-show='(data.connected.list.length == 0)')
               | There are no connected numbers. Please add some.
+
             table.table.table-striped(ng-show='ng-show')
               thead
                 tr
@@ -74,7 +80,7 @@ br
                   th Type
                   th
               tbody
-                tr(ng-repeat='number in data.connections')
+                tr(ng-repeat='number in data.connected.list')
                   td
                     span.label.label-success(ng-show='number.verified') Verified
                     span.label.label-error(ng-hide='number.verified') Not Verified
@@ -91,9 +97,11 @@ br
                                         ng-click='connections.verify.initiate(number)',
                                         type='button',
                                         style='margin-left: 5px;') Verify
-      // end manager
 
-      // notifier
+
+
+
+
       .tab-pane(ng-controller='notifier',
                 class="{{(views.notifier==true) && 'active'}}")
         .tab-header
@@ -129,9 +137,11 @@ br
                       option(value='{{ target.id }}',
                               ng-selected='data.settings.sms.target') {{ target.value }}
               button.btn(type='submit') Save changes
-      // end notifier
 
-      // reporter
+
+
+
+
       .tab-pane(ng-controller='reporter',
                 class="{{(views.reporter==true) && 'active'}}")
         .tab-header
@@ -164,9 +174,11 @@ br
                     button.btn.btn-mini(type='button',
                                         ng-click='logs.allow(log)',
                                         ng-show='log.blocked') Allow
-      // end reporter
 
-      // guarder
+
+
+
+
       .tab-pane(ng-controller='guarder',
                 class="{{(views.guarder==true) && 'active'}}")
         .tab-header
@@ -199,9 +211,10 @@ br
                   td
                     button.btn.btn-mini(ng-click='blacklists.remove(number)',
                                         type='button') Allow
-      // end guarder
 
-    // tab shadow
+
+
+
+
     #tab-shadow(style='margin-left: 154px;')
       img(ng-src='images/content_canvas_shadow.png')
-    // end tab shadow

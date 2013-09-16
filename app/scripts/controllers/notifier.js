@@ -9,32 +9,22 @@ define(
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
         {
-
-
-
-
           /**
            * Fix styles
            */
-          // $rootScope.fixStyles();
+          $rootScope.fixStyles();
 
+          /*
+          Core.settings.update({
+            id:   27004,
+            target: []
+          });
 
-
-
-//      Core.settings.update({
-//        id:   27004,
-//        target: []
-//      });
-
-
-
-//      Core.settings.update({
-//        id:   24003,
-//        target: []
-//      });
-
-
-
+          Core.settings.update({
+            id:   24003,
+            target: []
+          });
+          */
 
           /**
            * Notifications
@@ -260,17 +250,6 @@ define(
            * Initiate setup
            */
           // $scope.settings.local();
-
-
-
-
-
-
-
-
-
-
-
 
 
         }

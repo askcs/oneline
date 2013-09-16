@@ -20,16 +20,16 @@ html.no-js(lang='en')
     meta(name='viewport',
           content='width=device-width')
 
-    // block icons
-
     // build:css({.tmp,app}) styles/bootstrap.css
     link(rel='stylesheet',
           href='styles/bootstrap.css')
     // endbuild
+
     // build:css({.tmp,app}) styles/responsive.css
     link(rel='stylesheet',
           href='styles/responsive.css')
     // endbuild
+
     // build:css({.tmp,app}) styles/app.css
     link(rel='stylesheet',
           href='styles/app.css')
@@ -39,7 +39,6 @@ html.no-js(lang='en')
 
     block iestuff
     block navbar
-    block loading
     block notification
 
     #wrap
@@ -49,8 +48,6 @@ html.no-js(lang='en')
 
     block mobile-status-bar
     block footer
-
-    // block analytics
 
     script(data-main='scripts/main',
             src='vendors/requirejs/require.js')

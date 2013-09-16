@@ -1,5 +1,6 @@
 extends layout
 
+
 block navbar
   .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
     ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
@@ -32,48 +33,6 @@ block navbar
                 span(ng-show='browser.portrait || browser.screen.width < 768')
 
 
-block loading
-  #loading.ng-cloak(ng-show='loadingBig')
-    div(ng-show='loaderIcons.general')
-      span.entypo ⏳
-      p {{ui.loading.general}}...
-    div(ng-show='loaderIcons.dashboard')
-      span.entypo ◴
-      p
-        | {{ui.loading.general}}
-        br
-        | {{ui.loading.dashboard}}
-    div(ng-show='loaderIcons.planboard')
-      span.entypo 
-      p
-        | {{ui.loading.general}}
-        br
-        | {{ui.loading.planboard}}
-    div(ng-show='loaderIcons.messages')
-      span.entypo 
-      p
-        | {{ui.loading.general}}
-        br
-        | {{ui.loading.messages}}
-    div(ng-show='loaderIcons.groups')
-      span.entypo 
-      p
-        | {{ui.loading.general}}
-        br
-        | {{ui.loading.groups}}
-    div(ng-show='loaderIcons.profile')
-      span.entypo 
-      p
-        | {{ui.loading.general}}
-        br
-        | {{ui.loading.profile}}
-    div(ng-show='loaderIcons.settings')
-      span.entypo ⚒
-      p
-        | {{ui.loading.general}}
-        br
-        | {{ui.loading.settings}}
-
 
 block notification
   #notification.alert.ng-cloak(ng-show='notification.status')
@@ -84,10 +43,12 @@ block notification
     | {{notification.message}}
 
 
+
 block mobile-status-bar
   #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
     img(src='images/ajax-loader.gif')
     small {{loading.message}}
+
 
 
 block footer
@@ -105,13 +66,6 @@ block footer
           | {{loading.message}}
 
 
-block icons
-  link(rel='apple-touch-icon-precomposed', sizes='144x144', href='icons/apple-touch-icon-144-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='114x114', href='icons/apple-touch-icon-114-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', sizes='72x72', href='icons/apple-touch-icon-72-precomposed.png')
-  link(rel='apple-touch-icon-precomposed', href='icons/apple-touch-icon-57-precomposed.png')
-  link(rel='shortcut icon', href='icons/favicon.png')
-
 
 block iestuff
   //if lt IE 7
@@ -124,12 +78,3 @@ block iestuff
   //if lt IE 9
     script(src='vendors/es5-shim/es5-shim.js')
     script(src='vendors/json3/lib/json3.min.js')
-
-
-block analytics
-  // Google Analytics: change UA-XXXXX-X to be your site's ID.
-  script.
-    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-    (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-    g.src='//www.google-analytics.com/ga.js';
-    s.parentNode.insertBefore(g,s)}(document,'script'));

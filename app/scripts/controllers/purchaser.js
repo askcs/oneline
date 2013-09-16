@@ -10,9 +10,6 @@ define(
         function ($rootScope, $scope, Generators)
         {
 
-
-
-
           /**
            * Fix styles
            */
@@ -174,12 +171,6 @@ define(
               $scope.switchStep($scope.purchaser.step - 1);
             }
           };
-
-
-
-
-
-
 
         }
       ]

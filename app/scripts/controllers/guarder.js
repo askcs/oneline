@@ -9,26 +9,22 @@ define(
         '$rootScope', '$scope', 'Core',
         function ($rootScope, $scope, Core)
         {
-
-
-
           /**
            * Fix styles
            */
-          // $rootScope.fixStyles();
-
+          $rootScope.fixStyles();
 
           /**
            * Reset
            */
           $scope.blacklist = {};
 
-
-//      Core.groups.update({
-//        id:   $rootScope.data.groups.blacklist.id,
-//        list: [20003]
-//      });
-
+          /*
+          Core.groups.update({
+            id:   $rootScope.data.groups.blacklist.id,
+            list: [20003]
+          });
+          */
 
           /**
            * Blacklists
@@ -158,16 +154,6 @@ define(
           {
             // $scope.blacklists.list();
           });
-
-
-
-
-
-
-
-
-
-
 
 
         }
