@@ -39,11 +39,16 @@ define(
           */
 
 
-          $scope.connection = {
-            label:          '',
-            contactInfo:    '',
-            contactInfoTag: 'Phone'
+          $scope.resetConnection = function ()
+          {
+            $scope.connection = {
+              label:          '',
+              contactInfo:    '',
+              contactInfoTag: 'Phone'
+            };
           };
+
+          $scope.resetConnection();
 
 
           $scope.verified = {
@@ -82,13 +87,7 @@ define(
                   {
                     $rootScope.statusBar.off();
 
-                    $scope.connection = {
-                      label:          '',
-                      contactInfo:    '',
-                      contactInfoTag: 'Phone'
-                    };
-
-                    // self.list();
+                    $scope.resetConnection();
 
                     Core.factory.process();
                   });
@@ -105,8 +104,6 @@ define(
                 .then(function ()
                 {
                   $rootScope.statusBar.off();
-
-                  // self.list();
 
                   Core.factory.process();
                 });

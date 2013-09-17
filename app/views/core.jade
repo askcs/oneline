@@ -54,6 +54,9 @@ br
               input.input-large(ng-model='connection.contactInfo',
                                 type='text',
                                 placeholder='e.g. Phone number…')
+              button.btn(type='button',
+                          ng-show='connection.label.length > 0',
+                          ng-click='resetConnection();') Cancel
               button.btn(type='submit') Save
             h4 Numbers
             hr
@@ -70,8 +73,6 @@ br
 
             p(ng-show='(data.connected.list.length == 0)')
               | There are no connected numbers. Please add some.
-
-            // p {{ data.connected.group.contactInfoIds }}
 
             table.table.table-striped(ng-show='(data.connected.list.length > 0)')
               thead
