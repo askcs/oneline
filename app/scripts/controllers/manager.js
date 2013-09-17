@@ -13,10 +13,36 @@ define(
           $rootScope.fixStyles();
 
 
+          /*
+          Core.groups.update({
+           id:   $rootScope.data.connected.group.id,
+           list: []
+          });
+          */
+          /*
+          Core.settings.update({
+            id:   27004,
+            target: []
+          });
+          Core.settings.update({
+            id:   24003,
+            target: []
+          });
+          */
+          /*
+          Core.connections.remove({
+            id: 121001
+          });
+          Core.connections.remove({
+            id: 128001
+          });
+          */
+
+
           $scope.connection = {
-            label:            '',
-            contactInfo:      '',
-            contactInfoTag:   'Phone'
+            label:          '',
+            contactInfo:    '',
+            contactInfoTag: 'Phone'
           };
 
 
@@ -28,10 +54,7 @@ define(
 
           $scope.connections = {
 
-            local: function ()
-            {
-              return Core.connections.local();
-            },
+            local: function () { return Core.connections.local(); },
 
             list: function ()
             {
@@ -48,10 +71,10 @@ define(
 
             save: function ()
             {
+              var self = this;
+
               if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
               {
-                var self = this;
-
                 $rootScope.statusBar.display('Saving the number..');
 
                 Core.connections.save($scope.connection)
@@ -60,12 +83,14 @@ define(
                     $rootScope.statusBar.off();
 
                     $scope.connection = {
-                      label:            '',
-                      contactInfo:      '',
-                      contactInfoTag:   'Phone'
+                      label:          '',
+                      contactInfo:    '',
+                      contactInfoTag: 'Phone'
                     };
 
-                    self.list();
+                    // self.list();
+
+                    Core.factory.process();
                   });
               }
             },
@@ -81,13 +106,15 @@ define(
                 {
                   $rootScope.statusBar.off();
 
-                  self.list();
+                  // self.list();
+
+                  Core.factory.process();
                 });
             },
 
             edit: function (number)
             {
-              angular.forEach($rootScope.data.connections, function (connection)
+              angular.forEach($rootScope.data.connected.list, function (connection)
               {
                 if (number.id === connection.id) { $scope.connection = connection; }
               });

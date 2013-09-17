@@ -71,7 +71,9 @@ br
             p(ng-show='(data.connected.list.length == 0)')
               | There are no connected numbers. Please add some.
 
-            table.table.table-striped(ng-show='ng-show')
+            // p {{ data.connected.group.contactInfoIds }}
+
+            table.table.table-striped(ng-show='(data.connected.list.length > 0)')
               thead
                 tr
                   th(style='width: 100px;')
@@ -202,7 +204,7 @@ br
             p(ng-show='(data.blacklist.list.length == 0)')
               | There are no blacklisted numbers.
 
-            table.table.table-striped(ng-show='ng-show')
+            table.table.table-striped(ng-show='(data.blacklist.list.length > 0)')
               thead
                 tr
                   th Label

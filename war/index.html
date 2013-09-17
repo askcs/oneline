@@ -17,7 +17,6 @@
     <title>Oneline</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- block icons-->
     <link rel="stylesheet" href="styles/5b8108c6.bootstrap.css">
     <link rel="stylesheet" href="styles/39277953.responsive.css">
     <link rel="stylesheet" href="styles/cdc1d92e.app.css">
@@ -35,7 +34,7 @@
         <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#dashboard" class="brand">{{config.profile.title}}</a>
           <div class="nav-collapse collapse">
             <ul ng-hide="browser.mobile" class="nav pull-right">
-              <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i>{{app.resources.name}}<b class="caret"></b></a>
+              <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i> {{app.resources.name}}<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="#logout"><i class="icon-off"></i> Logout</a></li>
                 </ul>
@@ -46,29 +45,6 @@
             </ul>
           </div>
         </div>
-      </div>
-    </div>
-    <div id="loading" ng-show="loadingBig" class="ng-cloak">
-      <div ng-show="loaderIcons.general"><span class="entypo">⏳</span>
-        <p>{{ui.loading.general}}...</p>
-      </div>
-      <div ng-show="loaderIcons.dashboard"><span class="entypo">◴</span>
-        <p>{{ui.loading.general}}<br>{{ui.loading.dashboard}}</p>
-      </div>
-      <div ng-show="loaderIcons.planboard"><span class="entypo"></span>
-        <p>{{ui.loading.general}}<br>{{ui.loading.planboard}}</p>
-      </div>
-      <div ng-show="loaderIcons.messages"><span class="entypo"></span>
-        <p>{{ui.loading.general}}<br>{{ui.loading.messages}}</p>
-      </div>
-      <div ng-show="loaderIcons.groups"><span class="entypo"></span>
-        <p>{{ui.loading.general}}<br>{{ui.loading.groups}}</p>
-      </div>
-      <div ng-show="loaderIcons.profile"><span class="entypo"></span>
-        <p>{{ui.loading.general}}<br>{{ui.loading.profile}}</p>
-      </div>
-      <div ng-show="loaderIcons.settings"><span class="entypo">⚒</span>
-        <p>{{ui.loading.general}}<br>{{ui.loading.settings}}</p>
       </div>
     </div>
     <div id="notification" ng-show="notification.status" class="alert ng-cloak">
@@ -87,7 +63,6 @@
         <p ng-show="loading.status" class="muted"><img src="images/fba8e680.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
       </div>
     </div>
-    <!-- block analytics-->
     <script data-main="scripts/ebb3b81d.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

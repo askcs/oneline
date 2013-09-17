@@ -12,7 +12,6 @@ define(
           var Core = $resource();
 
 
-
           var ContactInfos = $resource(
             config.host + '/accounts/contactinfos/:id',
             {},
@@ -42,7 +41,6 @@ define(
           );
 
 
-
           var Verification = $resource(
             config.host + '/products/verifyme/:action',
             {},
@@ -57,7 +55,6 @@ define(
               }
             }
           );
-
 
 
           var Settings = $resource(
@@ -89,7 +86,6 @@ define(
           );
 
 
-
           var Groups = $resource(
             config.host + '/accounts/groups/:id',
             {},
@@ -111,7 +107,6 @@ define(
           );
 
 
-
           var Logs = $resource(
             config.host + '/log',
             {},
@@ -125,13 +120,20 @@ define(
           );
 
 
+          var Scenarios = $resource(
+            config.host + '/scenario/oneline/generate',
+            {},
+            {
+              build: {
+                method: 'POST',
+                params: { default: true }
+              }
+            }
+          );
+
 
           Core.prototype.logs = {
-
-            local: function ()
-            {
-              return angular.fromJson(Storage.get('settings'));
-            },
+            local: function () { return angular.fromJson(Storage.get('settings')); },
 
             list: function ()
             {
@@ -140,8 +142,6 @@ define(
               Logs.query(
                 function (result)
                 {
-                  // Storage.add('settings', angular.toJson(result));
-
                   deferred.resolve(result);
                 },
                 function (error)
@@ -180,11 +180,7 @@ define(
 
 
           Core.prototype.settings = {
-
-            local: function ()
-            {
-              return angular.fromJson(Storage.get('settings'));
-            },
+            local: function () { return angular.fromJson(Storage.get('settings')); },
 
             list: function ()
             {
@@ -292,11 +288,7 @@ define(
 
 
           Core.prototype.connections = {
-
-            local: function ()
-            {
-              return angular.fromJson(Storage.get('connections'));
-            },
+            local: function () { return angular.fromJson(Storage.get('connections')); },
 
             list: function ()
             {
@@ -341,21 +333,45 @@ define(
 
             save: function (connection)
             {
+              var self = this;
+
               var deferred = $q.defer();
 
               var payload = {
                 contactInfo:    connection.contactInfo,
                 contactInfoTag: connection.contactInfoTag,
-                label:          connection.label
+                label:          connection.label,
+                groupKeys:      [$rootScope.data.connected.group.id]
               };
 
               if (connection.id)
               {
                 payload.id = connection.id;
 
-                ContactInfos.update({id: connection.id}, payload,
+                ContactInfos.update(
+                  {
+                    id: connection.id
+                  },
+                  payload,
                   function (result)
                   {
+                    var connections = angular.fromJson(Storage.get('connections'));
+
+                    angular.forEach(connections, function (node)
+                    {
+                      if (node.id === result.id)
+                      {
+                        node.contactInfo    = result.contactInfo;
+                        node.contactInfoTag = result.contactInfoTag;
+                        node.label          = result.label;
+                        node.groupKeys      = [$rootScope.data.connected.group.id];
+                      }
+                    });
+
+                    Storage.add('connections', angular.toJson(connections));
+
+                    Core.prototype.scenarios.build();
+
                     deferred.resolve(result);
                   },
                   function (error)
@@ -366,9 +382,25 @@ define(
               }
               else
               {
-                ContactInfos.create(payload,
+                ContactInfos.create(
+                  payload,
                   function (result)
                   {
+                    var locals = self.local();
+
+                    locals.push(result);
+
+                    Storage.add('connections', angular.toJson(locals));
+
+                    var groups = angular.fromJson(Storage.get('groups'));
+
+                    angular.forEach(groups, function (group)
+                    {
+                      if (group.id === $rootScope.data.connected.group.id) { group.contactInfoIds.push(result.id); }
+                    });
+
+                    Storage.add('groups', angular.toJson(groups));
+
                     deferred.resolve(result);
                   },
                   function (error)
@@ -383,13 +415,53 @@ define(
 
             remove: function (connection)
             {
-              var deferred = $q.defer();
+              var deferred  = $q.defer(),
+                  self      = this;
 
-              ContactInfos.remove({
+              ContactInfos.remove(
+                {
                   id: connection.id
                 },
                 function (result)
                 {
+                  var locals    = self.local(),
+                      filtered  = [];
+
+                  angular.forEach(locals, function (local)
+                  {
+                    if (local.id !== connection.id) { filtered.push(local); }
+                  });
+
+                  console.log('id ->', connection.id);
+
+                  Storage.add('connections', angular.toJson(filtered));
+
+                  var groups      = angular.fromJson(Storage.get('groups')),
+                      connecteds  = [],
+                      changed     = [];
+
+                  console.log('before ->', $rootScope.data.connected.group.contactInfoIds);
+
+                  angular.forEach($rootScope.data.connected.group.contactInfoIds, function (node)
+                  {
+                    console.log('node -> ', node, 'connection ->', connection);
+
+                    if (node.id != connection.id) { connecteds.push(node); }
+                  });
+
+                  console.log('connected ->', connecteds);
+
+                  angular.forEach(groups, function (group)
+                  {
+                    if (group.id === $rootScope.data.connected.group.id) { group.contactInfoIds = connecteds; }
+
+                    changed.push(group);
+                  });
+
+                  console.log('changed ->', changed);
+
+                  Storage.add('groups', angular.toJson(changed));
+
                   deferred.resolve(result);
                 },
                 function (error)
@@ -453,11 +525,7 @@ define(
 
 
           Core.prototype.groups = {
-
-            local: function ()
-            {
-              return angular.fromJson(Storage.get('groups'));
-            },
+            local: function () { return angular.fromJson(Storage.get('groups')); },
 
             list: function ()
             {
@@ -505,7 +573,6 @@ define(
 
 
           Core.prototype.blacklists = {
-
             save: function (blacklisted)
             {
               var deferred = $q.defer();
@@ -518,7 +585,6 @@ define(
                 function (result)
                 {
                   deferred.resolve(result);
-
                 },
                 function (error)
                 {
@@ -539,7 +605,6 @@ define(
                 function (result)
                 {
                   deferred.resolve(result);
-
                 },
                 function (error)
                 {
@@ -549,13 +614,56 @@ define(
 
               return deferred.promise;
             }
+          };
 
+
+          Core.prototype.scenarios = {
+            build: function ()
+            {
+              var deferred = $q.defer();
+
+              var payload = {
+                info: 'Ask-Cs One Line scenario',
+                connected_numbers: {},
+                events: {
+                  on_blacklist:           '',
+                  on_scenario_complete:   '',
+                  on_scenario_exception:  ''
+                }
+              };
+
+              angular.forEach($rootScope.data.connected.list, function (listed, index)
+              {
+                payload.connected_numbers[index] = {
+                  contactInfoId: listed.id,
+                  timeout:       20
+                };
+              });
+
+              Scenarios.build(
+                {},
+                payload,
+                function (result)
+                {
+                  console.log('Scenario sucessfully implemented: ', result);
+
+                  deferred.resolve(result);
+                },
+                function (error)
+                {
+                  console.log('Scenario build error!');
+
+                  deferred.resolve({error: error});
+                }
+              );
+
+              return deferred.promise;
+            }
           };
 
 
 
           Core.prototype.factory = {
-
             process: function ()
             {
               var raws = {
@@ -586,6 +694,8 @@ define(
 
               $rootScope.data = {};
 
+              //console.table(raws.connections);
+
               angular.forEach(raws.connections, function (connection)
               {
                 nodes[connection.id] = connection;
@@ -613,11 +723,6 @@ define(
                   data.account.name = connection.contactInfo;
                   break;
 
-                case 'Phone':
-                  data.account.phone = connection.contactInfo;
-                  nodes[connection.id] = connection;
-                  break;
-
                 case 'Email':
                   data.account.email = connection.contactInfo;
                   nodes[connection.id] = connection;
@@ -630,8 +735,24 @@ define(
                 case 'PURCHASED_NUMBER':
                   data.account.purchasedNumber = connection.contactInfo;
                   break;
+
+                case 'Phone':
+                  switch (connection.label)
+                  {
+                  case 'Home':
+                    data.account.home = connection.contactInfo;
+                    break;
+
+                  case 'Personal':
+                    data.account.personal = connection.contactInfo;
+                    break;
+                  }
+
+                  nodes[connection.id] = connection;
+                  break;
                 }
               });
+
               $rootScope.app.resources = data.account;
 
               angular.forEach(nodes, function (node)
@@ -643,7 +764,7 @@ define(
                   break;
 
                 case 'Email':
-                  emails.push(node)
+                  emails.push(node);
                   break;
                 }
               });
@@ -699,19 +820,30 @@ define(
               });
 
               data.connected.list = [];
-              angular.forEach(data.connected.contactInfoIds, function (node)
+
+              angular.forEach(data.connected.group.contactInfoIds, function (id)
               {
-                data.connected.list.push(node);
+                data.connected.list.push(nodes[id]);
               });
+
+              //console.table(data.connected.list);
 
               data.blacklist.list = [];
-              angular.forEach(data.blacklist.contactInfoIds, function (node)
+
+              angular.forEach(data.blacklist.group.contactInfoIds, function (id)
               {
-                data.blacklist.list.push(node);
+                data.blacklist.list.push(nodes[id]);
               });
 
+              //console.table(data.blacklist.list);
+
+              data.nodes = nodes;
+
+              console.table(raws.connections);
+
               $rootScope.data = data;
-              // console.info('data ->', $rootScope.data);
+
+              console.info('data ->', $rootScope.data);
 
               return true;
             }

@@ -8,7 +8,6 @@
       <li class="{{(views.guarder==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span>Blacklist</a></li>
     </ul>
     <div class="tab-content">
-      <!-- manager-->
       <div ng-controller="manager" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Add a connection</h3>
@@ -17,12 +16,8 @@
         <div class="row-fluid">
           <div style="min-height: 234px" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
-              <input ng-model="connection.label" type="text" placeholder="Label" class="input-medium">
+              <input ng-model="connection.label" type="text" placeholder="Label" class="input-large">
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
-              <select ng-model="connection.contactInfoTag" style="margin-right: 5px" class="span2">
-                <option value="Email">Email</option>
-                <option value="Phone" selected="selected">Phone</option>
-              </select>
               <button type="submit" class="btn">Save</button>
             </form>
             <h4>Numbers</h4>
@@ -32,8 +27,8 @@
                 There was an error with verifiying number. Please try again. If problem resists, please get in touch
                 with us.</span>
             </div>
-            <p ng-show="(data.connections.length == 0)">There are no connected numbers. Please add some.</p>
-            <table ng-show="ng-show" class="table table-striped">
+            <p ng-show="(data.connected.list.length == 0)">There are no connected numbers. Please add some.</p>
+            <table ng-show="(data.connected.list.length &gt; 0)" class="table table-striped">
               <thead>
                 <tr>
                   <th style="width: 100px"></th>
@@ -44,7 +39,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="number in data.connections">
+                <tr ng-repeat="number in data.connected.list">
                   <td><span ng-show="number.verified" class="label label-success">Verified</span><span ng-hide="number.verified" class="label label-error">Not Verified</span></td>
                   <td>{{number.label}}</td>
                   <td>{{number.contactInfo}}</td>
@@ -60,8 +55,6 @@
           </div>
         </div>
       </div>
-      <!-- end manager-->
-      <!-- notifier-->
       <div ng-controller="notifier" class="tab-pane {{(views.notifier==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Missed Call Notifications</h3>
@@ -102,8 +95,6 @@
           </div>
         </div>
       </div>
-      <!-- end notifier-->
-      <!-- reporter-->
       <div ng-controller="reporter" class="tab-pane {{(views.reporter==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Recent calls</h3>
@@ -112,7 +103,7 @@
         <div class="row-fluid">
           <div style="min-height: 230px" class="span12">
             <p ng-hide="logsLoading">Oneline provides all your recent calls only to you.</p>
-            <p ng-show="logsLoading">Loading recent calls</p>
+            <p ng-show="logsLoading">Loading recent calls..</p>
             <table ng-hide="logsLoading" class="table table-striped">
               <thead>
                 <tr>
@@ -139,8 +130,6 @@
           </div>
         </div>
       </div>
-      <!-- end reporter-->
-      <!-- guarder-->
       <div ng-controller="guarder" class="tab-pane {{(views.guarder==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h3 class="pull-left">Blacklist</h3>
@@ -155,8 +144,8 @@
               <button type="submit" class="btn">Add to blacklist</button>
             </form>
             <h4>Numbers</h4>
-            <p ng-show="(data.blacklist.length == 0)">There are no blacklisted numbers.</p>
-            <table ng-show="ng-show" class="table table-striped">
+            <p ng-show="(data.blacklist.list.length == 0)">There are no blacklisted numbers.</p>
+            <table ng-show="(data.blacklist.list.length &gt; 0)" class="table table-striped">
               <thead>
                 <tr>
                   <th>Label</th>
@@ -165,7 +154,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="number in data.blacklist">
+                <tr ng-repeat="number in data.blacklist.list">
                   <td>{{number.label}}</td>
                   <td>{{number.contactInfo}}</td>
                   <td>
@@ -177,10 +166,7 @@
           </div>
         </div>
       </div>
-      <!-- end guarder-->
     </div>
-    <!-- tab shadow-->
     <div id="tab-shadow" style="margin-left: 154px"><img ng-src="images/content_canvas_shadow.png"></div>
-    <!-- end tab shadow-->
   </div>
 </div>

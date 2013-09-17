@@ -1,1 +1,1 @@
-define(["controllers/controllers","config"],function(e,t){e.controller("register",["$scope",function(e){}])});
+define(["controllers/controllers"],function(e){e.controller("register",["$scope",function(e){}])});
