@@ -144,8 +144,6 @@ define(
                     $rootScope.statusBar.off();
 
                     $scope.verificationInfoID = result.verificationInfo.id;
-
-                    console.log('verification info id ->', $scope.verificationInfoID, result);
                   });
               },
 
@@ -154,9 +152,14 @@ define(
                 $rootScope.statusBar.display('Verifying your number and code..');
 
                 Core.connections.verify.confirm($scope.verificationCode[number.id], $scope.verificationInfoID)
-                  .then(function ()
+                  .then(function (result)
                   {
                     $rootScope.statusBar.off();
+
+                    $scope.verified = {
+                      status: true,
+                      result: result.verified
+                    };
 
                     var connections = angular.fromJson(Storage.get('connections'));
 
