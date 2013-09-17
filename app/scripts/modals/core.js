@@ -490,6 +490,8 @@ define(
 
               confirm: function (verificationCode, verificationInfoID)
               {
+                console.log('confirming for ->', verificationCode, verificationInfoID);
+
                 var deferred = $q.defer();
 
                 Verification.confirm(

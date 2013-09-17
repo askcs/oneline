@@ -2,7 +2,7 @@
 <div class="row-fluid">
   <div class="tabbable tabs-left">
     <ul style="margin-right: 0" class="nav nav-tabs nav-tabs-app">
-      <li class="{{(views.manager==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;manager&quot;); connections.list();" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span>Connections</a></li>
+      <li class="{{(views.manager==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;manager&quot;); connections.list();" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-contact-add"></span>Connected numbers</a></li>
       <li class="{{(views.notifier==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;notifier&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span>Notification settings</a></li>
       <li class="{{(views.reporter==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;reporter&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span>Call list</a></li>
       <li class="{{(views.guarder==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span>Blacklist</a></li>
@@ -10,7 +10,7 @@
     <div class="tab-content">
       <div ng-controller="manager" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
-          <h3 class="pull-left">Add a connection</h3>
+          <h3 class="pull-left">Add a connected number</h3>
         </div>
         <hr>
         <div class="row-fluid">
@@ -18,6 +18,7 @@
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-large">
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
+              <button type="button" ng-show="connection.label.length &gt; 0" ng-click="resetConnection();" class="btn">Cancel</button>
               <button type="submit" class="btn">Save</button>
             </form>
             <h4>Numbers</h4>

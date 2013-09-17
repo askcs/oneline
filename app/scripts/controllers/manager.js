@@ -6,9 +6,8 @@ define(
 
     controllers.controller('manager',
       [
-        // TODO: add $modal later on
-        '$rootScope', '$scope', 'Core',
-        function ($rootScope, $scope, Core)
+        '$rootScope', '$scope', 'Core', 'Storage',
+        function ($rootScope, $scope, Core, Storage)
         {
           $rootScope.fixStyles();
 
@@ -56,6 +55,19 @@ define(
             result: null
           };
 
+          $scope.verifying = {};
+          $scope.verificationCode = {};
+
+          $scope.resetVerifiers = function ()
+          {
+            angular.forEach($rootScope.data.connected.list, function (connection)
+            {
+              $scope.verifying[connection.id] = false;
+
+              $scope.verificationCode[connection.id] = '';
+            });
+          };
+
 
           $scope.connections = {
 
@@ -76,8 +88,6 @@ define(
 
             save: function ()
             {
-              var self = this;
-
               if ($scope.connection.label !== '' || $scope.connection.contactInfo !== '')
               {
                 $rootScope.statusBar.display('Saving the number..');
@@ -96,8 +106,6 @@ define(
 
             remove: function (number)
             {
-              var self = this;
-
               $rootScope.statusBar.display('Deleting a number..');
 
               Core.connections.remove(number)
@@ -122,44 +130,46 @@ define(
               {
                 $rootScope.statusBar.display('Verification call inited or message is being sent..');
 
+                $('#verifyBtn-' + number.id)
+                  .text('Sending verification code..')
+                  .attr('disabled', 'disabled');
+
                 Core.connections.verify.initiate(number)
                   .then(function (result)
                   {
-                    console.log('result ->', result);
+                    $scope.resetVerifiers();
+
+                    $scope.verifying[number.id] = true;
 
                     $rootScope.statusBar.off();
-
-                    $scope.toBeVerified = number;
 
                     $scope.verificationInfoID = result.verificationInfo.id;
 
-                    $modal({
-                      template: '/js/views/elements/con_verification.html',
-                      persist:  true,
-                      show:     true,
-                      backdrop: 'static',
-                      scope:    $scope
-                    });
+                    console.log('verification info id ->', $scope.verificationInfoID, result);
                   });
               },
 
-              confirm: function (verificationCode, verificationInfoID)
+              confirm: function (number)
               {
                 $rootScope.statusBar.display('Verifying your number and code..');
 
-                Core.connections.verify.confirm(verificationCode, verificationInfoID)
-                  .then(function (result)
+                Core.connections.verify.confirm($scope.verificationCode[number.id], $scope.verificationInfoID)
+                  .then(function ()
                   {
                     $rootScope.statusBar.off();
 
-                    $scope.verified = {
-                      status: true,
-                      result: result.verified
-                    };
+                    var connections = angular.fromJson(Storage.get('connections'));
+
+                    angular.forEach(connections, function (connection)
+                    {
+                      if (connection.id === number.id) { connection.verified = true; }
+                    });
+
+                    Storage.add('connections', angular.toJson(connections));
+
+                    $scope.resetVerifiers();
 
                     Core.factory.process();
-
-                    $rootScope.$emit('setView', 'manager');
                   });
               }
             }

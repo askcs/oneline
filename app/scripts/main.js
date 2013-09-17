@@ -74,7 +74,6 @@ require(
     'services/generators',
 
     'bootstrap'
-//    'pouch'
   ],
   function (angular, domReady)
   {
