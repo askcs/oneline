@@ -12,7 +12,7 @@ br
         a(ng-click='setViewTo("manager"); connections.list();',
           data-toggle='tab')
           span.icomoon.icomoon-contact-add(aria-hidden='true')
-          | Connections
+          | Connected numbers
 
       li(class="{{(views.notifier==true) && 'active'}}")
         a(ng-click='setViewTo("notifier")',
@@ -43,7 +43,7 @@ br
       .tab-pane(ng-controller='manager',
                 class="{{(views.manager==true) && 'active'}}")
         .tab-header
-          h3.pull-left Add a connection
+          h3.pull-left Add a connected number
         hr
         .row-fluid
           .span12(style='min-height: 234px;')

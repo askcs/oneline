@@ -432,24 +432,16 @@ define(
                     if (local.id !== connection.id) { filtered.push(local); }
                   });
 
-                  console.log('id ->', connection.id);
-
                   Storage.add('connections', angular.toJson(filtered));
 
                   var groups      = angular.fromJson(Storage.get('groups')),
                       connecteds  = [],
                       changed     = [];
 
-                  console.log('before ->', $rootScope.data.connected.group.contactInfoIds);
-
                   angular.forEach($rootScope.data.connected.group.contactInfoIds, function (node)
                   {
-                    console.log('node -> ', node, 'connection ->', connection);
-
-                    if (node.id != connection.id) { connecteds.push(node); }
+                    if (node != connection.id) { connecteds.push(node); }
                   });
-
-                  console.log('connected ->', connecteds);
 
                   angular.forEach(groups, function (group)
                   {
@@ -457,8 +449,6 @@ define(
 
                     changed.push(group);
                   });
-
-                  console.log('changed ->', changed);
 
                   Storage.add('groups', angular.toJson(changed));
 
@@ -645,14 +635,10 @@ define(
                 payload,
                 function (result)
                 {
-                  console.log('Scenario sucessfully implemented: ', result);
-
                   deferred.resolve(result);
                 },
                 function (error)
                 {
-                  console.log('Scenario build error!');
-
                   deferred.resolve({error: error});
                 }
               );
@@ -693,8 +679,6 @@ define(
                 nodes   = {};
 
               $rootScope.data = {};
-
-              //console.table(raws.connections);
 
               angular.forEach(raws.connections, function (connection)
               {
@@ -826,8 +810,6 @@ define(
                 data.connected.list.push(nodes[id]);
               });
 
-              //console.table(data.connected.list);
-
               data.blacklist.list = [];
 
               angular.forEach(data.blacklist.group.contactInfoIds, function (id)
@@ -835,11 +817,7 @@ define(
                 data.blacklist.list.push(nodes[id]);
               });
 
-              //console.table(data.blacklist.list);
-
               data.nodes = nodes;
-
-              console.table(raws.connections);
 
               $rootScope.data = data;
 
