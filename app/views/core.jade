@@ -62,7 +62,7 @@ br
             hr
 
             .alert(ng-show='verified.status',
-                   style="alert-{{(verified.result) && 'success' || 'error'}}")
+                   class="alert-{{(verified.result) && 'success' || 'error'}}")
               button.close(type='button',
                             ng-click='verified.status = false',
                             data-dismiss='alert') ×
@@ -178,16 +178,16 @@ br
                   th
               tbody
                 tr(ng-repeat='log in logsList')
-                  td
+                  td(style='vertical-align: middle')
                     span.label.label-warning {{ log.callState }}
-                  td {{ log.address }}
-                  td {{ log.startTime | nicelyDate }}
-                  td {{ log.endTime - log.startTime | calculateTime }}
-                  td
-                    button.btn.btn-mini(type='button',
+                  td(style='vertical-align: middle') {{ log.address }}
+                  td(style='vertical-align: middle') {{ log.startTime | nicelyDate }}
+                  td(style='vertical-align: middle') {{ log.endTime - log.startTime | calculateTime }}
+                  td(style='vertical-align: middle')
+                    button.btn(type='button',
                                         ng-click='logs.block(log)',
                                         ng-hide='log.blocked') Block
-                    button.btn.btn-mini(type='button',
+                    button.btn(type='button',
                                         ng-click='logs.allow(log)',
                                         ng-show='log.blocked') Allow
 
@@ -226,11 +226,11 @@ br
                   th
               tbody
                 tr(ng-repeat='number in data.blacklist.list')
-                  td {{number.label}}
-                  td {{number.contactInfo}}
+                  td(style='vertical-align: middle') {{number.label}}
+                  td(style='vertical-align: middle') {{number.contactInfo}}
                   td
-                    button.btn.btn-mini(ng-click='blacklists.remove(number)',
-                                        type='button') Allow
+                    button.btn(ng-click='blacklists.remove(number)',
+                               type='button') Allow
 
 
 

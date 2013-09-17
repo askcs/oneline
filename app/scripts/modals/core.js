@@ -139,44 +139,43 @@ define(
             {
               var deferred = $q.defer();
 
-              Logs.query(
-                function (result)
-                {
-                  deferred.resolve(result);
-                },
-                function (error)
-                {
-                  deferred.resolve({error: error});
-                }
-              );
-
-//              deferred.resolve(
-//                [
-//                  {
-//                    "id": 52001,
-//                    "scenarioId": 1,
-//                    "startTime": 1,
-//                    "endTime": 1,
-//                    "address": "0643002549",
-//                    "type": "phone",
-//                    "callState": "answered"
-//                  },
-//                  {
-//                    "id": 52002,
-//                    "scenarioId": 1,
-//                    "startTime": 1,
-//                    "endTime": 324,
-//                    "address": "0629143143",
-//                    "type": "phone",
-//                    "callState": "answered"
-//                  }
-//                ]
+//              Logs.query(
+//                function (result)
+//                {
+//                  deferred.resolve(result);
+//                },
+//                function (error)
+//                {
+//                  deferred.resolve({error: error});
+//                }
 //              );
+
+              deferred.resolve(
+                [
+                  {
+                    "id": 52001,
+                    "scenarioId": 1,
+                    "startTime": 1,
+                    "endTime": 1,
+                    "address": "0643002549",
+                    "type": "phone",
+                    "callState": "answered"
+                  },
+                  {
+                    "id": 52002,
+                    "scenarioId": 1,
+                    "startTime": 1,
+                    "endTime": 324,
+                    "address": "0629143143",
+                    "type": "phone",
+                    "callState": "answered"
+                  }
+                ]
+              );
 
               return deferred.promise;
             }
           };
-
 
 
           Core.prototype.settings = {
@@ -207,13 +206,15 @@ define(
               var deferred = $q.defer();
 
               Settings.update(
-                {id: settings.id},
+                { id: settings.id },
                 {
                   targetContactInfos: settings.target
                 },
                 function (result)
                 {
                   Storage.add('settings', angular.toJson(result));
+
+                  Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 },
@@ -278,13 +279,14 @@ define(
               $q.all(calls)
                 .then(function (result)
                 {
+                  Core.prototype.scenarios.build();
+
                   deferred.resolve(result);
                 });
 
               return deferred.promise;
             }
           };
-
 
 
           Core.prototype.connections = {
@@ -401,6 +403,8 @@ define(
 
                     Storage.add('groups', angular.toJson(groups));
 
+                    Core.prototype.scenarios.build();
+
                     deferred.resolve(result);
                   },
                   function (error)
@@ -452,6 +456,8 @@ define(
 
                   Storage.add('groups', angular.toJson(changed));
 
+                  Core.prototype.scenarios.build();
+
                   deferred.resolve(result);
                 },
                 function (error)
@@ -490,8 +496,6 @@ define(
 
               confirm: function (verificationCode, verificationInfoID)
               {
-                console.log('confirming for ->', verificationCode, verificationInfoID);
-
                 var deferred = $q.defer();
 
                 Verification.confirm(
@@ -501,6 +505,8 @@ define(
                   },
                   function (result)
                   {
+                    Core.prototype.scenarios.build();
+
                     deferred.resolve(result);
                   },
                   function (error)
@@ -515,7 +521,7 @@ define(
           };
 
 
-
+          // TODO: Back-end takes care of these stuff. So no needed. Remove it?
           Core.prototype.groups = {
             local: function () { return angular.fromJson(Storage.get('groups')); },
 
@@ -544,7 +550,7 @@ define(
               var deferred = $q.defer();
 
               Groups.update(
-                {id: group.id},
+                { id: group.id },
                 {
                   contactInfoIds: group.list
                 },
@@ -563,7 +569,6 @@ define(
           };
 
 
-
           Core.prototype.blacklists = {
             save: function (blacklisted)
             {
@@ -572,10 +577,13 @@ define(
               ContactInfos.create({
                   contactInfo:    blacklisted.contactInfo,
                   contactInfoTag: 'Phone',
-                  label:          blacklisted.label
+                  label:          blacklisted.label,
+                  groupKeys:      [$rootScope.data.blacklist.group.id]
                 },
                 function (result)
                 {
+                  Core.prototype.scenarios.build();
+
                   deferred.resolve(result);
                 },
                 function (error)
@@ -587,15 +595,47 @@ define(
               return deferred.promise;
             },
 
-            remove: function (number)
+            remove: function (connection)
             {
-              var deferred = $q.defer();
+              var deferred  = $q.defer(),
+                  self      = this;
 
-              ContactInfos.remove({
-                  id: number.id
+              ContactInfos.remove(
+                {
+                  id: connection.id
                 },
                 function (result)
                 {
+                  var connections = angular.fromJson(Storage.get('connections')),
+                      filtered    = [];
+
+                  angular.forEach(connections, function (local)
+                  {
+                    if (local.id !== connection.id) { filtered.push(local); }
+                  });
+
+                  Storage.add('connections', angular.toJson(filtered));
+
+                  var groups      = angular.fromJson(Storage.get('groups')),
+                      connecteds  = [],
+                      changed     = [];
+
+                  angular.forEach($rootScope.data.blacklist.group.contactInfoIds, function (node)
+                  {
+                    if (node != connection.id) { connecteds.push(node); }
+                  });
+
+                  angular.forEach(groups, function (group)
+                  {
+                    if (group.id === $rootScope.data.connected.group.id) { group.contactInfoIds = connecteds; }
+
+                    changed.push(group);
+                  });
+
+                  Storage.add('groups', angular.toJson(changed));
+
+                  Core.prototype.scenarios.build();
+
                   deferred.resolve(result);
                 },
                 function (error)
@@ -611,7 +651,12 @@ define(
 
           Core.prototype.scenarios = {
             build: function ()
+            {},
+
+            build_: function ()
             {
+              console.log('scenario builder inited');
+
               var deferred = $q.defer();
 
               var payload = {
@@ -626,29 +671,42 @@ define(
 
               angular.forEach($rootScope.data.connected.list, function (listed, index)
               {
-                payload.connected_numbers[index] = {
-                  contactInfoId: listed.id,
-                  timeout:       20
-                };
+                console.log('listed ->', listed);
+
+                if (listed.verified)
+                {
+                  payload.connected_numbers[index] = {
+                    contactInfoId: listed.id,
+                    timeout:       20
+                  };
+                }
               });
 
-              Scenarios.build(
-                {},
-                payload,
-                function (result)
-                {
-                  deferred.resolve(result);
-                },
-                function (error)
-                {
-                  deferred.resolve({error: error});
-                }
-              );
+              console.log('payload ->', payload.connected_numbers);
+
+              if (payload.connected_numbers.length > 0)
+              {
+                Scenarios.build(
+                  {},
+                  payload,
+                  function (result)
+                  {
+                    deferred.resolve(result);
+                  },
+                  function (error)
+                  {
+                    deferred.resolve({error: error});
+                  }
+                );
+              }
+              else
+              {
+                deferred.resolve();
+              }
 
               return deferred.promise;
             }
           };
-
 
 
           Core.prototype.factory = {
@@ -818,6 +876,8 @@ define(
               {
                 data.blacklist.list.push(nodes[id]);
               });
+
+              // Storage.add('blacklist', angular.toJson(data.blacklist.list));
 
               data.nodes = nodes;
 

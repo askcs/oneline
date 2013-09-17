@@ -70,34 +70,14 @@ define(
 
             remove: function (number)
             {
-              var self = this,
-                  list = [];
-
-              $rootScope.statusBar.display('Allowing a blacklisted number..');
-
-              angular.forEach($rootScope.data.blacklist, function (listed)
-              {
-                if (listed.id !== number.id) { list.push(listed); }
-              });
+              $rootScope.statusBar.display('Removing a blacklisted number..');
 
               Core.blacklists.remove(number)
                 .then(function ()
                 {
-                  $rootScope.statusBar.display('Updating blacklist group..');
+                  $rootScope.statusBar.off();
 
-                  var lids = [];
-
-                  angular.forEach(list, function (l) { lids.push(l.id); });
-
-                  Core.groups.update({
-                    id:   $rootScope.data.groups.blacklist.id,
-                    list: lids
-                  }).then(function ()
-                    {
-                      $rootScope.statusBar.off();
-
-                      self.list();
-                    });
+                  Core.factory.process();
                 });
             }
           };

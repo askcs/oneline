@@ -6,21 +6,15 @@ define(
 
     controllers.controller('reporter',
       [
-        '$rootScope', '$scope', 'Core',
-        function ($rootScope, $scope, Core)
+        '$rootScope', '$scope', 'Core', 'Storage',
+        function ($rootScope, $scope, Core, Storage)
         {
           $rootScope.fixStyles();
 
-
           $scope.logs = [];
 
-
           $scope.logs = {
-
-            local: function ()
-            {
-              return Core.connections.local();
-            },
+            local: function () { return Core.connections.local(); },
 
             list: function ()
             {
@@ -51,8 +45,6 @@ define(
 
             block: function (log)
             {
-              var self = this;
-
               $rootScope.statusBar.display('Adding a blacklisted number..');
 
               Core.blacklists.save({
@@ -61,63 +53,25 @@ define(
               })
                 .then(function (result)
                 {
-                  $rootScope.statusBar.display('Updating blacklist group..');
+                  var connections = angular.fromJson(Storage.get('connections'));
 
-                  var list = [];
+                  connections.push(result);
 
-                  angular.forEach($rootScope.data.blacklist, function (listed)
+                  Storage.add('connections', angular.toJson(connections));
+
+                  var groups = angular.fromJson(Storage.get('groups'));
+
+                  angular.forEach(groups, function (group)
                   {
-                    list.push(listed.id);
+                    if (group.id === $rootScope.data.blacklist.group.id) { group.contactInfoIds.push(result.id); }
                   });
 
-                  list.push(result.id);
+                  Storage.add('groups', angular.toJson(groups));
 
-                  Core.groups.update({
-                    id:   $rootScope.data.groups.blacklist.id,
-                    list: list
-                  }).then(function ()
-                    {
-                      $rootScope.statusBar.off();
+                  Core.factory.process();
 
-                      $scope.logs.list();
-
-                      $rootScope.$broadcast('refreshBlockedNumbers');
-                    });
+                  $rootScope.$broadcast('setView', 'guarder');
                 });
-            },
-
-            allow: function (log)
-            {
-
-//          $rootScope.statusBar.display('Adding a blacklisted number..');
-//
-//          Core.blacklists.save($scope.blacklist)
-//            .then(function (result)
-//            {
-//              $rootScope.statusBar.display('Updating blacklist group..');
-//
-//              // Populate blacklist
-//              var list = [];
-//              angular.forEach($rootScope.data.blacklist, function (listed)
-//              {
-//                list.push(listed.id);
-//              });
-//              list.push(result.id);
-//
-//              // Park node temporarily
-////              $rootScope.data.tmp.push(result);
-//
-//              // Update blacklist group
-//              Core.groups.update({
-//                id:   $rootScope.data.groups.blacklist.id,
-//                list: list
-//              }).then(function ()
-//                {
-//                  $rootScope.statusBar.off();
-//
-//                  self.list();
-//                });
-//            });
             }
           };
 
