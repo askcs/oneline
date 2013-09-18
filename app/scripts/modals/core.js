@@ -191,8 +191,6 @@ define(
                 {
                   Storage.add('settings', angular.toJson(result));
 
-                  // Core.prototype.scenarios.build();
-
                   deferred.resolve(result);
                 },
                 function (error)
@@ -256,8 +254,6 @@ define(
               $q.all(calls)
                 .then(function (result)
                 {
-                  // Core.prototype.scenarios.build();
-
                   deferred.resolve(result);
                 });
 
@@ -349,8 +345,6 @@ define(
 
                     Storage.add('connections', angular.toJson(connections));
 
-                    // Core.prototype.scenarios.build();
-
                     deferred.resolve(result);
                   },
                   function (error)
@@ -379,8 +373,6 @@ define(
                     });
 
                     Storage.add('groups', angular.toJson(groups));
-
-                    // Core.prototype.scenarios.build();
 
                     deferred.resolve(result);
                   },
@@ -433,8 +425,6 @@ define(
 
                   Storage.add('groups', angular.toJson(changed));
 
-                  // Core.prototype.scenarios.build();
-
                   deferred.resolve(result);
                 },
                 function (error)
@@ -482,8 +472,6 @@ define(
                   },
                   function (result)
                   {
-                    // Core.prototype.scenarios.build();
-
                     deferred.resolve(result);
                   },
                   function (error)
@@ -559,8 +547,6 @@ define(
                 },
                 function (result)
                 {
-                  // Core.prototype.scenarios.build();
-
                   deferred.resolve(result);
                 },
                 function (error)
@@ -585,14 +571,10 @@ define(
                   var connections = angular.fromJson(Storage.get('connections')),
                       filtered    = [];
 
-                  // console.log('connections before ->', connections);
-
                   angular.forEach(connections, function (local)
                   {
                     if (local.id !== connection.id) { filtered.push(local); }
                   });
-
-                  // console.log('connections after ->', filtered);
 
                   Storage.add('connections', angular.toJson(filtered));
 
@@ -605,8 +587,6 @@ define(
                     if (node !== connection.id) { connecteds.push(node); }
                   });
 
-                  // console.log('connecteds ->', connecteds);
-
                   angular.forEach(groups, function (group)
                   {
                     if (group.id === $rootScope.data.blacklist.group.id) { group.contactInfoIds = connecteds; }
@@ -614,11 +594,7 @@ define(
                     changed.push(group);
                   });
 
-                  // console.log('changed ->', changed);
-
                   Storage.add('groups', angular.toJson(changed));
-
-                  // Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 },
@@ -653,16 +629,6 @@ define(
                     };
                   }
                 });
-
-                console.log('payload ->', angular.toJson({
-                  info: 'Ask-Cs One Line scenario',
-                  connected_numbers: connected,
-                  events: {
-                    on_blacklist:           '',
-                    on_scenario_complete:   '',
-                    on_scenario_exception:  ''
-                  }
-                }));
 
                 Scenarios.build(
                   {},
@@ -725,7 +691,7 @@ define(
                 emails  = [],
                 nodes   = {};
 
-              console.table(raws.connections);
+              // console.table(raws.connections);
 
               $rootScope.data = {};
 
@@ -888,7 +854,7 @@ define(
 
               $rootScope.data = data;
 
-              console.info('data ->', $rootScope.data);
+              // console.info('data ->', $rootScope.data);
 
               Core.prototype.scenarios.build();
 

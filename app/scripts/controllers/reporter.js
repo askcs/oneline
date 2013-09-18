@@ -29,17 +29,15 @@ define(
 
                   $scope.logsLoading = false;
 
-                  angular.forEach(logs, function (log)
-                  {
-                    angular.forEach($rootScope.data.blacklist, function (id)
-                    {
-                      log.blocked = !!(log.address == id.contactInfo);
-                    });
-                  });
+//                  angular.forEach(logs, function (log)
+//                  {
+//                    angular.forEach($rootScope.data.blacklist.list, function (id)
+//                    {
+//                      log.blocked = !!(log.address === id.contactInfo);
+//                    });
+//                  });
 
                   $scope.logsList = logs;
-
-                  // Core.factory.process();
                 });
             },
 

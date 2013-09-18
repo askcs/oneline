@@ -181,11 +181,11 @@ br
                   td(style='vertical-align: middle') {{ log.endTime - log.startTime | calculateTime }}
                   td(style='vertical-align: middle')
                     button.btn(type='button',
-                                        ng-click='logs.block(log)',
-                                        ng-hide='log.blocked') Block
+                                ng-click='logs.block(log)',
+                                ng-hide='log.blocked') Block
                     button.btn(type='button',
-                                        ng-click='logs.allow(log)',
-                                        ng-show='log.blocked') Allow
+                                ng-click='logs.allow(log)',
+                                ng-show='log.blocked') Allow
 
 
 
