@@ -1,7 +1,7 @@
 #welcome
 
   #preloader
-    img(ng-src='images/oneline_logo_big.png')
+    h2#logo-big Oneline
     h4.form-signin-heading Setting up the application
     .progress.progress-striped.active(style="width: 100%")
       .bar
@@ -10,7 +10,7 @@
 
   #login.boxed
     form(ng-submit='login()')
-      img(ng-src='images/oneline_logo_big.png')
+      h2#logo-big Oneline
       h4.form-signin-heading Welcome back
       p(style='font-size: 12px; margin-bottom: 25px;')
         a(href='#register') Register an account
@@ -39,4 +39,4 @@
         small
           a(href='#forgotpass') {{ui.login.forgot_password}}
 
-      // span.version v{{config.app.version}}
+      span.version v{{config.app.version}}

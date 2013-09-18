@@ -4,8 +4,6 @@ br
   .tabbable.tabs-left
 
 
-
-
     ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
 
       li(class="{{(views.manager==true) && 'active'}}")
@@ -39,11 +37,7 @@ br
           | Profile
 
 
-
-
     .tab-content
-
-
 
 
       .tab-pane(ng-controller='manager',
@@ -122,8 +116,6 @@ br
 
 
 
-
-
       .tab-pane(ng-controller='notifier',
                 class="{{(views.notifier==true) && 'active'}}")
         .tab-header
@@ -162,8 +154,6 @@ br
 
 
 
-
-
       .tab-pane(ng-controller='reporter',
                 class="{{(views.reporter==true) && 'active'}}")
         .tab-header
@@ -196,8 +186,6 @@ br
                     button.btn(type='button',
                                         ng-click='logs.allow(log)',
                                         ng-show='log.blocked') Allow
-
-
 
 
 
@@ -261,10 +249,3 @@ br
               dd {{ data.account.phone }}
               dt Purchased number
               dd {{ data.account.purchasedNumber }}
-
-
-
-
-
-    #tab-shadow(style='margin-left: 154px;')
-      img(ng-src='images/content_canvas_shadow.png')

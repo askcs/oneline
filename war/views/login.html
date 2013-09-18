@@ -1,12 +1,14 @@
 <div id="welcome">
-  <div id="preloader"><img ng-src="images/oneline_logo_big.png">
+  <div id="preloader">
+    <h2 id="logo-big">Oneline</h2>
     <h4 class="form-signin-heading">Setting up the application</h4>
     <div style="width: 100%" class="progress progress-striped active">
       <div class="bar"></div>
     </div><span class="muted"></span>
   </div>
   <div id="login" class="boxed">
-    <form ng-submit="login()"><img ng-src="images/oneline_logo_big.png">
+    <form ng-submit="login()">
+      <h2 id="logo-big">Oneline</h2>
       <h4 class="form-signin-heading">Welcome back</h4>
       <p style="font-size: 12px; margin-bottom: 25px"><a href="#register">Register an account</a></p>
       <div ng-show="alert.login.display" class="alert">
@@ -18,8 +20,7 @@
         <input type="checkbox" ng-model="logindata.remember">Remember me
       </label>
       <button type="submit" class="btn btn-large btn-primary">{{ui.login.button_login}}</button>
-      <p><small><a href="#forgotpass">{{ui.login.forgot_password}}</a></small></p>
-      <!-- span.version v{{config.app.version}}-->
+      <p><small><a href="#forgotpass">{{ui.login.forgot_password}}</a></small></p><span class="version">v{{config.app.version}}</span>
     </form>
   </div>
 </div>

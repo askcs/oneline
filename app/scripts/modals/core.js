@@ -150,29 +150,6 @@ define(
                 }
               );
 
-//              deferred.resolve(
-//                [
-//                  {
-//                    "id": 52001,
-//                    "scenarioId": 1,
-//                    "startTime": 1,
-//                    "endTime": 1,
-//                    "address": "0643002549",
-//                    "type": "phone",
-//                    "callState": "answered"
-//                  },
-//                  {
-//                    "id": 52002,
-//                    "scenarioId": 1,
-//                    "startTime": 1,
-//                    "endTime": 324,
-//                    "address": "0629143143",
-//                    "type": "phone",
-//                    "callState": "answered"
-//                  }
-//                ]
-//              );
-
               return deferred.promise;
             }
           };
@@ -214,7 +191,7 @@ define(
                 {
                   Storage.add('settings', angular.toJson(result));
 
-                  Core.prototype.scenarios.build();
+                  // Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 },
@@ -279,7 +256,7 @@ define(
               $q.all(calls)
                 .then(function (result)
                 {
-                  Core.prototype.scenarios.build();
+                  // Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 });
@@ -372,7 +349,7 @@ define(
 
                     Storage.add('connections', angular.toJson(connections));
 
-                    Core.prototype.scenarios.build();
+                    // Core.prototype.scenarios.build();
 
                     deferred.resolve(result);
                   },
@@ -403,7 +380,7 @@ define(
 
                     Storage.add('groups', angular.toJson(groups));
 
-                    Core.prototype.scenarios.build();
+                    // Core.prototype.scenarios.build();
 
                     deferred.resolve(result);
                   },
@@ -456,7 +433,7 @@ define(
 
                   Storage.add('groups', angular.toJson(changed));
 
-                  Core.prototype.scenarios.build();
+                  // Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 },
@@ -505,7 +482,7 @@ define(
                   },
                   function (result)
                   {
-                    Core.prototype.scenarios.build();
+                    // Core.prototype.scenarios.build();
 
                     deferred.resolve(result);
                   },
@@ -582,7 +559,7 @@ define(
                 },
                 function (result)
                 {
-                  Core.prototype.scenarios.build();
+                  // Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 },
@@ -641,7 +618,7 @@ define(
 
                   Storage.add('groups', angular.toJson(changed));
 
-                  Core.prototype.scenarios.build();
+                  // Core.prototype.scenarios.build();
 
                   deferred.resolve(result);
                 },
@@ -657,45 +634,47 @@ define(
 
 
           Core.prototype.scenarios = {
+
             build: function ()
-            {},
-
-            build_: function ()
             {
-              console.log('scenario builder inited');
-
               var deferred = $q.defer();
 
-              var payload = {
-                info: 'Ask-Cs One Line scenario',
-                connected_numbers: {},
-                events: {
-                  on_blacklist:           '',
-                  on_scenario_complete:   '',
-                  on_scenario_exception:  ''
-                }
-              };
-
-              angular.forEach($rootScope.data.connected.list, function (listed, index)
+              if ($rootScope.data.connected.list.length > 0)
               {
-                console.log('listed ->', listed);
+                var connected = {};
 
-                if (listed.verified)
+                angular.forEach($rootScope.data.connected.list, function (listed, index)
                 {
-                  payload.connected_numbers[index] = {
-                    contactInfoId: listed.id,
-                    timeout:       20
-                  };
-                }
-              });
+                  if (listed.verified)
+                  {
+                    connected[index] = {
+                      contactInfoId: listed.id,
+                      timeout:       20
+                    };
+                  }
+                });
 
-              console.log('payload ->', payload.connected_numbers);
+                console.log('payload ->', angular.toJson({
+                  info: 'Ask-Cs One Line scenario',
+                  connected_numbers: connected,
+                  events: {
+                    on_blacklist:           '',
+                    on_scenario_complete:   '',
+                    on_scenario_exception:  ''
+                  }
+                }));
 
-              if (payload.connected_numbers.length > 0)
-              {
                 Scenarios.build(
                   {},
-                  payload,
+                  {
+                    info: 'Ask-Cs One Line scenario',
+                    connected_numbers: connected,
+                    events: {
+                      on_blacklist:           '',
+                      on_scenario_complete:   '',
+                      on_scenario_exception:  ''
+                    }
+                  },
                   function (result)
                   {
                     deferred.resolve(result);
@@ -905,13 +884,13 @@ define(
                 }
               });
 
-              // Storage.add('blacklist', angular.toJson(data.blacklist.list));
-
               data.nodes = nodes;
 
               $rootScope.data = data;
 
               console.info('data ->', $rootScope.data);
+
+              Core.prototype.scenarios.build();
 
               return true;
             }
