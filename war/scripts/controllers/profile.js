@@ -1,0 +1,1 @@
+define(["controllers/controllers"],function(e){e.controller("profile",["$rootScope","$scope","Core","Storage",function(e,t,n,r){e.fixStyles()}])});

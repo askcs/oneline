@@ -139,39 +139,39 @@ define(
             {
               var deferred = $q.defer();
 
-//              Logs.query(
-//                function (result)
-//                {
-//                  deferred.resolve(result);
-//                },
-//                function (error)
-//                {
-//                  deferred.resolve({error: error});
-//                }
-//              );
-
-              deferred.resolve(
-                [
-                  {
-                    "id": 52001,
-                    "scenarioId": 1,
-                    "startTime": 1,
-                    "endTime": 1,
-                    "address": "0643002549",
-                    "type": "phone",
-                    "callState": "answered"
-                  },
-                  {
-                    "id": 52002,
-                    "scenarioId": 1,
-                    "startTime": 1,
-                    "endTime": 324,
-                    "address": "0629143143",
-                    "type": "phone",
-                    "callState": "answered"
-                  }
-                ]
+              Logs.query(
+                function (result)
+                {
+                  deferred.resolve(result);
+                },
+                function (error)
+                {
+                  deferred.resolve({error: error});
+                }
               );
+
+//              deferred.resolve(
+//                [
+//                  {
+//                    "id": 52001,
+//                    "scenarioId": 1,
+//                    "startTime": 1,
+//                    "endTime": 1,
+//                    "address": "0643002549",
+//                    "type": "phone",
+//                    "callState": "answered"
+//                  },
+//                  {
+//                    "id": 52002,
+//                    "scenarioId": 1,
+//                    "startTime": 1,
+//                    "endTime": 324,
+//                    "address": "0629143143",
+//                    "type": "phone",
+//                    "callState": "answered"
+//                  }
+//                ]
+//              );
 
               return deferred.promise;
             }
@@ -728,6 +728,7 @@ define(
                   account:    {},
                   connected:  {},
                   blacklist:  {},
+                  contact:    {},
                   settings:   {
                     sms: {
                       status:   false,
@@ -744,6 +745,8 @@ define(
                 phones  = [],
                 emails  = [],
                 nodes   = {};
+
+              console.table(raws.connections);
 
               $rootScope.data = {};
 
@@ -763,61 +766,93 @@ define(
                 case 'BlackList':
                   data.blacklist = {group: group};
                   break;
+
+                case 'Contact':
+                  data.contact = {group: group};
+                  break;
                 }
               });
 
               angular.forEach(raws.connections, function (connection)
               {
-                switch (connection.contactInfoTag)
+                if (connection.groupKeys[0] === data.contact.group.id)
                 {
-                case 'Name':
-                  data.account.name = connection.contactInfo;
-                  break;
-
-                case 'Email':
-                  data.account.email = connection.contactInfo;
-                  nodes[connection.id] = connection;
-                  break;
-
-                case 'Address':
-                  data.account.address = connection.contactInfo;
-                  break;
-
-                case 'PURCHASED_NUMBER':
-                  data.account.purchasedNumber = connection.contactInfo;
-                  break;
-
-                case 'Phone':
-                  switch (connection.label)
+                  switch (connection.contactInfoTag)
                   {
-                  case 'Home':
-                    data.account.home = connection.contactInfo;
+                  case 'Name':
+                    data.account.name = connection.contactInfo;
                     break;
 
-                  case 'Personal':
-                    data.account.personal = connection.contactInfo;
+                  case 'Email':
+                    data.account.email = connection.contactInfo;
+
+                    nodes[connection.id] = connection;
+                    break;
+
+                  case 'Address':
+                    data.account.address = connection.contactInfo;
+                    break;
+
+                  case 'PURCHASED_NUMBER':
+                    data.account.purchasedNumber = connection.contactInfo;
+                    break;
+
+                  case 'Phone':
+                    data.account.phone = connection.contactInfo;
+
+                    nodes[connection.id] = connection;
                     break;
                   }
-
-                  nodes[connection.id] = connection;
-                  break;
                 }
               });
 
               $rootScope.app.resources = data.account;
 
+              data.connected.list = [];
+
+              angular.forEach(data.connected.group.contactInfoIds, function (id)
+              {
+                data.connected.list.push(nodes[id]);
+              });
+
+              data.blacklist.list = [];
+
+              angular.forEach(data.blacklist.group.contactInfoIds, function (id)
+              {
+                data.blacklist.list.push(nodes[id]);
+              });
+
               angular.forEach(nodes, function (node)
               {
                 switch (node.contactInfoTag)
                 {
-                case 'Phone':
-                  phones.push(node);
-                  break;
-
                 case 'Email':
                   emails.push(node);
                   break;
                 }
+              });
+
+              var filtered = nodes;
+
+              angular.forEach(filtered, function (node, index)
+              {
+                if (node.contactInfoTag != 'Phone')
+                {
+                  delete filtered[index];
+                }
+              });
+
+              if (data.blacklist.group.contactInfoIds.length > 0)
+              {
+                angular.forEach(data.blacklist.group.contactInfoIds, function (id)
+                {
+                  delete filtered[id];
+                });
+              }
+
+              angular.forEach(filtered, function (node)
+              {
+                phones.push(node);
               });
 
               angular.forEach(emails, function (email)
@@ -868,20 +903,6 @@ define(
                     data.settings.sms.targets[0].id;
                   break;
                 }
-              });
-
-              data.connected.list = [];
-
-              angular.forEach(data.connected.group.contactInfoIds, function (id)
-              {
-                data.connected.list.push(nodes[id]);
-              });
-
-              data.blacklist.list = [];
-
-              angular.forEach(data.blacklist.group.contactInfoIds, function (id)
-              {
-                data.blacklist.list.push(nodes[id]);
               });
 
               // Storage.add('blacklist', angular.toJson(data.blacklist.list));

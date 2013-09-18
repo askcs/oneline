@@ -34,14 +34,12 @@
         <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#dashboard" class="brand">{{config.profile.title}}</a>
           <div class="nav-collapse collapse">
             <ul ng-hide="browser.mobile" class="nav pull-right">
-              <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i> {{app.resources.name}}<b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#logout"><i class="icon-off"></i> Logout</a></li>
-                </ul>
-              </li>
+              <li><a ng-click="redirectToProfile()"><i class="icon-user icon-white"></i> {{app.resources.name}}</a></li>
+              <li><a href="#logout"><i class="icon-off icon-white"></i> Logout</a></li>
             </ul>
             <ul ng-show="browser.mobile" class="nav pull-right">
-              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768"></span></a></li>
+              <li><a ng-click="redirectToProfile()"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-user icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">{{app.resources.name}}</span></a></li>
+              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Logout</span></a></li>
             </ul>
           </div>
         </div>
@@ -63,6 +61,6 @@
         <p ng-show="loading.status" class="muted"><img src="images/fba8e680.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
       </div>
     </div>
-    <script data-main="scripts/ebb3b81d.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/a7089660.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>

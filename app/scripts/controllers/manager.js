@@ -30,10 +30,10 @@ define(
           */
           /*
           Core.connections.remove({
-            id: 121001
+            id: 4785074604081152
           });
           Core.connections.remove({
-            id: 128001
+            id: 5642556234792960
           });
           */
 

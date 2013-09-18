@@ -6,6 +6,7 @@
       <li class="{{(views.notifier==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;notifier&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-bullhorn-2"></span>Notification settings</a></li>
       <li class="{{(views.reporter==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;reporter&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-file-10"></span>Call list</a></li>
       <li class="{{(views.guarder==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-thumbs-up-5"></span>Blacklist</a></li>
+      <li class="{{(views.profile==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;profile&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-user"></span>Profile</a></li>
     </ul>
     <div class="tab-content">
       <div ng-controller="manager" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
@@ -14,7 +15,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 234px" class="span12">
+          <div style="min-height: 300px" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-large">
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
@@ -23,7 +24,7 @@
             </form>
             <h4>Numbers</h4>
             <hr>
-            <div ng-show="verified.status" style="alert-{{(verified.result) &amp;&amp; 'success' || 'error'}}" class="alert">
+            <div ng-show="verified.status" class="alert alert-{{(verified.result) &amp;&amp; 'success' || 'error'}}">
               <button type="button" ng-click="verified.status = false" data-dismiss="alert" class="close">×</button><span ng-show="verified.result">Number is verified and ready to use.</span><span ng-hide="verified.result">
                 There was an error with verifiying number. Please try again. If problem resists, please get in touch
                 with us.</span>
@@ -41,14 +42,19 @@
               </thead>
               <tbody>
                 <tr ng-repeat="number in data.connected.list">
-                  <td><span ng-show="number.verified" class="label label-success">Verified</span><span ng-hide="number.verified" class="label label-error">Not Verified</span></td>
-                  <td>{{number.label}}</td>
-                  <td>{{number.contactInfo}}</td>
-                  <td>{{number.contactInfoTag}}</td>
-                  <td>
-                    <button ng-click="connections.remove(number)" type="button" ng-hide="(number.contactKey==data.account.contactKey)" class="btn btn-mini">Delete</button>
-                    <button ng-click="connections.edit(number)" type="button" class="btn btn-mini">Edit</button>
-                    <button ng-hide="number.verified" ng-click="connections.verify.initiate(number)" type="button" style="margin-left: 5px" class="btn btn-mini">Verify</button>
+                  <td style="vertical-align: middle"><span ng-show="number.verified" class="label label-success">Verified</span><span ng-hide="number.verified" class="label label-error">Not Verified</span></td>
+                  <td style="vertical-align: middle">{{number.label}}</td>
+                  <td style="vertical-align: middle">{{number.contactInfo}}</td>
+                  <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
+                  <td style="vertical-align: middle, text-align: right">
+                    <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" ng-hide="(number.contactKey==data.account.contactKey)" class="btn">Delete</button>
+                    <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" class="btn">Edit</button>
+                    <div style="margin-top:10px; display: inline" ng-show="verifying[number.id]" class="input-append">
+                      <input id="appendedInputButton" type="text" ng-model="verificationCode[number.id]" autofocus="autofocus" class="span3">
+                      <button type="button" ng-click="resetVerifiers()" class="btn">Cancel</button>
+                      <button type="button" ng-click="connections.verify.confirm(number)" class="btn">Confirm</button>
+                    </div>
+                    <button id="verifyBtn-{{number.id}}" ng-hide="number.verified || verifying[number.id]" ng-click="connections.verify.initiate(number)" type="button" class="btn">Verify</button>
                   </td>
                 </tr>
               </tbody>
@@ -62,7 +68,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 230px" class="span12">
+          <div style="min-height: 300px" class="span12">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
             <form ng-submit="settings.save()" class="form-inline">
               <table class="table table-striped">
@@ -102,7 +108,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 230px" class="span12">
+          <div style="min-height: 300px" class="span12">
             <p ng-hide="logsLoading">Oneline provides all your recent calls only to you.</p>
             <p ng-show="logsLoading">Loading recent calls..</p>
             <table ng-hide="logsLoading" class="table table-striped">
@@ -117,13 +123,13 @@
               </thead>
               <tbody>
                 <tr ng-repeat="log in logsList">
-                  <td><span class="label label-warning">{{ log.callState }}</span></td>
-                  <td>{{ log.address }}</td>
-                  <td>{{ log.startTime | nicelyDate }}</td>
-                  <td>{{ log.endTime - log.startTime | calculateTime }}</td>
-                  <td>
-                    <button type="button" ng-click="logs.block(log)" ng-hide="log.blocked" class="btn btn-mini">Block</button>
-                    <button type="button" ng-click="logs.allow(log)" ng-show="log.blocked" class="btn btn-mini">Allow</button>
+                  <td style="vertical-align: middle"><span class="label label-warning">{{ log.callState }}</span></td>
+                  <td style="vertical-align: middle">{{ log.address }}</td>
+                  <td style="vertical-align: middle">{{ log.startTime | nicelyDate }}</td>
+                  <td style="vertical-align: middle">{{ log.endTime - log.startTime | calculateTime }}</td>
+                  <td style="vertical-align: middle">
+                    <button type="button" ng-click="logs.block(log)" ng-hide="log.blocked" class="btn">Block</button>
+                    <button type="button" ng-click="logs.allow(log)" ng-show="log.blocked" class="btn">Allow</button>
                   </td>
                 </tr>
               </tbody>
@@ -137,11 +143,12 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 234px" class="span12">
+          <div style="min-height: 300px" class="span12">
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
-            <form ng-submit="blacklists.save()" class="form-inline well">
+            <form ng-submit="blacklists.block()" class="form-inline well">
               <input ng-model="blacklist.label" type="text" placeholder="Label" class="input-medium">
               <input ng-model="blacklist.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
+              <button type="button" ng-show="blacklist.label.length &gt; 0" ng-click="resetBlacklist();" class="btn">Cancel</button>
               <button type="submit" class="btn">Add to blacklist</button>
             </form>
             <h4>Numbers</h4>
@@ -156,14 +163,38 @@
               </thead>
               <tbody>
                 <tr ng-repeat="number in data.blacklist.list">
-                  <td>{{number.label}}</td>
-                  <td>{{number.contactInfo}}</td>
+                  <td style="vertical-align: middle">{{number.label}}</td>
+                  <td style="vertical-align: middle">{{number.contactInfo}}</td>
                   <td>
-                    <button ng-click="blacklists.remove(number)" type="button" class="btn btn-mini">Allow</button>
+                    <button ng-click="blacklists.allow(number)" type="button" class="btn">Allow</button>
                   </td>
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="profile" class="tab-pane {{(views.profile==true) &amp;&amp; 'active'}}">
+        <div class="tab-header">
+          <h3 class="pull-left">{{ data.account.name }}</h3>
+        </div>
+        <hr>
+        <div class="row-fluid">
+          <div style="min-height: 300px" class="span12">
+            <dl>
+              <dt>Name</dt>
+              <dd>{{ data.account.name }}</dd>
+              <dt>Email</dt>
+              <dd>{{ data.account.email }}</dd>
+              <dt>Address</dt>
+              <dd>{{ data.account.address }}</dd>
+              <dt>Phone (Home)</dt>
+              <dd>{{ data.account.home }}</dd>
+              <dt>Phone (Mobile)</dt>
+              <dd>{{ data.account.personal }}</dd>
+              <dt>Purchased number</dt>
+              <dd>{{ data.account.purchasedNumber }}</dd>
+            </dl>
           </div>
         </div>
       </div>
