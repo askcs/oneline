@@ -32,6 +32,12 @@ br
           span.icomoon.icomoon-thumbs-up-5(aria-hidden='true')
           | Blacklist
 
+      li(class="{{(views.profile==true) && 'active'}}")
+        a(ng-click='setViewTo("profile")',
+        data-toggle='tab')
+          span.icomoon.icomoon-user(aria-hidden='true')
+          | Profile
+
 
 
 
@@ -46,7 +52,7 @@ br
           h3.pull-left Add a connected number
         hr
         .row-fluid
-          .span12(style='min-height: 234px;')
+          .span12(style='min-height: 300px;')
             form.form-inline.well(ng-submit='connections.save()')
               input.input-large(ng-model='connection.label',
                                   type='text',
@@ -124,7 +130,7 @@ br
           h3.pull-left Missed Call Notifications
         hr
         .row-fluid
-          .span12(style='min-height: 230px;')
+          .span12(style='min-height: 300px;')
             p Your smart secretary can send notifcations about your missed calls.
             form.form-inline(ng-submit='settings.save()')
               table.table.table-striped
@@ -164,7 +170,7 @@ br
           h3.pull-left Recent calls
         hr
         .row-fluid
-          .span12(style='min-height: 230px;')
+          .span12(style='min-height: 300px;')
             p(ng-hide='logsLoading') Oneline provides all your recent calls only to you.
             p(ng-show='logsLoading')
               | Loading recent calls..
@@ -201,17 +207,20 @@ br
           h3.pull-left Blacklist
         hr
         .row-fluid
-          .span12(style='min-height: 234px;')
+          .span12(style='min-height: 300px;')
 
             p Oneline can block any unwanted incoming calls and let them know kindly
 
-            form.form-inline.well(ng-submit='blacklists.save()')
+            form.form-inline.well(ng-submit='blacklists.block()')
               input.input-medium(ng-model='blacklist.label',
                                   type='text',
                                   placeholder='Label')
               input.input-large(ng-model='blacklist.contactInfo',
                                 type='text',
                                 placeholder='e.g. Phone number…')
+              button.btn(type='button',
+                          ng-show='blacklist.label.length > 0',
+                          ng-click='resetBlacklist();') Cancel
               button.btn(type='submit') Add to blacklist
 
             h4 Numbers
@@ -229,8 +238,31 @@ br
                   td(style='vertical-align: middle') {{number.label}}
                   td(style='vertical-align: middle') {{number.contactInfo}}
                   td
-                    button.btn(ng-click='blacklists.remove(number)',
+                    button.btn(ng-click='blacklists.allow(number)',
                                type='button') Allow
+
+
+
+      .tab-pane(ng-controller='profile',
+                class="{{(views.profile==true) && 'active'}}")
+        .tab-header
+          h3.pull-left {{ data.account.name }}
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+            dl
+              dt Name
+              dd {{ data.account.name }}
+              dt Email
+              dd {{ data.account.email }}
+              dt Address
+              dd {{ data.account.address }}
+              dt Phone (Home)
+              dd {{ data.account.home }}
+              dt Phone (Mobile)
+              dd {{ data.account.personal }}
+              dt Purchased number
+              dd {{ data.account.purchasedNumber }}
 
 
 

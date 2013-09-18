@@ -58,6 +58,7 @@ require(
     'controllers/notifier',
     'controllers/reporter',
     'controllers/guarder',
+    'controllers/profile',
 
     'directives/appVersion',
 

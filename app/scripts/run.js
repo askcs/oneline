@@ -12,6 +12,11 @@ define(
           $rootScope.config = config;
           // $rootScope.config.init();
 
+          $rootScope.redirectToProfile = function ()
+          {
+            $rootScope.$emit('setView', 'profile');
+          };
+
 
           // TODO: Move these checks to jquery.browser
           /*

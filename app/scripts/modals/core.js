@@ -597,8 +597,7 @@ define(
 
             remove: function (connection)
             {
-              var deferred  = $q.defer(),
-                  self      = this;
+              var deferred  = $q.defer();
 
               ContactInfos.remove(
                 {
@@ -609,10 +608,14 @@ define(
                   var connections = angular.fromJson(Storage.get('connections')),
                       filtered    = [];
 
+                  // console.log('connections before ->', connections);
+
                   angular.forEach(connections, function (local)
                   {
                     if (local.id !== connection.id) { filtered.push(local); }
                   });
+
+                  // console.log('connections after ->', filtered);
 
                   Storage.add('connections', angular.toJson(filtered));
 
@@ -622,15 +625,19 @@ define(
 
                   angular.forEach($rootScope.data.blacklist.group.contactInfoIds, function (node)
                   {
-                    if (node != connection.id) { connecteds.push(node); }
+                    if (node !== connection.id) { connecteds.push(node); }
                   });
+
+                  // console.log('connecteds ->', connecteds);
 
                   angular.forEach(groups, function (group)
                   {
-                    if (group.id === $rootScope.data.connected.group.id) { group.contactInfoIds = connecteds; }
+                    if (group.id === $rootScope.data.blacklist.group.id) { group.contactInfoIds = connecteds; }
 
                     changed.push(group);
                   });
+
+                  // console.log('changed ->', changed);
 
                   Storage.add('groups', angular.toJson(changed));
 

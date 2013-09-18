@@ -6,13 +6,22 @@ define(
 
     controllers.controller('guarder',
       [
-        '$rootScope', '$scope', 'Core',
-        function ($rootScope, $scope, Core)
+        '$rootScope', '$scope', 'Core', 'Storage',
+        function ($rootScope, $scope, Core, Storage)
         {
           $rootScope.fixStyles();
 
 
           $scope.blacklist = {};
+
+
+          $scope.resetBlacklist = function ()
+          {
+            $scope.blacklist = {
+              label:          '',
+              contactInfo:    ''
+            };
+          };
 
 
           $scope.blacklists = {
@@ -36,10 +45,43 @@ define(
                 });
             },
 
-            save: function ()
+            block: function ()
             {
-              if ($scope.blacklist.label !== undefined || $scope.blacklist.contactInfo !== undefined)
+              if ($scope.blacklist.label !== '' || $scope.blacklist.contactInfo !== '')
               {
+                $rootScope.statusBar.display('Adding a blacklisted number..');
+
+                Core.blacklists.save({
+                  contactInfo:  $scope.blacklist.contactInfo,
+                  label:        $scope.blacklist.label
+                })
+                  .then(function (result)
+                  {
+                    $rootScope.statusBar.off();
+
+                    $scope.resetBlacklist();
+
+                    var connections = angular.fromJson(Storage.get('connections'));
+
+                    connections.push(result);
+
+                    Storage.add('connections', angular.toJson(connections));
+
+                    var groups = angular.fromJson(Storage.get('groups'));
+
+                    angular.forEach(groups, function (group)
+                    {
+                      if (group.id === $rootScope.data.blacklist.group.id) { group.contactInfoIds.push(result.id); }
+                    });
+
+                    Storage.add('groups', angular.toJson(groups));
+
+                    Core.factory.process();
+
+                    $rootScope.$broadcast('setView', 'guarder');
+                  });
+
+                /*
                 var self = this;
 
                 $rootScope.statusBar.display('Adding a blacklisted number..');
@@ -65,10 +107,11 @@ define(
                         self.list();
                       });
                   });
+                  */
               }
             },
 
-            remove: function (number)
+            allow: function (number)
             {
               $rootScope.statusBar.display('Removing a blacklisted number..');
 
@@ -82,11 +125,10 @@ define(
             }
           };
 
-
-          $rootScope.$on('refreshBlockedNumbers', function ()
-          {
-            // $scope.blacklists.list();
-          });
+//          $rootScope.$on('refreshBlockedNumbers', function ()
+//          {
+//            // $scope.blacklists.list();
+//          });
         }
       ]
     );

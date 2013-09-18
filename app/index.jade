@@ -14,18 +14,17 @@ block navbar
           span.icon-bar
         a.brand(href='#dashboard') {{config.profile.title}}
         .nav-collapse.collapse
+
           ul.nav.pull-right(ng-hide='browser.mobile')
-            li.dropdown
-              a.dropdown-toggle(href='#',
-                                data-toggle='dropdown')
+            li
+              a(ng-click='redirectToProfile()')
                 i.icon-user.icon-white
                 |  {{app.resources.name}}
-                b.caret
-              ul.dropdown-menu
-                li
-                  a(href='#logout')
-                    i.icon-off
-                    |  Logout
+            li
+              a(href='#logout')
+                i.icon-off.icon-white
+                |  Logout
+
           ul.nav.pull-right(ng-show='browser.mobile')
             li
               a(href='#logout')

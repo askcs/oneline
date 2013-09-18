@@ -18,7 +18,8 @@ define(
               manager:    false,
               notifier:   false,
               reporter:   false,
-              guarder:    false
+              guarder:    false,
+              profile:    false
             };
 
             $scope.views[hash] = true;
@@ -49,7 +50,7 @@ define(
 
           setView(view);
 
-          $rootScope.$on('setView', 'args', function ()
+          $rootScope.$on('setView', function ()
           {
             $scope.setViewTo(arguments[1]);
           });

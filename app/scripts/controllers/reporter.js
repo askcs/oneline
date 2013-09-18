@@ -53,6 +53,8 @@ define(
               })
                 .then(function (result)
                 {
+                  $rootScope.statusBar.off();
+
                   var connections = angular.fromJson(Storage.get('connections'));
 
                   connections.push(result);

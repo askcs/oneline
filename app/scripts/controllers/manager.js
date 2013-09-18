@@ -49,7 +49,6 @@ define(
 
           $scope.resetConnection();
 
-
           $scope.verified = {
             status: false,
             result: null
@@ -65,6 +64,10 @@ define(
               $scope.verifying[connection.id] = false;
 
               $scope.verificationCode[connection.id] = '';
+
+              $('#verifyBtn-' + connection.id)
+                .text('Verify')
+                .removeAttr('disabled');
             });
           };
 
@@ -129,6 +132,8 @@ define(
               initiate: function (number)
               {
                 $rootScope.statusBar.display('Verification call inited or message is being sent..');
+
+                $scope.resetVerifiers();
 
                 $('#verifyBtn-' + number.id)
                   .text('Sending verification code..')
