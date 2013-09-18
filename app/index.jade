@@ -14,7 +14,6 @@ block navbar
           span.icon-bar
         a.brand(href='#dashboard') {{config.profile.title}}
         .nav-collapse.collapse
-
           ul.nav.pull-right(ng-hide='browser.mobile')
             li
               a(ng-click='redirectToProfile()')
@@ -24,12 +23,15 @@ block navbar
               a(href='#logout')
                 i.icon-off.icon-white
                 |  Logout
-
           ul.nav.pull-right(ng-show='browser.mobile')
+            li
+              a(ng-click='redirectToProfile()')
+                i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') {{app.resources.name}}
             li
               a(href='#logout')
                 i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-                span(ng-show='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') Logout
 
 
 
