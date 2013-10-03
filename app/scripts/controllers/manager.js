@@ -131,7 +131,7 @@ define(
             verify: {
               initiate: function (number)
               {
-                $rootScope.statusBar.display('Verification call inited or message is being sent..');
+                $rootScope.statusBar.display('Verification call initiated or message is being sent..');
 
                 $scope.resetVerifiers();
 

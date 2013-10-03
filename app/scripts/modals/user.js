@@ -150,18 +150,18 @@ define(
                 var account = {};
                 angular.forEach(result, function (resource)
                 {
-                  switch (resource.contactInfoTag)
+                  switch (resource.contactInfoTag.toString().toUpperCase())
                   {
-                    case 'Name':
+                    case 'NAME':
                       account.name = resource.contactInfo;
                       break;
-                    case 'Phone':
+                    case 'PHONE':
                       account.phone = resource.contactInfo;
                       break;
-                    case 'Email':
+                    case 'EMAIL':
                       account.email = resource.contactInfo;
                       break;
-                    case 'Address':
+                    case 'ADDRESS':
                       account.address = resource.contactInfo;
                       break;
                     case 'PURCHASED_NUMBER':

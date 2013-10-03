@@ -108,7 +108,7 @@ define(
 
 
           var Logs = $resource(
-            config.host + '/log',
+            config.host + '/accounts/log',
             {},
             {
               list: {
@@ -443,7 +443,9 @@ define(
 
                 Verification.initiate(
                   {
-                    verificationMedium: (number.contactInfoTag === 'Email') ? 'Email' : 'SMS',
+                	  alert(number.contactInfoTag.toUpperCase());
+                    //verificationMedium: (number.contactInfoTag.toString().toUpperCase() === 'EMAIL') ? 'EMAIL' : 'SMS',
+                	  verificationMedium: 'AUTO',
                     verificationInfo: {
                       address:  number.contactInfo
                     }
@@ -541,7 +543,7 @@ define(
 
               ContactInfos.create({
                   contactInfo:    blacklisted.contactInfo,
-                  contactInfoTag: 'Phone',
+                  contactInfoTag: 'PHONE',
                   label:          blacklisted.label,
                   groupKeys:      [$rootScope.data.blacklist.group.id]
                 },
@@ -702,17 +704,17 @@ define(
 
               angular.forEach(raws.groups, function (group)
               {
-                switch (group.name)
+                switch (group.name.toString().toUpperCase())
                 {
-                case 'ConnectedNumbers':
+                case 'CONNECTEDNUMBERS':
                   data.connected = {group: group};
                   break;
 
-                case 'BlackList':
+                case 'BLACKLIST':
                   data.blacklist = {group: group};
                   break;
 
-                case 'Contact':
+                case 'CONTACT':
                   data.contact = {group: group};
                   break;
                 }
@@ -722,19 +724,19 @@ define(
               {
                 if (connection.groupKeys[0] === data.contact.group.id)
                 {
-                  switch (connection.contactInfoTag)
+                  switch (connection.contactInfoTag.toString().toUpperCase())
                   {
-                  case 'Name':
+                  case 'NAME':
                     data.account.name = connection.contactInfo;
                     break;
 
-                  case 'Email':
+                  case 'EMAIL':
                     data.account.email = connection.contactInfo;
 
                     nodes[connection.id] = connection;
                     break;
 
-                  case 'Address':
+                  case 'ADDRESS':
                     data.account.address = connection.contactInfo;
                     break;
 
@@ -742,7 +744,7 @@ define(
                     data.account.purchasedNumber = connection.contactInfo;
                     break;
 
-                  case 'Phone':
+                  case 'PHONE':
                     data.account.phone = connection.contactInfo;
 
                     nodes[connection.id] = connection;
@@ -769,9 +771,9 @@ define(
 
               angular.forEach(nodes, function (node)
               {
-                switch (node.contactInfoTag)
+                switch (node.contactInfoTag.toString().toUpperCase())
                 {
-                case 'Email':
+                case 'EMAIL':
                   emails.push(node);
                   break;
                 }
@@ -781,7 +783,7 @@ define(
 
               angular.forEach(filtered, function (node, index)
               {
-                if (node.contactInfoTag != 'Phone')
+                if (node.contactInfoTag.toString().toUpperCase() != 'PHONE')
                 {
                   delete filtered[index];
                 }
@@ -818,9 +820,9 @@ define(
 
               angular.forEach(raws.settings, function (setting)
               {
-                switch (setting.medium)
+                switch (setting.medium.toString().toUpperCase())
                 {
-                case 'Email':
+                case 'EMAIL':
                   data.settings.email.id = setting.id;
 
                   data.settings.email.status = !!((setting.targetContactInfos.length > 0));
