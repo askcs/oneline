@@ -1,0 +1,60 @@
+
+ul.breadcrumb-steps {
+	list-style: none;
+	margin: 15px 0 20px 0;
+	padding: 0;
+
+	display: block;
+
+	li {
+		display: inline;
+		margin-right: 20px;
+
+		.label {
+			border-radius: 30px;
+			width: 17px;
+			height: 20px;
+			background-color: $grayLighter;
+			border: 2px solid $pink;
+			padding: 5px 0 0 7px;
+			margin-right: 3px;
+			font-size: 18px;
+			color: #433c2d;
+			font-weight: normal;
+		}
+
+		a {
+			margin-top: 10px;
+			text-decoration: none;
+			font-size: 16px;
+			color: $textColor;
+		}
+
+		.breadcrumb-step-text {
+			font-size: 16px;
+		}
+	}
+
+	.step-active {
+
+		.label {		
+			background-color: $pink;
+			border: 2px solid $pink;
+			color: $white;
+		}
+
+		a {
+			color: $pink;
+		}
+	}
+
+}
+
+.step-watermark {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	font-size: 1.8em;
+	font-weight: bold;
+	color: $gray;
+}

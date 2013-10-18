@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3>Verify a number</h3>
+</div>
+<div class="modal-body">
+  <dl>
+    <dt>Label:</dt>
+      <dd>{{ toBeVerified.label }}</dd>
+    <dt>Number:</dt>
+      <dd>{{ toBeVerified.contactInfo }}</dd>
+  </dl>
+
+  <form>
+    <label>Verification code</label>
+    <input type="text"
+           ng-model="verificationCode"
+           autofocus>
+  </form>
+
+</div>
+<div class="modal-footer">
+
+  <button type="button"
+          class="btn"
+          ng-click="hide()">Cancel</button>
+
+  <button class="btn btn-primary"
+          ng-click="connections.verify.confirm(verificationCode, verificationInfoID); hide();">
+    Verify number
+  </button>
+
+</div>

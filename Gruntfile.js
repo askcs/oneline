@@ -78,7 +78,8 @@ module.exports = function (grunt)
         options: {
           port: 9000,
           // Change this to '0.0.0.0' to access the server from outside.
-          hostname: 'localhost'
+          // hostname: 'localhost'
+          hostname: '0.0.0.0'
         },
         livereload: {
           options: {
@@ -397,11 +398,9 @@ module.exports = function (grunt)
     {
       var files = this.options().files;
       grunt.util.spawn({
-
         // TODO (Test this if it is really needed git.cmd??)
         // cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
         cmd: 'git',
-
         args: ['add'].concat(files)
       }, grunt.task.current.async());
     }

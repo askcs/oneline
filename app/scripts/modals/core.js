@@ -443,7 +443,7 @@ define(
 
                 Verification.initiate(
                   {
-                	  alert(number.contactInfoTag.toUpperCase());
+                	  // alert(number.contactInfoTag.toUpperCase());
                     //verificationMedium: (number.contactInfoTag.toString().toUpperCase() === 'EMAIL') ? 'EMAIL' : 'SMS',
                 	  verificationMedium: 'AUTO',
                     verificationInfo: {

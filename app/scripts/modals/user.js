@@ -9,14 +9,6 @@ define(
         '$resource', '$q', '$location', 'Storage', '$rootScope',
         function ($resource, $q, $location, Storage, $rootScope)
         {
-
-
-
-
-
-
-
-
           var User = $resource();
 
 

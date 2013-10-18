@@ -86,11 +86,16 @@ define(
 
           self.auth = function (username, password)
           {
+            console.log('this one is being called');
+
             User.login(username.toLowerCase(), password)
               .then(function (result)
               {
-                if (result.status === 403)
+                console.log('result ->', result);
+
+                switch (result.status)
                 {
+                case 403:
                   $scope.alert = {
                     login: {
                       display:  true,
@@ -104,13 +109,28 @@ define(
                     .removeAttr('disabled');
 
                   return false;
-                }
-                else
-                {
-                  Session.set(result['X-SESSION_ID']);
+                break;
 
-                  self.preloader();
+                case 500:
+                  $scope.alert = {
+                    login: {
+                      display:  true,
+                      type:     'alert-error',
+                      message:  'Something went terribly wrong with login!'
+                    }
+                  };
+
+                  loginBtn
+                    .text('Login')
+                    .removeAttr('disabled');
+
+                  return false;
+                break;
                 }
+
+                Session.set(result['X-SESSION_ID']);
+
+                self.preloader();
               });
           };
 

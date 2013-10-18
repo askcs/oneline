@@ -12,9 +12,12 @@
     form(ng-submit='login()')
       h2#logo-big Oneline
       h4.form-signin-heading Welcome back
+
       p(style='font-size: 12px; margin-bottom: 25px;')
         a(href='#register') Register an account
-      .alert(ng-show='alert.login.display')
+
+      div(ng-show='alert.login.display',
+          class='alert {{alert.login.type}}')
         button.close(type='button',
                       ng-click='alert.login=false') ×
         | {{alert.login.message}}
