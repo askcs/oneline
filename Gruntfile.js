@@ -16,7 +16,7 @@ module.exports = function (grunt)
 
   var appConfig = {
     app:  'app',
-    dist: 'war/app'
+    dist: 'war'
   };
 
   try {
