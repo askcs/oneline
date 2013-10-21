@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"></html>
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"></html>
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"></html>
+<![endif]-->
+<!-- [if gt IE 8] <!-->
+<html lang="en" class="no-js">
+  <!-- <![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Oneline</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="styles/5b8108c6.bootstrap.css">
+    <link rel="stylesheet" href="styles/39277953.responsive.css">
+    <link rel="stylesheet" href="styles/b2175fa8.app.css">
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an outdated browser.<a href="http://browsehappy.com/">Upgrade your browser today</a>or<a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a>to better experience this site.</p>
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="vendors/es5-shim/es5-shim.js"></script>
+    <script src="vendors/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="bs-navbar" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
+      <div class="navbar-inner">
+        <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#dashboard" class="brand">{{config.profile.title}}</a>
+          <div class="nav-collapse collapse">
+            <ul ng-hide="browser.mobile" class="nav pull-right">
+              <li><a ng-click="redirectToProfile()"><i class="icon-user icon-white"></i> {{app.resources.name}}</a></li>
+              <li><a href="#logout"><i class="icon-off icon-white"></i> Logout</a></li>
+            </ul>
+            <ul ng-show="browser.mobile" class="nav pull-right">
+              <li><a ng-click="redirectToProfile()"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-user icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">{{app.resources.name}}</span></a></li>
+              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Logout</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="notification" ng-show="notification.status" class="alert ng-cloak">
+      <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
+    </div>
+    <div id="wrap">
+      <div class="container-fluid">
+        <div ng-view="ng-view"></div>
+        <div id="tab-shadow" style="margin-left: 154px" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;)"><img ng-src="images/0eed65c0.content_canvas_shadow.png"></div>
+      </div>
+      <div id="push"></div>
+    </div>
+    <div id="mobile-status-bar" ng-show="loading.status &amp;&amp; browser.mobile" class="ng-cloak"><img src="images/fba8e680.ajax-loader.gif"><small>{{loading.message}}</small></div>
+    <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak"><img ng-src="images/4bf4d149.footer_ribbon.png" style="width: 175px; display: block; margin: -158px auto 0 auto">
+      <div class="container-fluid">
+        <div id="copyrights"><img ng-src="images/dc5fab6e.ask_fast_logo.png" style="margin-top: 5px"></div>
+        <p ng-show="loading.status" class="muted"><img src="images/fba8e680.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
+      </div>
+    </div>
+    <script data-main="scripts/a7089660.main" src="vendors/requirejs/require.js"></script>
+  </body>
+</html>

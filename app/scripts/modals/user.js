@@ -209,17 +209,6 @@ define(
 
 
           return new User();
-
-
-
-
-
-
-
-
-
-
-
         }
       ]
     );
