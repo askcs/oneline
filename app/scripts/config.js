@@ -11,9 +11,9 @@ define(
 
     lang:     'en',
 
-    fullscreen: true,
+    fullscreen: 'true',
 
-    demoUsers: true,
+    demoUsers: 'true',
 
     host: 'http://askfastmarket1.appspot.com',
 
