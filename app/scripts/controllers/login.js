@@ -239,6 +239,29 @@ define(
 
             $('#preloader span').text(message);
           };
+
+
+          $scope.demoUsers = [
+            'ahmet',
+            'cengiz',
+            'duco',
+            'erik',
+            'leon',
+            'leonie',
+            'sam',
+            'shravan',
+            'sven',
+            'tymon',
+            'xiaoyu',
+            'yuankun',
+            'joose'
+          ];
+
+          $scope.demoLogin = function (user)
+          {
+            self.auth(user, MD5('askask'));
+          }
+
         }
       ]
     );

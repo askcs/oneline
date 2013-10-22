@@ -13,6 +13,8 @@ define(
 
     fullscreen: true,
 
+    demoUsers: true,
+
     host: 'http://askfastmarket1.appspot.com',
 
     formats: {

@@ -10,7 +10,6 @@ define(
         function($rootScope, $location, $timeout, Storage, $window, User, Session, Core, $http)
         {
           $rootScope.config = config;
-          // $rootScope.config.init();
 
           $rootScope.redirectToProfile = function ()
           {

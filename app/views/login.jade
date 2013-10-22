@@ -1,5 +1,13 @@
 #welcome
 
+  #demo_users.well(ng-show='config.demoUsers')
+    h4 Test users
+    hr
+    ul
+      li(ng-repeat='user in demoUsers')
+        a(ng-click='demoLogin(user)') {{user}}
+
+
   #preloader
     h2#logo-big Oneline
     h4.form-signin-heading Setting up the application
