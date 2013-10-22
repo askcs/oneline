@@ -693,7 +693,7 @@ define(
                 emails  = [],
                 nodes   = {};
 
-              // console.table(raws.connections);
+              console.table(raws.connections);
 
               $rootScope.data = {};
 
@@ -829,11 +829,11 @@ define(
 
                   var emailSetting = (nodes[setting.targetContactInfos[0]]) ?
                     nodes[setting.targetContactInfos[0]].id :
-                    data.settings.email.targets[0].id;
+                    (data.settings.email.targets.length > 0) ? data.settings.email.targets[0].id : null;
 
                   data.settings.email.original = data.settings.email.target = (setting.targetContactInfos.length > 0) ?
                     emailSetting :
-                    data.settings.email.targets[0].id;
+                    (data.settings.email.targets.length > 0) ? data.settings.email.targets[0].id : null;
                   break;
 
                 case 'SMS':
@@ -843,11 +843,11 @@ define(
 
                   var smsSetting = (nodes[setting.targetContactInfos[0]]) ?
                     nodes[setting.targetContactInfos[0]].id :
-                    data.settings.sms.targets[0].id;
+                    (data.settings.sms.targets.length > 0) ? data.settings.sms.targets[0].id : null;
 
                   data.settings.sms.original = data.settings.sms.target = (setting.targetContactInfos.length > 0) ?
                     smsSetting :
-                    data.settings.sms.targets[0].id;
+                    (data.settings.sms.targets.length > 0) ? data.settings.sms.targets[0].id : null;
                   break;
                 }
               });
