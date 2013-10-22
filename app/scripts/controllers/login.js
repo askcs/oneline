@@ -86,8 +86,6 @@ define(
 
           self.auth = function (username, password)
           {
-            console.log('this one is being called');
-
             User.login(username.toLowerCase(), password)
               .then(function (result)
               {
@@ -111,6 +109,22 @@ define(
                   return false;
                 break;
 
+                case 404:
+                  $scope.alert = {
+                    login: {
+                      display:  true,
+                      type:     'alert-error',
+                      message:  'Something went terribly wrong with login!'
+                    }
+                  };
+
+                  loginBtn
+                    .text('Login')
+                    .removeAttr('disabled');
+
+                  return false;
+                  break;
+
                 case 500:
                   $scope.alert = {
                     login: {
@@ -125,7 +139,7 @@ define(
                     .removeAttr('disabled');
 
                   return false;
-                break;
+                  break;
                 }
 
                 Session.set(result['X-SESSION_ID']);
@@ -143,39 +157,78 @@ define(
           };
 
 
+          self.loginAgain = function ()
+          {
+            $('#login').show();
+            $('#preloader').hide();
+
+            $scope.alert = {
+              login: {
+                display:  true,
+                type:     'alert-error',
+                message:  'Something went terribly wrong with login! Please try again.'
+              }
+            };
+
+            loginBtn
+              .text('Login')
+              .removeAttr('disabled');
+          };
+
+
           // TODO: What happens if preloader stucks? Optimize preloader and messages
           self.preloader = function ()
           {
             $('#login').hide();
-            $('#download').hide();
+            // $('#download').hide();
             $('#preloader').show();
 
             self.progress('Loading app related information..');
 
             Core.connections.list()
-              .then(function ()
+              .then(function (connections)
               {
-                self.progress('Connected numbers are loaded');
+                if (connections.error)
+                {
+                  self.loginAgain();
+                }
+                else
+                {
+                  self.progress('Connected numbers are loaded');
 
-                Core.settings.list()
-                  .then(function ()
-                  {
-                    self.progress('Notification settings loaded');
-
-                    Core.groups.list()
-                      .then(function ()
+                  Core.settings.list()
+                    .then(function (settings)
+                    {
+                      if (settings.error)
                       {
-                        self.progress('Groups loaded');
+                        self.loginAgain();
+                      }
+                      else
+                      {
+                        self.progress('Notification settings loaded');
 
-                        $location.path('/core');
+                        Core.groups.list()
+                          .then(function (groups)
+                          {
+                            if (groups.error)
+                            {
+                              self.loginAgain();
+                            }
+                            else
+                            {
+                              self.progress('Groups loaded');
 
-                        setTimeout(function ()
-                        {
-                          $('.navbar').show();
-                        }, 100);
+                              $location.path('/core');
 
-                      });
-                  });
+                              setTimeout(function ()
+                              {
+                                $('.navbar').show();
+                              }, 100);
+                            }
+                          });
+                      }
+                    });
+                }
               });
           };
 
