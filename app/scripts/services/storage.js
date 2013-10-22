@@ -42,7 +42,7 @@ define(
             }
             catch (e) {
               return false;
-            };
+            }
 
             return true;
           };
@@ -73,7 +73,7 @@ define(
             }
             catch (e) {
               return false;
-            };
+            }
 
             return true;
           };
@@ -98,9 +98,9 @@ define(
                 }
                 catch (e) {
                   return false;
-                };
-              };
-            };
+                }
+              }
+            }
 
             return true;
           };
@@ -134,7 +134,7 @@ define(
             }
             catch (e) {
               return false;
-            };
+            }
 
             return true;
           };
@@ -167,7 +167,7 @@ define(
             }
             catch (e) {
               return false;
-            };
+            }
 
             return true;
           };
@@ -192,9 +192,9 @@ define(
                 }
                 catch (e) {
                   return false;
-                };
-              };
-            };
+                }
+              }
+            }
 
             return true;
           };
@@ -232,27 +232,27 @@ define(
                 config.cookie.expiry = -1;
 
                 value = '';
-              };
+              }
 
               if (config.cookie.expiry !== 0)
               {
                 expiryDate.setTime(expiryDate.getTime() + (config.cookie.expiry * 60 * 60 * 1000));
 
                 expiry = "; expires=" + expiryDate.toGMTString();
-              };
+              }
 
               document.cookie = config.title +
-                key +
-                "=" +
-                //encodeURIComponent(value) +
-                value +
-                expiry +
-                "; path=" +
-                config.cookie.path;
+                                key +
+                                "=" +
+                                //encodeURIComponent(value) +
+                                value +
+                                expiry +
+                                "; path=" +
+                                config.cookie.path;
             }
             catch (e) {
               return false;
-            };
+            }
 
             return true;
           };
@@ -279,7 +279,7 @@ define(
 
               if (thisCookie.indexOf(config.title + key + '=') == 0)
                 return decodeURIComponent(thisCookie.substring(config.title.length + key.length + 1, thisCookie.length));
-            };
+            }
 
             return null;
           };
@@ -308,7 +308,7 @@ define(
               key = thisCookie.substring(prefixLength, thisCookie.indexOf('='));
 
               removeFromCookies(key);
-            };
+            }
           };
 
 
@@ -317,7 +317,7 @@ define(
             var item = (key) ? localStorage.key : localStorage;
 
             return ((3 + ((item.length * 16) / (8 * 1024))) * 0.0009765625).toPrecision(2) + ' MB';
-          }
+          };
 
 
           var getPeriods = function ()
@@ -371,16 +371,7 @@ define(
               members:  getMembers,
               settings: getSettings
             }
-          }
-
-
-
-
-
-
-
-
-
+          };
 
 
         }

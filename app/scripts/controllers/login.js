@@ -1,6 +1,6 @@
 define(
-  ['controllers/controllers', 'config', 'modals/user'],
-  function (controllers, config, User)
+  ['controllers/controllers', 'modals/user'],
+  function (controllers, User)
   {
     'use strict';
 
@@ -176,11 +176,9 @@ define(
           };
 
 
-          // TODO: What happens if preloader stucks? Optimize preloader and messages
           self.preloader = function ()
           {
             $('#login').hide();
-            // $('#download').hide();
             $('#preloader').show();
 
             self.progress('Loading app related information..');

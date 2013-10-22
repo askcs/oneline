@@ -13,22 +13,28 @@ define(
           $('.navbar').hide();
           $('#footer').hide();
 
+          console.log('logging out!');
+
           var logindata = angular.fromJson(Storage.get('logindata'));
 
           Storage.clearAll();
 
-          document.cookie = "WebPaige.session=''; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+          document.cookie = "OneLine.session=''; expires=Thu, 01-Jan-1970 00:00:01 GMT";
 
           User.logout()
             .then(function (result)
             {
-              if (result.error) { console.warn('error ->', result); }
-
-              // Storage.clearAll();
+              if (result.error)
+              {
+                console.warn('error ->', result);
+              }
 
               Storage.session.clearAll();
 
-              Storage.add('logindata', angular.toJson(logindata));
+              if (logindata.remember)
+              {
+                Storage.add('logindata', angular.toJson(logindata));
+              }
 
               $window.location.href = 'index.html';
             });
