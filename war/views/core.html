@@ -181,18 +181,40 @@
         <hr>
         <div class="row-fluid">
           <div style="min-height: 300px" class="span12">
-            <dl>
-              <dt>Name</dt>
-              <dd>{{ data.account.name }}</dd>
-              <dt>Email</dt>
-              <dd>{{ data.account.email }}</dd>
-              <dt>Address</dt>
-              <dd>{{ data.account.address }}</dd>
-              <dt>Phone</dt>
-              <dd>{{ data.account.phone }}</dd>
+            <dl style="margin-top:0; padding-bottom:10px" class="well">
               <dt>Purchased number</dt>
               <dd>{{ data.account.purchasedNumber }}</dd>
             </dl>
+            <hr>
+            <form class="form-vertical">
+              <div class="control-group">
+                <label for="name" class="control-label">Name</label>
+                <div class="controls">
+                  <input id="name" type="text" value="{{ data.account.name }}">
+                </div>
+              </div>
+              <div class="control-group">
+                <label for="email" class="control-label">Email</label>
+                <div class="controls">
+                  <input id="email" type="text" value="{{ data.account.email }}">
+                </div>
+              </div>
+              <div class="control-group">
+                <label for="address" class="control-label">Address</label>
+                <div class="controls">
+                  <input id="address" type="text" value="{{ data.account.address }}">
+                </div>
+              </div>
+              <div class="control-group">
+                <label for="phone" class="control-label">Phone</label>
+                <div class="controls">
+                  <input id="phone" type="text" value="{{ data.account.phone }}">
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

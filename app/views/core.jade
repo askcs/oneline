@@ -238,14 +238,32 @@ br
         hr
         .row-fluid
           .span12(style='min-height: 300px;')
-            dl
-              dt Name
-              dd {{ data.account.name }}
-              dt Email
-              dd {{ data.account.email }}
-              dt Address
-              dd {{ data.account.address }}
-              dt Phone
-              dd {{ data.account.phone }}
+
+            dl.well(style='margin-top:0; padding-bottom:10px;')
               dt Purchased number
               dd {{ data.account.purchasedNumber }}
+            hr
+
+            form.form-vertical
+              .control-group
+                label.control-label(for='name') Name
+                .controls
+                  input#name(type='text',
+                             value="{{ data.account.name }}")
+              .control-group
+                label.control-label(for='email') Email
+                .controls
+                  input#email(type='text',
+                  value="{{ data.account.email }}")
+              .control-group
+                label.control-label(for='address') Address
+                .controls
+                  input#address(type='text',
+                  value="{{ data.account.address }}")
+              .control-group
+                label.control-label(for='phone') Phone
+                .controls
+                  input#phone(type='text',
+                  value="{{ data.account.phone }}")
+              .form-actions
+                button.btn.btn-primary(type='submit') Save

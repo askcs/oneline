@@ -254,7 +254,8 @@ define(
             'tymon',
             'xiaoyu',
             'yuankun',
-            'joose'
+            'joose',
+            'jordi'
           ];
 
           $scope.demoLogin = function (user)
