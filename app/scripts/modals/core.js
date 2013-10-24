@@ -613,52 +613,72 @@ define(
 
           Core.prototype.scenarios = {
 
-            build: function ()
+            run: function ()
             {
               var deferred = $q.defer();
 
+              console.log('there are enough stuff to run scenario ->', $rootScope.data.connected.list);
+
+              var connected = {};
+
+              angular.forEach($rootScope.data.connected.list, function (listed, index)
+              {
+                if (listed.verified)
+                {
+                  connected[index] = {
+                    contactInfoId: listed.id,
+                    timeout:       20
+                  };
+                }
+              });
+
+              console.log('runing scenario on ->', connected);
+
+              Scenarios.build(
+                {},
+                {
+                  info: 'Ask-Cs One Line scenario',
+                  connected_numbers: connected,
+                  events: {
+                    on_blacklist:           '',
+                    on_scenario_complete:   '',
+                    on_scenario_exception:  ''
+                  }
+                },
+                function (result)
+                {
+                  deferred.resolve(result);
+                },
+                function (error)
+                {
+                  deferred.resolve({error: error});
+                }
+              );
+
+              return deferred.promise;
+            },
+
+            build: function ()
+            {
+              console.log('scenario build is being asked');
+
+              var verifieds = false;
+
               if ($rootScope.data.connected.list.length > 0)
               {
-                var connected = {};
-
-                angular.forEach($rootScope.data.connected.list, function (listed, index)
+                angular.forEach($rootScope.data.connected.list, function (listed)
                 {
                   if (listed.verified)
                   {
-                    connected[index] = {
-                      contactInfoId: listed.id,
-                      timeout:       20
-                    };
+                    verifieds = true;
                   }
                 });
-
-                Scenarios.build(
-                  {},
-                  {
-                    info: 'Ask-Cs One Line scenario',
-                    connected_numbers: connected,
-                    events: {
-                      on_blacklist:           '',
-                      on_scenario_complete:   '',
-                      on_scenario_exception:  ''
-                    }
-                  },
-                  function (result)
-                  {
-                    deferred.resolve(result);
-                  },
-                  function (error)
-                  {
-                    deferred.resolve({error: error});
-                  }
-                );
               }
-              else
+
+              if (verifieds)
               {
-                deferred.resolve();
+                this.run();
               }
-
-              return deferred.promise;
             }
           };
 
@@ -693,7 +713,7 @@ define(
                 emails  = [],
                 nodes   = {};
 
-              console.table(raws.connections);
+              // console.table(raws.connections);
 
               $rootScope.data = {};
 

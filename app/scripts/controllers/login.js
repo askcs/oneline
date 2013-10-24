@@ -144,10 +144,7 @@ define(
 
                 Session.set(result['X-SESSION_ID']);
 
-                setTimeout(function ()
-                {
-                  self.preloader();
-                }, 1000);
+                self.preloader();
               });
           };
 
