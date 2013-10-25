@@ -93,13 +93,15 @@ br
                   td(style='vertical-align: middle') {{number.contactInfoTag}}
 
                   td(style='vertical-align: middle, text-align: right')
+
                     button.btn(ng-click='connections.remove(number)',
                                 type='button',
-                                style='margin-right:5px',
-                                ng-hide='(number.contactKey==data.account.contactKey)') Delete
+                                style='margin-right:5px') Delete
+
                     button.btn(ng-click='connections.edit(number)',
                                 style='margin-right:5px',
                                 type='button') Edit
+
                     .input-append(style='margin-top:10px; display: inline',
                                   ng-show='verifying[number.id]')
                       input#appendedInputButton.span3(type='text',
@@ -109,6 +111,7 @@ br
                                   ng-click='resetVerifiers()') Cancel
                       button.btn(type='button',
                                   ng-click='connections.verify.confirm(number)') Confirm
+
                     button.btn(id='verifyBtn-{{number.id}}',
                                 ng-hide='number.verified || verifying[number.id]',
                                 ng-click='connections.verify.initiate(number)',

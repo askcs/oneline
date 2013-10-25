@@ -660,7 +660,7 @@ define(
 
             build: function ()
             {
-              console.log('scenario build is being asked');
+              console.log('scenario build is being asked ->', $rootScope.data.connected.list);
 
               var verifieds = false;
 
@@ -668,7 +668,7 @@ define(
               {
                 angular.forEach($rootScope.data.connected.list, function (listed)
                 {
-                  if (listed.verified)
+                  if (listed && listed.verified)
                   {
                     verifieds = true;
                   }
@@ -713,7 +713,7 @@ define(
                 emails  = [],
                 nodes   = {};
 
-              // console.table(raws.connections);
+              console.log(raws.connections);
 
               $rootScope.data = {};
 
@@ -779,14 +779,28 @@ define(
 
               angular.forEach(data.connected.group.contactInfoIds, function (id)
               {
-                data.connected.list.push(nodes[id]);
+                if (nodes[id])
+                {
+                  data.connected.list.push(nodes[id]);
+                }
+                else
+                {
+                  console.log('Error: This node does not exist! (For connections) ->', id);
+                }
               });
 
               data.blacklist.list = [];
 
               angular.forEach(data.blacklist.group.contactInfoIds, function (id)
               {
-                data.blacklist.list.push(nodes[id]);
+                if (nodes[id])
+                {
+                  data.blacklist.list.push(nodes[id]);
+                }
+                else
+                {
+                  console.log('Error: This node does not exist! (For blacklist) ->', id);
+                }
               });
 
               angular.forEach(nodes, function (node)
