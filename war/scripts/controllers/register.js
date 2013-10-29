@@ -1,0 +1,1 @@
+define(["controllers/controllers"],function(e){e.controller("register",["$scope",function(e){}])});

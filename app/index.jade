@@ -1,0 +1,81 @@
+extends layout
+
+
+block navbar
+  .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
+    ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
+    bs-navbar='bs-navbar')
+    .navbar-inner
+      .container-fluid
+        a.btn.btn-navbar(data-toggle='collapse',
+                          data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='#dashboard') {{config.profile.title}}
+        .nav-collapse.collapse
+          ul.nav.pull-right(ng-hide='browser.mobile')
+            li
+              a(ng-click='redirectToProfile()')
+                i.icon-user.icon-white
+                |  {{app.resources.name}}
+            li
+              a(href='#logout')
+                i.icon-off.icon-white
+                |  Logout
+          ul.nav.pull-right(ng-show='browser.mobile')
+            li
+              a(ng-click='redirectToProfile()')
+                i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') {{app.resources.name}}
+            li
+              a(href='#logout')
+                i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') Logout
+
+
+
+block notification
+  #notification.alert.ng-cloak(ng-show='notification.status')
+    button.close(
+      type='button',
+      ng-click='notification.status = false'
+    ) ×
+    | {{notification.message}}
+
+
+
+block mobile-status-bar
+  #mobile-status-bar.ng-cloak(ng-show='loading.status && browser.mobile')
+    img(src='images/ajax-loader.gif')
+    small {{loading.message}}
+
+
+
+block footer
+  #footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
+    img(ng-src='images/footer_ribbon.png',
+        style='width: 175px; display: block; margin: -158px auto 0 auto;')
+    .container-fluid
+      #copyrights
+        img(ng-src='images/ask_fast_logo.png',
+            style='margin-top: 5px;')
+      p.muted(ng-show='loading.status')
+        img(src='images/ajax-loader.gif')
+        small
+          span(ng-show='app.preloader.status') {{app.preloader.count}}%
+          | {{loading.message}}
+
+
+
+block iestuff
+  //if lt IE 7
+    p.chromeframe
+      | You are using an outdated browser.
+      a(href='http://browsehappy.com/') Upgrade your browser today
+      | or
+      a(href='http://www.google.com/chromeframe/?redirect=true') install Google Chrome Frame
+      | to better experience this site.
+  //if lt IE 9
+    script(src='vendors/es5-shim/es5-shim.js')
+    script(src='vendors/json3/lib/json3.min.js')

@@ -1,194 +1,480 @@
-/*jslint node: true */
 'use strict';
 
+var LIVERELOAD_PORT = 35729,
+    lrSnippet       = require('connect-livereload')({ port: LIVERELOAD_PORT }),
+    mountFolder     = function (connect, dir)
+                      {
+                        return connect.static(require('path').resolve(dir));
+                      },
+    markdown        = require('marked'),
+    semver          = require('semver');
 
-/**
- * Main compiler for app
- */
+
 module.exports = function (grunt)
 {
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+
+  var appConfig = {
+    app:  'app',
+    dist: 'war'
+  };
+
+  try {
+    appConfig.app = require('./bower.json').appPath || appConfig.app;
+  } catch (e) {}
+
   grunt.initConfig(
-  {
-    pkg: grunt.file.readJSON('package.json'),
+    {
+      pkg: grunt.file.readJSON('package.json'),
 
-    /**
-     * concat
-     */
-    concat: {
-      options: {
-        separator: ';'
+      paths: appConfig,
+
+      jade: {
+        index: {
+          options: {
+            pretty: true
+          },
+          files: {
+            '.tmp/index.html': ['<%= paths.app %>/index.jade']
+          }
+        },
+        views: {
+          options: {
+            pretty: true
+          },
+          files: [{
+            expand: true,
+            cwd: '<%= paths.app %>',
+            dest: '.tmp',
+            src: 'views/*.jade',
+            ext: '.html'
+          }]
+        }
       },
-      dist: {
-        files: {
-          'war/src/app.js': [
-            'war/js/localization.js',
-            'war/js/webpaige.js',
-            'war/js/config.js',
-            'war/js/routes.js',
-            'war/js/bootstrap.js',
 
-            // modals
-            'war/js/modals/user.js',
-            // 'war/js/modals/dashboard.js',
-            'war/js/modals/core.js',
-            // 'war/js/modals/profile.js',
-            // 'war/js/modals/settings.js',
+      watch: {
+        jade: {
+          files: ['<%= paths.app %>/{,*/}*.jade'],
+          tasks: ['jade']
+        },
+        compass: {
+          files: ['<%= paths.app %>/styles/{,*/}*.{scss,sass}'],
+          tasks: ['compass:server']
+        },
+        livereload: {
+          options: {
+            livereload: LIVERELOAD_PORT
+          },
+          files: [
+            '.tmp/{,*/}*.html',
+            '{.tmp,<%= paths.app %>}/styles/{,*/}*.css',
+            '{.tmp,<%= paths.app %>}/scripts/{,*/}*.js',
+            '<%= paths.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+          ]
+        }
+      },
 
-            // directives
-            'war/js/directives/directives.js',
-            'war/libs/angular-strap/0.7.0/angular-strap.min.js',
+      connect: {
+        options: {
+          port: 9000,
+          // Change this to '0.0.0.0' to access the server from outside.
+          // hostname: 'localhost'
+          hostname: '0.0.0.0'
+        },
+        livereload: {
+          options: {
+            middleware: function (connect)
+            {
+              return [
+                lrSnippet,
+                mountFolder(connect, '.tmp'),
+                mountFolder(connect, appConfig.app)
+              ];
+            }
+          }
+        },
+        test: {
+          options: {
+            middleware: function (connect)
+            {
+              return [
+                mountFolder(connect, '.tmp'),
+                mountFolder(connect, 'test')
+              ];
+            }
+          }
+        },
+        dist: {
+          options: {
+            middleware: function (connect)
+            {
+              return [
+                mountFolder(connect, appConfig.dist)
+              ];
+            }
+          }
+        }
+      },
 
-            // services
-            // 'war/js/services/timer.js',
-            'war/js/services/session.js',
-            // 'war/js/services/dater.js',
-            // 'war/js/services/eventbus.js',
-            // 'war/js/services/interceptor.js',
-            'war/js/services/md5.js',
-            'war/js/services/storage.js',
-            'war/js/services/strings.js',
-            'war/js/services/generators.js',
-            // 'war/js/services/sloter.js',
-            // 'war/js/services/stats.js',
-            // 'war/js/services/offsetter.js',
+      clean: {
+        dist: {
+          files: [{
+            dot: true,
+            src: [
+              '.tmp',
+              '<%= paths.dist %>/*',
+              '!<%= paths.dist %>/vendors*',
+              '!<%= paths.dist %>/WEB-INF*',
+              '!<%= paths.dist %>/.git*'
+            ]
+          }]
+        },
+        server: '.tmp'
+      },
 
-            // filters
-            'war/js/filters/filters.js',
+      jshint: {
+        options: {
+          jshintrc: '.jshintrc'
+        },
+        all: [
+          'Gruntfile.js',
+          '<%= paths.app %>/scripts/{,*/}*.js'
+        ]
+      },
 
-            // controllers
-            'war/js/controllers/loginCtrl.js',
-            'war/js/controllers/forgotpassCtrl.js',
-            'war/js/controllers/registerCtrl.js',
-            'war/js/controllers/logoutCtrl.js',
-            'war/js/controllers/coreCtrl.js',
-            'war/js/controllers/purchaserCtrl.js',
-            'war/js/controllers/managerCtrl.js',
-            'war/js/controllers/notifierCtrl.js',
-            'war/js/controllers/reporterCtrl.js',
-            'war/js/controllers/guarderCtrl.js',
-            // 'war/js/controllers/profile.js',
-            // 'war/js/controllers/settings.js',
-            // 'war/js/controllers/help.js'
-          ],
-          'war/src/plugins.js': [
-            'war/js/plugins/console.js',
-            'war/js/plugins/browser.js',
-            'war/js/plugins/os.js'
-//            'war/js/plugins/basket.js',
-//            'war/js/plugins/screenfull.js'
+      compass: {
+        options: {
+          sassDir: '<%= paths.app %>/styles',
+          cssDir: '.tmp/styles',
+          generatedImagesDir: '.tmp/images/generated',
+          imagesDir: '<%= paths.app %>/images',
+          javascriptsDir: '<%= paths.app %>/scripts',
+          fontsDir: '<%= paths.app %>/styles/fonts',
+          importPath: '<%= paths.app %>/vendors',
+          httpImagesPath: '/images',
+          httpGeneratedImagesPath: '/images/generated',
+          httpFontsPath: '/styles/fonts',
+          relativeAssets: false
+        },
+        dist: {},
+        server: {
+          options: {
+            debugInfo: true
+          }
+        }
+      },
+
+      /*
+      concat: {
+       dist: {}
+       },
+       */
+
+      rev: {
+        dist: {
+          files: {
+            src: [
+              '<%= paths.dist %>/scripts/main.js',
+              '<%= paths.dist %>/styles/{,*/}*.css',
+              '<%= paths.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+              '<%= paths.dist %>/styles/fonts/*'
+            ]
+          }
+        }
+      },
+
+      useminPrepare: {
+        html: '.tmp/index.html',
+        options: {
+          dest: '<%= paths.dist %>'
+        }
+      },
+
+      usemin: {
+        html: ['<%= paths.dist %>/{,*/}*.html'],
+        css: ['<%= paths.dist %>/styles/{,*/}*.css'],
+        options: {
+          dirs: ['<%= paths.dist %>']
+        }
+      },
+
+      imagemin: {
+        dist: {
+          files: [{
+            expand: true,
+            cwd: '<%= paths.app %>/images',
+            src: '{,*/}*.{png,jpg,jpeg}',
+            dest: '<%= paths.dist %>/images'
+          }]
+        }
+      },
+
+      cssmin: {
+        // By default, your `index.html` <!-- Usemin Block --> will take care of
+        // minification. This option is pre-configured if you do not wish to use
+        // Usemin blocks.
+        // dist: {
+        //   files: {
+        //     '<%= paths.dist %>/styles/main.css': [
+        //       '.tmp/styles/{,*/}*.css',
+        //       '<%= paths.app %>/styles/{,*/}*.css'
+        //     ]
+        //   }
+        // }
+      },
+
+      htmlmin: {
+        dist: {
+          options: {
+            /*removeCommentsFromCDATA: true,
+             // https://github.com/paths/grunt-usemin/issues/44
+             //collapseWhitespace: true,
+             collapseBooleanAttributes: true,
+             removeAttributeQuotes: true,
+             removeRedundantAttributes: true,
+             useShortDoctype: true,
+             removeEmptyAttributes: true,
+             removeOptionalTags: true*/
+          },
+          files: [{
+            expand: true,
+            cwd: '.tmp',
+            src: ['*.html', 'views/*.html'],
+            dest: '<%= paths.dist %>'
+          }]
+        }
+      },
+
+      copy: {
+        dist: {
+          files: [{
+            expand: true,
+            dot: true,
+            cwd: '<%= paths.app %>',
+            dest: '<%= paths.dist %>',
+            src: [
+              '*.{ico,png,txt}',
+              '.htaccess',
+              'vendors/**/*',
+              'images/{,*/}*.{gif,webp}',
+              'styles/fonts/*'
+            ]
+          }, {
+            expand: true,
+            cwd: '.tmp/images',
+            dest: '<%= paths.dist %>/images',
+            src: [
+              'generated/*'
+            ]
+          }]
+        }
+      },
+
+      concurrent: {
+        server: [
+          'compass:server',
+          'jade'
+        ],
+        test: [
+          'compass'
+        ]
+      },
+
+      karma: {
+        unit: {
+          configFile: 'karma.conf.js',
+          singleRun: false
+        },
+        end: {
+          configFile: 'karma-e2e.conf.js',
+          singleRun: false
+        }
+      },
+
+      ngmin: {
+        dist: {
+          files: [{
+            expand: true,
+            cwd: '<%= paths.dist %>/scripts',
+            src: '**/*.js',
+            dest: '<%= paths.dist %>/scripts'
+          }]
+        }
+      },
+
+      requirejs: {
+        compile: {
+          options: {
+            appDir: '<%= paths.app %>/scripts/',
+            baseUrl: '.',
+            dir: '<%= paths.dist %>/scripts/',
+            optimize: 'uglify',
+            mainConfigFile:'./<%= paths.app %>/scripts/main.js',
+            logLevel: 0,
+            findNestedDependencies: true,
+            fileExclusionRegExp: /^\./,
+            inlineText: true
+          }
+        }
+      },
+
+      changelog: {
+        options: {
+          dest: 'CHANGELOG.md',
+          versionFile: 'package.json'
+        }
+      },
+
+      release: {
+        options: {
+          commitMessage: '<%= version %>',
+          tagName: 'v<%= version %>',
+          tagMessage: 'tagging version <%= version %>',
+          bump: false,
+          file: 'package.json',
+          add: true,
+          commit: true,
+          tag: true,
+          push: true,
+          pushTags: true,
+          npm: false
+        }
+      },
+
+      stage: {
+        options: {
+          files: ['CHANGELOG.md']
+        }
+      },
+
+      replace: {
+        dist: {
+          options: {
+            variables: {
+              version: '<%= pkg.version %>',
+              released: grunt.template.today('dddd, mmmm dS, yyyy, h:MM:ss TT')
+            }
+          },
+          prefix: '@@',
+          files: [
+            {
+              expand: true,
+              flatten: true,
+              src: ['<%= paths.dist %>/scripts/config.js'],
+              dest: '<%= paths.dist %>/scripts/'
+            }
           ]
         }
       }
-    },
+    });
 
-    /**
-     * minify concated sources
-     */
-    uglify: {
-      options: {
-        banner: '/*!\n * OneLine v0.1.0 (snapshot)\n * Ask Community Systems\n * Authors: Cengiz Ulusoy\n * <%= grunt.template.today("dd-mm-yyyy hh:mm") %>\n */\n'
-      },
-      dist: {
-        files: {
-          'war/dist/app.min.js':     'war/src/app.js',
-          'war/dist/plugins.min.js': 'war/src/plugins.js'
-        }
-      }
-    },
+  grunt.registerTask('bump',
+    'bump manifest version',
+    function (type)
+    {
+      var options = this.options({
+        file: grunt.config('pkgFile') || 'package.json'
+      });
 
-    /**
-     * sass compiler
-     */
-    sass: {
-      options: {
-        trace: true,
-        cacheLocation:  'sass/.sass-cache'
-      },
-      dist: {
-        options: {
-          style: 'compressed'
-        },
-        files: {
-          'war/dist/bootstrap.css':   'sass/bootstrap.scss',
-          'war/dist/responsive.css':  'sass/responsive.scss',
-          'war/dist/app.css':         'sass/app.scss'
-        }
-      },
-      dev: {
-        options: {
-          style: 'expanded' // nested (default), compact, compressed, or expanded
-        },
-        files: {
-          'war/css/bootstrap.css':   'sass/bootstrap.scss',
-          'war/css/responsive.css':  'sass/responsive.scss',
-          'war/css/app.css':         'sass/app.scss'
-        }
+      function setup(file, type) {
+        var pkg = grunt.file.readJSON(file);
+        var newVersion = pkg.version = semver.inc(pkg.version, type || 'patch');
+        return {
+          file: file,
+          pkg: pkg,
+          newVersion: newVersion
+        };
       }
-    },
 
-    htmlmin: {
-      dist: {
-        options: {
-          removeComments:     true,
-          collapseWhitespace: true
-        },
-        files: {
-          'war/dist/views/login.html':        'war/js/views/login.html',
-          'war/dist/views/forgotpass.html':   'war/js/views/forgotpass.html',
-          'war/dist/views/register.html':     'war/js/views/register.html',
-          'war/dist/views/logout.html':       'war/js/views/logout.html',
-          // 'war/dist/views/dashboard.html': 'war/js/views/dashboard.html',
-          'war/dist/views/core.html':         'war/js/views/core.html',
-          // 'war/dist/views/profile.html':   'war/js/views/profile.html',
-          // 'war/dist/views/settings.html':  'war/js/views/settings.html',
-          // 'war/dist/views/help.html':      'war/js/views/help.html'
-        }
-      }
-    },
-
-    /**
-     * watch for changes
-     */
-    watch: {
-      js: {
-        files: [
-          'war/js/controllers/*.js',
-          'war/js/directives/*.js',
-          'war/js/filters/*.js',
-          'war/js/modals/*.js',
-          'war/js/plugins/*.js',
-          'war/js/services/*.js',
-          'war/js/*.js'
-        ],
-        tasks: ['concat', 'uglify']
-      },
-      css: {
-        files: [
-          'sass/**/*.scss'
-        ],
-        tasks: ['sass']
-      },
-      html: {
-        files: [
-          'war/js/views/**/*.html'
-        ],
-        tasks: ['htmlmin']
-      }
+      var config = setup(options.file, type);
+      grunt.file.write(config.file, JSON.stringify(config.pkg, null, '  ') + '\n');
+      grunt.log.ok('Version bumped to ' + config.newVersion);
     }
+  );
 
-  });
+  grunt.registerTask('stage',
+    'git add files before running the release task',
+    function ()
+    {
+      var files = this.options().files;
+      grunt.util.spawn({
+        // TODO (Test this if it is really needed git.cmd??)
+        // cmd: process.platform === 'win32' ? 'git.cmd' : 'git',
+        cmd: 'git',
+        args: ['add'].concat(files)
+      }, grunt.task.current.async());
+    }
+  );
 
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.registerTask('server',
+    'start a web server with extras',
+    function (target)
+    {
+      if (target === 'dist')
+      {
+        return grunt.task.run(['build', 'connect:dist:keepalive']);
+      }
 
-  grunt.registerTask('watchjs',   ['watch:js']);
-  grunt.registerTask('watchcss',  ['watch:css']);
-  grunt.registerTask('watchhtml', ['watch:html']);
-  grunt.registerTask('html',      ['htmlmin']);
-  grunt.registerTask('sasser',    ['sass']);
-  grunt.registerTask('webpaige',  ['concat', 'uglify', 'sasser', 'htmlmin']);
+      grunt.task.run([
+        'clean:server',
+        'concurrent:server',
+        'connect:livereload',
+        'watch'
+      ]);
+    }
+  );
 
+  grunt.registerTask('test', [
+    'clean:server',
+    'concurrent:test',
+    'connect:test',
+    'karma'
+  ]);
+
+  grunt.registerTask('build', [
+    'clean:dist',
+    'compass:dist',
+    'jade',
+    'useminPrepare',
+    'imagemin',
+    'htmlmin',
+    'concat',
+    'copy',
+    'ngmin',
+    'cssmin',
+    'requirejs',
+    'rev',
+    'usemin',
+    'replace'
+  ]);
+
+  grunt.registerTask('patch', [
+    'bump:patch',
+    'changelog',
+    'stage',
+    'release:patch',
+    'replace'
+  ]);
+
+  grunt.registerTask('minor', [
+    'bump:minor',
+    'changelog',
+    'stage',
+    'release:minor',
+    'replace'
+  ]);
+
+  grunt.registerTask('major', [
+    'bump:major',
+    'changelog',
+    'stage',
+    'release:major',
+    'replace'
+  ]);
+
+  grunt.registerTask('default', [
+    'jshint',
+    'test',
+    'build'
+  ]);
 };

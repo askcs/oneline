@@ -1,0 +1,272 @@
+br
+br
+.row-fluid
+  .tabbable.tabs-left
+
+
+    ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+
+      li(class="{{(views.manager==true) && 'active'}}")
+        a(ng-click='setViewTo("manager"); connections.list();',
+          data-toggle='tab')
+          span.icomoon.icomoon-contact-add(aria-hidden='true')
+          | Connected numbers
+
+      li(class="{{(views.notifier==true) && 'active'}}")
+        a(ng-click='setViewTo("notifier")',
+          data-toggle='tab')
+          span.icomoon.icomoon-bullhorn-2(aria-hidden='true')
+          | Notification settings
+
+      li(class="{{(views.reporter==true) && 'active'}}")
+        a(ng-click='setViewTo("reporter")',
+          data-toggle='tab')
+          span.icomoon.icomoon-file-10(aria-hidden='true')
+          | Call list
+
+      li(class="{{(views.guarder==true) && 'active'}}")
+        a(ng-click='setViewTo("guarder")',
+          data-toggle='tab')
+          span.icomoon.icomoon-thumbs-up-5(aria-hidden='true')
+          | Blacklist
+
+      li(class="{{(views.profile==true) && 'active'}}")
+        a(ng-click='setViewTo("profile")',
+        data-toggle='tab')
+          span.icomoon.icomoon-user(aria-hidden='true')
+          | Profile
+
+
+    .tab-content
+
+
+      .tab-pane(ng-controller='manager',
+                class="{{(views.manager==true) && 'active'}}")
+        .tab-header
+          h3.pull-left Add a connected number
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+            form.form-inline.well(ng-submit='connections.save()')
+              input.input-large(ng-model='connection.label',
+                                  type='text',
+                                  placeholder='Label')
+              input.input-large(ng-model='connection.contactInfo',
+                                type='text',
+                                placeholder='e.g. Phone number…')
+              button.btn(type='button',
+                          ng-show='connection.label.length > 0',
+                          ng-click='resetConnection();') Cancel
+              button.btn(type='submit') Save
+            h4 Numbers
+            hr
+
+            .alert(ng-show='verified.status',
+                   class="alert-{{(verified.result) && 'success' || 'error'}}")
+              button.close(type='button',
+                            ng-click='verified.status = false',
+                            data-dismiss='alert') ×
+              span(ng-show='verified.result') Number is verified and ready to use.
+              span(ng-hide='verified.result')
+                | There was an error with verifiying number. Please try again. If problem resists, please get in touch
+                | with us.
+
+            p(ng-show='(data.connected.list.length == 0)')
+              | There are no connected numbers. Please add some.
+
+
+            table.table.table-striped(ng-show='(data.connected.list.length > 0)')
+              thead
+                tr
+                  th(style='width: 100px;')
+                  th Label
+                  th Connection
+                  th Type
+                  th
+              tbody
+                tr(ng-repeat='number in data.connected.list')
+                  td(style='vertical-align: middle')
+                    span.label.label-success(ng-show='number.verified') Verified
+                    span.label.label-error(ng-hide='number.verified') Not Verified
+                  td(style='vertical-align: middle') {{number.label}}
+                  td(style='vertical-align: middle') {{number.contactInfo}}
+                  td(style='vertical-align: middle') {{number.contactInfoTag}}
+
+                  td(style='vertical-align: middle, text-align: right')
+
+                    button.btn(ng-click='connections.remove(number)',
+                                type='button',
+                                style='margin-right:5px') Delete
+
+                    button.btn(ng-click='connections.edit(number)',
+                                style='margin-right:5px',
+                                type='button') Edit
+
+                    .input-append(style='margin-top:10px; display: inline',
+                                  ng-show='verifying[number.id]')
+                      input#appendedInputButton.span3(type='text',
+                                                      ng-model='verificationCode[number.id]',
+                                                      autofocus='autofocus')
+                      button.btn(type='button',
+                                  ng-click='resetVerifiers()') Cancel
+                      button.btn(type='button',
+                                  ng-click='connections.verify.confirm(number)') Confirm
+
+                    button.btn(id='verifyBtn-{{number.id}}',
+                                ng-hide='number.verified || verifying[number.id]',
+                                ng-click='connections.verify.initiate(number)',
+                                type='button') Verify
+
+
+
+      .tab-pane(ng-controller='notifier',
+                class="{{(views.notifier==true) && 'active'}}")
+        .tab-header
+          h3.pull-left Missed Call Notifications
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+            p Your smart secretary can send notifcations about your missed calls.
+            form.form-inline(ng-submit='settings.save()')
+              table.table.table-striped
+                tr
+                  td
+                    label.checkbox
+                      input(type='checkbox',
+                            ng-model='data.settings.email.status')
+                      | Email Notification
+                  td
+                    select(ng-model='data.settings.email.target',
+                            ng-options='target.id as target.value for target in data.settings.email.targets',
+                            ng-disabled='!data.settings.email.status')
+                      option(value='{{ target.id }}',
+                              ng-selected='data.settings.email.target') {{ target.value }}
+                tr
+                  td
+                    label.checkbox
+                      input(type='checkbox',
+                            ng-model='data.settings.sms.status')
+                      | SMS Notification
+                  td
+                    select(ng-model='data.settings.sms.target',
+                            ng-options='target.id as target.value for target in data.settings.sms.targets',
+                            ng-disabled='!data.settings.sms.status')
+                      option(value='{{ target.id }}',
+                              ng-selected='data.settings.sms.target') {{ target.value }}
+              button.btn(type='submit') Save changes
+
+
+
+      .tab-pane(ng-controller='reporter',
+                class="{{(views.reporter==true) && 'active'}}")
+        .tab-header
+          h3.pull-left Recent calls
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+            p(ng-hide='logsLoading') Oneline provides all your recent calls only to you.
+            p(ng-show='logsLoading')
+              | Loading recent calls..
+            table.table.table-striped(ng-hide='logsLoading')
+              thead
+                tr
+                  th Call type
+                  th From
+                  th Date
+                  th Duration
+                  th
+              tbody
+                tr(ng-repeat='log in logsList')
+                  td(style='vertical-align: middle')
+                    span.label.label-warning {{ log.callState }}
+                  td(style='vertical-align: middle') {{ log.address }}
+                  td(style='vertical-align: middle') {{ log.startTime | nicelyDate }}
+                  td(style='vertical-align: middle') {{ log.endTime - log.startTime | calculateTime }}
+                  td(style='vertical-align: middle')
+                    button.btn(type='button',
+                                ng-click='logs.block(log)',
+                                ng-hide='log.blocked') Block
+                    button.btn(type='button',
+                                ng-click='logs.allow(log)',
+                                ng-show='log.blocked') Allow
+
+
+
+      .tab-pane(ng-controller='guarder',
+                class="{{(views.guarder==true) && 'active'}}")
+        .tab-header
+          h3.pull-left Blacklist
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+
+            p Oneline can block any unwanted incoming calls and let them know kindly
+
+            form.form-inline.well(ng-submit='blacklists.block()')
+              input.input-medium(ng-model='blacklist.label',
+                                  type='text',
+                                  placeholder='Label')
+              input.input-large(ng-model='blacklist.contactInfo',
+                                type='text',
+                                placeholder='e.g. Phone number…')
+              button.btn(type='button',
+                          ng-show='blacklist.label.length > 0',
+                          ng-click='resetBlacklist();') Cancel
+              button.btn(type='submit') Add to blacklist
+
+            h4 Numbers
+            p(ng-show='(data.blacklist.list.length == 0)')
+              | There are no blacklisted numbers.
+
+            table.table.table-striped(ng-show='(data.blacklist.list.length > 0)')
+              thead
+                tr
+                  th Label
+                  th Telefon number
+                  th
+              tbody
+                tr(ng-repeat='number in data.blacklist.list')
+                  td(style='vertical-align: middle') {{number.label}}
+                  td(style='vertical-align: middle') {{number.contactInfo}}
+                  td
+                    button.btn(ng-click='blacklists.allow(number)',
+                               type='button') Allow
+
+
+
+      .tab-pane(ng-controller='profile',
+                class="{{(views.profile==true) && 'active'}}")
+        .tab-header
+          h3.pull-left {{ data.account.name }}
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+
+            dl.well(style='margin-top:0; padding-bottom:10px;')
+              dt Purchased number
+              dd {{ data.account.purchasedNumber }}
+            hr
+
+            form.form-vertical
+              .control-group
+                label.control-label(for='name') Name
+                .controls
+                  input#name(type='text',
+                             value="{{ data.account.name }}")
+              .control-group
+                label.control-label(for='email') Email
+                .controls
+                  input#email(type='text',
+                  value="{{ data.account.email }}")
+              .control-group
+                label.control-label(for='address') Address
+                .controls
+                  input#address(type='text',
+                  value="{{ data.account.address }}")
+              .control-group
+                label.control-label(for='phone') Phone
+                .controls
+                  input#phone(type='text',
+                  value="{{ data.account.phone }}")
+              .form-actions
+                button.btn.btn-primary(type='submit') Save
