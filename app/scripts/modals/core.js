@@ -713,7 +713,7 @@ define(
                 emails  = [],
                 nodes   = {};
 
-              console.log(raws.connections);
+              // console.table(raws.connections);
 
               $rootScope.data = {};
 

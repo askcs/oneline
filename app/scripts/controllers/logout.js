@@ -21,6 +21,15 @@ define(
 
           document.cookie = "OneLine.session=''; expires=Thu, 01-Jan-1970 00:00:01 GMT";
 
+          Storage.session.clearAll();
+
+          if (logindata.remember)
+          {
+            Storage.add('logindata', angular.toJson(logindata));
+          }
+
+          $window.location.href = 'index.html';
+
           User.logout()
             .then(function (result)
             {
@@ -28,15 +37,6 @@ define(
               {
                 console.warn('error ->', result);
               }
-
-              Storage.session.clearAll();
-
-              if (logindata.remember)
-              {
-                Storage.add('logindata', angular.toJson(logindata));
-              }
-
-              $window.location.href = 'index.html';
             });
         }
       ]
