@@ -9,25 +9,25 @@ br
       li(class="{{(views.manager==true) && 'active'}}")
         a(ng-click='setViewTo("manager"); connections.list();',
           data-toggle='tab')
-          span.icomoon.icomoon-contact-add(aria-hidden='true')
+          span.icomoon.icomoon-oneline_number(aria-hidden='true')
           | Connected numbers
 
       li(class="{{(views.notifier==true) && 'active'}}")
         a(ng-click='setViewTo("notifier")',
           data-toggle='tab')
-          span.icomoon.icomoon-bullhorn-2(aria-hidden='true')
+          span.icomoon.icomoon-oneline_notification_settings(aria-hidden='true')
           | Notification settings
 
       li(class="{{(views.reporter==true) && 'active'}}")
         a(ng-click='setViewTo("reporter")',
           data-toggle='tab')
-          span.icomoon.icomoon-file-10(aria-hidden='true')
+          span.icomoon.icomoon-oneline_missedcalls(aria-hidden='true')
           | Call list
 
       li(class="{{(views.guarder==true) && 'active'}}")
         a(ng-click='setViewTo("guarder")',
           data-toggle='tab')
-          span.icomoon.icomoon-thumbs-up-5(aria-hidden='true')
+          span.icomoon.icomoon-oneline_blacklist(aria-hidden='true')
           | Blacklist
 
       li(class="{{(views.profile==true) && 'active'}}")
