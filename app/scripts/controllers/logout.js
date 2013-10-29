@@ -13,8 +13,6 @@ define(
           $('.navbar').hide();
           $('#footer').hide();
 
-          console.log('logging out!');
-
           var logindata = angular.fromJson(Storage.get('logindata'));
 
           Storage.clearAll();
@@ -28,8 +26,6 @@ define(
             Storage.add('logindata', angular.toJson(logindata));
           }
 
-          $window.location.href = 'index.html';
-
           User.logout()
             .then(function (result)
             {
@@ -38,6 +34,8 @@ define(
                 console.warn('error ->', result);
               }
             });
+
+          $window.location.href = 'index.html';
         }
       ]
     );
