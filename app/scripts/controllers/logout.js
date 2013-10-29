@@ -17,7 +17,11 @@ define(
 
           Storage.clearAll();
 
+          console.log('doc cookie before ->', document.cookie);
+
           document.cookie = "OneLine.session=''; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+
+          console.log('doc cookie after ->', document.cookie);
 
           Storage.session.clearAll();
 
