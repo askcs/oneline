@@ -617,7 +617,7 @@ define(
             {
               var deferred = $q.defer();
 
-              console.log('there are enough stuff to run scenario ->', $rootScope.data.connected.list);
+              // console.log('there are enough stuff to run scenario ->', $rootScope.data.connected.list);
 
               var connected = {};
 
@@ -632,7 +632,7 @@ define(
                 }
               });
 
-              console.log('runing scenario on ->', connected);
+              // console.log('runing scenario on ->', connected);
 
               Scenarios.build(
                 {},
@@ -660,7 +660,7 @@ define(
 
             build: function ()
             {
-              console.log('scenario build is being asked ->', $rootScope.data.connected.list);
+              // console.log('scenario build is being asked ->', $rootScope.data.connected.list);
 
               var verifieds = false;
 

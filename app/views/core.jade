@@ -68,8 +68,11 @@ br
                             data-dismiss='alert') ×
               span(ng-show='verified.result') Number is verified and ready to use.
               span(ng-hide='verified.result')
-                | There was an error with verifiying number. Please try again. If problem resists, please get in touch
-                | with us.
+                | There was an error with verifiying number.
+                br
+                | Did you enter the correct verification code?
+                br
+                | If so please try again and if the problem resists, please get in touch with us.
 
             p(ng-show='(data.connected.list.length == 0)')
               | There are no connected numbers. Please add some.
@@ -100,7 +103,8 @@ br
 
                     button.btn(ng-click='connections.edit(number)',
                                 style='margin-right:5px',
-                                type='button') Edit
+                                type='button',
+                                ng-hide='number.verified') Edit
 
                     .input-append(style='margin-top:10px; display: inline',
                                   ng-show='verifying[number.id]')
@@ -178,7 +182,8 @@ br
               tbody
                 tr(ng-repeat='log in logsList')
                   td(style='vertical-align: middle')
-                    span.label(class='{{ (log.callState == "ANSWERED") && "label-success"}} {{ (log.callState == "INCOMING") && "label-warning"}} {{ (log.callState == "MISSED") && "label-important"}}') {{ log.callState }}
+                    span.label(
+                      class='{{ (log.callState == "ANSWERED") && "label-success"}} {{ (log.callState == "INCOMING") && "label-warning"}} {{ (log.callState == "MISSED") && "label-important"}}') {{ log.callState }}
                   td(style='vertical-align: middle') {{ log.address }}
                   td(style='vertical-align: middle') {{ log.startTime | nicelyDate }}
                   td(style='vertical-align: middle') {{ log.endTime - log.startTime | calculateTime }}

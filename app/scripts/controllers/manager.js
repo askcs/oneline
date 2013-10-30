@@ -166,18 +166,22 @@ define(
                       result: result.verified
                     };
 
-                    var connections = angular.fromJson(Storage.get('connections'));
-
-                    angular.forEach(connections, function (connection)
+                    if (result.verified)
                     {
-                      if (connection.id === number.id) { connection.verified = true; }
-                    });
+                      var connections = angular.fromJson(Storage.get('connections'));
 
-                    Storage.add('connections', angular.toJson(connections));
+                      angular.forEach(connections, function (connection)
+                      {
+                        if (connection.id === number.id) { connection.verified = true; }
+                      });
+
+                      Storage.add('connections', angular.toJson(connections));
+
+                      Core.factory.process();
+                    }
 
                     $scope.resetVerifiers();
 
-                    Core.factory.process();
                   });
               }
             }

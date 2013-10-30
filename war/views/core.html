@@ -25,9 +25,7 @@
             <h4>Numbers</h4>
             <hr>
             <div ng-show="verified.status" class="alert alert-{{(verified.result) &amp;&amp; 'success' || 'error'}}">
-              <button type="button" ng-click="verified.status = false" data-dismiss="alert" class="close">×</button><span ng-show="verified.result">Number is verified and ready to use.</span><span ng-hide="verified.result">
-                There was an error with verifiying number. Please try again. If problem resists, please get in touch
-                with us.</span>
+              <button type="button" ng-click="verified.status = false" data-dismiss="alert" class="close">×</button><span ng-show="verified.result">Number is verified and ready to use.</span><span ng-hide="verified.result">There was an error with verifiying number.<br>Did you enter the correct verification code?<br>If so please try again and if the problem resists, please get in touch with us.</span>
             </div>
             <p ng-show="(data.connected.list.length == 0)">There are no connected numbers. Please add some.</p>
             <table ng-show="(data.connected.list.length &gt; 0)" class="table table-striped">
@@ -48,7 +46,7 @@
                   <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">
                     <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" class="btn">Delete</button>
-                    <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" class="btn">Edit</button>
+                    <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" ng-hide="number.verified" class="btn">Edit</button>
                     <div style="margin-top:10px; display: inline" ng-show="verifying[number.id]" class="input-append">
                       <input id="appendedInputButton" type="text" ng-model="verificationCode[number.id]" autofocus="autofocus" class="span3">
                       <button type="button" ng-click="resetVerifiers()" class="btn">Cancel</button>
