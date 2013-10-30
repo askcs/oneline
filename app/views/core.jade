@@ -178,7 +178,7 @@ br
               tbody
                 tr(ng-repeat='log in logsList')
                   td(style='vertical-align: middle')
-                    span.label.label-warning {{ log.callState }}
+                    span.label(class='{{ (log.callState == "ANSWERED") && "label-success"}} {{ (log.callState == "INCOMING") && "label-warning"}} {{ (log.callState == "MISSED") && "label-important"}}') {{ log.callState }}
                   td(style='vertical-align: middle') {{ log.address }}
                   td(style='vertical-align: middle') {{ log.startTime | nicelyDate }}
                   td(style='vertical-align: middle') {{ log.endTime - log.startTime | calculateTime }}

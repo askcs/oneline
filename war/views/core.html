@@ -123,7 +123,7 @@
               </thead>
               <tbody>
                 <tr ng-repeat="log in logsList">
-                  <td style="vertical-align: middle"><span class="label label-warning">{{ log.callState }}</span></td>
+                  <td style="vertical-align: middle"><span class="label {{ (log.callState == &quot;ANSWERED&quot;) &amp;&amp; &quot;label-success&quot;}} {{ (log.callState == &quot;INCOMING&quot;) &amp;&amp; &quot;label-warning&quot;}} {{ (log.callState == &quot;MISSED&quot;) &amp;&amp; &quot;label-important&quot;}}">{{ log.callState }}</span></td>
                   <td style="vertical-align: middle">{{ log.address }}</td>
                   <td style="vertical-align: middle">{{ log.startTime | nicelyDate }}</td>
                   <td style="vertical-align: middle">{{ log.endTime - log.startTime | calculateTime }}</td>
