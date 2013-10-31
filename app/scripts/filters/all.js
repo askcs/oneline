@@ -124,6 +124,8 @@ define(
       {
         return function (secs)
         {
+          secs /= 1000;
+
           var hours   = Math.floor(secs / (60 * 60)),
               dmin    = secs % (60 * 60),
               minutes = Math.floor(dmin / 60),
