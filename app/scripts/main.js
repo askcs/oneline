@@ -11,7 +11,8 @@ require.config(
       jquery:             '../vendors/jquery/jquery.min',
       domReady:           '../vendors/requirejs-domready/domReady',
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
-      'angular-resource': '../vendors/angular-resource/angular-resource.min'
+      'angular-resource': '../vendors/angular-resource/angular-resource.min',
+      d3:                 '../vendors/d3/d3.min'
     },
     shim:
     {
@@ -28,6 +29,10 @@ require.config(
       {
         deps:     ['jquery'],
         exports:  'bootstrap'
+      },
+      d3:
+      {
+        exports:  'd3'
       }
     }
   }
@@ -76,7 +81,8 @@ require(
     'services/strings',
     'services/generators',
 
-    'bootstrap'
+    'bootstrap',
+    'd3'
   ],
   function (angular, domReady)
   {

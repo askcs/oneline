@@ -62,7 +62,9 @@ define(
           angular.forEach($rootScope.data.connected.list, function (connection)
           {
             content.children[1].children.push({
-              name: connection.label + ', ' + connection.contactInfo
+              name: connection.label + ', ' +
+                    connection.contactInfo +
+                    ((connection.verified) ? ', Verified' : ', Not verified')
             });
           });
 
