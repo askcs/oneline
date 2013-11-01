@@ -9,8 +9,7 @@ define(
      */
     filters.filter('translatePackage',
     [
-      'config',
-      function (config)
+      function ()
       {
         return function (selected)
         {
@@ -18,9 +17,12 @@ define(
           {
             var gem;
 
-            angular.forEach($config.packages, function (pack)
+            angular.forEach(config.packages, function (pack)
             {
-              if (pack.id == selected) gem = pack;
+              if (pack.id == selected)
+              {
+                gem = pack;
+              }
             });
 
             return gem.label;
@@ -35,8 +37,7 @@ define(
      */
     filters.filter('translateCountry',
     [
-      'config',
-      function (config)
+      function ()
       {
         return function (selected)
         {
@@ -44,7 +45,7 @@ define(
           {
             var gem;
 
-            angular.forEach($config.countries, function (country)
+            angular.forEach(config.countries, function (country)
             {
               if (country.id == selected)
               {
@@ -64,8 +65,7 @@ define(
      */
     filters.filter('translateRegion',
     [
-      'config',
-      function (config)
+      function ()
       {
         return function (selected, country)
         {
@@ -73,9 +73,12 @@ define(
           {
             var gem;
 
-            angular.forEach($config.regions[country], function (region)
+            angular.forEach(config.regions[country], function (region)
             {
-              if (region.id == selected) gem = region;
+              if (region.id == selected)
+              {
+                gem = region;
+              }
             });
 
             return gem.label;
@@ -91,8 +94,7 @@ define(
      */
     filters.filter('translateService',
     [
-      'config',
-      function (config)
+      function ()
       {
         return function (selected)
         {
@@ -100,7 +102,7 @@ define(
           {
             var gem;
 
-            angular.forEach($config.virtuals, function (virtual)
+            angular.forEach(config.virtuals, function (virtual)
             {
               if (virtual.id == selected)
               {
@@ -152,7 +154,7 @@ define(
       {
         return function (date)
         {
-          if (typeof date == 'string')
+          if (typeof date === 'string')
           {
             date = Number(date);
           }

@@ -408,7 +408,13 @@ define(
                 payload,
                 function (results)
                 {
+                  console.warn('RESTURNED RESULTS ->', results);
+
                   var connections = angular.fromJson(Storage.get('connections'));
+
+                  var processed = [];
+
+                  console.log('connections before ->', connections);
 
                   angular.forEach(connections, function (node)
                   {
@@ -425,11 +431,15 @@ define(
                         node.groupKeys      = [$rootScope.data.connected.group.id];
                       }
                     });
+
+                    processed.push(node);
                   });
 
-                  Storage.add('connections', angular.toJson(connections));
+                  console.log('connections after ->', processed);
 
-                  deferred.resolve(result);
+                  Storage.add('connections', angular.toJson(processed));
+
+                  deferred.resolve(results);
                 },
                 function (error)
                 {

@@ -58,7 +58,7 @@ require(
     'controllers/register',
     'controllers/logout',
     'controllers/core',
-    // 'controllers/purchaser',
+    'controllers/purchaser',
     'controllers/manager',
     'controllers/notifier',
     'controllers/reporter',

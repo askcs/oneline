@@ -80,14 +80,18 @@ define(
           $scope.setRegion = function ()
           {
             if ($scope.order.region)
+            {
               $scope.numbers = Generators.list();
+            }
           };
 
 
           $scope.setVirtualArea = function ()
           {
             if ($scope.order.virtual)
+            {
               $scope.numbers = Generators.list();
+            }
           };
 
 
@@ -111,14 +115,18 @@ define(
           $scope.increaseStep = function ()
           {
             if ($scope.purchaser.step < 3 && $scope.order.number)
+            {
               $scope.switchStep($scope.purchaser.step + 1);
+            }
           };
 
 
           $scope.decreaseStep = function ()
           {
             if ($scope.purchaser.step > 1)
+            {
               $scope.switchStep($scope.purchaser.step - 1);
+            }
           };
 
         }

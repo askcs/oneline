@@ -5,6 +5,11 @@ br
 
 
     ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+      li(class="{{(views.purchaser==true) && 'active'}}")
+        a(ng-click='resetPurchaser(); setViewTo("purchaser")',
+          data-toggle='tab')
+          span.icomoon.icomoon-cart(aria-hidden='true')
+          | Online number
       li(class="{{(views.manager==true) && 'active'}}")
         a(ng-click='setViewTo("manager"); connections.list();',
           data-toggle='tab')
@@ -40,13 +45,346 @@ br
     .tab-content
 
 
+      .tab-pane(ng-controller='purchaser',
+                class="{{(views.purchaser==true) && 'active'}}")
+        .tab-header
+          h2.pull-left
+            | Buy number
+        hr
+        .row-fluid
+          .span12.well
+            div(style='display: inline; float: left; margin-top: 5px;')
+              span.icomoon.icomoon-mobile-5(aria-hidden='true',
+                                            style='font-size: 8em; margin-right: 20px; color: #646199;')
+            h2(style='margin-top: 25px;')
+              | What kind of number should I buy?
+            p
+              | First impression is always important. Your number should tell you about something about you or just you!
+
+        ul.breadcrumb-steps(ng-show='purchaser.step > 0')
+          li(class="{{(purchaser.step > 0) && 'step-active'}}")
+            span.label
+              | 1
+            a(ng-click='switchStep(1)')
+              | Number selection
+          li(class="{{(purchaser.step > 1) && 'step-active'}}")
+            span.label
+              | 2
+            a(ng-click='switchStep(2)',
+              ng-show='order.number')
+              | Payment types
+            span.breadcrumb-step-text(ng-hide='order.number')
+              | Payment types
+          li(class="{{(purchaser.step > 2) && 'step-active'}}")
+            span.label
+              | 3
+            a(ng-click='switchStep(3)',
+              ng-hide='(!order.monthly && !order.yearly) || purchaser.step == 1')
+              | User information
+            span.breadcrumb-step-text(ng-show='(!order.monthly && !order.yearly) || purchaser.step == 1')
+              | User information
+
+        .row-fluid(ng-show='purchaser.step == 0')
+          .span4
+            h4
+              | Online business
+            p
+              | 0800 numbers
+              br
+              | 0900 numbers
+            p
+              | Coming soon..
+          .span4
+            button.btn.btn-primary(ng-click='switchStep(1)')
+              | Buy a number now
+          .span4
+            h4
+              | Online personal
+            p
+              | Local numbers
+            p
+              | Virtual numbers are available
+
+        .row-fluid(ng-show='purchaser.step > 0')
+          .row-fluid
+            .span12(style='margin-bottom: 15px;')
+              div(ng-show='purchaser.step == 1')
+                h2
+                  | Select your number
+                p
+                  | We are providing many options for your Oneline number.
+              div(ng-show='purchaser.step == 2')
+                h2
+                  | Payment types
+                p
+                  | Some information about the payment types.
+              div(ng-show='purchaser.step == 3')
+                h2
+                  | User information
+                p
+                  | Some information about the user information.
+          .row-fluid
+
+            .span9
+              ul(style='list-style: none; margin: 0; padding: 0;')
+                li(ng-show='purchaser.step == 1')
+                  form.form-horizontal
+                    .control-group.well(style='position: relative;')
+                      label.control-label(for='inputEmail')
+                        | Types
+                      .controls
+                        ul(style='list-style: none; margin: 0; padding: 0; margin-top: 5px;')
+                          li(ng-repeat='package in packages',
+                              style='display: inline; float: left; margin: 0 15px 0 0;')
+                            label.radio
+                              input(type='radio',
+                                    ng-model='order.package',
+                                    ng-click='setPackage(package.id)',
+                                    value='{{package.id}}')
+                              | {{package.label}}
+                      .step-watermark
+                        | 1
+
+                    .control-group.well(style='position: relative;',
+                                        ng-show='(order.package==1) || (order.package==2)')
+                      label.control-label(for='inputPassword')
+                        | Country
+                      .controls
+                        select(ng-model='order.country',
+                                ng-options='country.id as country.label for country in countries',
+                                disabled='disabled')
+                      .step-watermark
+                        | 2
+
+                    .control-group.well(style='position: relative;',
+                                        ng-show='(order.package==1)')
+                      label.control-label(for='inputPassword')
+                        | Regions
+                      .controls
+                        select(ng-model='order.region',
+                                ng-options='region.id as region.label for region in regions',
+                                ng-change='setRegion()')
+                          option(value='')
+                            | Please select your region
+                      .step-watermark
+                        | 3
+                    .control-group.well(style='position: relative;',
+                                        ng-show='(order.package == 1) && order.region')
+                      label.control-label(for='inputPassword')
+                        | Numbers
+                      .controls
+                        ul#myTab.nav.nav-tabs
+                          li(class="{{(tabs.normals==true) && 'active'}}")
+                            a(ng-click='tabs.normals=true; tabs.premiums=false')
+                              | Normals
+                          li(class="{{(tabs.premiums==true) && 'active'}}")
+                            a(ng-click='tabs.premiums=true; tabs.normals=false;')
+                              | Premiums
+                        div(style='background-color: white; padding: 20px; margin-top: -20px; border: 1px solid #ddd; border-top: none;')
+                          #normals(ng-show='tabs.normals')
+                            table.table.table-striped
+                              tr(ng-repeat='number in numbers.normals')
+                                td
+                                  label.radio
+                                    input(type='radio',
+                                          ng-model='order.number',
+                                          value='{{number}}',
+                                          ng-click='order.premium=false')
+                                    | +{{order.country}} ({{order.region}}) {{number}}
+                          #premiums(ng-show='tabs.premiums')
+                            table.table.table-striped
+                              tr(ng-repeat='number in numbers.premiums')
+                                td
+                                  label.radio
+                                    input(type='radio',
+                                          ng-model='order.number',
+                                          value='{{number}}',
+                                          ng-click='order.premium=true')
+                                    | +{{order.country}} ({{order.region}}) {{number}}
+                      .step-watermark
+                        | 4
+
+                    .control-group.well(style='position: relative;',
+                                        ng-show='(order.package==2)')
+                      label.control-label(for='inputPassword')
+                        | Services
+                      .controls
+                        select.span6(ng-model='order.virtual',
+                                      ng-options='virtual.id as virtual.label for virtual in virtuals',
+                                      ng-change='setVirtual()')
+                          option(value='')
+                            | Please select a virtual service
+                      .step-watermark
+                        | 3
+
+                    .control-group.well(style='position: relative;',
+                                        ng-show='(order.package==2) && order.virtual')
+                      label.control-label(for='inputPassword')
+                        | Virtual area code
+                      .controls
+                        ul(style='list-style: none; padding: 0; margin: 5px 0 0;')
+                          li(ng-repeat='range in ranges',
+                              style='display: inline; float: left; width: 60px; margin: 0 15px 0 0;')
+                            label.radio
+                              input(type='radio',
+                                    ng-model='order.range',
+                                    value='{{range}}',
+                                    ng-click='setVirtualArea()')
+                              | {{range}}
+                      .step-watermark
+                        | 4
+
+                    .control-group.well(style='position: relative;',
+                                        ng-show='(order.package==2) && order.virtual && order.range')
+                      label.control-label(for='inputPassword')
+                        | Numbers
+                      .controls
+                        ul#myTab.nav.nav-tabs
+                          li(class="{{(tabs.normals==true) && 'active'}}")
+                            a(ng-click='tabs.normals=true; tabs.premiums=false')
+                              | Normals
+                          li(class="{{(tabs.premiums==true) && 'active'}}")
+                            a(ng-click='tabs.premiums=true; tabs.normals=false;')
+                              | Premiums
+                        div(style='background-color: white; padding: 20px; margin-top: -20px; border: 1px solid #ddd; border-top: none;')
+                          #normals(ng-show='tabs.normals')
+                            table.table.table-striped
+                              tr(ng-repeat='number in numbers.normals')
+                                td
+                                  label.radio
+                                    input(type='radio',
+                                          ng-model='order.number',
+                                          value='{{number}}',
+                                          ng-click='order.premium=false')
+                                    | +{{order.country}} ({{order.range}}) {{number}}
+                          #premiums(ng-show='tabs.premiums')
+                            table.table.table-striped
+                              tr(ng-repeat='number in numbers.premiums')
+                                td
+                                  label.radio
+                                    input(type='radio',
+                                          ng-model='order.number',
+                                          value='{{number}}',
+                                          ng-click='order.premium=true')
+                                    | +{{order.country}} ({{order.range}}) {{number}}
+                      .step-watermark
+                        | 4
+
+                li(ng-show='purchaser.step == 2')
+                  .row-fluid
+                    ul.thumbnails
+                      li.span6
+                        .well.thumb-btn(ng-click='order.monthly=true; order.yearly=false;',
+                                        class="{{(order.monthly) && 'thumb-btn-active'}}")
+                          .caption
+                            h3
+                              | {{prices.monthly}}€ per month
+                            p
+                              | Oneline Personal
+                              br
+                              | Monthly
+                              br
+                              | Subscription
+                      li.span6
+                        .well.thumb-btn(ng-click='order.monthly=false; order.yearly=true;',
+                                        class="{{(order.yearly) && 'thumb-btn-active'}}")
+                          .caption
+                            h3
+                              | {{prices.yearly}}€ per year
+                            p
+                              | Oneline Personal
+                              br
+                              | Monthly
+                              br
+                              | Subscription
+
+                li(ng-show='purchaser.step == 3')
+                  .well
+                    p
+                      | User information collecting..
+
+            .span3
+              #basket
+                .well
+                  div(ng-hide='order.package')
+                    | You have not selected anything yet.
+                  dl(ng-show='order.package')
+                    dt
+                      | Number type:
+                    dd
+                      | {{order.package | translatePackage}}
+                      span(ng-show='order.number')
+                        | -
+                        span(ng-show='order.premium')
+                          | Premium
+                        span(ng-hide='order.premium')
+                          | Normal
+                    dt
+                      | Country:
+                    dd
+                      | {{order.country | translateCountry}}
+                    dt(ng-show='(order.package==1) && order.region')
+                      | Region:
+                    dd(ng-show='(order.package==1) && order.region')
+                      | {{order.region | translateRegion:order.country}}
+                    dt(ng-show='(order.package==2) && order.virtual')
+                      | Virtual service:
+                    dd(ng-show='(order.package==2) && order.virtual')
+                      | {{order.virtual | translateService}}
+                    dt(ng-show='(order.package==2) && order.virtual && order.range')
+                      | Selected virtual area code:
+                    dd(ng-show='(order.package==2) && order.virtual && order.range')
+                      | {{order.range}}
+                    dt(ng-show='order.number')
+                      | Number:
+                    dd(ng-show='order.number')
+                      span(ng-show='(order.package==1)')
+                        | +{{order.country}} ({{order.region}}) {{order.number}}
+                      span(ng-show='(order.package==2)')
+                        | +{{order.country}} ({{order.range}}) {{order.number}}
+                    dt(ng-show='order.monthly || order.yearly')
+                      | Subscription:
+                    dd
+                      span(ng-show='order.monthly')
+                        | Monthly payment
+                      span(ng-show='order.yearly')
+                        | Yearly payment
+                    dt(ng-show='order.monthly || order.yearly')
+                      | Total:
+                    dd(ng-show='order.monthly || order.yearly')
+                      span(ng-show='order.monthly')
+                        | {{prices.monthly}}€ per month
+                      span(ng-show='order.yearly')
+                        | {{prices.yearly}}€ per year
+
+          .row-fluid
+            .span12
+              hr
+              ul.pager(ng-show='purchaser.step > 0')
+                li.previous(ng-show='purchaser.step == 2')
+                  a(ng-click='decreaseStep()')
+                    | Number selection
+                li.previous(ng-show='purchaser.step == 3')
+                  a(ng-click='decreaseStep()')
+                    | Payment types
+                li.next(ng-show='purchaser.step == 1',
+                        class="{{(!order.number) && 'disabled'}}")
+                  a(ng-click='increaseStep()')
+                    | Payment types
+                li.next(ng-show='purchaser.step == 2',
+                        class="{{(!order.monthly && !order.yearly) && 'disabled'}}")
+                  a(ng-click='increaseStep()')
+                    | User information
+
+
+
       .tab-pane(ng-controller='manager',
                 class="{{(views.manager==true) && 'active'}}")
         .tab-header
           h2.pull-left Add a connected number
         hr
         .row-fluid
-          .span12(style='min-height: 380px;')
+          .span12(style='min-height: 462px;')
             form.form-inline.well(ng-submit='connections.save()')
               input.input-large(ng-model='connection.label',
                                   type='text',
@@ -124,7 +462,7 @@ br
           h2.pull-left Missed Call Notifications
         hr
         .row-fluid
-          .span12(style='min-height: 380px;')
+          .span12(style='min-height: 462px;')
             p Your smart secretary can send notifcations about your missed calls.
             form.form-inline(ng-submit='settings.save()')
               table.table.table-striped
@@ -161,7 +499,7 @@ br
           h2.pull-left Recent calls
         hr
         .row-fluid
-          .span12(style='min-height: 380px;')
+          .span12(style='min-height: 462px;')
             p(ng-hide='logsLoading') Oneline provides all your recent calls only to you.
             p(ng-show='logsLoading')
               | Loading recent calls..
@@ -196,7 +534,7 @@ br
           h2.pull-left Blacklist
         hr
         .row-fluid
-          .span12(style='min-height: 380px;')
+          .span12(style='min-height: 462px;')
             p Oneline can block any unwanted incoming calls and let them know kindly
             form.form-inline.well(ng-submit='blacklists.block()')
               input.input-medium(ng-model='blacklist.label',
@@ -233,7 +571,7 @@ br
           h2.pull-left {{ data.account.name }}
         hr
         .row-fluid
-          .span12(style='min-height: 380px;')
+          .span12(style='min-height: 462px;')
             dl.well(style='margin-top:0; padding-bottom:10px;')
               dt Purchased number
               dd {{ data.account.purchasedNumber }}
@@ -273,5 +611,5 @@ br
           h2.pull-left Overview (Experimental)
         hr
         .row-fluid
-          .span12(style='min-height: 380px;')
+          .span12(style='min-height: 462px;')
             #birdseye

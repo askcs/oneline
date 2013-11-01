@@ -94,6 +94,8 @@ define(
                 .then(function (result)
                 {
                   console.log('returned result ->', result);
+
+                  Core.factory.process();
                 });
             }
           }
