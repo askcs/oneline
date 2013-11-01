@@ -19,7 +19,8 @@ define(
               notifier:   false,
               reporter:   false,
               guarder:    false,
-              profile:    false
+              profile:    false,
+              overview:   false
             };
 
             $scope.views[hash] = true;

@@ -1,0 +1,21 @@
+br
+br
+.row-fluid
+  .tabbable.tabs-left
+
+    ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
+      li.active
+        a(href='#',
+          data-toggle='tab')
+          span.icomoon.icomoon-tree(aria-hidden='true')
+          | Birds eye look
+
+    .tab-content
+
+      .tab-pane.active
+        .tab-header
+          h2.pull-left Birds eye overview
+        hr
+        .row-fluid
+          .span12(style='min-height: 300px;')
+            #birdseye

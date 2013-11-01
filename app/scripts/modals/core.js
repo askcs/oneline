@@ -41,6 +41,19 @@ define(
           );
 
 
+          var Profile = $resource(
+            config.host + '/accounts/contactinfos/',
+            {},
+            {
+              save: {
+                method: 'PUT',
+                params: {},
+                isArray: true
+              }
+            }
+          );
+
+
           var Verification = $resource(
             config.host + '/products/verifyme/:action',
             {},
@@ -386,6 +399,47 @@ define(
               return deferred.promise;
             },
 
+            profiler: function (payload)
+            {
+              var deferred = $q.defer();
+
+              Profile.save(
+                {},
+                payload,
+                function (results)
+                {
+                  var connections = angular.fromJson(Storage.get('connections'));
+
+                  angular.forEach(connections, function (node)
+                  {
+                    angular.forEach(results, function (result)
+                    {
+                      if (node.id === result.id)
+                      {
+                        node.contactInfo    = result.contactInfo;
+                        node.contactInfoTag = result.contactInfoTag;
+                        if (result.label)
+                        {
+                          node.label = result.label;
+                        }
+                        node.groupKeys      = [$rootScope.data.connected.group.id];
+                      }
+                    });
+                  });
+
+                  Storage.add('connections', angular.toJson(connections));
+
+                  deferred.resolve(result);
+                },
+                function (error)
+                {
+                  deferred.resolve({error: error});
+                }
+              );
+
+              return deferred.promise;
+            },
+
             remove: function (connection)
             {
               var deferred  = $q.defer(),
@@ -647,6 +701,8 @@ define(
                 },
                 function (result)
                 {
+                  Storage.add('scenario', angular.toJson(result));
+
                   deferred.resolve(result);
                 },
                 function (error)
@@ -890,7 +946,7 @@ define(
 
               $rootScope.data = data;
 
-              // console.info('data ->', $rootScope.data);
+              console.info('data ->', $rootScope.data);
 
               Core.prototype.scenarios.build();
 

@@ -89,7 +89,7 @@ define(
             User.login(username.toLowerCase(), password)
               .then(function (result)
               {
-                console.log('result ->', result);
+                // console.log('result ->', result);
 
                 switch (result.status)
                 {

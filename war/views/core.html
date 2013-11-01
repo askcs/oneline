@@ -7,6 +7,7 @@
       <li class="{{(views.reporter==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;reporter&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-oneline_missedcalls"></span>Call list</a></li>
       <li class="{{(views.guarder==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-oneline_blacklist"></span>Blacklist</a></li>
       <li class="{{(views.profile==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;profile&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-user"></span>Profile</a></li>
+      <li class="{{(views.overview==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;overview&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-eye"></span>Overview</a></li>
     </ul>
     <div class="tab-content">
       <div ng-controller="manager" class="tab-pane {{(views.manager==true) &amp;&amp; 'active'}}">
@@ -15,7 +16,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 300px" class="span12">
+          <div style="min-height: 380px" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-large">
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
@@ -66,7 +67,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 300px" class="span12">
+          <div style="min-height: 380px" class="span12">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
             <form ng-submit="settings.save()" class="form-inline">
               <table class="table table-striped">
@@ -106,7 +107,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 300px" class="span12">
+          <div style="min-height: 380px" class="span12">
             <p ng-hide="logsLoading">Oneline provides all your recent calls only to you.</p>
             <p ng-show="logsLoading">Loading recent calls..</p>
             <table ng-hide="logsLoading" class="table table-striped">
@@ -141,7 +142,7 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 300px" class="span12">
+          <div style="min-height: 380px" class="span12">
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
             <form ng-submit="blacklists.block()" class="form-inline well">
               <input ng-model="blacklist.label" type="text" placeholder="Label" class="input-medium">
@@ -178,41 +179,52 @@
         </div>
         <hr>
         <div class="row-fluid">
-          <div style="min-height: 300px" class="span12">
+          <div style="min-height: 380px" class="span12">
             <dl style="margin-top:0; padding-bottom:10px" class="well">
               <dt>Purchased number</dt>
               <dd>{{ data.account.purchasedNumber }}</dd>
             </dl>
             <hr>
-            <form class="form-vertical">
+            <form ng-submit="profile.edit()" class="form-vertical">
               <div class="control-group">
                 <label for="name" class="control-label">Name</label>
                 <div class="controls">
-                  <input id="name" type="text" value="{{ data.account.name }}">
+                  <input id="name" type="text" ng-model="profile.data.name" value="{{data.account.name}}">
                 </div>
               </div>
               <div class="control-group">
                 <label for="email" class="control-label">Email</label>
                 <div class="controls">
-                  <input id="email" type="text" value="{{ data.account.email }}">
+                  <input id="email" type="text" ng-model="profile.data.email" value="{{data.account.email}}">
                 </div>
               </div>
               <div class="control-group">
                 <label for="address" class="control-label">Address</label>
                 <div class="controls">
-                  <input id="address" type="text" value="{{ data.account.address }}">
+                  <input id="address" type="text" ng-model="profile.data.address" value="{{data.account.address}}">
                 </div>
               </div>
               <div class="control-group">
                 <label for="phone" class="control-label">Phone</label>
                 <div class="controls">
-                  <input id="phone" type="text" value="{{ data.account.phone }}">
+                  <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}">
                 </div>
               </div>
               <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save</button>
               </div>
             </form>
+          </div>
+        </div>
+      </div>
+      <div ng-controller="overview" class="tab-pane {{(views.overview==true) &amp;&amp; 'active'}}">
+        <div class="tab-header">
+          <h2 class="pull-left">Overview (Experimental)</h2>
+        </div>
+        <hr>
+        <div class="row-fluid">
+          <div style="min-height: 380px" class="span12">
+            <div id="birdseye"></div>
           </div>
         </div>
       </div>

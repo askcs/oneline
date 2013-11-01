@@ -36,6 +36,12 @@ define(
               controller:     'core',
               reloadOnSearch: false
             })
+            .when('/overview',
+            {
+              templateUrl:    'views/overview.html',
+              controller:     'overview',
+              reloadOnSearch: false
+            })
             .otherwise({
               redirectTo: '/login'
             });

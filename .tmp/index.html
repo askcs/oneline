@@ -26,6 +26,8 @@
     <!-- build:css({.tmp,app}) styles/app.css-->
     <link rel="stylesheet" href="styles/app.css">
     <!-- endbuild-->
+    <script src="http://mbostock.github.io/d3/talk/20111018/d3/d3.js"></script>
+    <script src="http://mbostock.github.io/d3/talk/20111018/d3/d3.layout.js"></script>
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -62,7 +64,7 @@
       <div id="push"></div>
     </div>
     <div id="mobile-status-bar" ng-show="loading.status &amp;&amp; browser.mobile" class="ng-cloak"><img src="images/ajax-loader.gif"><small>{{loading.message}}</small></div>
-    <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak"><img ng-src="images/footer_ribbon.png" style="width: 175px; display: block; margin: -158px auto 0 auto;">
+    <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak"><img ng-src="images/footer_ribbon.png" style="width: 175px; display: none; margin: -158px auto 0 auto;">
       <div class="container-fluid">
         <div id="copyrights"><img ng-src="images/ask_fast_logo.png" style="margin-top: 5px;"></div>
         <p ng-show="loading.status" class="muted"><img src="images/ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>

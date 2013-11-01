@@ -60,6 +60,8 @@ require(
     'controllers/guarder',
     'controllers/profile',
 
+    'controllers/overview',
+
     'directives/appVersion',
 
     'filters/interpolate',
