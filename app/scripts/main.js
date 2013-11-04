@@ -81,6 +81,8 @@ require(
     'services/strings',
     'services/generators',
 
+    'services/phone',
+
     'bootstrap',
     'd3'
   ],

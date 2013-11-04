@@ -302,6 +302,22 @@
                 </tr>
               </tbody>
             </table>
+            <form>
+              <p>Specify a Phone Number:
+                <input id="phoneNumber" type="text" name="phoneNumber" size="25"/>
+              </p>
+              <p>Specify a Default Country:
+                <input id="defaultCountry" type="text" name="defaultCountry" size="2"/>(ISO 3166-1 two-letter country code)
+              </p>
+              <p>Specify a Carrier Code:
+                <input id="carrierCode" type="text" name="carrierCode" size="2"/>(optional, only valid for some countries)
+              </p>
+              <input type="submit" value="Submit" ng-click="parse()"/>
+              <input type="reset" value="Reset"/>
+              <p>
+                <textarea id="output" rows="30" cols="80"></textarea>
+              </p>
+            </form>
           </div>
         </div>
       </div>

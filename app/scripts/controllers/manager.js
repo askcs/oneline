@@ -6,10 +6,15 @@ define(
 
     controllers.controller('manager',
       [
-        '$rootScope', '$scope', 'Core', 'Storage',
-        function ($rootScope, $scope, Core, Storage)
+        '$rootScope', '$scope', 'Core', 'Storage', 'Phone',
+        function ($rootScope, $scope, Core, Storage, Phone)
         {
           $rootScope.fixStyles();
+
+          var number = '0629143143';
+          var country = 'NL';
+
+          console.log('phonenumberparser ->', Phone.parse(number, country));
 
 
           /*

@@ -455,6 +455,24 @@ br
                                 ng-click='connections.verify.initiate(number)',
                                 type='button') Verify
 
+            form
+              p
+                | Specify a Phone Number:
+                input#phoneNumber(type='text', name='phoneNumber', size='25')
+              p
+                | Specify a Default Country:
+                input#defaultCountry(type='text', name='defaultCountry', size='2')
+                | (ISO 3166-1 two-letter country code)
+              p
+                | Specify a Carrier Code:
+                input#carrierCode(type='text', name='carrierCode', size='2')
+                | (optional, only valid for some countries)
+              input(type='submit', value='Submit', ng-click='parse()')
+              input(type='reset', value='Reset')
+              p
+                textarea#output(rows='30', cols='80')
+
+
 
       .tab-pane(ng-controller='notifier',
                 class="{{(views.notifier==true) && 'active'}}")
@@ -493,6 +511,7 @@ br
               button.btn(type='submit') Save changes
 
 
+
       .tab-pane(ng-controller='reporter',
                 class="{{(views.reporter==true) && 'active'}}")
         .tab-header
@@ -526,6 +545,7 @@ br
                     button.btn(type='button',
                                 ng-click='logs.allow(log)',
                                 ng-show='log.blocked') Allow
+
 
 
       .tab-pane(ng-controller='guarder',
@@ -563,6 +583,7 @@ br
                   td
                     button.btn(ng-click='blacklists.allow(number)',
                                type='button') Allow
+
 
 
       .tab-pane(ng-controller='profile',
@@ -603,6 +624,7 @@ br
                               value="{{data.account.phone}}")
               .form-actions
                 button.btn.btn-primary(type='submit') Save
+
 
 
       .tab-pane(ng-controller='overview',
