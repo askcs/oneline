@@ -391,7 +391,8 @@ br
                                   placeholder='Label')
               input.input-large(ng-model='connection.contactInfo',
                                 type='text',
-                                placeholder='e.g. Phone number…')
+                                placeholder='e.g. Phone number…',
+                                ng-change='checkNumber()')
               button.btn(type='button',
                           ng-show='connection.label.length > 0',
                           ng-click='resetConnection();') Cancel
@@ -457,20 +458,7 @@ br
 
             form
               p
-                | Specify a Phone Number:
-                input#phoneNumber(type='text', name='phoneNumber', size='25')
-              p
-                | Specify a Default Country:
-                input#defaultCountry(type='text', name='defaultCountry', size='2')
-                | (ISO 3166-1 two-letter country code)
-              p
-                | Specify a Carrier Code:
-                input#carrierCode(type='text', name='carrierCode', size='2')
-                | (optional, only valid for some countries)
-              input(type='submit', value='Submit', ng-click='parse()')
-              input(type='reset', value='Reset')
-              p
-                textarea#output(rows='30', cols='80')
+                textarea#output(class='span12', rows='20')
 
 
 

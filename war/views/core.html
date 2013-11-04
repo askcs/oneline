@@ -263,7 +263,7 @@
           <div style="min-height: 462px" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-large">
-              <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large">
+              <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" ng-change="checkNumber()" class="input-large">
               <button type="button" ng-show="connection.label.length &gt; 0" ng-click="resetConnection();" class="btn">Cancel</button>
               <button type="submit" class="btn">Save</button>
             </form>
@@ -302,6 +302,11 @@
                 </tr>
               </tbody>
             </table>
+            <form>
+              <p>
+                <textarea id="output" rows="20" class="span12"></textarea>
+              </p>
+            </form>
           </div>
         </div>
       </div>

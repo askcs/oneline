@@ -17,6 +17,11 @@ define(
           console.log('phonenumberparser ->', Phone.parse(number, country));
 
 
+          $scope.checkNumber = function ()
+          {
+            Phone.parse($scope.connection.contactInfo, 'NL');
+          }
+
           /*
           Core.groups.update({
            id:   $rootScope.data.connected.group.id,

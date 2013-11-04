@@ -5935,27 +5935,31 @@ define(
              */
             function gc(xnumber, xcountry, xcarrier) {
 
-//              var a = za("phoneNumber").value,
-//                  b = za("defaultCountry").value,
-//                  c = za("carrierCode").value,
-//                  d = new G;
-
               var a = xnumber,
                   b = xcountry,
                   c = xcarrier,
                   d = new G;
 
+              // console.log('GGG ->', d);
+
               try {
                 var e = M.xa(),
-                  f;
+                    f;
+
                 !ub(b) && (0 < a.length && "+" != a.charAt(0)) && i("Invalid country calling code");
+
                 f = Mb(e, a, b, k);
+
                 d.append("****Parsing Result:****\n");
                 d.append(Aa((new Xa(1)).ca(f)));
                 d.append("\n\n****Validation Results:****");
+
                 var g = 0 == Ib(e, f);
+
                 d.append("\nResult from isPossibleNumber(): ");
+
                 d.append(g);
+
                 if (g) {
                   var h = Db(e, f);
                   d.append("\nResult from isValidNumber(): ");
@@ -6021,6 +6025,7 @@ define(
                   }
                   d.append("\nNote: numbers that are not possible have type UNKNOWN, an unknown region, and are considered invalid.")
                 }
+
                 d.append("\n\n****Formatting Results:**** ");
                 d.append("\nE164 format: ");
                 d.append(h ? R(e, f, 0) : "invalid");
@@ -6046,7 +6051,11 @@ define(
               } catch (jc) {
                 d.append("\n" + jc)
               }
+
               za("output").value = d.toString();
+
+              // console.log('MMM ->', m);
+
               return m
             }
 
