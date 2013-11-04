@@ -20,7 +20,7 @@ define(
           $scope.checkNumber = function ()
           {
             Phone.parse($scope.connection.contactInfo, 'NL');
-          }
+          };
 
           /*
           Core.groups.update({

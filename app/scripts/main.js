@@ -12,7 +12,8 @@ require.config(
       domReady:           '../vendors/requirejs-domready/domReady',
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
-      d3:                 '../vendors/d3/d3.min'
+      d3:                 '../vendors/d3/d3.min',
+      libPhoneNumber:     '../vendors/webpaige-lib-phonenumber/libphonenumber'
     },
     shim:
     {
@@ -33,6 +34,10 @@ require.config(
       d3:
       {
         exports:  'd3'
+      },
+      libPhoneNumber:
+      {
+        exports:  'libPhoneNumber'
       }
     }
   }
@@ -84,7 +89,8 @@ require(
     'services/phone',
 
     'bootstrap',
-    'd3'
+    'd3',
+    'libPhoneNumber'
   ],
   function (angular, domReady)
   {
