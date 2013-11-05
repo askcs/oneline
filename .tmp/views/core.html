@@ -259,7 +259,7 @@
         </div>
         <hr/>
         <div class="row-fluid">
-          <div style="min-height: 462px;" class="span12">
+          <div style="min-height: 300px;" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-large"/>
               <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" ng-change="checkNumber()" class="input-large"/>
@@ -301,7 +301,8 @@
                 </tr>
               </tbody>
             </table>
-            <form style="display: none;">
+            <p>{{phoneNumberParsed}}</p>
+            <form style="display: block;">
               <p>
                 <textarea id="output" rows="20" class="span12"></textarea>
               </p>
@@ -315,7 +316,7 @@
         </div>
         <hr/>
         <div class="row-fluid">
-          <div style="min-height: 462px;" class="span12">
+          <div style="min-height: 300px;" class="span12">
             <p>Your smart secretary can send notifcations about your missed calls.</p>
             <form ng-submit="settings.save()" class="form-inline">
               <table class="table table-striped">
@@ -355,7 +356,7 @@
         </div>
         <hr/>
         <div class="row-fluid">
-          <div style="min-height: 462px;" class="span12">
+          <div style="min-height: 300px;" class="span12">
             <p ng-hide="logsLoading">Oneline provides all your recent calls only to you.</p>
             <p ng-show="logsLoading">Loading recent calls..</p>
             <table ng-hide="logsLoading" class="table table-striped">
@@ -390,7 +391,7 @@
         </div>
         <hr/>
         <div class="row-fluid">
-          <div style="min-height: 462px;" class="span12">
+          <div style="min-height: 300px;" class="span12">
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
             <form ng-submit="blacklists.block()" class="form-inline well">
               <input ng-model="blacklist.label" type="text" placeholder="Label" class="input-medium"/>

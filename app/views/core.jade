@@ -380,7 +380,7 @@ br
           h2.pull-left Add a connected number
         hr
         .row-fluid
-          .span12(style='min-height: 462px;')
+          .span12(style='min-height: 300px;')
             form.form-inline.well(ng-submit='connections.save()')
               input.input-large(ng-model='connection.label',
                                   type='text',
@@ -452,7 +452,9 @@ br
                                 ng-click='connections.verify.initiate(number)',
                                 type='button') Verify
 
-            form(style='display: none;')
+            p {{phoneNumberParsed}}
+
+            form(style='display: block;')
               p
                 textarea#output(class='span12', rows='20')
 
@@ -464,7 +466,7 @@ br
           h2.pull-left Missed Call Notifications
         hr
         .row-fluid
-          .span12(style='min-height: 462px;')
+          .span12(style='min-height: 300px;')
             p Your smart secretary can send notifcations about your missed calls.
             form.form-inline(ng-submit='settings.save()')
               table.table.table-striped
@@ -502,7 +504,7 @@ br
           h2.pull-left Recent calls
         hr
         .row-fluid
-          .span12(style='min-height: 462px;')
+          .span12(style='min-height: 300px;')
             p(ng-hide='logsLoading') Oneline provides all your recent calls only to you.
             p(ng-show='logsLoading')
               | Loading recent calls..
@@ -538,7 +540,7 @@ br
           h2.pull-left Blacklist
         hr
         .row-fluid
-          .span12(style='min-height: 462px;')
+          .span12(style='min-height: 300px;')
             p Oneline can block any unwanted incoming calls and let them know kindly
             form.form-inline.well(ng-submit='blacklists.block()')
               input.input-medium(ng-model='blacklist.label',

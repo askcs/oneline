@@ -6,11 +6,12 @@ define(
 
     services.factory('Phone',
       [
-        function ()
+        '$rootScope',
+        function ($rootScope)
         {
           function parse (number, country, carrier)
           {
-            var result = phoneNumberParser(number, country, carrier);
+            var result = $rootScope.phoneNumberParsed = phoneNumberParser(number, country, carrier);
 
             console.log('result ->', result);
 
