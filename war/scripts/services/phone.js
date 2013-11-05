@@ -1,1 +1,1 @@
-define(["services/services"],function(e){e.factory("Phone",[function(){function e(e,t,n){return phoneNumberParser(e,t,n)}return{parse:e}}])});
+define(["services/services"],function(e){e.factory("Phone",[function(){function e(e,t,n){var r=phoneNumberParser(e,t,n);return console.log("result ->",r),r}return{parse:e}}])});

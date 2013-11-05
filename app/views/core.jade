@@ -30,12 +30,8 @@ br
           data-toggle='tab')
           span.icomoon.icomoon-oneline_blacklist(aria-hidden='true')
           | Blacklist
-      li(class="{{(views.profile==true) && 'active'}}")
-        a(ng-click='setViewTo("profile")',
-        data-toggle='tab')
-          span.icomoon.icomoon-user(aria-hidden='true')
-          | Profile
-      li(class="{{(views.overview==true) && 'active'}}")
+      li(class="{{(views.overview==true) && 'active'}}",
+          style='display: none;')
         a(ng-click='setViewTo("overview")',
         data-toggle='tab')
           span.icomoon.icomoon-eye(aria-hidden='true')
@@ -456,7 +452,7 @@ br
                                 ng-click='connections.verify.initiate(number)',
                                 type='button') Verify
 
-            form
+            form(style='display: none;')
               p
                 textarea#output(class='span12', rows='20')
 
@@ -574,49 +570,9 @@ br
 
 
 
-      .tab-pane(ng-controller='profile',
-                class="{{(views.profile==true) && 'active'}}")
-        .tab-header
-          h2.pull-left {{ data.account.name }}
-        hr
-        .row-fluid
-          .span12(style='min-height: 462px;')
-            dl.well(style='margin-top:0; padding-bottom:10px;')
-              dt Purchased number
-              dd {{ data.account.purchasedNumber }}
-            hr
-            form.form-vertical(ng-submit='profile.edit()')
-              .control-group
-                label.control-label(for='name') Name
-                .controls
-                  input#name(type='text',
-                             ng-model='profile.data.name',
-                             value="{{data.account.name}}")
-              .control-group
-                label.control-label(for='email') Email
-                .controls
-                  input#email(type='text',
-                              ng-model='profile.data.email',
-                              value="{{data.account.email}}")
-              .control-group
-                label.control-label(for='address') Address
-                .controls
-                  input#address(type='text',
-                                ng-model='profile.data.address',
-                                value="{{data.account.address}}")
-              .control-group
-                label.control-label(for='phone') Phone
-                .controls
-                  input#phone(type='text',
-                              ng-model='profile.data.phone',
-                              value="{{data.account.phone}}")
-              .form-actions
-                button.btn.btn-primary(type='submit') Save
-
-
-
       .tab-pane(ng-controller='overview',
-                class="{{(views.overview==true) && 'active'}}")
+                class="{{(views.overview==true) && 'active'}}",
+                style='display: none;')
         .tab-header
           h2.pull-left Overview (Experimental)
         hr

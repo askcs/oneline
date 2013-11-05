@@ -1,6 +1,7 @@
 extends layout
 
 
+
 block navbar
   .navbar.navbar-inverse.navbar-fixed-top.ng-cloak(
     ng-hide='(location=="login" || location=="forgotpass" || location=="register")',
@@ -12,26 +13,141 @@ block navbar
           span.icon-bar
           span.icon-bar
           span.icon-bar
-        a.brand(href='#dashboard') {{config.profile.title}}
+        a.brand(href='#core') {{config.profile.title}}
         .nav-collapse.collapse
           ul.nav.pull-right(ng-hide='browser.mobile')
             li
-              a(ng-click='redirectToProfile()')
+              a(href='#credits')
+                i.icon-question-sign.icon-white
+                |  Credits: 10 EUR
+            li.dropdown
+              a.dropdown-toggle(href='#',
+                                data-toggle='dropdown')
                 i.icon-user.icon-white
                 |  {{app.resources.name}}
-            li
-              a(href='#logout')
-                i.icon-off.icon-white
-                |  Logout
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(data-toggle='modal',
+                    href='#modal-profile')
+                    i.icon-user
+                    |  Account Details
+                li
+                  a(data-toggle='modal',
+                    href='#modal-settings')
+                    i.icon-wrench
+                    |  Account Settings
+                li.divider
+                li
+                  a(href='#logout')
+                    i.icon-off
+                    |  Sign out
           ul.nav.pull-right(ng-show='browser.mobile')
             li
-              a(ng-click='redirectToProfile()')
+              a(data-toggle='modal',
+                href='#modal-profile')
                 i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-                span(ng-show='browser.portrait || browser.screen.width < 768') {{app.resources.name}}
+                span(ng-show='browser.portrait || browser.screen.width < 768') Account Details
+            li
+              a(data-toggle='modal',
+                href='#modal-settings')
+                i.icon-user.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
+                span(ng-show='browser.portrait || browser.screen.width < 768') Account Settings
             li
               a(href='#logout')
                 i.icon-off.icon-white(ng-hide='browser.portrait || browser.screen.width < 768')
-                span(ng-show='browser.portrait || browser.screen.width < 768') Logout
+                span(ng-show='browser.portrait || browser.screen.width < 768') Sign out
+
+
+
+block modal-profile
+  #modal-profile.modal.hide.fade(
+    ng-controller='profile',
+    tabindex='-1',
+    role='dialog',
+    aria-labelledby='modal-profile-label',
+    aria-hidden='true',
+    style='display: none;')
+    .modal-header
+      button.close(type='button',
+      data-dismiss='modal',
+      aria-hidden='true') ×
+      h3#modal-profile-label Account Details
+    .modal-body
+      div(ng-show='profileEdit',
+          ng-hide='!profileEditing')
+        form.form-vertical(ng-submit='profile.edit()')
+          .control-group
+            label.control-label(for='name') Name
+            .controls
+              input#name.span5(type='text',
+                          ng-model='profile.data.name',
+                          value="{{data.account.name}}")
+          .control-group
+            label.control-label(for='email') Email
+            .controls
+              input#email.span5(type='text',
+                          ng-model='profile.data.email',
+                          value="{{data.account.email}}")
+          .control-group
+            label.control-label(for='address') Address
+            .controls
+              input#address.span5(type='text',
+                            ng-model='profile.data.address',
+                            value="{{data.account.address}}")
+          .control-group
+            label.control-label(for='phone') Phone
+            .controls
+              input#phone.span3(type='text',
+                          ng-model='profile.data.phone',
+                          value="{{data.account.phone}}")
+      div(ng-hide='profileEdit',
+          ng-show='!profileEditing')
+        .alert(ng-show='profileEdited.status',
+                class="alert-{{(profileEdited.result) && 'success' || 'error'}}")
+          button.close(type='button',
+                        ng-click='profileEdited.status = false',
+                        data-dismiss='alert') ×
+          span(ng-show='profileEdited.result') Account details are changed successfully.
+          span(ng-hide='profileEdited.result') There was an error with changing account details.
+        dl
+          dt Oneline Number:
+            dd {{data.account.purchasedNumber}}
+          dt Name:
+            dd {{data.account.name}}
+          dt Email:
+            dd {{data.account.email}}
+          dt Address:
+            dd {{data.account.address}}
+          dt Phone:
+            dd {{data.account.phone}}
+    .modal-footer
+      button#modal-profile-btn-close.btn(ng-click='profileEdit=false',
+                                          ng-show='profileEdit') Cancel
+      button#modal-profile-btn-edit.btn.btn-primary(ng-click='profileEdit=true',
+                                                    ng-hide='profileEdit') Edit
+      button#modal-profile-btn-save.btn.btn-primary(ng-click='profile.edit();',
+                                                    ng-show='profileEdit') Save
+
+
+
+block modal-settings
+  #modal-settings.modal.hide.fade(tabindex='-1',
+                                  role='dialog',
+                                  aria-labelledby='modal-settings-label',
+                                  aria-hidden='true',
+                                  style='display: none;')
+    .modal-header
+      button.close(type='button',
+                   data-dismiss='modal',
+                   aria-hidden='true') ×
+      h3#modal-settings-label Account Settings
+    .modal-body
+      p
+        | Some account settings.
+    .modal-footer
+      button.btn(data-dismiss='modal') Cancel
+      button.btn.btn-primary Save
 
 
 
@@ -54,8 +170,6 @@ block mobile-status-bar
 
 block footer
   #footer.ng-cloak(ng-hide='browser.mobile || (location=="login" || location=="forgotpass" || location=="register")')
-    img(ng-src='images/footer_ribbon.png',
-        style='width: 175px; display: block; margin: -158px auto 0 auto;')
     .container-fluid
       #copyrights
         img(ng-src='images/ask_fast_logo.png',

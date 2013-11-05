@@ -9,7 +9,7 @@ define(
         '$rootScope', '$scope', '$location', 'Core',
         function ($rootScope, $scope, $location, Core)
         {
-          Core.factory.process();
+          // Core.factory.process();
 
           function setView(hash)
           {
@@ -40,9 +40,9 @@ define(
 
           if (!$location.hash())
           {
-            view = 'manager';
+            view = 'purchaser';
 
-            $location.hash('manager');
+            $location.hash('purchaser');
           }
           else
           {

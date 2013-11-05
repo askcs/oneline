@@ -497,18 +497,20 @@
    See the License for the specific language governing permissions and
    limitations under the License.
    */
-  function gc(xnumber, xcountry, xcarrier) {
+  function gc (xnumber, xcountry, xcarrier)
+  {
 
     var a = xnumber,
-      b = xcountry,
-      c = xcarrier,
-      d = new G;
+        b = xcountry,
+        c = xcarrier,
+        d = new G;
 
-    // console.log('GGG ->', d);
+    console.log('DDD ->', d);
 
-    try {
+    try
+    {
       var e = M.xa(),
-        f;
+          f;
 
       !ub(b) && (0 < a.length && "+" != a.charAt(0)) && i("Invalid country calling code");
 
@@ -625,9 +627,10 @@
 
 
   var Y = ["phoneNumberParser"],
-    Z = p;
+      Z = p;
 
   !(Y[0] in Z) && Z.execScript && Z.execScript("var " + Y[0]);
 
   for (var $; Y.length && ($ = Y.shift());)!Y.length && gc !== j ? Z[$] = gc : Z = Z[$] ? Z[$] : Z[$] = {};
+
 })();

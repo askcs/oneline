@@ -216,6 +216,8 @@ define(
                             {
                               self.progress('Groups loaded');
 
+                              Core.factory.process();
+
                               $location.path('/core');
 
                               setTimeout(function ()

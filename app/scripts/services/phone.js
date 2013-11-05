@@ -10,7 +10,11 @@ define(
         {
           function parse (number, country, carrier)
           {
-            return phoneNumberParser(number, country, carrier);
+            var result = phoneNumberParser(number, country, carrier);
+
+            console.log('result ->', result);
+
+            return result;
           }
 
           return {

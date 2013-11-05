@@ -6,18 +6,17 @@ define(
 
     controllers.controller('profile',
       [
-        '$rootScope', '$scope', 'Core', 'Storage',
-        function ($rootScope, $scope, Core, Storage)
+        '$rootScope', '$scope', '$location', 'Core', 'Storage',
+        function ($rootScope, $scope, $location, Core, Storage)
         {
           $rootScope.fixStyles();
 
           $scope.profile = {
 
-            data: $rootScope.data.account,
+            data: {},
 
-            edit: function ()
+            process: function (callback)
             {
-              $rootScope.statusBar.display('Verifying your number and code..');
 
               var payload = {};
 
@@ -96,8 +95,42 @@ define(
                   console.log('returned result ->', result);
 
                   Core.factory.process();
+
+                  callback();
                 });
+            },
+
+            edit: function ()
+            {
+              console.log('editing profile');
+
+              $rootScope.profileEditing = true;
+
+              $('#modal-profile-btn-save')
+                .text('Saving..')
+                .attr('disabled', 'disabled');
+
+              this.process(function ()
+              {
+                $('#modal-profile-btn-save')
+                  .text('Save')
+                  .removeAttr('disabled');
+
+                $rootScope.profileEditing = false;
+
+                $rootScope.profileEdited = {
+                  status: true,
+                  result: true
+                };
+
+                // $rootScope.$apply();
+              });
             }
+          };
+
+          if ($location.path() !== '/login')
+          {
+            $scope.profile.data = $rootScope.data.account;
           }
         }
       ]

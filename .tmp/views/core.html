@@ -7,8 +7,7 @@
       <li class="{{(views.notifier==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;notifier&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-oneline_notification_settings"></span>Notification settings</a></li>
       <li class="{{(views.reporter==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;reporter&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-oneline_missedcalls"></span>Call list</a></li>
       <li class="{{(views.guarder==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;guarder&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-oneline_blacklist"></span>Blacklist</a></li>
-      <li class="{{(views.profile==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;profile&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-user"></span>Profile</a></li>
-      <li class="{{(views.overview==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;overview&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-eye"></span>Overview</a></li>
+      <li style="display: none;" class="{{(views.overview==true) &amp;&amp; 'active'}}"><a ng-click="setViewTo(&quot;overview&quot;)" data-toggle="tab"><span aria-hidden="true" class="icomoon icomoon-eye"></span>Overview</a></li>
     </ul>
     <div class="tab-content">
       <div ng-controller="purchaser" class="tab-pane {{(views.purchaser==true) &amp;&amp; 'active'}}">
@@ -302,7 +301,7 @@
                 </tr>
               </tbody>
             </table>
-            <form>
+            <form style="display: none;">
               <p>
                 <textarea id="output" rows="20" class="span12"></textarea>
               </p>
@@ -422,51 +421,7 @@
           </div>
         </div>
       </div>
-      <div ng-controller="profile" class="tab-pane {{(views.profile==true) &amp;&amp; 'active'}}">
-        <div class="tab-header">
-          <h2 class="pull-left">{{ data.account.name }}</h2>
-        </div>
-        <hr/>
-        <div class="row-fluid">
-          <div style="min-height: 462px;" class="span12">
-            <dl style="margin-top:0; padding-bottom:10px;" class="well">
-              <dt>Purchased number</dt>
-              <dd>{{ data.account.purchasedNumber }}</dd>
-            </dl>
-            <hr/>
-            <form ng-submit="profile.edit()" class="form-vertical">
-              <div class="control-group">
-                <label for="name" class="control-label">Name</label>
-                <div class="controls">
-                  <input id="name" type="text" ng-model="profile.data.name" value="{{data.account.name}}"/>
-                </div>
-              </div>
-              <div class="control-group">
-                <label for="email" class="control-label">Email</label>
-                <div class="controls">
-                  <input id="email" type="text" ng-model="profile.data.email" value="{{data.account.email}}"/>
-                </div>
-              </div>
-              <div class="control-group">
-                <label for="address" class="control-label">Address</label>
-                <div class="controls">
-                  <input id="address" type="text" ng-model="profile.data.address" value="{{data.account.address}}"/>
-                </div>
-              </div>
-              <div class="control-group">
-                <label for="phone" class="control-label">Phone</label>
-                <div class="controls">
-                  <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}"/>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary">Save</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-      <div ng-controller="overview" class="tab-pane {{(views.overview==true) &amp;&amp; 'active'}}">
+      <div ng-controller="overview" style="display: none;" class="tab-pane {{(views.overview==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h2 class="pull-left">Overview (Experimental)</h2>
         </div>

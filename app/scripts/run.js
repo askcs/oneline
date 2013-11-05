@@ -87,6 +87,20 @@ define(
           }
 
 
+
+          if ($location.path() !== '/login')
+          {
+            Core.factory.process();
+          }
+
+
+          $rootScope.profileEdited = {
+            status: false,
+            result: false
+          };
+
+
+
           $rootScope.statusBar =
           {
             init: function ()
