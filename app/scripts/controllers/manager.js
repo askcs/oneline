@@ -11,7 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-
           $scope.phoneNumberParsed = {};
 
           $scope.phoneNumberParsed.result = false;
@@ -20,51 +19,93 @@ define(
           {
             if ($scope.connection.contactInfo.length > 0)
             {
-              var result,
-                  all;
-
-              result = all = Phone.parse($scope.connection.contactInfo, 'NL');
-
-              $scope.phoneNumberParsed.result = true;
-
-              if (result)
+              if (new RegExp('^\\+?[0-9]+$').test($scope.connection.contactInfo))
               {
-                if (result.error)
+                var result, all;
+
+                result = all = Phone.parse($scope.connection.contactInfo, 'NL');
+
+                $scope.phoneNumberParsed.result = true;
+
+                if (result)
                 {
-                  $scope.phoneNumberParsed = {
-                    result:   false,
-                    message:  'It seems not to be a phone number! Either it is too short or not a number!'
-                  };
-                }
-                else
-                {
-                  if (!result.validation.isPossibleNumber)
+                  var error = 'It seems not to be a phone number!',
+                      invalidCountry = 'Invalid country code. Please enter a number from Netherlands.',
+                      message;
+
+                  if (result.error)
                   {
                     $scope.phoneNumberParsed = {
-                      result:   false,
-                      message:  'It seems not to be a phone number! Either it is too short or not a number!'
+                      result:  false,
+                      message: error
                     };
                   }
                   else
                   {
-                    if (!result.validation.isValidNumber)
+                    if (!result.validation.isPossibleNumber)
                     {
+                      switch (result.validation.isPossibleNumberWithReason)
+                      {
+                      case 'INVALID_COUNTRY_CODE':
+                        message = invalidCountry;
+                        break;
+                      case 'TOO_SHORT':
+                        message = error + ' (Number is too short.)';
+                        break;
+                      case 'TOO_LONG':
+                        message = error + ' (Number is too long)';
+                        break;
+                      }
+
                       $scope.phoneNumberParsed = {
-                        result:   false,
-                        message:  'It does not seem to be a number!'
+                        result:  false,
+                        message: message
                       };
                     }
                     else
                     {
-                      $scope.phoneNumberParsed.result = true;
+                      if (!result.validation.isValidNumber)
+                      {
+                        $scope.phoneNumberParsed = {
+                          result:  false,
+                          message: error
+                        };
+                      }
+                      else
+                      {
+                        if (!result.validation.isValidNumberForRegion)
+                        {
+                          $scope.phoneNumberParsed = {
+                            result:  false,
+                            message: invalidCountry
+                          };
+                        }
+                        else
+                        {
+                          $scope.phoneNumberParsed = {
+                            result:  true,
+                            message: 'You have entered a correct number. Number is registered for ' +
+                              result.validation.phoneNumberRegion +
+                              ' and number type is ' +
+                              result.validation.getNumberType
+                          };
 
-                      $('#inputPhoneNumber').removeClass('error');
+                          $('#inputPhoneNumber').removeClass('error');
+                        }
+                      }
                     }
                   }
                 }
-              }
 
-              $scope.phoneNumberParsed.all = all;
+                $scope.phoneNumberParsed.all = all;
+              }
+              else
+              {
+                $scope.phoneNumberParsed = {
+                  result:  false,
+                  message: 'It does not seem like a number at all! Are you sure about that?'
+                };
+              }
             }
             else
             {

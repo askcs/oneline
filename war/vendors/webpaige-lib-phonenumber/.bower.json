@@ -1,6 +1,6 @@
 {
   "name": "webpaige-lib-phonenumber",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "homepage": "https://github.com/askcs/webpaige-lib-phonenumber",
   "authors": [
     "Cengizism <culusoy@ask-cs.com>"
@@ -15,14 +15,14 @@
   ],
   "license": "MIT",
   "private": true,
-  "_release": "1.0.1",
+  "_release": "1.1.1",
   "_resolution": {
     "type": "version",
-    "tag": "v1.0.1",
-    "commit": "621d3f3ff28bc4c50d33b43259285d9acfae53f3"
+    "tag": "v1.1.1",
+    "commit": "76410c7d93c4a93c6e092dbf74abb95fdf1ee36e"
   },
   "_source": "https://github.com/askcs/webpaige-lib-phonenumber.git",
-  "_target": "~1.0.1",
+  "_target": "~1.1.1",
   "_originalSource": "https://github.com/askcs/webpaige-lib-phonenumber.git",
   "_direct": true
 }

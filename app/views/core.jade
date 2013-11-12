@@ -402,6 +402,11 @@ br
                 small
                   i {{phoneNumberParsed.message}}
 
+              span.text-success(style='margin-left: 10px;'
+                              ng-show='phoneNumberParsed.result')
+                small
+                  i {{phoneNumberParsed.message}}
+
             h4 Numbers
             hr
             .alert(ng-show='verified.status',
@@ -461,7 +466,7 @@ br
                                 ng-click='connections.verify.initiate(number)',
                                 type='button') Verify
 
-            p {{phoneNumberParsed.all}}
+            // p {{phoneNumberParsed.all}}
 
 
 
