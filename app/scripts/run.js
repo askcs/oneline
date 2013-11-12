@@ -87,7 +87,7 @@ define(
           }
 
 
-
+          // if ($location.path() !== undefined || $location.path() !== '/login')
           if ($location.path() !== '/login')
           {
             Core.factory.process();

@@ -1,3 +1,4 @@
+/*jslint node: true */
 define(
   ['modals/modals', 'config'],
   function (modals, config)
@@ -477,7 +478,10 @@ define(
 
                   angular.forEach($rootScope.data.connected.group.contactInfoIds, function (node)
                   {
-                    if (node != connection.id) { connecteds.push(node); }
+                    if (node !== connection.id)
+                    {
+                      connecteds.push(node);
+                    }
                   });
 
                   angular.forEach(groups, function (group)
@@ -507,9 +511,9 @@ define(
 
                 Verification.initiate(
                   {
-                	  // alert(number.contactInfoTag.toUpperCase());
+                    // alert(number.contactInfoTag.toUpperCase());
                     //verificationMedium: (number.contactInfoTag.toString().toUpperCase() === 'EMAIL') ? 'EMAIL' : 'SMS',
-                	  verificationMedium: 'AUTO',
+                    verificationMedium: 'AUTO',
                     verificationInfo: {
                       address:  number.contactInfo
                     }
@@ -883,7 +887,7 @@ define(
 
               angular.forEach(filtered, function (node, index)
               {
-                if (node.contactInfoTag.toString().toUpperCase() != 'PHONE')
+                if (node.contactInfoTag.toString().toUpperCase() !== 'PHONE')
                 {
                   delete filtered[index];
                 }

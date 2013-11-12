@@ -6,14 +6,13 @@ define(
 
     services.factory('Phone',
       [
-        '$rootScope',
-        function ($rootScope)
+        function ()
         {
-          function parse (number, country, carrier)
+          function parse(number, country, carrier)
           {
-            var result = $rootScope.phoneNumberParsed = phoneNumberParser(number, country, carrier);
+            var result = phoneNumberParser(number, country, carrier);
 
-            console.log('result ->', result);
+            result.parsed = angular.fromJson(result.parsed);
 
             return result;
           }

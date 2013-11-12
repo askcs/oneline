@@ -4,32 +4,56 @@ define(
   {
     'use strict';
 
+//    /**
+//     * Translate phone number parser
+//     */
+//    filters.filter('translateParsedNumber',
+//      [
+//        function ()
+//        {
+//          return function (result)
+//          {
+//            if (result)
+//            {
+//              if (result.error)
+//              {
+//                return result.error;
+//              }
+//              else
+//              {
+//                return result;
+//              }
+//            }
+//          };
+//        }
+//      ]);
+
     /**
      * Translate package
      */
     filters.filter('translatePackage',
-    [
-      function ()
-      {
-        return function (selected)
+      [
+        function ()
         {
-          if (selected)
+          return function (selected)
           {
-            var gem;
-
-            angular.forEach(config.packages, function (pack)
+            if (selected)
             {
-              if (pack.id == selected)
-              {
-                gem = pack;
-              }
-            });
+              var gem;
 
-            return gem.label;
-          }
-        };
-      }
-    ]);
+              angular.forEach(config.packages, function (pack)
+              {
+                if (pack.id == selected)
+                {
+                  gem = pack;
+                }
+              });
+
+              return gem.label;
+            }
+          };
+        }
+      ]);
 
 
     /**

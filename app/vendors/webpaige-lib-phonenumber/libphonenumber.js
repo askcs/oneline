@@ -506,18 +506,10 @@ function cc(a,b){var c=a.r.toString();if(0<=c.substring(a.ba).search(a.ia)){var 
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-function phoneNumberParser (xnumber, xcountry, xcarrier)
+function phoneNumberParser (phone, country, carrier)
 {
-
-  if (!xcarrier)
-  {
-    xcarrier = 6;
-  }
-
-  var a = xnumber,
-      b = xcountry,
-      c = xcarrier,
-      d = new G;
+  if (!country) { country = 'NL'; }
+  if (!carrier) { carrier = 6; }
 
   var results = {};
 
@@ -527,44 +519,30 @@ function phoneNumberParser (xnumber, xcountry, xcarrier)
         f;
 
     // Throw exception with i()
-    !ub(b) && (0 < a.length && "+" != a.charAt(0)) && i("Invalid country calling code");
+    !ub(country) && (0 < phone.length && "+" != phone.charAt(0)) && i('Invalid country calling code');
 
-    f = Mb(e, a, b, k);
-
+    f = Mb(e, phone, country, k);
 
     // Parsing results
-    d.append("****Parsing Result:****\n");
-    var parsingResult = Aa((new Xa(1)).ca(f));
-    d.append(parsingResult);
-    results.parsed = parsingResult;
+    results.parsed = Aa((new Xa(1)).ca(f));
 
     // Validation results
-    d.append("\n\n****Validation Results:****");
     results.validation = {};
 
     // Check if its a number
-    var g = (0 == Ib(e, f));
-    d.append("\nResult from isPossibleNumber(): ");
-    d.append(g);
-    results.validation.isPossibleNumber = g;
+    var isPossibleNumber = results.validation.isPossibleNumber = (0 == Ib(e, f));
 
     // If it is a number
-    if (g)
+    if (isPossibleNumber)
     {
       var h = Db(e, f);
-      d.append("\nResult from isValidNumber(): ");
-      d.append(h);
+
       results.validation.isValidNumber = h;
 
-      h && (b && "ZZ" != b) && (d.append("\nResult from isValidNumberForRegion(): "), d.append(Hb(e, f, b)));
-      h && (b && "ZZ" != b) && (results.validation.isValidNumberForRegion = Hb(e, f, b));
+      h && (country && "ZZ" != country) && (results.validation.isValidNumberForRegion = Hb(e, f, country));
 
-      d.append("\nPhone Number region: ");
-      var region = Gb(e, f);
-      d.append(region);
-      results.validation.phoneNumberRegion = region;
+      results.validation.phoneNumberRegion = Gb(e, f);
 
-      d.append("\nResult from getNumberType(): ");
       var n,
           w = Gb(e, f),
           r = U(e, f.g(), w);
@@ -583,136 +561,49 @@ function phoneNumberParser (xnumber, xcountry, xcarrier)
 
       switch (n)
       {
-        case 0:
-          getNumberType = "FIXED_LINE";
-          break;
-        case 1:
-          getNumberType = "MOBILE";
-          break;
-        case 2:
-          getNumberType = "FIXED_LINE_OR_MOBILE";
-          break;
-        case 3:
-          getNumberType = "TOLL_FREE";
-          break;
-        case 4:
-          getNumberType = "PREMIUM_RATE";
-          break;
-        case 5:
-          getNumberType = "SHARED_COST";
-          break;
-        case 6:
-          getNumberType = "VOIP";
-          break;
-        case 7:
-          getNumberType = "PERSONAL_NUMBER";
-          break;
-        case 8:
-          getNumberType = "PAGER";
-          break;
-        case 9:
-          getNumberType = "UAN";
-          break;
-        case -1:
-          getNumberType = "UNKNOWN";
+        case 0: getNumberType = "FIXED_LINE";           break;
+        case 1: getNumberType = "MOBILE";               break;
+        case 2: getNumberType = "FIXED_LINE_OR_MOBILE"; break;
+        case 3: getNumberType = "TOLL_FREE";            break;
+        case 4: getNumberType = "PREMIUM_RATE";         break;
+        case 5: getNumberType = "SHARED_COST";          break;
+        case 6: getNumberType = "VOIP";                 break;
+        case 7: getNumberType = "PERSONAL_NUMBER";      break;
+        case 8: getNumberType = "PAGER";                break;
+        case 9: getNumberType = "UAN";                  break;
+        case -1: getNumberType = "UNKNOWN";
       }
-      d.append(getNumberType);
       results.validation.getNumberType = getNumberType;
     }
     // It is not a number
     else
     {
-      d.append("\nResult from isPossibleNumberWithReason(): ");
-
       var isPossibleNumberWithReason;
 
       switch (Ib(e, f))
       {
-        case rb.Ca:
-          isPossibleNumberWithReason = "INVALID_COUNTRY_CODE";
-          break;
-        case rb.Ea:
-          isPossibleNumberWithReason = "TOO_SHORT";
-          break;
-        case rb.Da:
-          isPossibleNumberWithReason = "TOO_LONG";
+        case rb.Ca: isPossibleNumberWithReason = "INVALID_COUNTRY_CODE";  break;
+        case rb.Ea: isPossibleNumberWithReason = "TOO_SHORT";             break;
+        case rb.Da: isPossibleNumberWithReason = "TOO_LONG";
       }
-      d.append(isPossibleNumberWithReason);
       results.validation.isPossibleNumberWithReason = isPossibleNumberWithReason;
 
-      var note = 'Note: numbers that are not possible have type UNKNOWN, an unknown region, and are considered invalid.';
-      d.append("\n" + note);
-      results.validation.isPossibleNumberWithReasonNote = note;
+      results.validation.isPossibleNumberWithReasonNote = 'Note: numbers that are not possible have type UNKNOWN, an unknown region, and are considered invalid.';
     }
 
-    d.append("\n\n****Formatting Results:**** ");
-    results.formatting = {};
+    results.formatting = {
+      e164:         h ? R(e, f, 0) : 'invalid',
+      original:     Bb(e, f, country),
+      national:     R(e, f, 2),
+      international:h ? R(e, f, 1) : 'invalid'
+    };
 
-    d.append("\nE164 format: ");
-    var e164 = h ? R(e, f, 0) : "invalid";
-    d.append(e164);
-    results.formatting.e164 = e164;
-
-
-    d.append("\nOriginal format: ");
-    var original = Bb(e, f, b);
-    d.append(original);
-    results.formatting.original = original;
-
-
-    d.append("\nNational format: ");
-    var national = R(e, f, 2);
-    d.append(national);
-    results.formatting.national = national;
-
-
-    d.append("\nInternational format: ");
-    var international = h ? R(e, f, 1) : "invalid";
-    d.append(international);
-    results.formatting.international = international;
-
-
-    // d.append("\nOut-of-country format from US: ");
-    // d.append(h ? yb(e, f, "US") : "invalid");
-
-
-    // d.append("\nOut-of-country format from Switzerland: ");
-    // d.append(h ? yb(e, f, "CH") : "invalid");
-
-
-    if (xcarrier.length > 0)
-    {
-      d.append("\nNational format with carrier code: ");
-      var nationalWithCarrier = xb(e, f, c);
-      d.append(nationalWithCarrier);
-      results.formatting.nationalWithCarrier = nationalWithCarrier;
-    }
-
-    /*
-    d.append("\n\n****AsYouTypeFormatter Results****");
-
-    for (var hc = new Nb(b), ic = a.length, b = 0; b < ic; ++b)
-    {
-      var zb = a.charAt(b);
-
-      d.append("\nChar entered: ");
-      d.append(zb);
-
-      d.append(" Output: ");
-      d.append(Wb(hc, zb))
-    }
-    */
-
+    if (carrier.length > 0) { results.formatting.nationalWithCarrier = xb(e, f, carrier); }
   }
   catch (jc)
   {
-    d.append("\n" + jc);
     results.error = jc;
   }
-
-  za("output").value = d.toString();
-
-  // console.log('MMM ->', m);
 
   return results;
 }

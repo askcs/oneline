@@ -11,41 +11,70 @@ define(
         {
           $rootScope.fixStyles();
 
-          var number = '0629143143';
-          var country = 'NL';
 
-          console.log('phonenumberparser ->', Phone.parse(number, country));
+          $scope.phoneNumberParsed = {};
 
+          $scope.phoneNumberParsed.result = false;
 
           $scope.checkNumber = function ()
           {
-            Phone.parse($scope.connection.contactInfo, 'NL');
-          };
+            if ($scope.connection.contactInfo.length > 0)
+            {
+              var result,
+                  all;
 
-          /*
-          Core.groups.update({
-           id:   $rootScope.data.connected.group.id,
-           list: []
-          });
-          */
-          /*
-          Core.settings.update({
-            id:   27004,
-            target: []
-          });
-          Core.settings.update({
-            id:   24003,
-            target: []
-          });
-          */
-          /*
-          Core.connections.remove({
-            id: 4785074604081152
-          });
-          Core.connections.remove({
-            id: 5642556234792960
-          });
-          */
+              result = all = Phone.parse($scope.connection.contactInfo, 'NL');
+
+              $scope.phoneNumberParsed.result = true;
+
+              if (result)
+              {
+                if (result.error)
+                {
+                  $scope.phoneNumberParsed = {
+                    result:   false,
+                    message:  'It seems not to be a phone number! Either it is too short or not a number!'
+                  };
+                }
+                else
+                {
+                  if (!result.validation.isPossibleNumber)
+                  {
+                    $scope.phoneNumberParsed = {
+                      result:   false,
+                      message:  'It seems not to be a phone number! Either it is too short or not a number!'
+                    };
+                  }
+                  else
+                  {
+                    if (!result.validation.isValidNumber)
+                    {
+                      $scope.phoneNumberParsed = {
+                        result:   false,
+                        message:  'It does not seem to be a number!'
+                      };
+                    }
+                    else
+                    {
+                      $scope.phoneNumberParsed.result = true;
+
+                      $('#inputPhoneNumber').removeClass('error');
+                    }
+                  }
+                }
+              }
+
+              $scope.phoneNumberParsed.all = all;
+            }
+            else
+            {
+              $scope.phoneNumberParsed.result = true;
+
+              delete $scope.phoneNumberParsed.message;
+
+              $('#inputPhoneNumber').removeClass('error');
+            }
+          };
 
 
           $scope.resetConnection = function ()
@@ -57,7 +86,9 @@ define(
             };
           };
 
+
           $scope.resetConnection();
+
 
           $scope.verified = {
             status: false,
@@ -65,6 +96,7 @@ define(
           };
 
           $scope.verifying = {};
+
           $scope.verificationCode = {};
 
           $scope.resetVerifiers = function ()
