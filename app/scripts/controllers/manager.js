@@ -19,8 +19,8 @@ define(
           {
             if ($scope.connection.contactInfo.length > 0)
             {
-              if (new RegExp('^\\+?[0-9]+$').test($scope.connection.contactInfo))
-              {
+//              if (new RegExp('^\\+?[/s]+?[(]+?[-]+?[0-9]+?[)]+?[-]+?[0-9]+$').test($scope.connection.contactInfo))
+//              {
                 var result, all;
 
                 result = all = Phone.parse($scope.connection.contactInfo, 'NL');
@@ -98,14 +98,14 @@ define(
                 }
 
                 $scope.phoneNumberParsed.all = all;
-              }
-              else
-              {
-                $scope.phoneNumberParsed = {
-                  result:  false,
-                  message: 'It does not seem like a number at all! Are you sure about that?'
-                };
-              }
+//              }
+//              else
+//              {
+//                $scope.phoneNumberParsed = {
+//                  result:  false,
+//                  message: 'It does not seem like a number at all! Are you sure about that?'
+//                };
+//              }
             }
             else
             {
