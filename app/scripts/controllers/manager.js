@@ -11,6 +11,56 @@ define(
         {
           $rootScope.fixStyles();
 
+
+          $scope.list = ["one", "two", 'three'];
+
+
+
+
+
+          $('#secondtry').sortable({items: 'li',
+            update: function (event, ui)
+            {
+              //Convert the ordered list into an array
+              var new_order = $('ol').sortable('toArray');
+
+              console.log('new order ->', new_order);
+
+              //Loop through the array and assign the input
+              //that matches the li id the new position value
+              $.each(new_order, function (i, element)
+              {
+                $('input[name='+element+']').attr('value', i+1);
+
+                console.log('i - element ->', i, element);
+              });
+
+              console.log('new order ->', new_order);
+            }
+          });
+
+
+          $('#firsttry').sortable({
+            items: 'tbody tr',
+            update: function (event, ui)
+            {
+              console.log('new list ->', $('#firsttry').sortable('toArray'));
+
+              $.each($('#firsttry tbody tr'), function (i, element)
+              {
+                console.log('i - element ->', i, element);
+
+//                $.each($('#firsttry tbody tr td'), function (i2, element2)
+//                {
+//                  console.log('i2 - element 2 ->', i, i2, element, element2);
+//                });
+
+              });
+            }
+          });
+
+
+
           $scope.phoneNumberParsed = {};
 
           $scope.phoneNumberParsed.result = false;

@@ -3317,3 +3317,17 @@ path.link {
   stroke: #ccc;
   stroke-width: 1.5px;
 }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Develop\/Ask\/Git\/oneline\/app\/styles\/app\.scss}line{font-family:\0000339}}
+.item, .placeholder {
+  padding: 2px;
+  width: 50px;
+  height: 20px;
+  border: 1px solid #333;
+  background: #EEE;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Develop\/Ask\/Git\/oneline\/app\/styles\/app\.scss}line{font-family:\0000346}}
+.placeholder {
+  background: #AEF;
+}

@@ -61,6 +61,7 @@ block navbar
 
 
 block modal-profile
+
   #modal-profile.modal(
     ng-controller='profile',
     tabindex='-1',
@@ -68,18 +69,26 @@ block modal-profile
     aria-labelledby='modal-profile-label',
     aria-hidden='true',
     style='display: none;')
+
     .modal-header
       button.close(type='button',
       data-dismiss='modal',
       aria-hidden='true') ×
       h3#modal-profile-label Account Details
+
     .modal-body
+
       div(ng-show='profileEdit',
           ng-hide='!profileEditing')
+
         form.form-vertical(ng-submit='profile.edit()')
+
+          // p {{data.account}}
+
           p.muted
             small
               i Fields with * are compulsory to fill it in.
+
           .control-group
             label.control-label(for='name') Name *
             .controls
@@ -91,6 +100,7 @@ block modal-profile
               p.text-error(ng-show='!profile.data.name')
                 small
                   i Please fill your name
+
           .control-group
             label.control-label(for='email') Email *
             .controls
@@ -102,12 +112,14 @@ block modal-profile
               p.text-error(ng-show='!profile.data.email')
                 small
                   i Please fill your address
+
           .control-group
             label.control-label(for='address') Address
             .controls
               input#address.span5(type='text',
                             ng-model='profile.data.address',
                             value="{{data.account.address}}")
+
           .control-group
             label.control-label(for='phone') Phone *
             .controls
@@ -119,6 +131,7 @@ block modal-profile
               p.text-error(ng-show='!profile.data.phone')
                 small
                   i Please fill your phone
+
       div(ng-hide='profileEdit',
           ng-show='!profileEditing')
         .alert(ng-show='profileEdited.status',
@@ -139,6 +152,7 @@ block modal-profile
             dd {{data.account.address}}
           dt Phone:
             dd {{data.account.phone}}
+
     .modal-footer
       button#modal-profile-btn-close.btn(ng-click='profileEdit=false',
                                           ng-show='profileEdit') Cancel

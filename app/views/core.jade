@@ -4,6 +4,8 @@ br
   .tabbable.tabs-left
 
 
+
+
     ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
       li(class="{{(views.purchaser==true) && 'active'}}")
         a(ng-click='resetPurchaser(); setViewTo("purchaser")',
@@ -38,7 +40,11 @@ br
           | Overview
 
 
+
+
     .tab-content
+
+
 
 
       .tab-pane(ng-controller='purchaser',
@@ -374,6 +380,8 @@ br
 
 
 
+
+
       .tab-pane(ng-controller='manager',
                 class="{{(views.manager==true) && 'active'}}")
         .tab-header
@@ -468,6 +476,20 @@ br
 
             // p {{phoneNumberParsed.all}}
 
+            table#firsttry.table.table-bordered(style='width: auto;')
+              thead
+                tr
+                  th Index
+                  th Count
+              tbody(ng-model='list')
+                tr.item(ng-repeat='item in list',
+                        style='cursor: move;')
+                  td {{$index}}
+                  td
+                    | {{item}}
+
+
+      // button test
 
 
       .tab-pane(ng-controller='notifier',
@@ -508,6 +530,8 @@ br
 
 
 
+
+
       .tab-pane(ng-controller='reporter',
                 class="{{(views.reporter==true) && 'active'}}")
         .tab-header
@@ -541,6 +565,8 @@ br
                     button.btn(type='button',
                                 ng-click='logs.allow(log)',
                                 ng-show='log.blocked') Allow
+
+
 
 
 
@@ -579,6 +605,8 @@ br
                   td
                     button.btn(ng-click='blacklists.allow(number)',
                                type='button') Allow
+
+
 
 
 

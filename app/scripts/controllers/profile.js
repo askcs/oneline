@@ -41,7 +41,7 @@ define(
                 }
               };
 
-              /*
+
               angular.forEach(angular.fromJson(Storage.get('connections')), function (connection)
               {
                 if (connection.groupKeys[0] === $rootScope.data.contact.group.id)
@@ -49,25 +49,21 @@ define(
                   switch (connection.contactInfoTag.toString().toUpperCase())
                   {
                   case 'NAME':
-                    connection.contactInfo = $scope.profile.data.name;
-                    payload.name = connection;
+                    payload.name.id = connection.id;
                     break;
                   case 'EMAIL':
-                    connection.contactInfo = $scope.profile.data.email;
-                    payload.email = connection;
+                    payload.email.id = connection.id;
                     break;
                   case 'ADDRESS':
-                    connection.contactInfo = $scope.profile.data.address;
-                    payload.address = connection;
+                    payload.address.id = connection.id;
                     break;
                   case 'PHONE':
-                    connection.contactInfo = $scope.profile.data.phone;
-                    payload.phone = connection;
+                    payload.phone.id = connection.id;
                     break;
                   }
                 }
               });
-              */
+
 
               var arrayyed = [];
 

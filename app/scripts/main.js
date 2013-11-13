@@ -13,7 +13,8 @@ require.config(
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
       d3:                 '../vendors/d3/d3.min',
-      libPhoneNumber:     '../vendors/webpaige-lib-phonenumber/libphonenumber'
+      libPhoneNumber:     '../vendors/webpaige-lib-phonenumber/libphonenumber',
+      'jquery-ui':        '../vendors/jquery-ui/ui/minified/jquery-ui.min'
     },
     shim:
     {
@@ -38,6 +39,10 @@ require.config(
       libPhoneNumber:
       {
         exports:  'libPhoneNumber'
+      },
+      'jquery-ui':
+      {
+        deps:     ['jquery']
       }
     }
   }

@@ -8,7 +8,8 @@ define(
     'services/services',
     'filters/filters',
     'directives/directives',
-    'angular-resource'
+    'angular-resource',
+    'jquery-ui'
   ],
   function (angular)
   {

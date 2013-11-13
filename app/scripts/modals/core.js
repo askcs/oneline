@@ -430,28 +430,79 @@ define(
 
                   console.log('connections before ->', connections);
 
-                  angular.forEach(connections, function (node)
-                  {
-                    angular.forEach(results, function (result)
-                    {
-                      if (node.id === result.id)
-                      {
-                        node.contactInfo    = result.contactInfo;
-                        node.contactInfoTag = result.contactInfoTag;
-                        if (result.label)
-                        {
-                          node.label = result.label;
-                        }
-                        node.groupKeys      = [$rootScope.data.connected.group.id];
-                      }
-                    });
+                  var returned = {};
 
-                    processed.push(node);
+                  angular.forEach(results, function (result)
+                  {
+                    var node = {
+                      id: result.id,
+                      contactInfo: result.contactInfo
+                    };
+
+                    switch (result.contactInfoTag.toString().toUpperCase())
+                    {
+                      case 'NAME':
+                        returned.name = node;
+                        break;
+                      case 'EMAIL':
+                        returned.email = node;
+                        break;
+                      case 'ADDRESS':
+                        returned.address = node;
+                        break;
+                      case 'PHONE':
+                        returned.phone = node;
+                        break;
+                    }
                   });
 
-                  console.log('connections after ->', processed);
+                  angular.forEach(connections, function (connection)
+                  {
+                    if (connection.groupKeys[0] === $rootScope.data.contact.group.id)
+                    {
+                      switch (connection.contactInfoTag.toString().toUpperCase())
+                      {
+                        case 'NAME':
+                          connection.contactInfo = returned.name.contactInfo;
+                          break;
+                        case 'EMAIL':
+                          connection.contactInfo = returned.email.contactInfo;
+                          break;
+                        case 'ADDRESS':
+                          connection.contactInfo = returned.address.contactInfo;
+                          break;
+                        case 'PHONE':
+                          connection.contactInfo = returned.phone.contactInfo;
+                          break;
+                      }
+                    }
+                  });
 
-                  Storage.add('connections', angular.toJson(processed));
+
+//                  angular.forEach(connections, function (node)
+//                  {
+//                    angular.forEach(results, function (result)
+//                    {
+//                      if (node.id === result.id)
+//                      {
+//                        node.contactInfo    = result.contactInfo;
+//                        node.contactInfoTag = result.contactInfoTag;
+//
+//                        if (result.label)
+//                        {
+//                          node.label = result.label;
+//                        }
+//
+//                        node.groupKeys      = [$rootScope.data.connected.group.id];
+//                      }
+//                    });
+//
+//                    processed.push(node);
+//                  });
+
+//                  console.log('connections after ->', processed);
+
+                  Storage.add('connections', angular.toJson(connections));
 
                   deferred.resolve(results);
                 },

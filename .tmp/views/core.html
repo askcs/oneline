@@ -304,9 +304,24 @@
               </tbody>
             </table>
             <!-- p {{phoneNumberParsed.all}}-->
+            <table id="firsttry" style="width: auto;" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Index</th>
+                  <th>Count</th>
+                </tr>
+              </thead>
+              <tbody ng-model="list">
+                <tr ng-repeat="item in list" style="cursor: move;" class="item">
+                  <td>{{$index}}</td>
+                  <td>{{item}}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
+      <!-- button test-->
       <div ng-controller="notifier" class="tab-pane {{(views.notifier==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h2 class="pull-left">Missed Call Notifications</h2>
