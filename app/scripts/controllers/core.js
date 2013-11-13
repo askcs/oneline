@@ -9,8 +9,6 @@ define(
         '$rootScope', '$scope', '$location', 'Core',
         function ($rootScope, $scope, $location, Core)
         {
-          // Core.factory.process();
-
           function setView(hash)
           {
             $scope.views = {

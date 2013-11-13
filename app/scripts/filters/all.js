@@ -4,30 +4,6 @@ define(
   {
     'use strict';
 
-//    /**
-//     * Translate phone number parser
-//     */
-//    filters.filter('translateParsedNumber',
-//      [
-//        function ()
-//        {
-//          return function (result)
-//          {
-//            if (result)
-//            {
-//              if (result.error)
-//              {
-//                return result.error;
-//              }
-//              else
-//              {
-//                return result;
-//              }
-//            }
-//          };
-//        }
-//      ]);
-
     /**
      * Translate package
      */

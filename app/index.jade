@@ -61,13 +61,13 @@ block navbar
 
 
 block modal-profile
-  #modal-profile.modal.hide.fade(
+  #modal-profile.modal(
     ng-controller='profile',
     tabindex='-1',
     role='dialog',
     aria-labelledby='modal-profile-label',
     aria-hidden='true',
-    style='display: none;')
+    style='display: block;')
     .modal-header
       button.close(type='button',
       data-dismiss='modal',
@@ -77,18 +77,31 @@ block modal-profile
       div(ng-show='profileEdit',
           ng-hide='!profileEditing')
         form.form-vertical(ng-submit='profile.edit()')
+          p.muted
+            small
+              i Fields with * are compulsory to fill it in.
           .control-group
-            label.control-label(for='name') Name
+            label.control-label(for='name') Name *
             .controls
               input#name.span5(type='text',
                           ng-model='profile.data.name',
-                          value="{{data.account.name}}")
+                          value="{{data.account.name}}",
+                          ng-change='profile.validate()',
+                          required)
+              p.text-error(ng-show='!profile.data.name')
+                small
+                  i Please fill your name
           .control-group
-            label.control-label(for='email') Email
+            label.control-label(for='email') Email *
             .controls
               input#email.span5(type='text',
                           ng-model='profile.data.email',
-                          value="{{data.account.email}}")
+                          value="{{data.account.email}}",
+                          ng-change='profile.validate()',
+                          required)
+              p.text-error(ng-show='!profile.data.email')
+                small
+                  i Please fill your address
           .control-group
             label.control-label(for='address') Address
             .controls
@@ -96,11 +109,16 @@ block modal-profile
                             ng-model='profile.data.address',
                             value="{{data.account.address}}")
           .control-group
-            label.control-label(for='phone') Phone
+            label.control-label(for='phone') Phone *
             .controls
               input#phone.span3(type='text',
                           ng-model='profile.data.phone',
-                          value="{{data.account.phone}}")
+                          value="{{data.account.phone}}",
+                          ng-change='profile.validate()',
+                          required)
+              p.text-error(ng-show='!profile.data.phone')
+                small
+                  i Please fill your phone
       div(ng-hide='profileEdit',
           ng-show='!profileEditing')
         .alert(ng-show='profileEdited.status',
