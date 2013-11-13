@@ -19,7 +19,7 @@
     <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="styles/5b8108c6.bootstrap.css">
     <link rel="stylesheet" href="styles/39277953.responsive.css">
-    <link rel="stylesheet" href="styles/80025d59.app.css">
+    <link rel="stylesheet" href="styles/2fbbdec4.app.css">
   </head>
   <body>
     <!--[if lt IE 7]>
@@ -63,7 +63,7 @@
       </div>
       <div id="push"></div>
     </div>
-    <div id="modal-profile" ng-controller="profile" tabindex="-1" role="dialog" aria-labelledby="modal-profile-label" aria-hidden="true" style="display: none" class="modal hide fade">
+    <div id="modal-profile" ng-controller="profile" tabindex="-1" role="dialog" aria-labelledby="modal-profile-label" aria-hidden="true" style="display: none" class="modal">
       <div class="modal-header">
         <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
         <h3 id="modal-profile-label">Account Details</h3>
@@ -71,16 +71,20 @@
       <div class="modal-body">
         <div ng-show="profileEdit" ng-hide="!profileEditing">
           <form ng-submit="profile.edit()" class="form-vertical">
+            <!-- p {{data.account}}-->
+            <p class="muted"><small><i>Fields with * are compulsory to fill it in.</i></small></p>
             <div class="control-group">
-              <label for="name" class="control-label">Name</label>
+              <label for="name" class="control-label">Name *</label>
               <div class="controls">
-                <input id="name" type="text" ng-model="profile.data.name" value="{{data.account.name}}" class="span5">
+                <input id="name" type="text" ng-model="profile.data.name" value="{{data.account.name}}" ng-change="profile.validate()" required="" class="span5">
+                <p ng-show="!profile.data.name" class="text-error"><small><i>Please fill your name</i></small></p>
               </div>
             </div>
             <div class="control-group">
-              <label for="email" class="control-label">Email</label>
+              <label for="email" class="control-label">Email *</label>
               <div class="controls">
-                <input id="email" type="text" ng-model="profile.data.email" value="{{data.account.email}}" class="span5">
+                <input id="email" type="text" ng-model="profile.data.email" value="{{data.account.email}}" ng-change="profile.validate()" required="" class="span5">
+                <p ng-show="!profile.data.email" class="text-error"><small><i>Please fill your address</i></small></p>
               </div>
             </div>
             <div class="control-group">
@@ -90,9 +94,10 @@
               </div>
             </div>
             <div class="control-group">
-              <label for="phone" class="control-label">Phone</label>
+              <label for="phone" class="control-label">Phone *</label>
               <div class="controls">
-                <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}" class="span3">
+                <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}" ng-change="profile.validate()" required="" class="span3">
+                <p ng-show="!profile.data.phone" class="text-error"><small><i>Please fill your phone</i></small></p>
               </div>
             </div>
           </form>
@@ -146,6 +151,6 @@
         <p ng-show="loading.status" class="muted"><img src="images/fba8e680.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
       </div>
     </div>
-    <script data-main="scripts/8e6f980b.main" src="vendors/requirejs/require.js"></script>
+    <script data-main="scripts/2533f421.main" src="vendors/requirejs/require.js"></script>
   </body>
 </html>
