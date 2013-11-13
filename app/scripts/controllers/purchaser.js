@@ -63,7 +63,7 @@ define(
           }, true);
 
 
-          $scope.resetPurchaser = function ()
+          $rootScope.resetPurchaser = function ()
           {
             $scope.order = {
               package:  null,

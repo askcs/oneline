@@ -78,7 +78,6 @@ define(
 
               console.log('arrayed ->', arrayyed);
 
-              /*
               Core.connections.profiler(arrayyed)
                 .then(function (result)
                 {
@@ -88,11 +87,12 @@ define(
 
                   callback();
                 });
-              */
             },
 
             validate: function ()
             {
+              var result;
+
               if ($scope.profile.data.name  === undefined ||
                   $scope.profile.data.email === undefined ||
                   $scope.profile.data.phone === undefined)
@@ -100,35 +100,23 @@ define(
                 $('#modal-profile-btn-save')
                   .attr('disabled', 'disabled');
 
-                return false;
+                result = false;
               }
               else
               {
                 $('#modal-profile-btn-save')
                   .removeAttr('disabled');
 
-                return true;
+                result = true;
               }
+
+              return result;
             },
 
             edit: function ()
             {
-              console.log('$scope.profile.data.name ->', $scope.profile.data.name);
-              console.log('$scope.profile.data.email ->', $scope.profile.data.email);
-              console.log('$scope.profile.data.phone ->', $scope.profile.data.phone);
-
-              var validation = this.validate();
-
-              console.log('validation ->', validation);
-
-              if (!validation)
+              if (this.validate())
               {
-                console.log('Validation failed!');
-              }
-              else
-              {
-                console.log('editing profile');
-
                 $rootScope.profileEditing = true;
 
                 $('#modal-profile-btn-save')

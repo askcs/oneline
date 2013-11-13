@@ -43,11 +43,11 @@ define(
 
 
           var Profile = $resource(
-            config.host + '/accounts/contactinfos/',
+            config.host + '/accounts/contactinfos/owner',
             {},
             {
               save: {
-                method: 'PUT',
+                method: 'POST',
                 params: {},
                 isArray: true
               }
@@ -100,7 +100,7 @@ define(
           );
 
 
-          var Groups = $resource(
+          var GroupsOriginal = $resource(
             config.host + '/accounts/groups/:id',
             {},
             {
@@ -116,6 +116,19 @@ define(
               update: {
                 method: 'PUT',
                 params: {id: ''}
+              }
+            }
+          );
+
+
+          var Groups = $resource(
+            config.host + '/scenario/oneline/groups/',
+            {},
+            {
+              list: {
+                method: 'POST',
+                params: {},
+                isArray: true
               }
             }
           );
@@ -564,7 +577,8 @@ define(
             {
               var deferred = $q.defer();
 
-              Groups.query(
+              Groups.list(
+                {},
                 function (result)
                 {
                   Storage.add('groups', angular.toJson(result));

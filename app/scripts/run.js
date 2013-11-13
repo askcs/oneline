@@ -17,6 +17,11 @@ define(
           };
 
 
+
+          console.table('contactInfos ->', angular.fromJson(Storage.get('connections')));
+
+
+
           // TODO: Move these checks to jquery.browser
           /*
           $rootScope.browser = $.browser;
