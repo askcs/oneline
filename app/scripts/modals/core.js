@@ -327,6 +327,7 @@ define(
               var deferred = $q.defer();
 
               var payload = {
+                // contactKey:     $rootScope.data.grou
                 contactInfo:    connection.contactInfo,
                 contactInfoTag: connection.contactInfoTag,
                 label:          connection.label,
