@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"></html>
+<![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"></html>
+<![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"></html>
+<![endif]-->
+<!-- [if gt IE 8] <!-->
+<html lang="en" class="no-js">
+  <!-- <![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Oneline</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="styles/5b8108c6.bootstrap.css">
+    <link rel="stylesheet" href="styles/39277953.responsive.css">
+    <link rel="stylesheet" href="styles/2fbbdec4.app.css">
+  </head>
+  <body>
+    <!--[if lt IE 7]>
+    <p class="chromeframe">You are using an outdated browser.<a href="http://browsehappy.com/">Upgrade your browser today</a>or<a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a>to better experience this site.</p>
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="vendors/es5-shim/es5-shim.js"></script>
+    <script src="vendors/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <div ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" bs-navbar="bs-navbar" class="navbar navbar-inverse navbar-fixed-top ng-cloak">
+      <div class="navbar-inner">
+        <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#core" class="brand">{{config.profile.title}}</a>
+          <div class="nav-collapse collapse">
+            <ul ng-hide="browser.mobile" class="nav pull-right">
+              <li><a href="#credits"><i class="icon-question-sign icon-white"></i> Credits: 10 EUR</a></li>
+              <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i> {{app.resources.name}}<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                  <li><a data-toggle="modal" href="#modal-profile"><i class="icon-user"></i> Account Details</a></li>
+                  <li><a data-toggle="modal" href="#modal-settings"><i class="icon-wrench"></i> Account Settings</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#logout"><i class="icon-off"></i> Sign out</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul ng-show="browser.mobile" class="nav pull-right">
+              <li><a data-toggle="modal" href="#modal-profile"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-user icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Account Details</span></a></li>
+              <li><a data-toggle="modal" href="#modal-settings"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-user icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Account Settings</span></a></li>
+              <li><a href="#logout"><i ng-hide="browser.portrait || browser.screen.width &lt; 768" class="icon-off icon-white"></i><span ng-show="browser.portrait || browser.screen.width &lt; 768">Sign out</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="notification" ng-show="notification.status" class="alert ng-cloak">
+      <button type="button" ng-click="notification.status = false" class="close">×</button>{{notification.message}}
+    </div>
+    <div id="wrap">
+      <div class="container-fluid">
+        <div ng-view="ng-view"></div>
+        <div id="tab-shadow" style="margin-left: 154px" ng-hide="(location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot; || location==&quot;logout&quot;)"><img ng-src="images/0eed65c0.content_canvas_shadow.png"></div>
+      </div>
+      <div id="push"></div>
+    </div>
+    <div id="modal-profile" ng-controller="profile" tabindex="-1" role="dialog" aria-labelledby="modal-profile-label" aria-hidden="true" style="display: none" class="modal">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+        <h3 id="modal-profile-label">Account Details</h3>
+      </div>
+      <div class="modal-body">
+        <div ng-show="profileEdit" ng-hide="!profileEditing">
+          <form ng-submit="profile.edit()" class="form-vertical">
+            <!-- p {{data.account}}-->
+            <p class="muted"><small><i>Fields with * are compulsory to fill it in.</i></small></p>
+            <div class="control-group">
+              <label for="name" class="control-label">Name *</label>
+              <div class="controls">
+                <input id="name" type="text" ng-model="profile.data.name" value="{{data.account.name}}" ng-change="profile.validate()" required="" class="span5">
+                <p ng-show="!profile.data.name" class="text-error"><small><i>Please fill your name</i></small></p>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="email" class="control-label">Email *</label>
+              <div class="controls">
+                <input id="email" type="text" ng-model="profile.data.email" value="{{data.account.email}}" ng-change="profile.validate()" required="" class="span5">
+                <p ng-show="!profile.data.email" class="text-error"><small><i>Please fill your address</i></small></p>
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="address" class="control-label">Address</label>
+              <div class="controls">
+                <input id="address" type="text" ng-model="profile.data.address" value="{{data.account.address}}" class="span5">
+              </div>
+            </div>
+            <div class="control-group">
+              <label for="phone" class="control-label">Phone *</label>
+              <div class="controls">
+                <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}" ng-change="profile.validate()" required="" class="span3">
+                <p ng-show="!profile.data.phone" class="text-error"><small><i>Please fill your phone</i></small></p>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div ng-hide="profileEdit" ng-show="!profileEditing">
+          <div ng-show="profileEdited.status" class="alert alert-{{(profileEdited.result) &amp;&amp; 'success' || 'error'}}">
+            <button type="button" ng-click="profileEdited.status = false" data-dismiss="alert" class="close">×</button><span ng-show="profileEdited.result">Account details are changed successfully.</span><span ng-hide="profileEdited.result">There was an error with changing account details.</span>
+          </div>
+          <dl>
+            <dt>Oneline Number:
+              <dd>{{data.account.purchasedNumber}}</dd>
+            </dt>
+            <dt>Name:
+              <dd>{{data.account.name}}</dd>
+            </dt>
+            <dt>Email:
+              <dd>{{data.account.email}}</dd>
+            </dt>
+            <dt>Address:
+              <dd>{{data.account.address}}</dd>
+            </dt>
+            <dt>Phone:
+              <dd>{{data.account.phone}}</dd>
+            </dt>
+          </dl>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modal-profile-btn-close" ng-click="profileEdit=false" ng-show="profileEdit" class="btn">Cancel</button>
+        <button id="modal-profile-btn-edit" ng-click="profileEdit=true" ng-hide="profileEdit" class="btn btn-primary">Edit</button>
+        <button id="modal-profile-btn-save" ng-click="profile.edit();" ng-show="profileEdit" class="btn btn-primary">Save</button>
+      </div>
+    </div>
+    <div id="modal-settings" tabindex="-1" role="dialog" aria-labelledby="modal-settings-label" aria-hidden="true" style="display: none" class="modal hide fade">
+      <div class="modal-header">
+        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">×</button>
+        <h3 id="modal-settings-label">Account Settings</h3>
+      </div>
+      <div class="modal-body">
+        <p>Some account settings.</p>
+      </div>
+      <div class="modal-footer">
+        <button data-dismiss="modal" class="btn">Cancel</button>
+        <button class="btn btn-primary">Save</button>
+      </div>
+    </div>
+    <div id="mobile-status-bar" ng-show="loading.status &amp;&amp; browser.mobile" class="ng-cloak"><img src="images/fba8e680.ajax-loader.gif"><small>{{loading.message}}</small></div>
+    <div id="footer" ng-hide="browser.mobile || (location==&quot;login&quot; || location==&quot;forgotpass&quot; || location==&quot;register&quot;)" class="ng-cloak">
+      <div class="container-fluid">
+        <div id="copyrights"><img ng-src="images/dc5fab6e.ask_fast_logo.png" style="margin-top: 5px"></div>
+        <p ng-show="loading.status" class="muted"><img src="images/fba8e680.ajax-loader.gif"><small><span ng-show="app.preloader.status">{{app.preloader.count}}%</span>{{loading.message}}</small></p>
+      </div>
+    </div>
+    <script data-main="scripts/2533f421.main" src="vendors/requirejs/require.js"></script>
+  </body>
+</html>

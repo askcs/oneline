@@ -1,0 +1,28 @@
+#welcome
+
+  #login.boxed
+    form
+
+      img(ng-src='images/oneline_logo_big.png')
+
+      h4.form-signin-heading Forget your password?
+
+      p(style='font-size: 12px; margin-bottom: 25px;')
+        | Please provide your mobile number that you used when you signed up to Oneline. We will send you an SMS to share your temporary password.
+
+      .alert(ng-show='alert.login.display',
+              class="{{alert.login.type}}")
+        button.close(type='button',
+                      ng-click='alert.login=false') ×
+        | {{alert.login.message}}
+
+      input(type='text',
+            ng-model='logindata.username',
+            placeholder='Mobile number',
+            autofocus='autofocus')
+      button.btn.btn-large.btn-primary(type='submit') Reset password
+      p
+        small
+          a(href='#login') Login
+
+      span.version v{{config.version}}

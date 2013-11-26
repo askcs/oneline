@@ -1,0 +1,982 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	background:#fff;
+}
+@font-face {
+font-family:jabjai_import;
+src:url(../fonts/jabjai.ttf);
+}
+@font-face {
+font-family:FlaemischeKanzleischrift_import;
+src:url(../fonts/FlaemischeKanzleischrift.ttf);
+}
+.fr {
+	float:right !important;
+}
+
+a:hover{text-decoration:none;}
+
+
+.onelinebox img {
+    margin-top: 7%;
+}
+
+.selectsec.fl {
+    width: 60%;
+}
+
+
+
+.loginbox {
+    background: none repeat scroll 0 0 #65629B;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 55px;
+    left: 63%;
+    position: absolute;
+    text-align: center;
+    top: 9%;
+    width: 176px;
+}
+.loginbox:hover{
+    background: none repeat scroll 0 0 #000;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 55px;
+    left: 63%;
+    position: absolute;
+    text-align: center;
+    top: 9%;
+    width: 176px;
+}
+
+.loginbox > a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 24px;
+    line-height: 56px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+
+
+.registernowwbox {
+    background: none repeat scroll 0 0 #E21980;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 55px;
+    left: 85%;
+    position: absolute;
+    text-align: center;
+    top: 9%;
+    width: 208px;
+}
+.registernowwbox:hover{
+    background: none repeat scroll 0 0 #000;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 55px;
+    left: 85%;
+    position: absolute;
+    text-align: center;
+    top: 9%;
+    width: 208px;
+}
+.registernowwbox > a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 24px;
+    line-height: 57px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+
+
+
+
+
+
+.cloud {
+    color: #E42286;
+    font-family: jabjai_import;
+    font-size: 30px;
+    left: 45%;
+    line-height: 31px;
+    position: absolute;
+    top: 4.5%;
+}
+
+.meassages {
+    color: #FFFFFF;
+    font-family: jabjai_import;
+    font-size: 18px;
+    left: 35%;
+    position: absolute;
+    text-shadow: 3px 0 4px #000000;
+    top: 9%;
+}
+
+.fl {
+	float:left !important;
+}
+.leftwidth {
+	width:20%
+}
+.topmenu {
+	background:#97c23f;
+	height:50px;
+}
+.topmenu ul {
+	margin:0;
+	padding:0;
+}
+.topmenu ul li {
+	list-style-type:none;
+	float:left;
+}
+.rightmain {
+    background: url("../img/bg.jpg") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: block;
+    height: 2560px;
+    position: relative;
+}
+
+.topmenu ul li a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 21px;
+    padding: 15px 47px;
+   /* text-shadow: 2px 2px 9px #E42286; */
+}
+
+.topmenu ul li a.active {
+    color: #E42286;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 21px;
+    padding: 15px 30px;
+    /* text-shadow: 2px 2px 0 #FFFFFF; */
+}
+.onelinesec {
+	margin: 104px 0 0 125px;
+}
+
+.onelinesec .onelinebox {
+    border: 7px solid #97C23F;
+    border-radius: 20px;
+    height: 88px;
+    overflow: hidden;
+    text-align: center;
+    width: 222px;
+}
+.onelinebox > a {
+    color: #605D99;
+    display: block;
+    font-family: FlaemischeKanzleischrift_import;
+    font-size: 51px;
+    line-height: 76px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+.onelinebox > a:hover {
+	text-decoration:none;
+}
+.onelinesec .onelinebox:hover {
+
+	color:#fff;
+}
+.onelinesec .onelinebox:hover a {
+	
+	color:#fff;
+}
+
+
+
+.whatisonline {
+    margin: 470px 0 0 84px;
+}
+
+.whatisonline .whatisonlinebox {
+    border: 7px solid #97C23F;
+    border-radius: 60px;
+    height: 71px;
+    text-align: center;
+    width: 268px;overflow:hidden;
+}
+
+
+.whatisonlinebox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 32px;
+    line-height: 68px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+.whatisonlinebox > a:hover {
+	text-decoration:none;
+}
+.whatisonline .whatisonlinebox:hover {
+	color:#fff;
+}
+
+.whatisonline .whatisonlinebox:hover a {
+    color: #E21980;
+}
+
+
+.circlesec {
+    margin: 62px 0 0 76px;
+}
+.circlesec .circlebox {
+    border-radius: 20px;
+    display: block;
+    height: 71px;
+    margin-top: 3px;
+    text-align: center;
+    width: 360px;
+}.circlesec .circlebox ul {margin:0;padding:0;}
+
+.circlebox ul li img {
+    margin-top: 15px;
+}
+
+.circlesec .circlebox ul li {
+    background: none repeat scroll 0 0 #97C23F;
+    border-radius: 38px;
+    float: left;
+    height: 67px;
+    list-style-type: none;
+    margin-left: 30px;
+    width: 64px;
+}
+
+.circlesec .circlebox ul li:hover {
+    background: none repeat scroll 0 0 #97C23F;
+    border: 4px solid #56538b;
+    border-radius: 38px;
+    float: left;
+    height: 67px;
+    list-style-type: none;
+    margin-left: 30px;
+    margin-top: -10px;
+    width: 64px;
+}
+.circlesec .circlebox ul li a {
+    color: #65629B;
+}
+li.first {
+    margin-left: 0 !important;
+}
+
+li.first:hover {
+    margin-left: 0 !important;margin-top:-10px;border:1px solid #e42285;
+}
+
+
+
+
+
+
+
+
+
+.featuressec {
+    margin: -78px 0 0 613px;
+}
+.featuressec .featuressecbox {
+    border: 7px solid #97C23F;
+    border-radius: 55px;
+    height: 61px;
+    text-align: center;
+    width: 163px;overflow:hidden;
+}
+
+.featuressecbox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 28px;
+    line-height: 62px;
+    margin-top: 1px;
+    padding-top: 0;
+}.featuressecbox > a:hover {
+	text-decoration:none;
+}
+
+.featuressec .featuressecbox:hover {
+    color: #E21980;
+}
+.featuressec .featuressecbox:hover a {
+    color: #E21980;
+}
+
+
+
+
+
+
+
+.howtostart {
+    margin: 239px 0 0 116px;
+}
+
+.howtostart .howtostartbox {
+    border: 7px solid #97C23F;
+    border-radius: 58px;
+    height: 53px;
+    text-align: center;
+    width: 214px;overflow:hidden;
+}
+
+.howtostartbox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 28px;
+    line-height: 54px;
+    margin-top: 1px;
+    padding-top: 0;
+}.featuressecbox > a:hover {
+	text-decoration:none;
+}
+
+
+.howtostart .howtostartbox:hover a {
+    color: #E21980;
+    overflow: hidden;
+    text-decoration: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+.whatdoesitcost {
+    margin: 241px 0 0 294px;
+}
+
+.whatdoesitcost .whatdoesitcostbox {
+    border: 7px solid #97C23F;
+    border-radius: 54px;
+    height: 53px;
+    text-align: center;
+    width: 289px;
+}
+
+.whatdoesitcostbox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 28px;
+    line-height: 53px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+.whatdoesitcostbox > a:hover {
+	text-decoration:none;
+}
+
+.whatdoesitcost .whatdoesitcostbox:hover {
+  
+   
+    overflow: hidden;
+}
+.whatdoesitcost .whatdoesitcostbox:hover a {
+    color: #E21980;
+}
+
+.tesy {
+    color: #65629B;
+    font-family: jabjai_import;
+    font-size: 23px;
+    margin-bottom: 0;
+    width: 102%;
+}
+
+.tesy span {
+    background: none repeat scroll 0 0 #E21980;
+    border-radius: 61px;
+    color: #FFFFFF;
+    display: block;
+    float: left;
+    font-size: 20px;
+    height: 31px;
+    line-height: 35px;
+    margin-right: 2%;
+    margin-top: 1%;
+    text-align: center;
+    width: 30px;
+}
+
+
+
+
+
+
+
+
+
+.whatdoineed {
+    margin: 189px 0 0 296px;
+}
+
+
+.whatdoineed .whatdoineednox {
+    border: 7px solid #97C23F;
+    border-radius: 55px;
+    height: 53px;
+    text-align: center;
+    width: 272px;
+}
+.whatdoineednox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 28px;
+    line-height: 53px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+.whatdoineednox > a:hover {
+	text-decoration:none;
+}
+
+.whatdoineed .whatdoineednox:hover {
+    color: #E21980;
+    overflow: hidden;
+}
+.whatdoineed .whatdoineednox:hover a {
+    color: #E21980;
+}
+
+.topmenu ul li a:hover{text-decoration:none;color:#E42286; text-shadow: 2px 2px 9px #E42286;}
+
+
+
+.footer {
+    border-top: 5px solid #E42285;
+    height: 52px;
+    margin-top: 0;
+    width: 100%;
+}
+.sales {
+    bottom: 5%;
+    left: 52%;
+    position: absolute;
+    width: 22%;
+}
+.fr.logoright > p {
+    color: #2E3192;
+    font-weight: bold;
+    margin: 1px 0;
+}
+
+
+.register {
+    margin: 2400px 0 0 59px;
+}
+
+
+
+.botomlogo {
+    display: block;
+    left: 22%;
+    margin-top: 26%;
+    overflow: hidden;
+    position: absolute;
+    top: 76%;
+    width: 470px;
+}
+
+.register .registerbox {
+    background: none repeat scroll 0 0 #E21980;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 80px;
+    text-align: center;
+    width: 272px;
+}
+
+
+.registerbox > a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 28px;
+    line-height: 83px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+.registerbox > a:hover {
+	text-decoration:none;
+}
+
+.register .registerbox:hover {
+    background: none repeat scroll 0 0 #E21980;
+    color: #FFFFFF;
+    overflow: hidden;
+}
+.register .registerbox:hover a {
+	background:#e21980;
+	color:#fff;
+}
+
+
+
+.numberssec {
+    float: left;
+    margin: -2px 0 0 57px;
+    width: 296px;
+}
+
+.selectsec p {
+    margin-left: 45px;
+}
+
+.numbers li {
+    list-style-type: none;
+    margin-bottom: 0;
+    margin-top: 5px;
+}
+.numbers li.tisri {
+    list-style-type: none;
+    margin-bottom: 9px;
+}
+.numbers li img{cursor:pointer;}
+
+
+p.feat {
+    margin-left: 10%;
+    margin-top: 2%;
+    text-align: justify;
+    width: 66%;
+}
+
+p.lim {
+    margin-left: 13%;
+    margin-top: 2%;
+    text-align: justify;
+    width: 66%;
+}
+.limited {
+    margin-left: 13%;
+    margin-top: 2%;
+    position: absolute;
+    text-align: center;
+    width: 690px;
+}
+
+.notificationsinner h4 {
+    color: #65629B;
+    margin: 0;
+}
+
+
+.notifications {
+    margin: 0 142px;
+    overflow: hidden;
+    position: absolute;
+    width: 751px;
+}
+
+.notifications .notificationsinner {
+    overflow: hidden;
+    width: 666px;
+}
+.notifications .notificationsinner ul {margin:0;padding:0;}
+
+
+.notifications .notificationsinner ul li {
+    float: left;
+    height: 125px;
+    list-style-type: none;
+    text-align: center;
+    width: 219px;
+}
+
+.notificationsinner p {
+    color: #65629B;
+    font-size: 10px;
+    line-height: 12px;
+    margin: 0 auto;
+    width: 60%;
+}
+.bootomul {
+    display: block;
+    margin-left: 17% !important;
+}
+
+.nidin {
+    margin: 20px auto;
+    width: 56%;
+}
+
+
+@media (min-width: 700px) and (max-width: 800px) {
+.no{display:none;}
+
+.topmenu ul li a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 21px;
+    padding: 15px 23px;
+    text-shadow: 2px 2px 9px #E42286;
+}
+.rightmain {
+    background: url("../img/bg.png") no-repeat scroll 0 0 / 100% auto rgba(0, 0, 0, 0);
+    display: block;
+    height: 2560px;
+    position: relative;
+    width: 100%;
+}
+
+.onelinesec {
+    margin: 76px 0 0 84px;
+}
+
+.cloud {
+    color: #E42286;
+    font-family: jabjai_import;
+    font-size: 21px;
+    left: 45%;
+    line-height: 31px;
+    position: absolute;
+    top: 3%;
+}
+
+.loginbox > a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 12px;
+    line-height: 33px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+.meassages {
+    color: #FFFFFF;
+    font-family: jabjai_import;
+    font-size: 11px;
+    left: 35%;
+    position: absolute;
+    text-shadow: 3px 0 4px #000000;
+    top: 7%;
+}
+
+.loginbox {
+    background: none repeat scroll 0 0 #65629B;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 32px;
+    left: 55%;
+    position: absolute;
+    text-align: center;
+    top: 6%;
+    width: 100px;
+}
+.loginbox:hover {
+    background: none repeat scroll 0 0 #000;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 32px;
+    left: 55%;
+    position: absolute;
+    text-align: center;
+    top: 6%;
+    width: 100px;
+}
+.registernowwbox {
+    background: none repeat scroll 0 0 #E21980;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 32px;
+    left: 69%;
+    position: absolute;
+    text-align: center;
+    top: 6%;
+    width: 102px;
+}
+.registernowwbox:hover {
+    background: none repeat scroll 0 0 #000;
+    border-radius: 10px;
+    box-shadow: 2px 4px 5px #333333;
+    height: 32px;
+    left: 69%;
+    position: absolute;
+    text-align: center;
+    top: 6%;
+    width: 102px;
+}
+
+.registernowwbox > a {
+    color: #FFFFFF;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 12px;
+    line-height: 32px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+
+.whatisonline {
+    margin: 362px 0 0 61px;
+}
+
+.whatisonline .whatisonlinebox {
+    border: 7px solid #97C23F;
+    border-radius: 20px;
+    height: 58px;
+    overflow: hidden;
+    text-align: center;
+    width: 214px;
+}
+.whatisonlinebox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 21px;
+    line-height: 61px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+.circlesec {
+    margin: 21px 0 0 76px;
+}
+
+
+.featuressec {
+    margin: -71px 0 0 480px;
+}
+
+.featuressec .featuressecbox {
+    border: 7px solid #97C23F;
+    border-radius: 31px;
+    height: 51px;
+    overflow: hidden;
+    text-align: center;
+    width: 130px;
+}
+
+.featuressecbox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 23px;
+    line-height: 56px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+p.lim {
+    line-height: 17px;
+    margin-left: 13%;
+    margin-top: 0;
+    text-align: justify;
+    width: 66%;
+}
+.notifications {
+    margin: 2px 18px;
+    overflow: hidden;
+    position: absolute;
+    width: 751px;
+}
+
+.notificationsinner img {
+    width: 18%;
+}
+
+.notifications .notificationsinner ul li {
+    float: left;
+    height: 89px;
+    list-style-type: none;
+    text-align: center;
+    width: 219px;
+}
+
+
+.howtostart {
+    margin: 176px 0 0 88px;
+}
+.tesy {
+    color: #65629B;
+    font-family: jabjai_import;
+    font-size: 19px;
+    margin-bottom: 0;
+    width: 102%;
+}
+
+.numbers li img {
+    cursor: pointer;
+    width: 77%;
+}
+
+.howtostart .howtostartbox {
+    border: 7px solid #97C23F;
+    border-radius: 31px;
+    height: 34px;
+    overflow: hidden;
+    text-align: center;
+    width: 174px;
+}
+
+.howtostartbox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 19px;
+    line-height: 34px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+
+ul, ol {
+    margin: 0 0 10px 1px;
+    padding: 0;
+}
+
+.numbers li {
+    list-style-type: none;
+    margin-bottom: -11px;
+}
+
+.numbers li.tisri {
+    list-style-type: none;
+    margin-bottom: -8px;
+}
+
+.numberssec {
+    float: left;
+    margin: -2px 0 0 67px;
+    width: 224px;
+}
+
+.selectsec p {
+    font-size: 82%;
+    line-height: 0;
+    margin-left: 45px;
+}
+
+.selectsectext > img {
+    width: 80%;
+}
+
+.selectsec p {
+    font-size: 82%;
+    margin-left: 45px;
+}
+
+.whatdoesitcost {
+    margin: 189px 0 0 233px;
+}
+
+.whatdoesitcost .whatdoesitcostbox {
+    border: 7px solid #97C23F;
+    border-radius: 31px;
+    height: 46px;
+    text-align: center;
+    width: 228px;
+}
+
+.whatdoineed {
+    margin: 143px 0 0 230px;
+}
+
+.whatdoineed .whatdoineednox {
+    border: 7px solid #97C23F;
+    border-radius: 31px;
+    height: 40px;
+    text-align: center;
+    width: 216px;
+}
+
+.whatdoineednox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 19px;
+    line-height: 43px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+.whatdoesitcostbox > a {
+    color: #E21980;
+    display: block;
+    font-family: jabjai_import;
+    font-size: 20px;
+    line-height: 46px;
+    margin-top: 1px;
+    padding-top: 0;
+}
+
+.register {
+    margin: 1885px 0 0 16px;
+}
+
+.botomlogo {
+    display: block;
+    left: 9%;
+    margin-top: 27%;
+    overflow: hidden;
+    position: absolute;
+    top: 59%;
+    width: 470px;
+}
+
+.sales {
+    bottom: 25%;
+    font-size: 12px;
+    left: 52%;
+    position: absolute;
+    width: 22%;
+}
+
+.footer {
+    border-top: 5px solid #E42285;
+    bottom: -110%;
+    height: 52px;
+    margin-top: 0;
+    position: absolute;
+    width: 100%;
+}
+
+.limited {
+    margin-left: 3%;
+    margin-top: 1%;
+    position: absolute;
+    text-align: center;
+    width: 690px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
