@@ -9,6 +9,7 @@ define(
     'filters/filters',
     'directives/directives',
     'angular-resource',
+    'angular-route',
     'jquery-ui'
   ],
   function (angular)
@@ -20,7 +21,8 @@ define(
         'services',
         'filters',
         'directives',
-        'ngResource'
+        'ngResource',
+        'ngRoute'
       ]);
   }
 );

@@ -12,6 +12,7 @@ require.config(
       domReady:           '../vendors/requirejs-domready/domReady',
       bootstrap:          '../vendors/bootstrap-sass/dist/js/bootstrap.min',
       'angular-resource': '../vendors/angular-resource/angular-resource.min',
+      'angular-route':    '../vendors/angular-route/angular-route.min',
       d3:                 '../vendors/d3/d3.min',
       libPhoneNumber:     '../vendors/webpaige-lib-phonenumber/libphonenumber',
       'jquery-ui':        '../vendors/jquery-ui/ui/minified/jquery-ui.min'
@@ -24,6 +25,10 @@ require.config(
         exports:  'angular'
       },
       'angular-resource':
+      {
+        deps:     ['angular']
+      },
+      'angular-route':
       {
         deps:     ['angular']
       },
@@ -54,6 +59,7 @@ require(
     'domReady',
 
     'angular-resource',
+    'angular-route',
 
     'config',
     'app',
