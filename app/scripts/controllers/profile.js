@@ -89,6 +89,12 @@ define(
                   {
                     Core.factory.process();
 
+                    $rootScope.$watch(function ()
+                    {
+                      $rootScope.profileEdit = false;
+                      $rootScope.profileEditing = false;
+                    });
+
                     callback();
                   }
                 });
@@ -97,16 +103,6 @@ define(
             validate: function ()
             {
               var result;
-
-              // console.log('validation result ->', $rootScope.phoneNumberParsed.result);
-
-              /*
-              function validEmail (e)
-              {
-                var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
-                return String(e).search (filter) != -1;
-              }
-              */
 
               if ($scope.profile.data.name  === undefined ||
                   $scope.profile.data.email === undefined ||

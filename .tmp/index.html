@@ -75,9 +75,6 @@
         <h3 id="modal-profile-label">Account Details</h3>
       </div>
       <div ng-show="profileEdit" ng-hide="!profileEditing" class="modal-body">
-        <div ng-show="profileEdited.status" class="alert alert-{{(profileEdited.result) &amp;&amp; 'success' || 'error'}}">
-          <button type="button" ng-click="profileEdited.status=false" data-dismiss="alert" class="close">×</button><span ng-show="profileEdited.result">Account details are changed successfully.</span><span ng-hide="profileEdited.result">There was an error with changing account details.</span>
-        </div>
         <form ng-submit="profile.edit()" class="form-vertical">
           <p class="muted"><small><i>Fields with * are compulsory to fill it in.</i></small></p>
           <div class="control-group">
@@ -116,6 +113,9 @@
         <button id="modal-profile-btn-save" ng-click="profile.edit();" ng-show="phoneNumberParsed.result" class="btn btn-primary">Save</button>
       </div>
       <div ng-hide="profileEdit" ng-show="!profileEditing" class="modal-body">
+        <div ng-show="profileEdited.status" class="alert alert-{{(profileEdited.result) &amp;&amp; 'success' || 'error'}}">
+          <button type="button" ng-click="profileEdited.status=false" data-dismiss="alert" class="close">×</button><span ng-show="profileEdited.result">Account details are changed successfully.</span><span ng-hide="profileEdited.result">There was an error with changing account details.</span>
+        </div>
         <dl>
           <dt>Oneline Number:
             <dd>{{data.account.purchasedNumber}}</dd>
