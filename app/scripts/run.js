@@ -18,7 +18,7 @@ define(
 
 
 
-          console.table('contactInfos ->', angular.fromJson(Storage.get('connections')));
+          // console.table('contactInfos ->', angular.fromJson(Storage.get('connections')));
 
 
 
@@ -68,6 +68,19 @@ define(
             });
           };
           */
+
+
+          $rootScope.toggleProfileEdit = function ()
+          {
+            /*
+            if (!$rootScope.profileEdit)
+            {
+              $rootScope.profileEdit = true;
+            }
+            */
+
+            $rootScope.profileEdit = !$rootScope.profileEdit;
+          };
 
 
           $rootScope.changeLanguage = function (lang) { $rootScope.ui = config.ui[lang]; };

@@ -422,11 +422,9 @@ define(
                 payload,
                 function (results)
                 {
-                  console.warn('RESTURNED RESULTS ->', results);
+                  console.warn('RESULTS ->', results);
 
                   var connections = angular.fromJson(Storage.get('connections'));
-
-                  var processed = [];
 
                   console.log('connections before ->', connections);
 
@@ -458,7 +456,7 @@ define(
 
                   angular.forEach(connections, function (connection)
                   {
-                    if (connection.groupKeys[0] === $rootScope.data.contact.group.id)
+                    if (connection.groupKeys[0] === $rootScope.data.owner.group.id)
                     {
                       switch (connection.contactInfoTag.toString().toUpperCase())
                       {
@@ -478,29 +476,12 @@ define(
                     }
                   });
 
+                  if (connections.length === 0)
+                  {
+                    connections = results;
+                  }
 
-//                  angular.forEach(connections, function (node)
-//                  {
-//                    angular.forEach(results, function (result)
-//                    {
-//                      if (node.id === result.id)
-//                      {
-//                        node.contactInfo    = result.contactInfo;
-//                        node.contactInfoTag = result.contactInfoTag;
-//
-//                        if (result.label)
-//                        {
-//                          node.label = result.label;
-//                        }
-//
-//                        node.groupKeys      = [$rootScope.data.connected.group.id];
-//                      }
-//                    });
-//
-//                    processed.push(node);
-//                  });
-
-//                  console.log('connections after ->', processed);
+                  console.log('saving connections ->', connections);
 
                   Storage.add('connections', angular.toJson(connections));
 
@@ -831,6 +812,7 @@ define(
                   connected:  {},
                   blacklist:  {},
                   contact:    {},
+                  owner:      {},
                   settings:   {
                     sms: {
                       status:   false,
@@ -872,13 +854,24 @@ define(
                 case 'CONTACT':
                   data.contact = {group: group};
                   break;
+
+                case 'OWNERCONTACT':
+                  data.owner = {group: group};
+                  break;
                 }
               });
 
+
+
+
+              console.log('looping through connections ->', raws.connections);
+
               angular.forEach(raws.connections, function (connection)
               {
-                if (connection.groupKeys[0] === data.contact.group.id)
+                if (connection.groupKeys[0] === data.owner.group.id)
                 {
+                  console.log('connection ->', connection);
+
                   switch (connection.contactInfoTag.toString().toUpperCase())
                   {
                   case 'NAME':
@@ -909,6 +902,10 @@ define(
               });
 
               $rootScope.app.resources = data.account;
+
+
+
+
 
               data.connected.list = [];
 

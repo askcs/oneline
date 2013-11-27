@@ -62,104 +62,101 @@ block navbar
 
 block modal-profile
 
-  #modal-profile.modal(
+  #modal-profile.modal.hide.fade(
     ng-controller='profile',
     tabindex='-1',
     role='dialog',
     aria-labelledby='modal-profile-label',
     aria-hidden='true',
-    style='display: none;')
+    style='display: hide;')
 
     .modal-header
       button.close(type='button',
-      data-dismiss='modal',
-      aria-hidden='true') ×
+                    data-dismiss='modal',
+                    aria-hidden='true') ×
       h3#modal-profile-label Account Details
 
-    .modal-body
+    .modal-body(ng-show='profileEdit',
+                ng-hide='!profileEditing')
 
-      div(ng-show='profileEdit',
-          ng-hide='!profileEditing')
+      .alert(ng-show='profileEdited.status',
+              class="alert-{{(profileEdited.result) && 'success' || 'error'}}",
+              ng-init="profileEdit=false")
+        button.close(type='button',
+                      ng-click='profileEdited.status = false',
+                      data-dismiss='alert') ×
+        span(ng-show='profileEdited.result') Account details are changed successfully.
+        span(ng-hide='profileEdited.result') There was an error with changing account details.
 
-        form.form-vertical(ng-submit='profile.edit()')
+      form.form-vertical(ng-submit='profile.edit()')
 
-          // p {{data.account}}
+        p.muted
+          small
+            i Fields with * are compulsory to fill it in.
 
-          p.muted
-            small
-              i Fields with * are compulsory to fill it in.
+        .control-group
+          label.control-label(for='name') Name *
+          .controls
+            input#name.span5(type='text',
+                        ng-model='profile.data.name',
+                        ng-change='profile.validate()',
+                        required)
+            p.text-error(ng-show='!profile.data.name')
+              small
+                i Please fill your name
 
-          .control-group
-            label.control-label(for='name') Name *
-            .controls
-              input#name.span5(type='text',
-                          ng-model='profile.data.name',
-                          value="{{data.account.name}}",
-                          ng-change='profile.validate()',
-                          required)
-              p.text-error(ng-show='!profile.data.name')
-                small
-                  i Please fill your name
+        .control-group
+          label.control-label(for='email') Email *
+          .controls
+            input#email.span5(type='text',
+                        ng-model='profile.data.email',
+                        ng-change='profile.validate()',
+                        required)
+            p.text-error(ng-show='!profile.data.email')
+              small
+                i Please fill your address
 
-          .control-group
-            label.control-label(for='email') Email *
-            .controls
-              input#email.span5(type='text',
-                          ng-model='profile.data.email',
-                          value="{{data.account.email}}",
-                          ng-change='profile.validate()',
-                          required)
-              p.text-error(ng-show='!profile.data.email')
-                small
-                  i Please fill your address
+        .control-group
+          label.control-label(for='address') Address
+          .controls
+            input#address.span5(type='text',
+                          ng-model='profile.data.address')
 
-          .control-group
-            label.control-label(for='address') Address
-            .controls
-              input#address.span5(type='text',
-                            ng-model='profile.data.address',
-                            value="{{data.account.address}}")
+        .control-group
+          label.control-label(for='phone') Phone *
+          .controls
+            input#phone.span3(type='text',
+                        ng-model='profile.data.phone',
+                        ng-change='profile.validate()',
+                        required)
+            p.text-error(ng-show='!profile.data.phone')
+              small
+                i Please fill your phone
 
-          .control-group
-            label.control-label(for='phone') Phone *
-            .controls
-              input#phone.span3(type='text',
-                          ng-model='profile.data.phone',
-                          value="{{data.account.phone}}",
-                          ng-change='profile.validate()',
-                          required)
-              p.text-error(ng-show='!profile.data.phone')
-                small
-                  i Please fill your phone
+    .modal-footer(ng-show='profileEdit',
+                  ng-hide='!profileEditing')
+      button#modal-profile-btn-close.btn(ng-click='profileEdit=false') Cancel
+      button#modal-profile-btn-save.btn.btn-primary(ng-click='profile.edit();') Save
 
-      div(ng-hide='profileEdit',
-          ng-show='!profileEditing')
-        .alert(ng-show='profileEdited.status',
-                class="alert-{{(profileEdited.result) && 'success' || 'error'}}")
-          button.close(type='button',
-                        ng-click='profileEdited.status = false',
-                        data-dismiss='alert') ×
-          span(ng-show='profileEdited.result') Account details are changed successfully.
-          span(ng-hide='profileEdited.result') There was an error with changing account details.
-        dl
-          dt Oneline Number:
-            dd {{data.account.purchasedNumber}}
-          dt Name:
-            dd {{data.account.name}}
-          dt Email:
-            dd {{data.account.email}}
-          dt Address:
-            dd {{data.account.address}}
-          dt Phone:
-            dd {{data.account.phone}}
 
-    .modal-footer
-      button#modal-profile-btn-close.btn(ng-click='profileEdit=false',
-                                          ng-show='profileEdit') Cancel
-      button#modal-profile-btn-edit.btn.btn-primary(ng-click='profileEdit=true',
-                                                    ng-hide='profileEdit') Edit
-      button#modal-profile-btn-save.btn.btn-primary(ng-click='profile.edit();',
-                                                    ng-show='profileEdit') Save
+    .modal-body(ng-hide='profileEdit',
+                ng-show='!profileEditing')
+      dl
+        dt Oneline Number:
+          dd {{data.account.purchasedNumber}}
+        dt Name:
+          dd {{data.account.name}}
+        dt Email:
+          dd {{data.account.email}}
+        dt Address:
+          dd {{data.account.address}}
+        dt Phone:
+          dd {{data.account.phone}}
+
+    .modal-footer(ng-hide='profileEdit',
+                  ng-show='!profileEditing')
+
+      button#modal-profile-btn-edit.btn.btn-primary(ng-click='profileEdit=!profileEdit; profileEdited.status = false') Edit
 
 
 

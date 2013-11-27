@@ -11,40 +11,40 @@ define(
         {
           $rootScope.fixStyles();
 
+          $rootScope.profileEdit = false;
+
           $scope.profile = {
 
             data: {},
 
             process: function (callback)
             {
-
               var payload = {
                 name: {
                   contactInfo:    $scope.profile.data.name,
                   contactInfoTag: 'NAME',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 email: {
                   contactInfo:    $scope.profile.data.email,
                   contactInfoTag: 'EMAIL',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 address: {
                   contactInfo:    $scope.profile.data.address,
                   contactInfoTag: 'ADDRESS',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 phone: {
                   contactInfo:    $scope.profile.data.phone,
                   contactInfoTag: 'PHONE',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 }
               };
 
-
               angular.forEach(angular.fromJson(Storage.get('connections')), function (connection)
               {
-                if (connection.groupKeys[0] === $rootScope.data.contact.group.id)
+                if (connection.groupKeys[0] === $rootScope.data.owner.group.id)
                 {
                   switch (connection.contactInfoTag.toString().toUpperCase())
                   {
@@ -64,21 +64,16 @@ define(
                 }
               });
 
-
-              var arrayyed = [];
+              var arr = [];
 
               angular.forEach(payload, function (node)
               {
-                arrayyed.push(node);
+                arr.push(node);
               });
 
-              console.log('arrayed ->', arrayyed);
-
-              Core.connections.profiler(arrayyed)
-                .then(function (result)
+              Core.connections.profiler(arr)
+                .then(function ()
                 {
-                  console.log('returned result ->', result);
-
                   Core.factory.process();
 
                   callback();
@@ -126,6 +121,8 @@ define(
                   $('#modal-profile-btn-save')
                     .text('Save')
                     .removeAttr('disabled');
+
+                  // $rootScope.profileEdit = false;
 
                   $rootScope.profileEditing = false;
 
