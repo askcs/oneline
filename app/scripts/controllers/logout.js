@@ -29,13 +29,18 @@ define(
 
               Storage.session.clearAll();
 
-              if (logindata.remember)
+              if (logindata && logindata.remember)
               {
                 Storage.add('logindata', angular.toJson(logindata));
               }
 
-              $rootScope.data = {};
-              $rootScope.session = {};
+              $rootScope.$watch(function ()
+              {
+                $rootScope.data = {};
+                $rootScope.session = {};
+
+                $rootScope.resetProfileEdit();
+              });
 
               $location.path('/login');
 

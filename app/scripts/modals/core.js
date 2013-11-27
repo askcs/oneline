@@ -890,31 +890,38 @@ define(
 
               data.connected.list = [];
 
-              angular.forEach(data.connected.group.contactInfoIds, function (id)
+              if (data.connected.group && data.connected.group.contactInfoIds)
               {
-                if (nodes[id])
+                angular.forEach(data.connected.group.contactInfoIds, function (id)
                 {
-                  data.connected.list.push(nodes[id]);
-                }
-                else
-                {
-                  console.log('Error: This node does not exist! (For connections) ->', id);
-                }
-              });
+                  if (nodes[id])
+                  {
+                    data.connected.list.push(nodes[id]);
+                  }
+                  else
+                  {
+                    console.log('Error: This node does not exist! (For connections) ->', id);
+                  }
+                });
+              }
 
               data.blacklist.list = [];
 
-              angular.forEach(data.blacklist.group.contactInfoIds, function (id)
+              if (data.blacklist.group && data.blacklist.group.contactInfoIds)
               {
-                if (nodes[id])
+                angular.forEach(data.blacklist.group.contactInfoIds, function (id)
                 {
-                  data.blacklist.list.push(nodes[id]);
-                }
-                else
-                {
-                  console.log('Error: This node does not exist! (For blacklist) ->', id);
-                }
-              });
+                  if (nodes[id])
+                  {
+                    data.blacklist.list.push(nodes[id]);
+                  }
+                  else
+                  {
+                    console.log('Error: This node does not exist! (For blacklist) ->', id);
+                  }
+                });
+              }
+
 
               angular.forEach(nodes, function (node)
               {
@@ -936,7 +943,7 @@ define(
                 }
               });
 
-              if (data.blacklist.group.contactInfoIds.length > 0)
+              if (data.blacklist.group && data.blacklist.group.contactInfoIds.length > 0)
               {
                 angular.forEach(data.blacklist.group.contactInfoIds, function (id)
                 {

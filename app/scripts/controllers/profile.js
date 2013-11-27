@@ -151,6 +151,8 @@ define(
 
           if ($location.path() !== '/login')
           {
+            $scope.profile.data = {};
+
             $scope.profile.data = $rootScope.data.account;
           }
         }

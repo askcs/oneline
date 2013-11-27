@@ -9,6 +9,7 @@ define(
         '$rootScope', '$scope', 'Core', 'Storage',
         function ($rootScope, $scope, Core, Storage)
         {
+          /*
           $rootScope.fixStyles();
 
           var content = {
@@ -248,6 +249,7 @@ define(
             }
           }
 
+         */
 
         }
       ]

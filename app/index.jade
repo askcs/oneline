@@ -73,7 +73,8 @@ block modal-profile
     .modal-header
       button.close(type='button',
                     data-dismiss='modal',
-                    aria-hidden='true') ×
+                    aria-hidden='true',
+                    ng-click='resetProfileEdit()') ×
       h3#modal-profile-label Account Details
 
     .modal-body(ng-show='profileEdit',
@@ -90,6 +91,7 @@ block modal-profile
           .controls
             input#name.span5(type='text',
                         ng-model='profile.data.name',
+                        value='{{profile.data.name}}',
                         ng-change='profile.validate()',
                         required)
             p.text-error(ng-show='!profile.data.name')
@@ -101,6 +103,7 @@ block modal-profile
           .controls
             input#email.span5(type='email',
                               ng-model='profile.data.email',
+                              value='{{profile.data.email}}',
                               ng-change='profile.validate()',
                               required)
             p.text-error(ng-show='!profile.data.email')
@@ -111,16 +114,15 @@ block modal-profile
           label.control-label(for='address') Address
           .controls
             input#address.span5(type='text',
-                          ng-model='profile.data.address')
-
-
-
+                                ng-model='profile.data.address',
+                                value='{{profile.data.address}}')
 
         .control-group
           label.control-label(for='phone') Phone *
           .controls
             input#phone.span3(type='text',
                         ng-model='profile.data.phone',
+                        value='{{profile.data.phone}}',
                         ng-change='profile.validate(); checkNumber(profile.data.phone)',
                         required)
             p.text-error(ng-show='!profile.data.phone')

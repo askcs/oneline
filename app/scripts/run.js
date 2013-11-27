@@ -99,23 +99,12 @@ define(
 
 
 
-
-          /*
-          $rootScope.toggleProfileEdit = function ()
+          $rootScope.resetProfileEdit = function ()
           {
-            console.log('coming to here?');
+            $rootScope.profileEdit = false;
 
-            if ($rootScope.profileEdit)
-            {
-              $rootScope.profileEdit = false;
-            }
-
-            // $rootScope.profileEdit = !$rootScope.profileEdit;
-
-            $rootScope.profileEdited.status = false
+            $rootScope.profileEdited.status = false;
           };
-          */
-
 
           $rootScope.profileEdited = {
             status: false,
@@ -129,19 +118,6 @@ define(
 
             $rootScope.profileEdit = false;
           });
-
-
-          /*
-          console.log('rootScope values');
-          angular.forEach($rootScope, function (value, key)
-          {
-            if (key[0] != '$' && key != 'this')
-            {
-              console.log(key, ' -> ', value);
-            }
-          });
-          */
-
 
 
 
