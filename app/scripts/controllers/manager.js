@@ -6,17 +6,19 @@ define(
 
     controllers.controller('manager',
       [
-        '$rootScope', '$scope', 'Core', 'Storage', 'Phone',
-        function ($rootScope, $scope, Core, Storage, Phone)
+        '$rootScope', '$scope', 'Core', 'Storage',
+        function ($rootScope, $scope, Core, Storage)
         {
           $rootScope.fixStyles();
 
 
+
+
+
+
+
+
           $scope.list = ["one", "two", 'three'];
-
-
-
-
 
           $('#secondtry').sortable({items: 'li',
             update: function (event, ui)
@@ -61,6 +63,13 @@ define(
 
 
 
+
+
+
+
+
+
+          /*
           $scope.phoneNumberParsed = {};
 
           $scope.phoneNumberParsed.result = false;
@@ -166,6 +175,14 @@ define(
               $('#inputPhoneNumber').removeClass('error');
             }
           };
+          */
+
+
+
+
+
+
+
 
 
           $scope.resetConnection = function ()

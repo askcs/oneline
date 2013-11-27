@@ -6,8 +6,8 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', '$timeout', 'Storage', '$window', 'User', 'Session', 'Core', '$http',
-        function($rootScope, $location, $timeout, Storage, $window, User, Session, Core, $http)
+        '$rootScope', '$location', '$timeout', 'Storage', '$window', 'User', 'Session', 'Core', '$http', 'Phone',
+        function($rootScope, $location, $timeout, Storage, $window, User, Session, Core, $http, Phone)
         {
           $rootScope.config = config;
 
@@ -17,9 +17,7 @@ define(
           };
 
 
-
           // console.table('contactInfos ->', angular.fromJson(Storage.get('connections')));
-
 
 
           // TODO: Move these checks to jquery.browser
@@ -70,19 +68,6 @@ define(
           */
 
 
-          $rootScope.toggleProfileEdit = function ()
-          {
-            /*
-            if (!$rootScope.profileEdit)
-            {
-              $rootScope.profileEdit = true;
-            }
-            */
-
-            $rootScope.profileEdit = !$rootScope.profileEdit;
-          };
-
-
           $rootScope.changeLanguage = function (lang) { $rootScope.ui = config.ui[lang]; };
 
           $rootScope.ui = config.ui[$rootScope.config.lang];
@@ -112,10 +97,177 @@ define(
           }
 
 
+
+
+
+          /*
+          $rootScope.toggleProfileEdit = function ()
+          {
+            console.log('coming to here?');
+
+            if ($rootScope.profileEdit)
+            {
+              $rootScope.profileEdit = false;
+            }
+
+            // $rootScope.profileEdit = !$rootScope.profileEdit;
+
+            $rootScope.profileEdited.status = false
+          };
+          */
+
+
           $rootScope.profileEdited = {
             status: false,
             result: false
           };
+
+
+          $rootScope.$on('resetProfileEditing', function ()
+          {
+            // console.log('action has been asked');
+
+            $rootScope.profileEdit = false;
+          });
+
+
+          /*
+          console.log('rootScope values');
+          angular.forEach($rootScope, function (value, key)
+          {
+            if (key[0] != '$' && key != 'this')
+            {
+              console.log(key, ' -> ', value);
+            }
+          });
+          */
+
+
+
+
+
+
+
+
+
+
+
+
+
+          $rootScope.phoneNumberParsed = {};
+
+          $rootScope.phoneNumberParsed.result = false;
+
+          $rootScope.checkNumber = function (checked)
+          {
+            if (checked && checked.length > 0)
+            {
+//              if (new RegExp('^\\+?[/s]+?[(]+?[-]+?[0-9]+?[)]+?[-]+?[0-9]+$').test($scope.connection.contactInfo))
+//              {
+              var result, all;
+
+              result = all = Phone.parse(checked, 'NL');
+
+              $rootScope.phoneNumberParsed.result = true;
+
+              if (result)
+              {
+                var error = 'It seems not to be a phone number!',
+                  invalidCountry = 'Invalid country code. Please enter a number from Netherlands.',
+                  message;
+
+                if (result.error)
+                {
+                  $rootScope.phoneNumberParsed = {
+                    result:  false,
+                    message: error
+                  };
+                }
+                else
+                {
+                  if (!result.validation.isPossibleNumber)
+                  {
+                    switch (result.validation.isPossibleNumberWithReason)
+                    {
+                      case 'INVALID_COUNTRY_CODE': message = invalidCountry; break;
+                      case 'TOO_SHORT': message = error + ' (Number is too short.)'; break;
+                      case 'TOO_LONG': message = error + ' (Number is too long)'; break;
+                    }
+
+                    $rootScope.phoneNumberParsed = {
+                      result:  false,
+                      message: message
+                    };
+                  }
+                  else
+                  {
+                    if (!result.validation.isValidNumber)
+                    {
+                      $rootScope.phoneNumberParsed = {
+                        result:  false,
+                        message: error
+                      };
+                    }
+                    else
+                    {
+                      if (!result.validation.isValidNumberForRegion)
+                      {
+                        $rootScope.phoneNumberParsed = {
+                          result:  false,
+                          message: invalidCountry
+                        };
+                      }
+                      else
+                      {
+                        $rootScope.phoneNumberParsed = {
+                          result:  true,
+                          message: 'You have entered a correct number. Number is registered for ' +
+                            result.validation.phoneNumberRegion +
+                            ' and number type is ' +
+                            result.validation.getNumberType
+                        };
+
+                        $('#inputPhoneNumber').removeClass('error');
+                      }
+                    }
+                  }
+                }
+              }
+
+              $rootScope.phoneNumberParsed.all = all;
+//              }
+//              else
+//              {
+//                $scope.phoneNumberParsed = {
+//                  result:  false,
+//                  message: 'It does not seem like a number at all! Are you sure about that?'
+//                };
+//              }
+            }
+            else
+            {
+              $rootScope.phoneNumberParsed.result = true;
+
+              delete $rootScope.phoneNumberParsed.message;
+
+              $('#inputPhoneNumber').removeClass('error');
+            }
+          };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -72,17 +72,41 @@ define(
               });
 
               Core.connections.profiler(arr)
-                .then(function ()
+                .then(function (result)
                 {
-                  Core.factory.process();
+                  if (result.error)
+                  {
+                    $('#modal-profile-btn-save')
+                      .text('Save')
+                      .removeAttr('disabled');
 
-                  callback();
+                    $rootScope.profileEdited = {
+                      status: true,
+                      result: false
+                    };
+                  }
+                  else
+                  {
+                    Core.factory.process();
+
+                    callback();
+                  }
                 });
             },
 
             validate: function ()
             {
               var result;
+
+              // console.log('validation result ->', $rootScope.phoneNumberParsed.result);
+
+              /*
+              function validEmail (e)
+              {
+                var filter = /^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/;
+                return String(e).search (filter) != -1;
+              }
+              */
 
               if ($scope.profile.data.name  === undefined ||
                   $scope.profile.data.email === undefined ||
@@ -116,15 +140,9 @@ define(
 
                 this.process(function ()
                 {
-                  console.log('callback is executed.');
-
                   $('#modal-profile-btn-save')
                     .text('Save')
                     .removeAttr('disabled');
-
-                  // $rootScope.profileEdit = false;
-
-                  $rootScope.profileEditing = false;
 
                   $rootScope.profileEdited = {
                     status: true,

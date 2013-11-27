@@ -89,7 +89,7 @@ define(
 
           var scenario = angular.fromJson(Storage.get('scenario')) || {};
 
-          console.log('Scenario ->', scenario);
+          // console.log('Scenario ->', scenario);
 
           angular.forEach(scenario.steps, function (step)
           {

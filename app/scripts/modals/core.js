@@ -422,13 +422,8 @@ define(
                 payload,
                 function (results)
                 {
-                  console.warn('RESULTS ->', results);
-
-                  var connections = angular.fromJson(Storage.get('connections'));
-
-                  console.log('connections before ->', connections);
-
-                  var returned = {};
+                  var connections = angular.fromJson(Storage.get('connections')),
+                      returned    = {};
 
                   angular.forEach(results, function (result)
                   {
@@ -480,8 +475,6 @@ define(
                   {
                     connections = results;
                   }
-
-                  console.log('saving connections ->', connections);
 
                   Storage.add('connections', angular.toJson(connections));
 
@@ -726,7 +719,6 @@ define(
 
 
           Core.prototype.scenarios = {
-
             run: function ()
             {
               var deferred = $q.defer();
@@ -861,17 +853,10 @@ define(
                 }
               });
 
-
-
-
-              console.log('looping through connections ->', raws.connections);
-
               angular.forEach(raws.connections, function (connection)
               {
                 if (connection.groupKeys[0] === data.owner.group.id)
                 {
-                  console.log('connection ->', connection);
-
                   switch (connection.contactInfoTag.toString().toUpperCase())
                   {
                   case 'NAME':
@@ -902,10 +887,6 @@ define(
               });
 
               $rootScope.app.resources = data.account;
-
-
-
-
 
               data.connected.list = [];
 

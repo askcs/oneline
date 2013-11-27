@@ -34,6 +34,9 @@ define(
                 Storage.add('logindata', angular.toJson(logindata));
               }
 
+              $rootScope.data = {};
+              $rootScope.session = {};
+
               $location.path('/login');
 
             });

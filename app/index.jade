@@ -24,7 +24,7 @@ block navbar
               a.dropdown-toggle(href='#',
                                 data-toggle='dropdown')
                 i.icon-user.icon-white
-                |  {{app.resources.name}}
+                |  {{app.resources.name}} &nbsp;
                 b.caret
               ul.dropdown-menu
                 li
@@ -68,7 +68,7 @@ block modal-profile
     role='dialog',
     aria-labelledby='modal-profile-label',
     aria-hidden='true',
-    style='display: hide;')
+    style='display: none;')
 
     .modal-header
       button.close(type='button',
@@ -80,10 +80,9 @@ block modal-profile
                 ng-hide='!profileEditing')
 
       .alert(ng-show='profileEdited.status',
-              class="alert-{{(profileEdited.result) && 'success' || 'error'}}",
-              ng-init="profileEdit=false")
+              class="alert-{{(profileEdited.result) && 'success' || 'error'}}")
         button.close(type='button',
-                      ng-click='profileEdited.status = false',
+                      ng-click='profileEdited.status=false',
                       data-dismiss='alert') ×
         span(ng-show='profileEdited.result') Account details are changed successfully.
         span(ng-hide='profileEdited.result') There was an error with changing account details.
@@ -108,13 +107,13 @@ block modal-profile
         .control-group
           label.control-label(for='email') Email *
           .controls
-            input#email.span5(type='text',
-                        ng-model='profile.data.email',
-                        ng-change='profile.validate()',
-                        required)
+            input#email.span5(type='email',
+                              ng-model='profile.data.email',
+                              ng-change='profile.validate()',
+                              required)
             p.text-error(ng-show='!profile.data.email')
               small
-                i Please fill your address
+                i Please fill a correct email address
 
         .control-group
           label.control-label(for='address') Address
@@ -122,25 +121,39 @@ block modal-profile
             input#address.span5(type='text',
                           ng-model='profile.data.address')
 
+
+
+
         .control-group
           label.control-label(for='phone') Phone *
           .controls
             input#phone.span3(type='text',
                         ng-model='profile.data.phone',
-                        ng-change='profile.validate()',
+                        ng-change='profile.validate(); checkNumber(profile.data.phone)',
                         required)
             p.text-error(ng-show='!profile.data.phone')
               small
                 i Please fill your phone
+            p.text-error(ng-hide='phoneNumberParsed.result')
+              small
+                i {{phoneNumberParsed.message}}
+
+
+
 
     .modal-footer(ng-show='profileEdit',
-                  ng-hide='!profileEditing')
-      button#modal-profile-btn-close.btn(ng-click='profileEdit=false') Cancel
-      button#modal-profile-btn-save.btn.btn-primary(ng-click='profile.edit();') Save
+                  ng-hide='!profileEditing',
+                  ng-init='phoneNumberParsed.result=true')
 
+      button#modal-profile-btn-close.btn(ng-click='profileEdit=false') Cancel
+
+      button.btn.btn-primary(ng-hide='phoneNumberParsed.result', disabled) Save
+      button#modal-profile-btn-save.btn.btn-primary(ng-click='profile.edit();',
+                                                    ng-show='phoneNumberParsed.result') Save
 
     .modal-body(ng-hide='profileEdit',
                 ng-show='!profileEditing')
+
       dl
         dt Oneline Number:
           dd {{data.account.purchasedNumber}}
@@ -155,8 +168,8 @@ block modal-profile
 
     .modal-footer(ng-hide='profileEdit',
                   ng-show='!profileEditing')
+      button#modal-profile-btn-edit.btn.btn-primary(ng-click='profileEdit=true; profileEdited.status=false') Edit
 
-      button#modal-profile-btn-edit.btn.btn-primary(ng-click='profileEdit=!profileEdit; profileEdited.status = false') Edit
 
 
 
