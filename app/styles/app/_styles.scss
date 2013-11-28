@@ -236,6 +236,21 @@ h2#logo-big {
 }
 
 
+
+
+
+
+
+#verifieds {
+  tr {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+
+
 // .navbar, #footer, #notification, #mobile-status-bar {
 //   display: none;
 // }

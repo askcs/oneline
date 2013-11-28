@@ -12,7 +12,6 @@ define(
         {
           var Core = $resource();
 
-
           var ContactInfos = $resource(
             config.host + '/accounts/contactinfos/:id',
             {},
@@ -41,7 +40,6 @@ define(
             }
           );
 
-
           var Profile = $resource(
             config.host + '/accounts/contactinfos/owner',
             {},
@@ -53,7 +51,6 @@ define(
               }
             }
           );
-
 
           var Verification = $resource(
             config.host + '/products/verifyme/:action',
@@ -69,7 +66,6 @@ define(
               }
             }
           );
-
 
           var Settings = $resource(
             config.host + '/settings/notifications/:id',
@@ -99,7 +95,6 @@ define(
             }
           );
 
-
           var GroupsOriginal = $resource(
             config.host + '/accounts/groups/:id',
             {},
@@ -120,7 +115,6 @@ define(
             }
           );
 
-
           var Groups = $resource(
             config.host + '/scenario/oneline/groups/',
             {},
@@ -133,7 +127,6 @@ define(
             }
           );
 
-
           var Logs = $resource(
             config.host + '/accounts/log',
             {},
@@ -145,7 +138,6 @@ define(
               }
             }
           );
-
 
           var Scenarios = $resource(
             config.host + '/scenario/oneline/generate',
@@ -727,18 +719,31 @@ define(
 
               var connected = {};
 
-              angular.forEach($rootScope.data.connected.list, function (listed, index)
+              if ($rootScope.data.sequence)
               {
-                if (listed.verified)
+                angular.forEach($rootScope.data.sequence, function (id, rank)
                 {
-                  connected[index] = {
-                    contactInfoId: listed.id,
+                  connected[rank] = {
+                    contactInfoId: id,
                     timeout:       20
                   };
-                }
-              });
+                });
+              }
+              else
+              {
+                angular.forEach($rootScope.data.connected.list, function (listed, index)
+                {
+                  if (listed.verified)
+                  {
+                    connected[index] = {
+                      contactInfoId: listed.id,
+                      timeout:       20
+                    };
+                  }
+                });
+              }
 
-              // console.log('runing scenario on ->', connected);
+              // console.log('running scenario on ->', connected);
 
               Scenarios.build(
                 {},
@@ -792,6 +797,18 @@ define(
 
 
           Core.prototype.factory = {
+            run: function ()
+            {
+              var deferred = $q.defer();
+
+              if (this.process())
+              {
+                deferred.resolve();
+              }
+
+              return deferred.promise;
+            },
+
             process: function ()
             {
               var raws = {
@@ -805,6 +822,7 @@ define(
                   blacklist:  {},
                   contact:    {},
                   owner:      {},
+                  sequence:   {},
                   settings:   {
                     sms: {
                       status:   false,
@@ -831,6 +849,8 @@ define(
                 nodes[connection.id] = connection;
               });
 
+              var sequenced = false;
+
               angular.forEach(raws.groups, function (group)
               {
                 switch (group.name.toString().toUpperCase())
@@ -849,6 +869,12 @@ define(
 
                 case 'OWNERCONTACT':
                   data.owner = {group: group};
+                  break;
+
+                case 'CONNECTEDNUMBERSEQUENCE':
+                  data.sequence = group.contactInfoSequence;
+
+                  sequenced = true;
                   break;
                 }
               });
@@ -888,7 +914,10 @@ define(
 
               $rootScope.app.resources = data.account;
 
-              data.connected.list = [];
+              data.connected.list = {
+                verified: [],
+                notVerified: []
+              };
 
               if (data.connected.group && data.connected.group.contactInfoIds)
               {
@@ -896,12 +925,30 @@ define(
                 {
                   if (nodes[id])
                   {
-                    data.connected.list.push(nodes[id]);
+                    if (nodes[id].verified)
+                    {
+                      data.connected.list.verified.push(nodes[id]);
+                    }
+                    else
+                    {
+                      data.connected.list.notVerified.push(nodes[id]);
+                    }
                   }
                   else
                   {
                     console.log('Error: This node does not exist! (For connections) ->', id);
                   }
+                });
+              }
+
+
+              if (!sequenced)
+              {
+                angular.forEach(data.connected.list.verified, function (verified, index)
+                {
+                  console.log(verified, index);
+
+                  data.sequence[index] = verified.id;
                 });
               }
 

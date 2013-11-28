@@ -268,15 +268,49 @@
               <button type="button" ng-show="connection.label.length &gt; 0" ng-click="resetConnection();" class="btn">Cancel</button>
               <button type="submit" class="btn {{(phoneNumberParsed.result == false) &amp;&amp; &quot;disabled&quot;}}">Save</button><span style="margin-left: 10px;" ng-hide="phoneNumberParsed.result" class="text-error"><small><i>{{phoneNumberParsed.message}}</i></small></span><span style="margin-left: 10px;" ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></span>
             </form>
-            <h4>Numbers</h4>
-            <hr/>
-            <div ng-show="verified.status" class="alert alert-{{(verified.result) &amp;&amp; 'success' || 'error'}}">
-              <button type="button" ng-click="verified.status = false" data-dismiss="alert" class="close">×</button><span ng-show="verified.result">Number is verified and ready to use.</span><span ng-hide="verified.result">There was an error with verifiying number.<br/>Did you enter the correct verification code?<br/>If so please try again and if the problem resists, please get in touch with us.</span>
+            <div ng-show="(data.connected.list.notVerified.length &gt; 0)">
+              <h4>Not Verified Numbers</h4>
+              <hr/>
+              <div ng-show="verified.status" class="alert alert-{{(verified.result) &amp;&amp; 'success' || 'error'}}">
+                <button type="button" ng-click="verified.status = false" data-dismiss="alert" class="close">×</button><span ng-show="verified.result">Number is verified and ready to use.</span><span ng-hide="verified.result">There was an error with verifiying number.<br/>Did you enter the correct verification code?<br/>If so please try again and if the problem resists, please get in touch with us.</span>
+              </div>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th style="width: 100px;"></th>
+                    <th>Label</th>
+                    <th>Connection</th>
+                    <th>Type</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-repeat="number in data.connected.list.notVerified">
+                    <td style="vertical-align: middle"><span class="label label-error">Not Verified</span></td>
+                    <td style="vertical-align: middle">{{number.label}}</td>
+                    <td style="vertical-align: middle">{{number.contactInfo}}</td>
+                    <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
+                    <td style="vertical-align: middle, text-align: right">
+                      <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" class="btn">Delete</button>
+                      <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" ng-hide="number.verified" class="btn">Edit</button>
+                      <div style="margin-top:10px; display: inline" ng-show="verifying[number.id]" class="input-append">
+                        <input id="appendedInputButton" type="text" ng-model="verificationCode[number.id]" autofocus="autofocus" class="span3"/>
+                        <button type="button" ng-click="resetVerifiers()" class="btn">Cancel</button>
+                        <button type="button" ng-click="connections.verify.confirm(number)" class="btn">Confirm</button>
+                      </div>
+                      <button id="verifyBtn-{{number.id}}" ng-hide="number.verified || verifying[number.id]" ng-click="connections.verify.initiate(number)" type="button" class="btn">Verify</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table><br/><br/>
             </div>
-            <p ng-show="(data.connected.list.length == 0)">There are no connected numbers. Please add some.</p>
-            <table ng-show="(data.connected.list.length &gt; 0)" class="table table-striped">
+            <h4>Verified Numbers</h4>
+            <hr/>
+            <p ng-show="(data.connected.list.verified.length == 0)">There are no connected numbers. Please add some.</p>
+            <table id="verifieds" ng-show="(data.connected.list.verified.length &gt; 0)" class="table table-striped">
               <thead>
                 <tr>
+                  <th style="width: 50px;"></th>
                   <th style="width: 100px;"></th>
                   <th>Label</th>
                   <th>Connection</th>
@@ -285,43 +319,22 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="number in data.connected.list">
-                  <td style="vertical-align: middle"><span ng-show="number.verified" class="label label-success">Verified</span><span ng-hide="number.verified" class="label label-error">Not Verified</span></td>
-                  <td style="vertical-align: middle">{{number.label}}</td>
+                <tr ng-repeat="(rank, number) in verifiedNumbers" data-rank="{{number.id}}">
+                  <td style="vertical-align: middle"><span aria-hidden="true" style="font-size: 24px;" class="icomoon icomoon-menu muted">{{rank}}</span></td>
+                  <td style="vertical-align: middle"><span class="label label-success">Verified</span></td>
+                  <td style="vertical-align: middle">{{number.id}} - {{number.label}}</td>
                   <td style="vertical-align: middle">{{number.contactInfo}}</td>
                   <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">
                     <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" class="btn">Delete</button>
-                    <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" ng-hide="number.verified" class="btn">Edit</button>
-                    <div style="margin-top:10px; display: inline" ng-show="verifying[number.id]" class="input-append">
-                      <input id="appendedInputButton" type="text" ng-model="verificationCode[number.id]" autofocus="autofocus" class="span3"/>
-                      <button type="button" ng-click="resetVerifiers()" class="btn">Cancel</button>
-                      <button type="button" ng-click="connections.verify.confirm(number)" class="btn">Confirm</button>
-                    </div>
-                    <button id="verifyBtn-{{number.id}}" ng-hide="number.verified || verifying[number.id]" ng-click="connections.verify.initiate(number)" type="button" class="btn">Verify</button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <!-- p {{phoneNumberParsed.all}}-->
-            <table id="firsttry" style="width: auto;" class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Index</th>
-                  <th>Count</th>
-                </tr>
-              </thead>
-              <tbody ng-model="list">
-                <tr ng-repeat="item in list" style="cursor: move;" class="item">
-                  <td>{{$index}}</td>
-                  <td>{{item}}</td>
-                </tr>
-              </tbody>
-            </table>
+            <button ng-click="reGenerate()" class="btn btn-primary">Generate</button>
           </div>
         </div>
       </div>
-      <!-- button test-->
       <div ng-controller="notifier" class="tab-pane {{(views.notifier==true) &amp;&amp; 'active'}}">
         <div class="tab-header">
           <h2 class="pull-left">Missed Call Notifications</h2>

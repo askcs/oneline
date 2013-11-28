@@ -12,59 +12,78 @@ define(
           $rootScope.fixStyles();
 
 
+          $scope.populate = function ()
+          {
+            $scope.verifiedNumbers = {};
 
-
-
-
-
-
-          $scope.list = ["one", "two", 'three'];
-
-          $('#secondtry').sortable({items: 'li',
-            update: function (event, ui)
+            angular.forEach($rootScope.data.sequence, function (id, rank)
             {
-              //Convert the ordered list into an array
-              var new_order = $('ol').sortable('toArray');
+              $scope.verifiedNumbers[rank] = $rootScope.data.nodes[id];
+            });
+          };
 
-              console.log('new order ->', new_order);
-
-              //Loop through the array and assign the input
-              //that matches the li id the new position value
-              $.each(new_order, function (i, element)
-              {
-                $('input[name='+element+']').attr('value', i+1);
-
-                console.log('i - element ->', i, element);
-              });
-
-              console.log('new order ->', new_order);
-            }
-          });
+          
+          $scope.populate();
 
 
-          $('#firsttry').sortable({
-            items: 'tbody tr',
-            update: function (event, ui)
+          window.setConnecteds = setTimeout(function ()
+          {
+            if ($rootScope.data.connected.list.verified)
             {
-              console.log('new list ->', $('#firsttry').sortable('toArray'));
+              $scope.list = {};
 
-              $.each($('#firsttry tbody tr'), function (i, element)
+              angular.forEach($rootScope.data.connected.list.verified, function (connection, rank)
               {
-                console.log('i - element ->', i, element);
-
-//                $.each($('#firsttry tbody tr td'), function (i2, element2)
-//                {
-//                  console.log('i2 - element 2 ->', i, i2, element, element2);
-//                });
-
+                $scope.list[rank + 1] = connection.label + ' ' + connection.contactInfo;
               });
             }
-          });
+          }, 1000);
 
 
+          $('#verifieds').sortable(
+            {
+              items: 'tbody tr',
+
+              update: function ()
+              {
+                var row = $('#verifieds tbody tr');
+
+                $.each(row, function (i)
+                {
+                  $rootScope.data.sequence[i] = $(row[i]).attr('data-rank');
+                });
+              }
+            }
+          );
 
 
+          $scope.reGenerate = function ()
+          {
+            $rootScope.statusBar.display('Regenerating the list..');
 
+            Core.scenarios.run()
+              .then(function (result)
+              {
+                $rootScope.statusBar.off();
+
+                var groups = angular.fromJson(Storage.get('groups'));
+
+                angular.forEach(groups, function (group)
+                {
+                  if (group.scenarioId == result.scenarioId)
+                  {
+                    group.contactInfoSequence = result.contactInfoSequence;
+                  }
+                });
+
+                Storage.add('groups', angular.toJson(groups));
+
+                Core.factory.process();
+
+                $scope.populate();
+
+              });
+          };
 
 
           $scope.resetConnection = function ()
@@ -76,9 +95,7 @@ define(
             };
           };
 
-
           $scope.resetConnection();
-
 
           $scope.verified = {
             status: false,
@@ -102,7 +119,6 @@ define(
                 .removeAttr('disabled');
             });
           };
-
 
           $scope.connections = {
 
@@ -218,7 +234,6 @@ define(
               }
             }
           };
-
         }
       ]
     );

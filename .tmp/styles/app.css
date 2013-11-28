@@ -2515,18 +2515,23 @@ h2#logo-big {
   font-size: 11px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003350}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003246}}
+#verifieds tr:hover {
+  cursor: pointer;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003365}}
 .thumb-btn {
   text-align: center;
   cursor: pointer;
   border: 2px solid whitesmoke;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003354}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003369}}
 .thumb-btn:hover {
   border: 2px solid #e9168b;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003359}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/cengizulusoy\/Ask\/Git\/oneline\/app\/styles\/app\/_styles\.scss}line{font-family:\00003374}}
 .thumb-btn-active {
   border: 2px solid #e9168b;
 }

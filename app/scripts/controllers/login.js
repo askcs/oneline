@@ -46,7 +46,6 @@ define(
           var loginBtn = $('#login button[type=submit]');
 
 
-          // TODO: Remove unneccessary DOM manipulation Use cookies for user credentials
           $scope.login = function ()
           {
             $('#alertDiv').hide();
@@ -216,14 +215,19 @@ define(
                             {
                               self.progress('Groups loaded');
 
-                              Core.factory.process();
+                              // Core.factory.process();
 
-                              $location.path('/core');
+                              Core.factory.run()
+                                .then(function ()
+                                {
+                                  $location.path('/core');
 
-                              setTimeout(function ()
-                              {
-                                $('.navbar').show();
-                              }, 100);
+                                  setTimeout(function ()
+                                  {
+                                    $('.navbar').show();
+                                  }, 100);
+                                });
+
                             }
                           });
                       }
@@ -244,6 +248,7 @@ define(
 
 
           $scope.demoUsers = [
+            'apptestoneline',
             'ahmet',
             'cengiz',
             'duco',

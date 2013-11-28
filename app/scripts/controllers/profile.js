@@ -91,7 +91,7 @@ define(
 
                     $rootScope.$watch(function ()
                     {
-                      $rootScope.profileEdit = false;
+                      // $rootScope.profileEdit = false;
                       $rootScope.profileEditing = false;
                     });
 
