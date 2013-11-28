@@ -14,30 +14,19 @@ define(
 
           $scope.populate = function ()
           {
-            $scope.verifiedNumbers = {};
+            $scope.verifiedNumbers = [];
 
             angular.forEach($rootScope.data.sequence, function (id, rank)
             {
-              $scope.verifiedNumbers[rank] = $rootScope.data.nodes[id];
+              $scope.verifiedNumbers.push({
+                rank:   rank,
+                number: $rootScope.data.nodes[id]
+              });
             });
           };
 
-          
+
           $scope.populate();
-
-
-          window.setConnecteds = setTimeout(function ()
-          {
-            if ($rootScope.data.connected.list.verified)
-            {
-              $scope.list = {};
-
-              angular.forEach($rootScope.data.connected.list.verified, function (connection, rank)
-              {
-                $scope.list[rank + 1] = connection.label + ' ' + connection.contactInfo;
-              });
-            }
-          }, 1000);
 
 
           $('#verifieds').sortable(
@@ -61,6 +50,8 @@ define(
           {
             $rootScope.statusBar.display('Regenerating the list..');
 
+            $('#sequenceBtn').attr('disabled', 'disabled');
+
             Core.scenarios.run()
               .then(function (result)
               {
@@ -75,6 +66,8 @@ define(
                     group.contactInfoSequence = result.contactInfoSequence;
                   }
                 });
+
+                $('#sequenceBtn').removeAttr('disabled');
 
                 Storage.add('groups', angular.toJson(groups));
 

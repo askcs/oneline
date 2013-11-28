@@ -491,28 +491,28 @@ br
             table#verifieds.table.table-striped(ng-show='(data.connected.list.verified.length > 0)')
               thead
                 tr
-                  th(style='width: 50px;')
+                  th(style='width: 80px;')
                   th(style='width: 100px;')
                   th Label
                   th Connection
                   th Type
                   th
               tbody
-                tr(ng-repeat='(rank, number) in verifiedNumbers', data-rank='{{number.id}}')
+                tr(ng-repeat='verified in verifiedNumbers', data-rank='{{verified.number.id}}')
                   td(style='vertical-align: middle')
-                    span.icomoon.icomoon-menu.muted(aria-hidden='true', style='font-size: 24px;') {{rank}}
+                    span.icomoon.icomoon-menu.muted(aria-hidden='true', style='font-size: 24px;') &nbsp;{{verified.rank}}
                   td(style='vertical-align: middle')
                     span.label.label-success Verified
-                  td(style='vertical-align: middle') {{number.id}} - {{number.label}}
-                  td(style='vertical-align: middle') {{number.contactInfo}}
-                  td(style='vertical-align: middle') {{number.contactInfoTag}}
+                  td(style='vertical-align: middle') {{verified.number.id}} - {{verified.number.label}}
+                  td(style='vertical-align: middle') {{verified.number.contactInfo}}
+                  td(style='vertical-align: middle') {{verified.number.contactInfoTag}}
                   td(style='vertical-align: middle, text-align: right')
 
-                    button.btn(ng-click='connections.remove(number)',
+                    button.btn(ng-click='connections.remove(verified.number)',
                                 type='button',
                                 style='margin-right:5px') Delete
 
-            button.btn.btn-primary(ng-click='reGenerate()') Generate
+            button#sequenceBtn.btn(ng-click='reGenerate()') Resequence
 
 
 

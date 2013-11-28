@@ -310,7 +310,7 @@
             <table id="verifieds" ng-show="(data.connected.list.verified.length &gt; 0)" class="table table-striped">
               <thead>
                 <tr>
-                  <th style="width: 50px;"></th>
+                  <th style="width: 80px;"></th>
                   <th style="width: 100px;"></th>
                   <th>Label</th>
                   <th>Connection</th>
@@ -319,19 +319,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="(rank, number) in verifiedNumbers" data-rank="{{number.id}}">
-                  <td style="vertical-align: middle"><span aria-hidden="true" style="font-size: 24px;" class="icomoon icomoon-menu muted">{{rank}}</span></td>
+                <tr ng-repeat="verified in verifiedNumbers" data-rank="{{verified.number.id}}">
+                  <td style="vertical-align: middle"><span aria-hidden="true" style="font-size: 24px;" class="icomoon icomoon-menu muted">&nbsp;{{verified.rank}}</span></td>
                   <td style="vertical-align: middle"><span class="label label-success">Verified</span></td>
-                  <td style="vertical-align: middle">{{number.id}} - {{number.label}}</td>
-                  <td style="vertical-align: middle">{{number.contactInfo}}</td>
-                  <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
+                  <td style="vertical-align: middle">{{verified.number.id}} - {{verified.number.label}}</td>
+                  <td style="vertical-align: middle">{{verified.number.contactInfo}}</td>
+                  <td style="vertical-align: middle">{{verified.number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">
-                    <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" class="btn">Delete</button>
+                    <button ng-click="connections.remove(verified.number)" type="button" style="margin-right:5px" class="btn">Delete</button>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <button ng-click="reGenerate()" class="btn btn-primary">Generate</button>
+            <button id="sequenceBtn" ng-click="reGenerate()" class="btn">Resequence</button>
           </div>
         </div>
       </div>
