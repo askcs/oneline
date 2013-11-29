@@ -293,7 +293,7 @@
                     <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
                     <td style="vertical-align: middle, text-align: right">
                       <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" class="btn">Delete</button>
-                      <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" ng-hide="number.verified" class="btn">Edit</button>
+                      <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" class="btn">Edit</button>
                       <div style="margin-top:10px; display: inline" ng-show="verifying[number.id]" class="input-append">
                         <input id="appendedInputButton" type="text" ng-model="verificationCode[number.id]" autofocus="autofocus" class="span3"/>
                         <button type="button" ng-click="resetVerifiers()" class="btn">Cancel</button>
@@ -323,7 +323,7 @@
                 <tr ng-repeat="verified in data.connected.list.verified" data-rank="{{verified.number.id}}">
                   <td style="vertical-align: middle"><span aria-hidden="true" style="font-size: 24px;" class="icomoon icomoon-menu muted">&nbsp;{{verified.rank}}</span></td>
                   <td style="vertical-align: middle"><span class="label label-success">Verified</span></td>
-                  <td style="vertical-align: middle">{{verified.number.label}}</td>
+                  <td style="vertical-align: middle">{{verified}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfo}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">

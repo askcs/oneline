@@ -42,7 +42,9 @@ define(
                 $rootScope.resetProfileEdit();
               });
 
-              $location.path('/login');
+              $window.location.href = 'views/logout.html';
+
+              // $location.path('/login');
 
             });
 

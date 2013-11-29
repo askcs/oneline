@@ -459,8 +459,7 @@ br
 
                       button.btn(ng-click='connections.edit(number)',
                                   style='margin-right:5px',
-                                  type='button',
-                                  ng-hide='number.verified') Edit
+                                  type='button') Edit
 
                       .input-append(style='margin-top:10px; display: inline',
                                     ng-show='verifying[number.id]')
@@ -501,7 +500,7 @@ br
                     span.icomoon.icomoon-menu.muted(aria-hidden='true', style='font-size: 24px;') &nbsp;{{verified.rank}}
                   td(style='vertical-align: middle')
                     span.label.label-success Verified
-                  td(style='vertical-align: middle') {{verified.number.label}}
+                  td(style='vertical-align: middle') {{verified}}
                   td(style='vertical-align: middle') {{verified.number.contactInfo}}
                   td(style='vertical-align: middle') {{verified.number.contactInfoTag}}
                   td(style='vertical-align: middle, text-align: right')
