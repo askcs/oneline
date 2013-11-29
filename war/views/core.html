@@ -266,7 +266,8 @@
                 <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" ng-change="checkNumber(connection.contactInfo)" class="input-large">
               </div>
               <button type="button" ng-show="connection.label.length &gt; 0" ng-click="resetConnection();" class="btn">Cancel</button>
-              <button type="submit" class="btn {{(phoneNumberParsed.result == false) &amp;&amp; &quot;disabled&quot;}}">Save</button><span style="margin-left: 10px" ng-hide="phoneNumberParsed.result" class="text-error"><small><i>{{phoneNumberParsed.message}}</i></small></span><span style="margin-left: 10px" ng-show="phoneNumberParsed.result" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></span>
+              <button type="submit" class="btn {{(phoneNumberParsed.result == false) &amp;&amp; &quot;disabled&quot;}}">Save</button><span style="margin-left: 10px" ng-hide="phoneNumberParsed.result" class="text-error"><small><i>{{phoneNumberParsed.message}}</i></small></span>
+              <div ng-show="phoneNumberParsed.result"><span style="margin-top: 15px" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></span></div>
             </form>
             <div ng-show="(data.connected.list.notVerified.length &gt; 0)">
               <h4>Not Verified Numbers</h4>
@@ -319,10 +320,10 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="verified in verifiedNumbers" data-rank="{{verified.number.id}}">
+                <tr ng-repeat="verified in data.connected.list.verified" data-rank="{{verified.number.id}}">
                   <td style="vertical-align: middle"><span aria-hidden="true" style="font-size: 24px" class="icomoon icomoon-menu muted">&nbsp;{{verified.rank}}</span></td>
                   <td style="vertical-align: middle"><span class="label label-success">Verified</span></td>
-                  <td style="vertical-align: middle">{{verified.number.id}} - {{verified.number.label}}</td>
+                  <td style="vertical-align: middle">{{verified.number.label}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfo}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">
