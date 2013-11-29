@@ -485,6 +485,8 @@ br
             p(ng-show='(data.connected.list.verified.length == 0)')
               | There are no connected numbers. Please add some.
 
+            p --> {{data.connected.list.verified}}
+
             table#verifieds.table.table-striped(ng-show='(data.connected.list.verified.length > 0)')
               thead
                 tr

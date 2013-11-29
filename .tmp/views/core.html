@@ -308,6 +308,7 @@
             <h4>Verified Numbers</h4>
             <hr/>
             <p ng-show="(data.connected.list.verified.length == 0)">There are no connected numbers. Please add some.</p>
+            <p>--> {{data.connected.list.verified}}</p>
             <table id="verifieds" ng-show="(data.connected.list.verified.length &gt; 0)" class="table table-striped">
               <thead>
                 <tr>
