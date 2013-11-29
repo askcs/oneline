@@ -36,7 +36,7 @@ define(
 
               $rootScope.$watch(function ()
               {
-                $rootScope.data = {};
+                // $rootScope.data = {};
                 $rootScope.session = {};
 
                 $rootScope.resetProfileEdit();

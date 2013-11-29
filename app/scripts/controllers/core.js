@@ -6,8 +6,8 @@ define(
 
     controllers.controller('core',
       [
-        '$rootScope', '$scope', '$location', 'Core',
-        function ($rootScope, $scope, $location, Core)
+        '$rootScope', '$scope', '$location',
+        function ($rootScope, $scope, $location)
         {
           function setView(hash)
           {

@@ -215,18 +215,30 @@ define(
                             {
                               self.progress('Groups loaded');
 
-                              // Core.factory.process();
+                              Core.factory.process();
 
-                              Core.factory.run()
-                                .then(function ()
-                                {
-                                  $location.path('/core');
+//                              Core.factory.run()
+//                                .then(function ()
+//                                {
+//
+//
+//                                  $location.path('/core');
+//
+//                                  setTimeout(function ()
+//                                  {
+//                                    $('.navbar').show();
+//                                  }, 100);
+//
+//
+//                                });
 
-                                  setTimeout(function ()
-                                  {
-                                    $('.navbar').show();
-                                  }, 100);
-                                });
+
+                              $location.path('/core');
+
+                              setTimeout(function ()
+                              {
+                                $('.navbar').show();
+                              }, 100);
 
                             }
                           });

@@ -11,23 +11,22 @@ define(
         {
           $rootScope.fixStyles();
 
+          // $rootScope.data = $rootScope.tmp;
 
-          $scope.populate = function ()
+          if (!$rootScope.data.connected)
           {
-            $scope.verifiedNumbers = [];
+            console.log('no items in connected', $rootScope.data, $rootScope.tmp);
 
-            angular.forEach($rootScope.data.sequence, function (id, rank)
+            // TODO: Workaround?
+            $rootScope.data = $rootScope.tmp;
+
+            /*
+            setTimeout(function ()
             {
-              $scope.verifiedNumbers.push({
-                rank:   rank,
-                number: $rootScope.data.nodes[id]
-              });
-            });
-          };
-
-
-          $scope.populate();
-
+              $rootScope.data = $rootScope.data;
+            },500);
+            */
+          }
 
           $('#verifieds').sortable(
             {
@@ -44,7 +43,6 @@ define(
               }
             }
           );
-
 
           $scope.reGenerate = function ()
           {
@@ -72,12 +70,8 @@ define(
                 Storage.add('groups', angular.toJson(groups));
 
                 Core.factory.process();
-
-                $scope.populate();
-
               });
           };
-
 
           $scope.resetConnection = function ()
           {
@@ -140,6 +134,8 @@ define(
                   .then(function ()
                   {
                     $rootScope.statusBar.off();
+
+                    $rootScope.phoneNumberParsed.message = '';
 
                     $scope.resetConnection();
 

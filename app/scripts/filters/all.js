@@ -4,31 +4,6 @@ define(
   {
     'use strict';
 
-    /**
-     * Translate package
-     */
-    filters.filter('sortSequence',
-      [
-        function ()
-        {
-          return function (sequence)
-          {
-            if (sequence)
-            {
-              var i = 0, ordered;
-
-              angular.forEach(sequence, function (seq)
-              {
-                console.log('seq ->', seq);
-              });
-
-              console.log('-----------------');
-
-              return sequence;
-            }
-          };
-        }
-      ]);
 
     /**
      * Translate package

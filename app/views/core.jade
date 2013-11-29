@@ -412,10 +412,10 @@ br
                 small
                   i {{phoneNumberParsed.message}}
 
-              span.text-success(style='margin-left: 10px;'
-                              ng-show='phoneNumberParsed.result')
-                small
-                  i {{phoneNumberParsed.message}}
+              div(ng-show='phoneNumberParsed.result')
+                span.text-success(style='margin-top: 15px')
+                  small
+                    i {{phoneNumberParsed.message}}
 
 
             div(ng-show='(data.connected.list.notVerified.length > 0)')
@@ -476,10 +476,8 @@ br
                                   ng-hide='number.verified || verifying[number.id]',
                                   ng-click='connections.verify.initiate(number)',
                                   type='button') Verify
-
               br
               br
-
 
 
             h4 Verified Numbers
@@ -498,12 +496,12 @@ br
                   th Type
                   th
               tbody
-                tr(ng-repeat='verified in verifiedNumbers', data-rank='{{verified.number.id}}')
+                tr(ng-repeat='verified in data.connected.list.verified', data-rank='{{verified.number.id}}')
                   td(style='vertical-align: middle')
                     span.icomoon.icomoon-menu.muted(aria-hidden='true', style='font-size: 24px;') &nbsp;{{verified.rank}}
                   td(style='vertical-align: middle')
                     span.label.label-success Verified
-                  td(style='vertical-align: middle') {{verified.number.id}} - {{verified.number.label}}
+                  td(style='vertical-align: middle') {{verified.number.label}}
                   td(style='vertical-align: middle') {{verified.number.contactInfo}}
                   td(style='vertical-align: middle') {{verified.number.contactInfoTag}}
                   td(style='vertical-align: middle, text-align: right')

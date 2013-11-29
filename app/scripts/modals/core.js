@@ -797,11 +797,12 @@ define(
 
 
           Core.prototype.factory = {
+
             run: function ()
             {
               var deferred = $q.defer();
 
-              if (this.process())
+              if (Core.prototype.factory.process())
               {
                 deferred.resolve();
               }
@@ -811,34 +812,34 @@ define(
 
             process: function ()
             {
-              var raws = {
-                  groups:       angular.fromJson(Storage.get('groups')),
-                  connections:  angular.fromJson(Storage.get('connections')),
-                  settings:     angular.fromJson(Storage.get('settings'))
-                },
-                data  = {
-                  account:    {},
-                  connected:  {},
-                  blacklist:  {},
-                  contact:    {},
-                  owner:      {},
-                  sequence:   {},
-                  settings:   {
-                    sms: {
-                      status:   false,
-                      target:   null,
-                      targets:  []
-                    },
-                    email: {
-                      status:   false,
-                      target:   null,
-                      targets:  []
+              var raws   = {
+                    groups:       angular.fromJson(Storage.get('groups')),
+                    connections:  angular.fromJson(Storage.get('connections')),
+                    settings:     angular.fromJson(Storage.get('settings'))
+                  },
+                  data   = {
+                    account:    {},
+                    connected:  {},
+                    blacklist:  {},
+                    contact:    {},
+                    owner:      {},
+                    sequence:   {},
+                    settings:   {
+                      sms: {
+                        status:   false,
+                        target:   null,
+                        targets:  []
+                      },
+                      email: {
+                        status:   false,
+                        target:   null,
+                        targets:  []
+                      }
                     }
-                  }
-                },
-                phones  = [],
-                emails  = [],
-                nodes   = {};
+                  },
+                  phones = [],
+                  emails = [],
+                  nodes  = {};
 
               // console.table(raws.connections);
 
@@ -927,7 +928,7 @@ define(
                   {
                     if (nodes[id].verified)
                     {
-                      data.connected.list.verified.push(nodes[id]);
+                      // data.connected.list.verified.push(nodes[id]);
                     }
                     else
                     {
@@ -941,7 +942,6 @@ define(
                 });
               }
 
-
               if (!sequenced)
               {
                 angular.forEach(data.connected.list.verified, function (verified, index)
@@ -951,6 +951,14 @@ define(
                   data.sequence[index] = verified.id;
                 });
               }
+
+              angular.forEach(data.sequence, function (id, rank)
+              {
+                data.connected.list.verified.push({
+                  rank:   rank,
+                  number: nodes[id]
+                });
+              });
 
               data.blacklist.list = [];
 
@@ -968,7 +976,6 @@ define(
                   }
                 });
               }
-
 
               angular.forEach(nodes, function (node)
               {
@@ -1055,7 +1062,9 @@ define(
 
               data.nodes = nodes;
 
-              $rootScope.data = data;
+              console.info('processed ->', data);
+
+              $rootScope.tmp = $rootScope.data = data;
 
               console.info('data ->', $rootScope.data);
 
