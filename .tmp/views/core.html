@@ -308,7 +308,6 @@
             <h4>Verified Numbers</h4>
             <hr/>
             <p ng-show="(data.connected.list.verified.length == 0)">There are no connected numbers. Please add some.</p>
-            <p>--> {{data.connected.list.verified}}</p>
             <table id="verifieds" ng-show="(data.connected.list.verified.length &gt; 0)" class="table table-striped">
               <thead>
                 <tr>
@@ -324,7 +323,7 @@
                 <tr ng-repeat="verified in data.connected.list.verified" data-rank="{{verified.number.id}}">
                   <td style="vertical-align: middle"><span aria-hidden="true" style="font-size: 24px;" class="icomoon icomoon-menu muted">&nbsp;{{verified.rank}}</span></td>
                   <td style="vertical-align: middle"><span class="label label-success">Verified</span></td>
-                  <td style="vertical-align: middle">{{verified}}</td>
+                  <td style="vertical-align: middle">{{verified.number.label}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfo}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">

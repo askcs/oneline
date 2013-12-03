@@ -11,22 +11,7 @@ define(
         {
           $rootScope.fixStyles();
 
-          // $rootScope.data = $rootScope.tmp;
-
-          if (!$rootScope.data.connected)
-          {
-            console.log('no items in connected', $rootScope.data, $rootScope.tmp);
-
-            // TODO: Workaround?
-            $rootScope.data = $rootScope.tmp;
-
-            /*
-            setTimeout(function ()
-            {
-              $rootScope.data = $rootScope.data;
-            },500);
-            */
-          }
+          console.log('-->', $rootScope.data.connected.list);
 
           $('#verifieds').sortable(
             {
@@ -209,7 +194,30 @@ define(
 
                       angular.forEach(connections, function (connection)
                       {
-                        if (connection.id === number.id) { connection.verified = true; }
+                        if (connection.id === number.id)
+                        {
+                          connection.verified = true;
+
+                          var sequence  = $rootScope.data.sequence,
+                              count     = 0,
+                              groups    = angular.fromJson(Storage.get('groups'));
+
+                          angular.forEach($rootScope.data.sequence, function () { count++; });
+
+                          sequence[count] = connection.id;
+
+                          $rootScope.data.sequence = sequence;
+
+                          angular.forEach(groups, function (group)
+                          {
+                            if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERSEQUENCE')
+                            {
+                              group.contactInfoSequence = sequence;
+                            }
+                          });
+
+                          Storage.add('groups', angular.toJson(groups));
+                        }
                       });
 
                       Storage.add('connections', angular.toJson(connections));

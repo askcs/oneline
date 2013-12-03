@@ -485,8 +485,6 @@ br
             p(ng-show='(data.connected.list.verified.length == 0)')
               | There are no connected numbers. Please add some.
 
-            p --> {{data.connected.list.verified}}
-
             table#verifieds.table.table-striped(ng-show='(data.connected.list.verified.length > 0)')
               thead
                 tr
@@ -502,7 +500,7 @@ br
                     span.icomoon.icomoon-menu.muted(aria-hidden='true', style='font-size: 24px;') &nbsp;{{verified.rank}}
                   td(style='vertical-align: middle')
                     span.label.label-success Verified
-                  td(style='vertical-align: middle') {{verified}}
+                  td(style='vertical-align: middle') {{verified.number.label}}
                   td(style='vertical-align: middle') {{verified.number.contactInfo}}
                   td(style='vertical-align: middle') {{verified.number.contactInfoTag}}
                   td(style='vertical-align: middle, text-align: right')

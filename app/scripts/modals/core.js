@@ -731,7 +731,7 @@ define(
               }
               else
               {
-                angular.forEach($rootScope.data.connected.list, function (listed, index)
+                angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
                 {
                   if (listed.verified)
                   {
@@ -810,7 +810,7 @@ define(
               return deferred.promise;
             },
 
-            process: function ()
+            process: function (byPassScenario)
             {
               var raws   = {
                     groups:       angular.fromJson(Storage.get('groups')),
@@ -873,9 +873,17 @@ define(
                   break;
 
                 case 'CONNECTEDNUMBERSEQUENCE':
-                  data.sequence = group.contactInfoSequence;
 
-                  sequenced = true;
+                  if (group.contactInfoSequence)
+                  {
+                    data.sequence = group.contactInfoSequence;
+
+                    sequenced = true;
+                  }
+                  else
+                  {
+                    sequenced = false;
+                  }
                   break;
                 }
               });
@@ -952,10 +960,12 @@ define(
                 });
               }
 
+              console.log('sequence ->', data.sequence);
+
               angular.forEach(data.sequence, function (id, rank)
               {
                 data.connected.list.verified.push({
-                  rank:   rank,
+                  rank:   Number(rank) + 1,
                   number: nodes[id]
                 });
               });
@@ -1062,13 +1072,14 @@ define(
 
               data.nodes = nodes;
 
-              console.info('processed ->', data);
-
               $rootScope.tmp = $rootScope.data = data;
 
               console.info('data ->', $rootScope.data);
 
-              Core.prototype.scenarios.build();
+              if (byPassScenario)
+              {
+                Core.prototype.scenarios.build();
+              }
 
               return true;
             }
