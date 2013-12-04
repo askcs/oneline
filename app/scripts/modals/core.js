@@ -473,16 +473,21 @@ define(
                 function (result)
                 {
                   var list = $rootScope.data.connected.group.contactInfoIds;
+                  var connections = angular.fromJson(Storage.get('connections'));
+                  var filteredList = [];
 
                   var contactInfoIds = [];
 
                   if (list.indexOf(connection.id) != -1)
                   {
-                    angular.forEach(list, function (listed)
+                    angular.forEach(connections, function (con)
                     {
-                      if (listed != connection.id)
+                      if (con.id != connection.id &&
+                          list.indexOf(con.id) != -1)
                       {
-                        contactInfoIds.push(listed);
+                        contactInfoIds.push(con);
+
+                        filteredList.push(con.id);
                       }
                     });
                   }
@@ -495,19 +500,40 @@ define(
                   {
                     if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERS')
                     {
-                      group.contactInfoIds = contactInfoIds;
+                      group.contactInfoIds = filteredList;
                     }
                   });
 
                   Storage.add('groups', angular.toJson(groups));
 
+
+
+
+
+
                   if (section == 'verified')
                   {
+                    console.log('it is a verified number and deleting it -----------------------------');
+
                     var reorder = {};
+
+                    console.log('old sequence ->', $rootScope.data.sequence);
+
+                    var removedRank;
+
+                    angular.forEach($rootScope.data.sequence, function (id, rank)
+                    {
+                      if (id == connection.id)
+                      {
+                        removedRank = rank;
+                      }
+                    });
+
+                    delete $rootScope.data.sequence[removedRank];
 
                     angular.forEach($rootScope.data.sequence, function (val, i)
                     {
-                      if (i < connection.id)
+                      if (i < removedRank)
                       {
                         reorder[i] = val;
                       }
@@ -529,6 +555,10 @@ define(
 
                     Storage.add('groups', angular.toJson(groups));
                   }
+
+
+
+
 
                   delete $rootScope.data.nodes[connection.id];
 
