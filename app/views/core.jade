@@ -509,8 +509,9 @@ br
                                 type='button',
                                 style='margin-right:5px') Delete
 
-            button#sequenceBtn.btn(ng-click='reGenerate()') Resequence
-            button#sequenceBtn.btn(ng-click='cleanSequence()') Clean Sequence
+            button#sequenceBtn.btn(ng-show='(data.connected.list.verified.length > 0)',
+                                    ng-click='reGenerate()') Resequence
+            button#sequenceBtn.btn.btn-danger(style='display: none', ng-click='cleanSequence()') Clean Sequence
 
 
 

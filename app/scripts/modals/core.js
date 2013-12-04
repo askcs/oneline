@@ -517,27 +517,35 @@ define(
 
                     var reorder = {};
 
+
+
                     console.log('old sequence ->', $rootScope.data.sequence);
 
-                    var removedRank;
+
+
+                    // var removedRank;
+
+
+
+                    var _this = this;
 
                     angular.forEach($rootScope.data.sequence, function (id, rank)
                     {
                       if (id == connection.id)
                       {
-                        removedRank = rank;
+                        _this.removedRank = rank;
 
-                        delete $rootScope.data.sequence[removedRank];
+                        delete $rootScope.data.sequence[_this.removedRank];
                       }
                     });
 
 
-                    console.log('deleting -->', $rootScope.data.sequence[removedRank]);
+                    console.log('deleting -->', $rootScope.data.sequence[_this.removedRank]);
 
 
                     angular.forEach($rootScope.data.sequence, function (val, i)
                     {
-                      if (i < removedRank)
+                      if (i < _this.removedRank)
                       {
                         reorder[i] = val;
                       }
@@ -758,7 +766,15 @@ define(
             {
               var deferred = $q.defer();
 
-              var connected = {};
+              var payload = {
+                info: 'Ask-Cs One Line scenario',
+                connected_numbers: {},
+                events: {
+                  on_blacklist:           '',
+                  on_scenario_complete:   '',
+                  on_scenario_exception:  ''
+                }
+              };
 
               if (custom)
               {
@@ -786,16 +802,21 @@ define(
                 {
                   connected = {};
                 }
-                */
                 console.log('connected ->', connected);
+                */
+
+
+                payload = null;
               }
               else
               {
                 if ($rootScope.data.sequence != {})
                 {
+                  console.log('1111');
+
                   angular.forEach($rootScope.data.sequence, function (id, rank)
                   {
-                    connected[rank] = {
+                    payload.connected_numbers[rank] = {
                       contactInfoId: id,
                       timeout:       20
                     };
@@ -803,11 +824,13 @@ define(
                 }
                 else
                 {
+                  console.log('2222');
+
                   angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
                   {
                     if (listed.verified)
                     {
-                      connected[index] = {
+                      payload.connected_numbers[index] = {
                         contactInfoId: listed.id,
                         timeout:       20
                       };
@@ -818,15 +841,7 @@ define(
 
               Scenarios.build(
                 {},
-                {
-                  info: 'Ask-Cs One Line scenario',
-                  connected_numbers: connected,
-                  events: {
-                    on_blacklist:           '',
-                    on_scenario_complete:   '',
-                    on_scenario_exception:  ''
-                  }
-                },
+                payload,
                 function (result)
                 {
                   Storage.add('scenario', angular.toJson(result));
@@ -879,7 +894,7 @@ define(
               return deferred.promise;
             },
 
-            process: function (byPassScenario)
+            process: function ()
             {
               var raws   = {
                     groups:       angular.fromJson(Storage.get('groups')),
@@ -1145,10 +1160,7 @@ define(
 
               console.info('data ->', $rootScope.data);
 
-              if (byPassScenario)
-              {
-                Core.prototype.scenarios.build();
-              }
+              Core.prototype.scenarios.build();
 
               return true;
             }
