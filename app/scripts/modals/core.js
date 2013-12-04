@@ -526,10 +526,14 @@ define(
                       if (id == connection.id)
                       {
                         removedRank = rank;
+
+                        delete $rootScope.data.sequence[removedRank];
                       }
                     });
 
-                    delete $rootScope.data.sequence[removedRank];
+
+                    console.log('deleting -->', $rootScope.data.sequence[removedRank]);
+
 
                     angular.forEach($rootScope.data.sequence, function (val, i)
                     {
@@ -750,39 +754,59 @@ define(
 
 
           Core.prototype.scenarios = {
-            run: function ()
+            run: function (custom)
             {
               var deferred = $q.defer();
 
-              // console.log('there are enough stuff to run scenario ->', $rootScope.data.connected.list);
-
               var connected = {};
 
-              if ($rootScope.data.sequence)
+              if (custom)
               {
-                angular.forEach($rootScope.data.sequence, function (id, rank)
-                {
-                  connected[rank] = {
-                    contactInfoId: id,
-                    timeout:       20
-                  };
-                });
-              }
-              else
-              {
+                console.log('coming to here..');
+
                 angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
                 {
-                  if (listed.verified)
+                  console.log('listed ->', listed);
+
+                  if (listed.number.verified)
                   {
+                    console.log('verified ->', listed);
+
                     connected[index] = {
-                      contactInfoId: listed.id,
+                      contactInfoId: listed.number.id,
                       timeout:       20
                     };
                   }
                 });
-              }
 
-              // console.log('running scenario on ->', connected);
+                console.log('connected ->', connected);
+              }
+              else
+              {
+                if ($rootScope.data.sequence != {})
+                {
+                  angular.forEach($rootScope.data.sequence, function (id, rank)
+                  {
+                    connected[rank] = {
+                      contactInfoId: id,
+                      timeout:       20
+                    };
+                  });
+                }
+                else
+                {
+                  angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
+                  {
+                    if (listed.number.verified)
+                    {
+                      connected[index] = {
+                        contactInfoId: listed.number.id,
+                        timeout:       20
+                      };
+                    }
+                  });
+                }
+              }
 
               Scenarios.build(
                 {},
@@ -812,8 +836,6 @@ define(
 
             build: function ()
             {
-              // console.log('scenario build is being asked ->', $rootScope.data.connected.list);
-
               var verifieds = false;
 
               if ($rootScope.data.connected.list.length > 0)

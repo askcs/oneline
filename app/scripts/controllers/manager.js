@@ -29,6 +29,19 @@ define(
             }
           );
 
+
+          $scope.cleanSequence = function ()
+          {
+            $rootScope.statusBar.display('Cleaning the sequence..');
+
+            Core.scenarios.run(true)
+              .then(function ()
+              {
+                $rootScope.statusBar.off();
+              });
+          };
+
+
           $scope.reGenerate = function ()
           {
             $rootScope.statusBar.display('Regenerating the list..');
