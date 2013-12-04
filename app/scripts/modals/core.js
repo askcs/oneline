@@ -466,121 +466,130 @@ define(
               var deferred  = $q.defer(),
                   self      = this;
 
-              ContactInfos.remove(
-                {
-                  id: connection.id
-                },
-                function (result)
-                {
-                  var list = $rootScope.data.connected.group.contactInfoIds;
-                  var connections = angular.fromJson(Storage.get('connections'));
-                  var filteredList = [];
 
-                  var contactInfoIds = [];
 
-                  if (list.indexOf(connection.id) != -1)
+              function removeNumber (connection, section)
+              {
+                var list = $rootScope.data.connected.group.contactInfoIds;
+
+                var connections = angular.fromJson(Storage.get('connections'));
+
+                var filteredList = [];
+
+                var contactInfoIds = [];
+
+                if (list.indexOf(connection.id) != -1)
+                {
+                  console.log('deleting number is in the list');
+
+                  angular.forEach(connections, function (con)
                   {
-                    angular.forEach(connections, function (con)
+                    if (con.id != connection.id &&
+                      list.indexOf(con.id) != -1)
                     {
-                      if (con.id != connection.id &&
-                          list.indexOf(con.id) != -1)
-                      {
-                        contactInfoIds.push(con);
+                      contactInfoIds.push(con);
 
-                        filteredList.push(con.id);
-                      }
-                    });
+                      filteredList.push(con.id);
+                    }
+                  });
+                }
+                else
+                {
+                  console.warn('delete number is not valid not in list !!');
+                }
+
+                Storage.add('connections', angular.toJson(contactInfoIds));
+
+                var groups = angular.fromJson(Storage.get('groups'));
+
+                angular.forEach(groups, function (group)
+                {
+                  if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERS')
+                  {
+                    group.contactInfoIds = filteredList;
                   }
+                });
 
-                  Storage.add('connections', angular.toJson(contactInfoIds));
+                Storage.add('groups', angular.toJson(groups));
 
-                  var groups = angular.fromJson(Storage.get('groups'));
+
+
+                if (section == 'verified')
+                {
+                  console.log('it is a verified number and deleting it -----------------------------');
+
+                  var reorder = {};
+
+                  console.log('old sequence ->', $rootScope.data.sequence);
+
+                  var removedRank;
+
+                  // var _this = this;
+
+                  angular.forEach($rootScope.data.sequence, function (id, rank)
+                  {
+                    if (id == connection.id)
+                    {
+                      removedRank = rank;
+                    }
+                  });
+
+                  console.log('sequence -->', $rootScope.data.sequence);
+
+                  delete $rootScope.data.sequence[removedRank];
+
+                  console.log('DEL -->', $rootScope.data.sequence[removedRank]);
+
+                  console.log('removedRank ->', removedRank);
+
+                  angular.forEach($rootScope.data.sequence, function (val, i)
+                  {
+                    if (i < removedRank)
+                    {
+                      reorder[i] = val;
+                    }
+                    else
+                    {
+                      reorder[i-1] = val;
+                    }
+                  });
+
+                  $rootScope.data.sequence = reorder;
 
                   angular.forEach(groups, function (group)
                   {
-                    if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERS')
+                    if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERSEQUENCE')
                     {
-                      group.contactInfoIds = filteredList;
+                      group.contactInfoSequence = reorder;
                     }
                   });
 
                   Storage.add('groups', angular.toJson(groups));
-
-
-
-
-
-
-                  if (section == 'verified')
-                  {
-                    console.log('it is a verified number and deleting it -----------------------------');
-
-                    var reorder = {};
-
-
-
-                    console.log('old sequence ->', $rootScope.data.sequence);
-
-
-
-                    // var removedRank;
-
-
-
-                    var _this = this;
-
-                    angular.forEach($rootScope.data.sequence, function (id, rank)
-                    {
-                      if (id == connection.id)
-                      {
-                        _this.removedRank = rank;
-
-                        delete $rootScope.data.sequence[_this.removedRank];
-                      }
-                    });
-
-
-                    console.log('deleting -->', $rootScope.data.sequence[_this.removedRank]);
-
-
-                    angular.forEach($rootScope.data.sequence, function (val, i)
-                    {
-                      if (i < _this.removedRank)
-                      {
-                        reorder[i] = val;
-                      }
-                      else
-                      {
-                        reorder[i-1] = val;
-                      }
-                    });
-
-                    $rootScope.data.sequence = reorder;
-
-                    angular.forEach(groups, function (group)
-                    {
-                      if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERSEQUENCE')
-                      {
-                        group.contactInfoSequence = reorder;
-                      }
-                    });
-
-                    Storage.add('groups', angular.toJson(groups));
-                  }
-
-
-
-
-
-                  delete $rootScope.data.nodes[connection.id];
-
-                  deferred.resolve(result);
-                },
-                function (error)
-                {
-                  deferred.resolve({error: error});
                 }
-              );
+
+
+                delete $rootScope.data.nodes[connection.id];
+
+              }
+
+
+              removeNumber(connection, section);
+
+
+
+//              ContactInfos.remove(
+//                {
+//                  id: connection.id
+//                },
+//                function (result)
+//                {
+//                  deferred.resolve(result);
+//                },
+//                function (error)
+//                {
+//                  deferred.resolve({error: error});
+//                }
+//              );
 
               return deferred.promise;
             },
@@ -1103,41 +1112,41 @@ define(
 
 
 
-//              angular.forEach(data.sequence, function (id, rank)
-//              {
-//                data.connected.list.verified.push({
-//                  rank:   Number(rank) + 1,
-//                  number: nodes[id]
-//                });
-//              });
-
-              if (data.connected.group && data.connected.group.contactInfoIds)
+              angular.forEach(data.sequence, function (id, rank)
               {
-                angular.forEach(data.connected.group.contactInfoIds, function (id)
-                {
-                  if (nodes[id] && nodes[id].verified)
-                  {
-                    var ranked;
-
-                    angular.forEach(data.sequence, function (sid, rank)
-                    {
-                      if (sid == id)
-                      {
-                        ranked = rank;
-                      }
-                    });
-
-                    data.connected.list.verified.push({
-                      rank:   Number(ranked) + 1,
-                      number: nodes[id]
-                    });
-                  }
-                  else
-                  {
-                    console.log('Error: This node does not exist! (For connections) ->', id);
-                  }
+                data.connected.list.verified.push({
+                  rank:   Number(rank) + 1,
+                  number: nodes[id]
                 });
-              }
+              });
+
+//              if (data.connected.group && data.connected.group.contactInfoIds)
+//              {
+//                angular.forEach(data.connected.group.contactInfoIds, function (id)
+//                {
+//                  if (nodes[id] && nodes[id].verified)
+//                  {
+//                    var ranked;
+//
+//                    angular.forEach(data.sequence, function (sid, rank)
+//                    {
+//                      if (sid == id)
+//                      {
+//                        ranked = rank;
+//                      }
+//                    });
+//
+//                    data.connected.list.verified.push({
+//                      rank:   Number(ranked) + 1,
+//                      number: nodes[id]
+//                    });
+//                  }
+//                  else
+//                  {
+//                    console.log('Error: This node does not exist! (For connections) ->', id);
+//                  }
+//                });
+//              }
 
 
 
