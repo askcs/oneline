@@ -762,7 +762,7 @@ define(
 
 
           Core.prototype.scenarios = {
-            run: function (custom)
+            runori: function (custom)
             {
               var deferred = $q.defer();
 
@@ -779,31 +779,31 @@ define(
               if (custom)
               {
                 /*
-                console.log('coming to here..');
+                 console.log('coming to here..');
 
-                if ($rootScope.data.connected.list.verified.length > 0)
-                {
-                  angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
-                  {
-                    console.log('listed ->', listed);
+                 if ($rootScope.data.connected.list.verified.length > 0)
+                 {
+                 angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
+                 {
+                 console.log('listed ->', listed);
 
-                    if (listed.number.verified)
-                    {
-                      console.log('verified ->', listed);
+                 if (listed.number.verified)
+                 {
+                 console.log('verified ->', listed);
 
-                      connected[index] = {
-                        contactInfoId: listed.number.id,
-                        timeout:       20
-                      };
-                    }
-                  });
-                }
-                else
-                {
-                  connected = {};
-                }
-                console.log('connected ->', connected);
-                */
+                 connected[index] = {
+                 contactInfoId: listed.number.id,
+                 timeout:       20
+                 };
+                 }
+                 });
+                 }
+                 else
+                 {
+                 connected = {};
+                 }
+                 console.log('connected ->', connected);
+                 */
 
 
                 payload = null;
@@ -857,19 +857,73 @@ define(
               return deferred.promise;
             },
 
+            run: function ()
+            {
+              var deferred = $q.defer();
+
+              var payload = {
+                info: 'Ask-Cs One Line scenario',
+                connected_numbers: {},
+                events: {
+                  on_blacklist:           '',
+                  on_scenario_complete:   '',
+                  on_scenario_exception:  ''
+                }
+              };
+
+              if ($rootScope.data.sequence != {})
+              {
+                console.log('there is a sequence already');
+
+                angular.forEach($rootScope.data.sequence, function (id, rank)
+                {
+                  payload.connected_numbers[rank] = {
+                    contactInfoId: id,
+                    timeout:       20
+                  };
+                });
+              }
+              else
+              {
+                console.log('no sequence so creating one');
+
+                angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
+                {
+                  if (listed.verified)
+                  {
+                    payload.connected_numbers[index] = {
+                      contactInfoId: listed.id,
+                      timeout:       20
+                    };
+                  }
+                });
+              }
+
+              Scenarios.build(
+                {},
+                payload,
+                function (result)
+                {
+                  Storage.add('scenario', angular.toJson(result));
+
+                  deferred.resolve(result);
+                },
+                function (error)
+                {
+                  deferred.resolve({error: error});
+                }
+              );
+
+              return deferred.promise;
+            },
+
             build: function ()
             {
               var verifieds = false;
 
-              if ($rootScope.data.connected.list.length > 0)
+              if ($rootScope.data.connected.list.verified.length > 0)
               {
-                angular.forEach($rootScope.data.connected.list, function (listed)
-                {
-                  if (listed && listed.verified)
-                  {
-                    verifieds = true;
-                  }
-                });
+                verifieds = true;
               }
 
               if (verifieds)

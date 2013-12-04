@@ -11,7 +11,7 @@ define(
         {
           $rootScope.fixStyles();
 
-          console.log('-->', $rootScope.data.connected.list);
+          // console.log('-->', $rootScope.data.connected.list);
 
           $('#verifieds').sortable(
             {
