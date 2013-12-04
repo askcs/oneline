@@ -1100,13 +1100,49 @@ define(
 
               console.log('sequence ->', data.sequence);
 
-              angular.forEach(data.sequence, function (id, rank)
+
+
+
+//              angular.forEach(data.sequence, function (id, rank)
+//              {
+//                data.connected.list.verified.push({
+//                  rank:   Number(rank) + 1,
+//                  number: nodes[id]
+//                });
+//              });
+
+              if (data.connected.group && data.connected.group.contactInfoIds)
               {
-                data.connected.list.verified.push({
-                  rank:   Number(rank) + 1,
-                  number: nodes[id]
+                angular.forEach(data.connected.group.contactInfoIds, function (id)
+                {
+                  if (nodes[id] && nodes[id].verified)
+                  {
+                    var ranked;
+
+                    angular.forEach(data.sequence, function (sid, rank)
+                    {
+                      if (sid == id)
+                      {
+                        ranked = rank;
+                      }
+                    });
+
+                    data.connected.list.verified.push({
+                      rank:   Number(ranked) + 1,
+                      number: nodes[id]
+                    });
+                  }
+                  else
+                  {
+                    console.log('Error: This node does not exist! (For connections) ->', id);
+                  }
                 });
-              });
+              }
+
+
+
+
+
 
               data.blacklist.list = [];
 
