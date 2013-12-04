@@ -129,11 +129,11 @@ define(
               }
             },
 
-            remove: function (number)
+            remove: function (number, section)
             {
               $rootScope.statusBar.display('Deleting a number..');
 
-              Core.connections.remove(number)
+              Core.connections.remove(number, section)
                 .then(function ()
                 {
                   $rootScope.statusBar.off();
@@ -144,7 +144,9 @@ define(
 
             edit: function (number)
             {
-              angular.forEach($rootScope.data.connected.list, function (connection)
+              console.log('number ->', number);
+
+              angular.forEach($rootScope.data.connected.list.notVerified, function (connection)
               {
                 if (number.id === connection.id) { $scope.connection = connection; }
               });

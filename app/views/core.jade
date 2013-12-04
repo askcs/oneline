@@ -453,7 +453,7 @@ br
 
                     td(style='vertical-align: middle, text-align: right')
 
-                      button.btn(ng-click='connections.remove(number)',
+                      button.btn(ng-click='connections.remove(number, "notVerified")',
                                   type='button',
                                   style='margin-right:5px') Delete
 
@@ -505,7 +505,7 @@ br
                   td(style='vertical-align: middle') {{verified.number.contactInfoTag}}
                   td(style='vertical-align: middle, text-align: right')
 
-                    button.btn(ng-click='connections.remove(verified.number)',
+                    button.btn(ng-click='connections.remove(verified.number, "verified")',
                                 type='button',
                                 style='margin-right:5px') Delete
 

@@ -95,26 +95,6 @@ define(
             }
           );
 
-          var GroupsOriginal = $resource(
-            config.host + '/accounts/groups/:id',
-            {},
-            {
-              list: {
-                method: 'GET',
-                params: {},
-                isArray: true
-              },
-              get: {
-                method: 'GET',
-                params: {id: ''}
-              },
-              update: {
-                method: 'PUT',
-                params: {id: ''}
-              }
-            }
-          );
-
           var Groups = $resource(
             config.host + '/scenario/oneline/groups/',
             {},
@@ -481,7 +461,7 @@ define(
               return deferred.promise;
             },
 
-            remove: function (connection)
+            remove: function (connection, section)
             {
               var deferred  = $q.defer(),
                   self      = this;
@@ -492,36 +472,65 @@ define(
                 },
                 function (result)
                 {
-                  var locals    = self.local(),
-                      filtered  = [];
+                  var list = $rootScope.data.connected.group.contactInfoIds;
 
-                  angular.forEach(locals, function (local)
+                  var contactInfoIds = [];
+
+                  if (list.indexOf(connection.id) != -1)
                   {
-                    if (local.id !== connection.id) { filtered.push(local); }
-                  });
-
-                  Storage.add('connections', angular.toJson(filtered));
-
-                  var groups      = angular.fromJson(Storage.get('groups')),
-                      connecteds  = [],
-                      changed     = [];
-
-                  angular.forEach($rootScope.data.connected.group.contactInfoIds, function (node)
-                  {
-                    if (node !== connection.id)
+                    angular.forEach(list, function (listed)
                     {
-                      connecteds.push(node);
-                    }
-                  });
+                      if (listed != connection.id)
+                      {
+                        contactInfoIds.push(listed);
+                      }
+                    });
+                  }
+
+                  Storage.add('connections', angular.toJson(contactInfoIds));
+
+                  var groups = angular.fromJson(Storage.get('groups'));
 
                   angular.forEach(groups, function (group)
                   {
-                    if (group.id === $rootScope.data.connected.group.id) { group.contactInfoIds = connecteds; }
-
-                    changed.push(group);
+                    if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERS')
+                    {
+                      group.contactInfoIds = contactInfoIds;
+                    }
                   });
 
-                  Storage.add('groups', angular.toJson(changed));
+                  Storage.add('groups', angular.toJson(groups));
+
+                  if (section == 'verified')
+                  {
+                    var reorder = {};
+
+                    angular.forEach($rootScope.data.sequence, function (val, i)
+                    {
+                      if (i < connection.id)
+                      {
+                        reorder[i] = val;
+                      }
+                      else
+                      {
+                        reorder[i-1] = val;
+                      }
+                    });
+
+                    $rootScope.data.sequence = reorder;
+
+                    angular.forEach(groups, function (group)
+                    {
+                      if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERSEQUENCE')
+                      {
+                        group.contactInfoSequence = reorder;
+                      }
+                    });
+
+                    Storage.add('groups', angular.toJson(groups));
+                  }
+
+                  delete $rootScope.data.nodes[connection.id];
 
                   deferred.resolve(result);
                 },

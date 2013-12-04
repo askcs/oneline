@@ -292,8 +292,8 @@
                     <td style="vertical-align: middle">{{number.contactInfo}}</td>
                     <td style="vertical-align: middle">{{number.contactInfoTag}}</td>
                     <td style="vertical-align: middle, text-align: right">
-                      <button ng-click="connections.remove(number)" type="button" style="margin-right:5px" class="btn">Delete</button>
-                      <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" ng-hide="number.verified" class="btn">Edit</button>
+                      <button ng-click="connections.remove(number, &quot;notVerified&quot;)" type="button" style="margin-right:5px" class="btn">Delete</button>
+                      <button ng-click="connections.edit(number)" style="margin-right:5px" type="button" class="btn">Edit</button>
                       <div style="margin-top:10px; display: inline" ng-show="verifying[number.id]" class="input-append">
                         <input id="appendedInputButton" type="text" ng-model="verificationCode[number.id]" autofocus="autofocus" class="span3">
                         <button type="button" ng-click="resetVerifiers()" class="btn">Cancel</button>
@@ -327,7 +327,7 @@
                   <td style="vertical-align: middle">{{verified.number.contactInfo}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfoTag}}</td>
                   <td style="vertical-align: middle, text-align: right">
-                    <button ng-click="connections.remove(verified.number)" type="button" style="margin-right:5px" class="btn">Delete</button>
+                    <button ng-click="connections.remove(verified.number, &quot;verified&quot;)" type="button" style="margin-right:5px" class="btn">Delete</button>
                   </td>
                 </tr>
               </tbody>
