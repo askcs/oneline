@@ -34,7 +34,7 @@ define(
           {
             $rootScope.statusBar.display('Cleaning the sequence..');
 
-            Core.scenarios.run(true)
+            Core.scenarios.run({})
               .then(function ()
               {
                 $rootScope.statusBar.off();

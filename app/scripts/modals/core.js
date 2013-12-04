@@ -762,23 +762,31 @@ define(
 
               if (custom)
               {
+                /*
                 console.log('coming to here..');
 
-                angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
+                if ($rootScope.data.connected.list.verified.length > 0)
                 {
-                  console.log('listed ->', listed);
-
-                  if (listed.number.verified)
+                  angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
                   {
-                    console.log('verified ->', listed);
+                    console.log('listed ->', listed);
 
-                    connected[index] = {
-                      contactInfoId: listed.number.id,
-                      timeout:       20
-                    };
-                  }
-                });
+                    if (listed.number.verified)
+                    {
+                      console.log('verified ->', listed);
 
+                      connected[index] = {
+                        contactInfoId: listed.number.id,
+                        timeout:       20
+                      };
+                    }
+                  });
+                }
+                else
+                {
+                  connected = {};
+                }
+                */
                 console.log('connected ->', connected);
               }
               else
@@ -797,10 +805,10 @@ define(
                 {
                   angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
                   {
-                    if (listed.number.verified)
+                    if (listed.verified)
                     {
                       connected[index] = {
-                        contactInfoId: listed.number.id,
+                        contactInfoId: listed.id,
                         timeout:       20
                       };
                     }
