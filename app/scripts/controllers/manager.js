@@ -79,7 +79,7 @@ define(
 
           $scope.resetVerifiers = function ()
           {
-            angular.forEach($rootScope.data.connected.list, function (connection)
+            angular.forEach($rootScope.data.connected.list.notVerified, function (connection)
             {
               $scope.verifying[connection.id] = false;
 
