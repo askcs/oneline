@@ -11,8 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-          // console.log('-->', $rootScope.data.connected.list);
-
           $('#verifieds').sortable(
             {
               items: 'tbody tr',
@@ -28,18 +26,6 @@ define(
               }
             }
           );
-
-
-          $scope.cleanSequence = function ()
-          {
-            $rootScope.statusBar.display('Cleaning the sequence..');
-
-            Core.scenarios.run({})
-              .then(function ()
-              {
-                $rootScope.statusBar.off();
-              });
-          };
 
 
           $scope.reGenerate = function ()
