@@ -156,7 +156,7 @@ define(
           };
 
 
-          self.loginAgain = function ()
+          self.loginAgain_ = function ()
           {
             $('#login').show();
             $('#preloader').hide();
@@ -172,6 +172,25 @@ define(
             loginBtn
               .text('Login')
               .removeAttr('disabled');
+          };
+
+
+
+          self.loginAgain = function ()
+          {
+            User.logout()
+              .then(function ()
+              {
+                User.login('leon', MD5('askask'))
+                  .then(function ()
+                  {
+                    User.logout()
+                      .then(function ()
+                      {
+                        self.auth($scope.logindata.username, MD5($scope.logindata.password));
+                      })
+                  });
+              });
           };
 
 
