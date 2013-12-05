@@ -1052,6 +1052,8 @@ define(
                   rank:   Number(rank) + 1,
                   number: nodes[id]
                 });
+
+                console.log('node ->', nodes[id]);
               });
 
               data.blacklist.list = [];
