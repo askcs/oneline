@@ -63,6 +63,7 @@ require(
     'directives/appVersion',
 
     'filters/interpolate',
+    'filters/parsePhoneNumber',
     'filters/all',
 
     'services/version',

@@ -145,12 +145,10 @@ block modal-profile
     .modal-body(ng-hide='profileEdit',
                 ng-show='!profileEditing')
 
-
       .alert(ng-show='profileEdited.status', class="alert-{{(profileEdited.result) && 'success' || 'error'}}")
         button.close(type='button', ng-click='profileEdited.status=false', data-dismiss='alert') ×
         span(ng-show='profileEdited.result') Account details are changed successfully.
         span(ng-hide='profileEdited.result') There was an error with changing account details.
-
 
       dl
         dt Oneline Number:

@@ -737,7 +737,8 @@ define(
 
             run: function ()
             {
-              var deferred = $q.defer();
+              var deferred = $q.defer(),
+                  _this = this;
 
               var payload = {
                 info: 'Ask-Cs One Line scenario',
@@ -782,13 +783,22 @@ define(
                 payload,
                 function (result)
                 {
+                  // if (result.s)
+
+                  console.log('result =>', result);
+
                   Storage.add('scenario', angular.toJson(result));
 
                   deferred.resolve(result);
                 },
                 function (error)
                 {
+
+                  console.log('error =>', error);
+
                   deferred.resolve({error: error});
+
+                  _this.recall();
                 }
               );
 
@@ -797,23 +807,48 @@ define(
 
             build: function ()
             {
-              var verifieds = false;
-
               if ($rootScope.data.connected.list.verified.length > 0)
               {
-                verifieds = true;
-              }
-
-              if (verifieds)
-              {
                 this.run();
+              }
+            },
+
+            timeout: 2000,
+
+            recall: function ()
+            {
+              var _this = this;
+
+              if (this.timeout > 33000)
+              {
+                $rootScope.statusBar.display('Scenario generate failed..');
+              }
+              else
+              {
+                var attempt = 1;
+
+                switch (this.timeout)
+                {
+                  case 4000:  attempt = 2; break;
+                  case 8000:  attempt = 3; break;
+                  case 16000: attempt = 4; break;
+                  case 32000: attempt = 5; break;
+                }
+
+                $rootScope.statusBar.display('Retrying scenario generation.. Attempt number: ' + attempt);
+
+                setTimeout(function ()
+                {
+                  _this.run();
+                }, this.timeout);
+
+                this.timeout *= 2;
               }
             }
           };
 
 
           Core.prototype.factory = {
-
             run: function ()
             {
               var deferred = $q.defer();

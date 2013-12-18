@@ -502,7 +502,7 @@ br
                     span.label.label-success Verified
                   td(style='vertical-align: middle') {{verified.number.label}}
                   td(style='vertical-align: middle') {{verified.number.contactInfo}}
-                  td(style='vertical-align: middle') {{verified.number.contactInfoTag}}
+                  td(style='vertical-align: middle') {{verified.number.contactInfo | parsePhoneNumber}}
                   td(style='vertical-align: middle, text-align: right')
 
                     button.btn(ng-click='connections.remove(verified.number, "verified")',
