@@ -91,7 +91,7 @@ block modal-profile
           .controls
             input#name.span5(type='text',
                         ng-model='profile.data.name',
-                        value='{{profile.data.name}}',
+                        value='{{data.account.name}}',
                         ng-change='profile.validate()',
                         required)
             p.text-error(ng-show='!profile.data.name')
@@ -103,7 +103,7 @@ block modal-profile
           .controls
             input#email.span5(type='email',
                               ng-model='profile.data.email',
-                              value='{{profile.data.email}}',
+                              value='{{data.account.email}}',
                               ng-change='profile.validate()',
                               required)
             p.text-error(ng-show='!profile.data.email')
@@ -115,14 +115,14 @@ block modal-profile
           .controls
             input#address.span5(type='text',
                                 ng-model='profile.data.address',
-                                value='{{profile.data.address}}')
+                                value='{{data.account.address}}')
 
         .control-group
           label.control-label(for='phone') Phone *
           .controls
             input#phone.span3(type='text',
                         ng-model='profile.data.phone',
-                        value='{{profile.data.phone}}',
+                        value='{{data.account.phone}}',
                         ng-change='profile.validate(); checkNumber(profile.data.phone)',
                         required)
             p.text-error(ng-show='!profile.data.phone')

@@ -9,6 +9,10 @@ define(
         '$rootScope', '$scope', '$location',
         function ($rootScope, $scope, $location)
         {
+
+          $rootScope.profile.data = $rootScope.data.account;
+
+
           function setView(hash)
           {
             $scope.views = {

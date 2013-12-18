@@ -31,7 +31,7 @@ define(
 
           // TODO: Lose this jQuery stuff later on!
           $('.navbar').hide();
-          $('#footer').hide();
+          // $('#footer').hide();
           $('#preloader').hide();
 
 

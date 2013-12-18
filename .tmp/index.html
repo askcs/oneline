@@ -80,27 +80,27 @@
           <div class="control-group">
             <label for="name" class="control-label">Name *</label>
             <div class="controls">
-              <input id="name" type="text" ng-model="profile.data.name" value="{{profile.data.name}}" ng-change="profile.validate()" required class="span5">
+              <input id="name" type="text" ng-model="profile.data.name" value="{{data.account.name}}" ng-change="profile.validate()" required class="span5">
               <p ng-show="!profile.data.name" class="text-error"><small><i>Please fill your name</i></small></p>
             </div>
           </div>
           <div class="control-group">
             <label for="email" class="control-label">Email *</label>
             <div class="controls">
-              <input id="email" type="email" ng-model="profile.data.email" value="{{profile.data.email}}" ng-change="profile.validate()" required class="span5">
+              <input id="email" type="email" ng-model="profile.data.email" value="{{data.account.email}}" ng-change="profile.validate()" required class="span5">
               <p ng-show="!profile.data.email" class="text-error"><small><i>Please fill a correct email address</i></small></p>
             </div>
           </div>
           <div class="control-group">
             <label for="address" class="control-label">Address</label>
             <div class="controls">
-              <input id="address" type="text" ng-model="profile.data.address" value="{{profile.data.address}}" class="span5">
+              <input id="address" type="text" ng-model="profile.data.address" value="{{data.account.address}}" class="span5">
             </div>
           </div>
           <div class="control-group">
             <label for="phone" class="control-label">Phone *</label>
             <div class="controls">
-              <input id="phone" type="text" ng-model="profile.data.phone" value="{{profile.data.phone}}" ng-change="profile.validate(); checkNumber(profile.data.phone)" required class="span3">
+              <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}" ng-change="profile.validate(); checkNumber(profile.data.phone)" required class="span3">
               <p ng-show="!profile.data.phone" class="text-error"><small><i>Please fill your phone</i></small></p>
               <p ng-hide="phoneNumberParsed.result" class="text-error"><small><i>{{phoneNumberParsed.message}}</i></small></p>
             </div>

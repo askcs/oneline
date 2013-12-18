@@ -129,7 +129,6 @@ define(
 
 
 
-
           $rootScope.phoneNumberParsed = {};
 
           $rootScope.phoneNumberParsed.result = false;

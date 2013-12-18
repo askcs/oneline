@@ -821,6 +821,8 @@ define(
 
               if (this.timeout > 33000)
               {
+                clearTimeout(window.retryScenario);
+
                 $rootScope.statusBar.display('Scenario generate failed..');
               }
               else
@@ -837,7 +839,7 @@ define(
 
                 $rootScope.statusBar.display('Retrying scenario generation.. Attempt number: ' + attempt);
 
-                setTimeout(function ()
+                window.retryScenario = setTimeout(function ()
                 {
                   _this.run();
                 }, this.timeout);

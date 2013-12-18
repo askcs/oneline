@@ -13,7 +13,7 @@ define(
 
           $rootScope.profileEdit = false;
 
-          $scope.profile = {
+          $rootScope.profile = {
 
             data: {},
 
@@ -21,22 +21,22 @@ define(
             {
               var payload = {
                 name: {
-                  contactInfo:    $scope.profile.data.name,
+                  contactInfo:    $rootScope.profile.data.name,
                   contactInfoTag: 'NAME',
                   groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 email: {
-                  contactInfo:    $scope.profile.data.email,
+                  contactInfo:    $rootScope.profile.data.email,
                   contactInfoTag: 'EMAIL',
                   groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 address: {
-                  contactInfo:    $scope.profile.data.address,
+                  contactInfo:    $rootScope.profile.data.address,
                   contactInfoTag: 'ADDRESS',
                   groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 phone: {
-                  contactInfo:    $scope.profile.data.phone,
+                  contactInfo:    $rootScope.profile.data.phone,
                   contactInfoTag: 'PHONE',
                   groupKeys:      [$rootScope.data.owner.group.id]
                 }
@@ -104,9 +104,9 @@ define(
             {
               var result;
 
-              if ($scope.profile.data.name  === undefined ||
-                  $scope.profile.data.email === undefined ||
-                  $scope.profile.data.phone === undefined)
+              if ($rootScope.profile.data.name  === undefined ||
+                $rootScope.profile.data.email === undefined ||
+                $rootScope.profile.data.phone === undefined)
               {
                 $('#modal-profile-btn-save')
                   .attr('disabled', 'disabled');
@@ -151,9 +151,9 @@ define(
 
           if ($location.path() !== '/login')
           {
-            $scope.profile.data = {};
+            $rootScope.profile.data = {};
 
-            $scope.profile.data = $rootScope.data.account;
+            $rootScope.profile.data = $rootScope.data.account;
           }
         }
       ]
