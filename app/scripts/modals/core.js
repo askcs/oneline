@@ -103,6 +103,23 @@ define(
                 method: 'POST',
                 params: {},
                 isArray: true
+              },
+              detailed: {
+                method: 'GET',
+                params: {detailed: true},
+                isArray: true
+              }
+            }
+          );
+
+          var Detailed = $resource(
+            config.host + '/accounts/:section/',
+            {},
+            {
+              list: {
+                method: 'GET',
+                params: {detailed: true},
+                isArray: true
               }
             }
           );
@@ -622,6 +639,29 @@ define(
                 function (result)
                 {
                   Storage.add('groups', angular.toJson(result));
+
+                  deferred.resolve(result);
+                },
+                function (error)
+                {
+                  deferred.resolve({error: error});
+                }
+              );
+
+              return deferred.promise;
+            },
+
+            detailed: function ()
+            {
+              var deferred = $q.defer();
+
+              Detailed.list(
+                {
+                  section: 'groups'
+                },
+                function (result)
+                {
+                  // Storage.add('groups', angular.toJson(result));
 
                   deferred.resolve(result);
                 },
