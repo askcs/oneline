@@ -104,10 +104,14 @@ define(
 
           $rootScope.forceProfileEdit = function ()
           {
-            $rootScope.profileEdit=true;
-            $rootScope.profileEdited.status=false;
+            $rootScope.profileEdit = true;
+            $rootScope.profileEdited.status = false;
           };
 
+          $rootScope.forceProfileView = function ()
+          {
+            $rootScope.profileEdit = false;
+          };
 
           $rootScope.phoneNumberParsed = {};
 

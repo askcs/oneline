@@ -126,7 +126,7 @@ block modal-profile
     .modal-footer(ng-show='profileEdit',
     ng-hide='!profileEditing',
     ng-init='phoneNumberParsed.result=true')
-      button#modal-profile-btn-close.btn(ng-click='profileEdit=false') Cancel
+      button#modal-profile-btn-close.btn(ng-click='forceProfileView()') Cancel
       button.btn.btn-primary(ng-hide='phoneNumberParsed.result', disabled) Save
       button#modal-profile-btn-save.btn.btn-primary(ng-click='profile.edit();',
       ng-show='phoneNumberParsed.result') Save

@@ -110,7 +110,7 @@
         </form>
       </div>
       <div ng-show="profileEdit" ng-hide="!profileEditing" ng-init="phoneNumberParsed.result=true" class="modal-footer">
-        <button id="modal-profile-btn-close" ng-click="profileEdit=false" class="btn">Cancel</button>
+        <button id="modal-profile-btn-close" ng-click="forceProfileView()" class="btn">Cancel</button>
         <button ng-hide="phoneNumberParsed.result" disabled class="btn btn-primary">Save</button>
         <button id="modal-profile-btn-save" ng-click="profile.edit();" ng-show="phoneNumberParsed.result" class="btn btn-primary">Save</button>
       </div>
