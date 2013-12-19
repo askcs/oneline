@@ -325,7 +325,7 @@
                   <td style="vertical-align: middle"><span class="label label-success">Verified</span></td>
                   <td style="vertical-align: middle">{{verified.number.label}}</td>
                   <td style="vertical-align: middle">{{verified.number.contactInfo}}</td>
-                  <td style="vertical-align: middle">{{verified.number.contactInfoTag}}</td>
+                  <td style="vertical-align: middle">{{verified.number.contactInfo | parsePhoneNumber}}</td>
                   <td style="vertical-align: middle, text-align: right">
                     <button ng-click="connections.remove(verified.number, &quot;verified&quot;)" type="button" style="margin-right:5px" class="btn">Delete</button>
                   </td>
