@@ -137,7 +137,7 @@
         </dl>
       </div>
       <div ng-hide="profileEdit" ng-show="!profileEditing" class="modal-footer">
-        <button id="modal-profile-btn-edit" ng-click="profileEdit=true; profileEdited.status=false" class="btn btn-primary">Edit</button>
+        <button id="modal-profile-btn-edit" ng-click="forceProfileEdit()" class="btn btn-primary">Edit</button>
       </div>
     </div>
     <div id="modal-settings" tabindex="-1" role="dialog" aria-labelledby="modal-settings-label" aria-hidden="true" style="display: none;" class="modal hide fade">

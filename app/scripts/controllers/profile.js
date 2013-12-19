@@ -11,7 +11,7 @@ define(
         {
           $rootScope.fixStyles();
 
-          $rootScope.profileEdit = false;
+          // $rootScope.profileEdit = false;
 
           $rootScope.profile = {
 
@@ -144,6 +144,8 @@ define(
                     status: true,
                     result: true
                   };
+
+                  $rootScope.profileEdit = false;
                 });
               }
             }

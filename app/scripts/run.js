@@ -97,25 +97,16 @@ define(
           }
 
 
-          $rootScope.resetProfileEdit = function ()
-          {
-            $rootScope.profileEdit = false;
-
-            $rootScope.profileEdited.status = false;
-          };
-
           $rootScope.profileEdited = {
             status: false,
             result: false
           };
 
-
-          $rootScope.$on('resetProfileEditing', function ()
+          $rootScope.forceProfileEdit = function ()
           {
-            // console.log('action has been asked');
-
-            $rootScope.profileEdit = false;
-          });
+            $rootScope.profileEdit=true;
+            $rootScope.profileEdited.status=false;
+          };
 
 
           $rootScope.phoneNumberParsed = {};
@@ -217,8 +208,6 @@ define(
 
           $rootScope.resetPhoneParser = function ()
           {
-            console.log('reseting phone number parser');
-
             $rootScope.phoneNumberParsed.result = true;
 
             delete $rootScope.phoneNumberParsed.message;
@@ -284,14 +273,20 @@ define(
           });
 
 
+          // TODO: Functionality is broken!! Remove it in time.
           $rootScope.fixStyles = function ()
           {
             var tabHeight = $('.tabs-left .nav-tabs').height();
 
             $.each($('.tab-content').children(), function ()
             {
-              var $this         = $(this).attr('id'),
-                  contentHeight = $('.tabs-left .tab-content #' + $this).height();
+              var $this         = $(this).attr('id');
+
+              // console.log('$this ->', $this);
+
+              var contentHeight = $('.tabs-left .tab-content #' + $this).height();
+
+              // console.log('contentHeight ->', contentHeight);
 
               if (tabHeight > contentHeight)
               {
