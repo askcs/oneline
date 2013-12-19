@@ -76,6 +76,8 @@ define(
                 {
                   if (result.error)
                   {
+                    console.log('error happened?');
+                    
                     $('#modal-profile-btn-save')
                       .text('Save')
                       .removeAttr('disabled');
@@ -91,7 +93,6 @@ define(
 
                     $rootScope.$watch(function ()
                     {
-                      // $rootScope.profileEdit = false;
                       $rootScope.profileEditing = false;
                     });
 
