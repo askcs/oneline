@@ -11,7 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-
           $scope.settings = {
 
             local: function ()

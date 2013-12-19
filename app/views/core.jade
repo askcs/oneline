@@ -394,7 +394,7 @@ br
               input.input-large(ng-model='connection.label',
                                   type='text',
                                   placeholder='Label')
-              #inputPhoneNumber.control-group(style='display: inline;',
+              .inputPhoneNumber.control-group(style='display: inline;',
                                               class='{{(phoneNumberParsed.message) && "error"}}')
                 input.input-large(ng-model='connection.contactInfo',
                                   type='text',
@@ -608,13 +608,30 @@ br
               input.input-medium(ng-model='blacklist.label',
                                   type='text',
                                   placeholder='Label')
-              input.input-large(ng-model='blacklist.contactInfo',
-                                type='text',
-                                placeholder='e.g. Phone number…')
+              .inputPhoneNumber.control-group(style='display: inline;',
+                                              class='{{(phoneNumberParsed.message) && "error"}}')
+                input.input-large(ng-model='blacklist.contactInfo',
+                                  type='text',
+                                  placeholder='e.g. Phone number…',
+                                  ng-change='checkNumber(blacklist.contactInfo)')
+
               button.btn(type='button',
                           ng-show='blacklist.label.length > 0',
                           ng-click='resetBlacklist();') Cancel
-              button.btn(type='submit') Add to blacklist
+
+              button.btn(type='submit',
+                          class='{{(phoneNumberParsed.result == false) && "disabled"}}') Add to blacklist
+              span.text-error(style='margin-left: 10px;'
+                              ng-hide='phoneNumberParsed.result')
+                small
+                  i {{phoneNumberParsed.message}}
+              div(ng-show='phoneNumberParsed.result')
+                span.text-success(style='margin-top: 15px')
+                  small
+                    i {{phoneNumberParsed.message}}
+
+
+
             h4 Numbers
             p(ng-show='(data.blacklist.list.length == 0)')
               | There are no blacklisted numbers.

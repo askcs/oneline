@@ -262,7 +262,7 @@
           <div style="min-height: 300px;" class="span12">
             <form ng-submit="connections.save()" class="form-inline well">
               <input ng-model="connection.label" type="text" placeholder="Label" class="input-large"/>
-              <div id="inputPhoneNumber" style="display: inline;" class="control-group {{(phoneNumberParsed.message) &amp;&amp; &quot;error&quot;}}">
+              <div style="display: inline;" class="inputPhoneNumber control-group {{(phoneNumberParsed.message) &amp;&amp; &quot;error&quot;}}">
                 <input ng-model="connection.contactInfo" type="text" placeholder="e.g. Phone number…" ng-change="checkNumber(connection.contactInfo)" class="input-large"/>
               </div>
               <button type="button" ng-show="connection.label.length &gt; 0" ng-click="resetConnection();" class="btn">Cancel</button>
@@ -421,9 +421,12 @@
             <p>Oneline can block any unwanted incoming calls and let them know kindly</p>
             <form ng-submit="blacklists.block()" class="form-inline well">
               <input ng-model="blacklist.label" type="text" placeholder="Label" class="input-medium"/>
-              <input ng-model="blacklist.contactInfo" type="text" placeholder="e.g. Phone number…" class="input-large"/>
+              <div style="display: inline;" class="inputPhoneNumber control-group {{(phoneNumberParsed.message) &amp;&amp; &quot;error&quot;}}">
+                <input ng-model="blacklist.contactInfo" type="text" placeholder="e.g. Phone number…" ng-change="checkNumber(blacklist.contactInfo)" class="input-large"/>
+              </div>
               <button type="button" ng-show="blacklist.label.length &gt; 0" ng-click="resetBlacklist();" class="btn">Cancel</button>
-              <button type="submit" class="btn">Add to blacklist</button>
+              <button type="submit" class="btn {{(phoneNumberParsed.result == false) &amp;&amp; &quot;disabled&quot;}}">Add to blacklist</button><span style="margin-left: 10px;" ng-hide="phoneNumberParsed.result" class="text-error"><small><i>{{phoneNumberParsed.message}}</i></small></span>
+              <div ng-show="phoneNumberParsed.result"><span style="margin-top: 15px" class="text-success"><small><i>{{phoneNumberParsed.message}}</i></small></span></div>
             </form>
             <h4>Numbers</h4>
             <p ng-show="(data.blacklist.list.length == 0)">There are no blacklisted numbers.</p>

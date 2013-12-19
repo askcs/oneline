@@ -71,7 +71,7 @@
     </div>
     <div id="modal-profile" ng-controller="profile" tabindex="-1" role="dialog" aria-labelledby="modal-profile-label" aria-hidden="true" style="display: none;" class="modal hide fade">
       <div class="modal-header">
-        <button type="button" data-dismiss="modal" aria-hidden="true" ng-click="resetProfileEdit()" class="close">×</button>
+        <button type="button" data-dismiss="modal" aria-hidden="true" ng-click="resetProfileEdit(); resetPhoneParser()" class="close">×</button>
         <h3 id="modal-profile-label">Account Details</h3>
       </div>
       <div ng-show="profileEdit" ng-hide="!profileEditing" class="modal-body">
@@ -100,7 +100,9 @@
           <div class="control-group">
             <label for="phone" class="control-label">Phone *</label>
             <div class="controls">
-              <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}" ng-change="profile.validate(); checkNumber(profile.data.phone)" required class="span3">
+              <div style="display: inline;" class="inputPhoneNumber control-group {{(phoneNumberParsed.message) &amp;&amp; &quot;error&quot;}}">
+                <input id="phone" type="text" ng-model="profile.data.phone" value="{{data.account.phone}}" ng-change="profile.validate(); checkNumber(profile.data.phone)" required class="span3">
+              </div>
               <p ng-show="!profile.data.phone" class="text-error"><small><i>Please fill your phone</i></small></p>
               <p ng-hide="phoneNumberParsed.result" class="text-error"><small><i>{{phoneNumberParsed.message}}</i></small></p>
             </div>

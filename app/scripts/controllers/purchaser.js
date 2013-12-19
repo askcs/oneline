@@ -11,7 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-
           $scope.order = {
             package:  null,
             country:  31

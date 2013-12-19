@@ -97,8 +97,6 @@ define(
           }
 
 
-
-
           $rootScope.resetProfileEdit = function ()
           {
             $rootScope.profileEdit = false;
@@ -118,15 +116,6 @@ define(
 
             $rootScope.profileEdit = false;
           });
-
-
-
-
-
-
-
-
-
 
 
           $rootScope.phoneNumberParsed = {};
@@ -202,7 +191,7 @@ define(
                             result.validation.getNumberType
                         };
 
-                        $('#inputPhoneNumber').removeClass('error');
+                        $('.inputPhoneNumber').removeClass('error');
                       }
                     }
                   }
@@ -221,29 +210,21 @@ define(
             }
             else
             {
-              $rootScope.phoneNumberParsed.result = true;
-
-              delete $rootScope.phoneNumberParsed.message;
-
-              $('#inputPhoneNumber').removeClass('error');
+              $rootScope.resetPhoneParser();
             }
           };
 
 
+          $rootScope.resetPhoneParser = function ()
+          {
+            console.log('reseting phone number parser');
 
+            $rootScope.phoneNumberParsed.result = true;
 
+            delete $rootScope.phoneNumberParsed.message;
 
-
-
-
-
-
-
-
-
-
-
-
+            $('.inputPhoneNumber').removeClass('error');
+          };
 
 
           $rootScope.statusBar =

@@ -13,6 +13,8 @@ define(
 
           function setView(hash)
           {
+            $rootScope.resetPhoneParser();
+
             $scope.views = {
               purchaser:  false,
               manager:    false,

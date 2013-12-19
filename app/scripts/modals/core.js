@@ -752,7 +752,7 @@ define(
 
               if ($rootScope.data.sequence != {})
               {
-                console.log('there is a sequence already');
+                // console.log('there is a sequence already');
 
                 angular.forEach($rootScope.data.sequence, function (id, rank)
                 {
@@ -764,7 +764,7 @@ define(
               }
               else
               {
-                console.log('no sequence so creating one');
+                // console.log('no sequence so creating one');
 
                 angular.forEach($rootScope.data.connected.list.verified, function (listed, index)
                 {
@@ -783,9 +783,7 @@ define(
                 payload,
                 function (result)
                 {
-                  // if (result.s)
-
-                  console.log('result =>', result);
+                  // console.log('result =>', result);
 
                   Storage.add('scenario', angular.toJson(result));
 
@@ -793,8 +791,7 @@ define(
                 },
                 function (error)
                 {
-
-                  console.log('error =>', error);
+                  // console.log('error =>', error);
 
                   deferred.resolve({error: error});
 
@@ -1007,7 +1004,7 @@ define(
               {
                 angular.forEach(data.connected.list.verified, function (verified, index)
                 {
-                  console.log(verified, index);
+                  // console.log(verified, index);
 
                   data.sequence[index] = verified.id;
                 });
@@ -1022,7 +1019,7 @@ define(
                   number: nodes[id]
                 });
 
-                console.log('node ->', nodes[id]);
+                // console.log('node ->', nodes[id]);
               });
 
 //              if (data.connected.group && data.connected.group.contactInfoIds)
@@ -1126,7 +1123,7 @@ define(
                 case 'EMAIL':
                   data.settings.email.id = setting.id;
 
-                  data.settings.email.status = !!((setting.targetContactInfos.length > 0));
+                  data.settings.email.status = ((setting.targetContactInfos.length > 0));
 
                   var emailSetting = (nodes[setting.targetContactInfos[0]]) ?
                     nodes[setting.targetContactInfos[0]].id :
@@ -1140,7 +1137,7 @@ define(
                 case 'SMS':
                   data.settings.sms.id  = setting.id;
 
-                  data.settings.sms.status = !!((setting.targetContactInfos.length > 0));
+                  data.settings.sms.status = ((setting.targetContactInfos.length > 0));
 
                   var smsSetting = (nodes[setting.targetContactInfos[0]]) ?
                     nodes[setting.targetContactInfos[0]].id :
@@ -1155,7 +1152,9 @@ define(
 
               data.nodes = nodes;
 
-              $rootScope.tmp = $rootScope.data = data;
+              // $rootScope.tmp = $rootScope.data = data;
+
+              $rootScope.data = data;
 
               console.info('data ->', $rootScope.data);
 

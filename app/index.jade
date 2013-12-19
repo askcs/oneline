@@ -74,7 +74,7 @@ block modal-profile
       button.close(type='button',
                     data-dismiss='modal',
                     aria-hidden='true',
-                    ng-click='resetProfileEdit()') ×
+                    ng-click='resetProfileEdit(); resetPhoneParser()') ×
       h3#modal-profile-label Account Details
 
     .modal-body(ng-show='profileEdit',
@@ -120,11 +120,13 @@ block modal-profile
         .control-group
           label.control-label(for='phone') Phone *
           .controls
-            input#phone.span3(type='text',
-                        ng-model='profile.data.phone',
-                        value='{{data.account.phone}}',
-                        ng-change='profile.validate(); checkNumber(profile.data.phone)',
-                        required)
+            .inputPhoneNumber.control-group(style='display: inline;',
+                                            class='{{(phoneNumberParsed.message) && "error"}}')
+              input#phone.span3(type='text',
+                          ng-model='profile.data.phone',
+                          value='{{data.account.phone}}',
+                          ng-change='profile.validate(); checkNumber(profile.data.phone)',
+                          required)
             p.text-error(ng-show='!profile.data.phone')
               small
                 i Please fill your phone
