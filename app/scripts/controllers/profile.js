@@ -11,8 +11,6 @@ define(
         {
           $rootScope.fixStyles();
 
-          // $rootScope.profileEdit = false;
-
           $rootScope.profile = {
 
             data: {},
