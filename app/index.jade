@@ -16,10 +16,12 @@ block navbar
         a.brand(href='#core') {{config.profile.title}}
         .nav-collapse.collapse
           ul.nav.pull-right(ng-hide='browser.mobile')
-            li
-              a(href='#credits')
-                i.icon-question-sign.icon-white
-                |  Credits: 10 EUR
+            li(ng-show='data.account.purchasedNumber')
+              a(href='#core')
+                // i.icon-hand-right.icon-white
+                b Oneline number:
+                |  {{data.account.purchasedNumber}}
+                // Credits: 10 EUR
             li.dropdown
               a.dropdown-toggle(href='#',
                                 data-toggle='dropdown')
@@ -34,7 +36,8 @@ block navbar
                     |  Account Details
                 li
                   a(data-toggle='modal',
-                    href='#modal-settings')
+                    href='#modal-settings',
+                    style='display: none;')
                     i.icon-wrench
                     |  Account Settings
                 li.divider
@@ -137,8 +140,8 @@ block modal-profile
         span(ng-show='profileEdited.result') Account details are changed successfully.
         span(ng-hide='profileEdited.result') There was an error with changing account details.
       dl
-        dt Oneline Number:
-          dd {{data.account.purchasedNumber}}
+        dt(ng-show='data.account.purchasedNumber') Oneline Number:
+          dd(ng-show='data.account.purchasedNumber') {{data.account.purchasedNumber}}
         dt Name:
           dd {{data.account.name}}
         dt Email:

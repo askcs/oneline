@@ -42,9 +42,9 @@ define(
 
           if (!$location.hash())
           {
-            view = 'purchaser';
+            view = 'manager';
 
-            $location.hash('purchaser');
+            $location.hash('manager');
           }
           else
           {
@@ -56,6 +56,16 @@ define(
           $rootScope.$on('setView', function ()
           {
             $scope.setViewTo(arguments[1]);
+          });
+
+          jQuery(document).bind('keydown', 'ctrl+o',function (event)
+          {
+            if (event.ctrlKey && event.keyCode == 79)
+            {
+              $location.path('/overview');
+              $scope.$apply();
+            }
+            return false;
           });
         }
       ]

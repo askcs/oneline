@@ -7,7 +7,8 @@ br
 
 
     ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
-      li(class="{{(views.purchaser==true) && 'active'}}")
+      li(class="{{(views.purchaser==true) && 'active'}}",
+          style='display: none;')
         a(ng-click='resetPurchaser(); setViewTo("purchaser")',
           data-toggle='tab')
           span.icomoon.icomoon-cart(aria-hidden='true')
@@ -510,7 +511,9 @@ br
                                 style='margin-right:5px') Delete
 
             button#sequenceBtn.btn(ng-show='(data.connected.list.verified.length > 0)',
-                                    ng-click='reGenerate()') Resequence
+                                    ng-click='reGenerate()')
+              i.icon-random
+              |  Resequence
 
 
 

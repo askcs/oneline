@@ -18,7 +18,7 @@
     <form ng-submit="login()">
       <h2 id="logo-big">Oneline</h2>
       <h4 class="form-signin-heading">Welcome back</h4>
-      <p style="font-size: 12px; margin-bottom: 25px;"><a href="#register">Register an account</a></p>
+      <p style="font-size: 12px; margin-bottom: 25px; display: none;"><a href="#register">Register an account</a></p>
       <div ng-show="alert.login.display" class="alert {{alert.login.type}}">
         <button type="button" ng-click="alert.login=false" class="close">×</button>{{alert.login.message}}
       </div>
@@ -28,7 +28,7 @@
         <input type="checkbox" ng-model="logindata.remember"/>Remember me
       </label>
       <button type="submit" class="btn btn-large btn-primary">{{ui.login.button_login}}</button>
-      <p><small><a href="#forgotpass">{{ui.login.forgot_password}}</a></small></p><span class="version">v{{config.app.version}}</span>
+      <p style="display: none;"><small><a href="#forgotpass">{{ui.login.forgot_password}}</a></small></p><span class="version">v{{config.app.version}}</span>
     </form>
   </div>
 </div>

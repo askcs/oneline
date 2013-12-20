@@ -40,11 +40,13 @@
         <div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="#core" class="brand">{{config.profile.title}}</a>
           <div class="nav-collapse collapse">
             <ul ng-hide="browser.mobile" class="nav pull-right">
-              <li><a href="#credits"><i class="icon-question-sign icon-white"></i> Credits: 10 EUR</a></li>
+              <li ng-show="data.account.purchasedNumber"><a href="#core">
+                  <!-- i.icon-hand-right.icon-white--><b>Oneline number:</b> {{data.account.purchasedNumber}}
+                  <!-- Credits: 10 EUR--></a></li>
               <li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="icon-user icon-white"></i> {{app.resources.name}} &nbsp;<b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a data-toggle="modal" href="#modal-profile"><i class="icon-user"></i> Account Details</a></li>
-                  <li><a data-toggle="modal" href="#modal-settings"><i class="icon-wrench"></i> Account Settings</a></li>
+                  <li><a data-toggle="modal" href="#modal-settings" style="display: none;"><i class="icon-wrench"></i> Account Settings</a></li>
                   <li class="divider"></li>
                   <li><a href="#logout"><i class="icon-off"></i> Sign out</a></li>
                 </ul>
@@ -119,8 +121,8 @@
           <button type="button" ng-click="profileEdited.status=false" data-dismiss="alert" class="close">×</button><span ng-show="profileEdited.result">Account details are changed successfully.</span><span ng-hide="profileEdited.result">There was an error with changing account details.</span>
         </div>
         <dl>
-          <dt>Oneline Number:
-            <dd>{{data.account.purchasedNumber}}</dd>
+          <dt ng-show="data.account.purchasedNumber">Oneline Number:
+            <dd ng-show="data.account.purchasedNumber">{{data.account.purchasedNumber}}</dd>
           </dt>
           <dt>Name:
             <dd>{{data.account.name}}</dd>

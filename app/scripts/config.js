@@ -13,7 +13,7 @@ define(
 
     fullscreen: 'true',
 
-    demoUsers: 'true',
+    demoUsers: 'false',
 
     host: 'http://askfastmarket1.appspot.com',
 

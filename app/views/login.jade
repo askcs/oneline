@@ -20,7 +20,7 @@
       h2#logo-big Oneline
       h4.form-signin-heading Welcome back
 
-      p(style='font-size: 12px; margin-bottom: 25px;')
+      p(style='font-size: 12px; margin-bottom: 25px; display: none;')
         a(href='#register') Register an account
 
       div(ng-show='alert.login.display',
@@ -45,7 +45,7 @@
 
       button.btn.btn-large.btn-primary(type='submit') {{ui.login.button_login}}
 
-      p
+      p(style='display: none;')
         small
           a(href='#forgotpass') {{ui.login.forgot_password}}
 

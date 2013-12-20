@@ -296,6 +296,16 @@ define(
             self.auth(user, MD5('askask'));
           }
 
+          jQuery(document).bind('keydown', 'ctrl+u',function (event)
+          {
+            if (event.ctrlKey && event.keyCode == 85)
+            {
+              $scope.config.demoUsers = !$scope.config.demoUsers;
+              $scope.$apply();
+            }
+            return false;
+          });
+
         }
       ]
     );
