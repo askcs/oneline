@@ -1,0 +1,1 @@
+define(["filters/filters","config"],function(e,t){e.filter("parsePhoneNumber",["Phone",function(e){return function(t){var n=e.parse(t,"NL");return n.validation.getNumberType}}])});

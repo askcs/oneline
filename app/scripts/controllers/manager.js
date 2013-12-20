@@ -6,167 +6,56 @@ define(
 
     controllers.controller('manager',
       [
-        '$rootScope', '$scope', 'Core', 'Storage', 'Phone',
-        function ($rootScope, $scope, Core, Storage, Phone)
+        '$rootScope', '$scope', 'Core', 'Storage',
+        function ($rootScope, $scope, Core, Storage)
         {
           $rootScope.fixStyles();
 
-
-          $scope.list = ["one", "two", 'three'];
-
-
-
-
-
-          $('#secondtry').sortable({items: 'li',
-            update: function (event, ui)
+          $('#verifieds').sortable(
             {
-              //Convert the ordered list into an array
-              var new_order = $('ol').sortable('toArray');
+              items: 'tbody tr',
 
-              console.log('new order ->', new_order);
-
-              //Loop through the array and assign the input
-              //that matches the li id the new position value
-              $.each(new_order, function (i, element)
+              update: function ()
               {
-                $('input[name='+element+']').attr('value', i+1);
+                var row = $('#verifieds tbody tr');
 
-                console.log('i - element ->', i, element);
-              });
-
-              console.log('new order ->', new_order);
-            }
-          });
-
-
-          $('#firsttry').sortable({
-            items: 'tbody tr',
-            update: function (event, ui)
-            {
-              console.log('new list ->', $('#firsttry').sortable('toArray'));
-
-              $.each($('#firsttry tbody tr'), function (i, element)
-              {
-                console.log('i - element ->', i, element);
-
-//                $.each($('#firsttry tbody tr td'), function (i2, element2)
-//                {
-//                  console.log('i2 - element 2 ->', i, i2, element, element2);
-//                });
-
-              });
-            }
-          });
-
-
-
-          $scope.phoneNumberParsed = {};
-
-          $scope.phoneNumberParsed.result = false;
-
-          $scope.checkNumber = function ()
-          {
-            if ($scope.connection.contactInfo.length > 0)
-            {
-//              if (new RegExp('^\\+?[/s]+?[(]+?[-]+?[0-9]+?[)]+?[-]+?[0-9]+$').test($scope.connection.contactInfo))
-//              {
-              var result, all;
-
-              result = all = Phone.parse($scope.connection.contactInfo, 'NL');
-
-              $scope.phoneNumberParsed.result = true;
-
-              if (result)
-              {
-                var error = 'It seems not to be a phone number!',
-                    invalidCountry = 'Invalid country code. Please enter a number from Netherlands.',
-                    message;
-
-                if (result.error)
+                $.each(row, function (i)
                 {
-                  $scope.phoneNumberParsed = {
-                    result:  false,
-                    message: error
-                  };
-                }
-                else
-                {
-                  if (!result.validation.isPossibleNumber)
-                  {
-                    switch (result.validation.isPossibleNumberWithReason)
-                    {
-                    case 'INVALID_COUNTRY_CODE':
-                      message = invalidCountry;
-                      break;
-                    case 'TOO_SHORT':
-                      message = error + ' (Number is too short.)';
-                      break;
-                    case 'TOO_LONG':
-                      message = error + ' (Number is too long)';
-                      break;
-                    }
-
-                    $scope.phoneNumberParsed = {
-                      result:  false,
-                      message: message
-                    };
-                  }
-                  else
-                  {
-                    if (!result.validation.isValidNumber)
-                    {
-                      $scope.phoneNumberParsed = {
-                        result:  false,
-                        message: error
-                      };
-                    }
-                    else
-                    {
-                      if (!result.validation.isValidNumberForRegion)
-                      {
-                        $scope.phoneNumberParsed = {
-                          result:  false,
-                          message: invalidCountry
-                        };
-                      }
-                      else
-                      {
-                        $scope.phoneNumberParsed = {
-                          result:  true,
-                          message: 'You have entered a correct number. Number is registered for ' +
-                            result.validation.phoneNumberRegion +
-                            ' and number type is ' +
-                            result.validation.getNumberType
-                        };
-
-                        $('#inputPhoneNumber').removeClass('error');
-                      }
-                    }
-                  }
-                }
+                  $rootScope.data.sequence[i] = $(row[i]).attr('data-rank');
+                });
               }
-
-              $scope.phoneNumberParsed.all = all;
-//              }
-//              else
-//              {
-//                $scope.phoneNumberParsed = {
-//                  result:  false,
-//                  message: 'It does not seem like a number at all! Are you sure about that?'
-//                };
-//              }
             }
-            else
-            {
-              $scope.phoneNumberParsed.result = true;
+          );
 
-              delete $scope.phoneNumberParsed.message;
 
-              $('#inputPhoneNumber').removeClass('error');
-            }
+          $scope.reGenerate = function ()
+          {
+            $rootScope.statusBar.display('Regenerating the list..');
+
+            $('#sequenceBtn').attr('disabled', 'disabled');
+
+            Core.scenarios.run()
+              .then(function (result)
+              {
+                $rootScope.statusBar.off();
+
+                var groups = angular.fromJson(Storage.get('groups'));
+
+                angular.forEach(groups, function (group)
+                {
+                  if (group.scenarioId == result.scenarioId)
+                  {
+                    group.contactInfoSequence = result.contactInfoSequence;
+                  }
+                });
+
+                $('#sequenceBtn').removeAttr('disabled');
+
+                Storage.add('groups', angular.toJson(groups));
+
+                Core.factory.process();
+              });
           };
-
 
           $scope.resetConnection = function ()
           {
@@ -177,9 +66,7 @@ define(
             };
           };
 
-
           $scope.resetConnection();
-
 
           $scope.verified = {
             status: false,
@@ -192,7 +79,7 @@ define(
 
           $scope.resetVerifiers = function ()
           {
-            angular.forEach($rootScope.data.connected.list, function (connection)
+            angular.forEach($rootScope.data.connected.list.notVerified, function (connection)
             {
               $scope.verifying[connection.id] = false;
 
@@ -203,7 +90,6 @@ define(
                 .removeAttr('disabled');
             });
           };
-
 
           $scope.connections = {
 
@@ -233,6 +119,8 @@ define(
                   {
                     $rootScope.statusBar.off();
 
+                    $rootScope.phoneNumberParsed.message = '';
+
                     $scope.resetConnection();
 
                     Core.factory.process();
@@ -240,11 +128,11 @@ define(
               }
             },
 
-            remove: function (number)
+            remove: function (number, section)
             {
               $rootScope.statusBar.display('Deleting a number..');
 
-              Core.connections.remove(number)
+              Core.connections.remove(number, section)
                 .then(function ()
                 {
                   $rootScope.statusBar.off();
@@ -255,7 +143,9 @@ define(
 
             edit: function (number)
             {
-              angular.forEach($rootScope.data.connected.list, function (connection)
+              console.log('number ->', number);
+
+              angular.forEach($rootScope.data.connected.list.notVerified, function (connection)
               {
                 if (number.id === connection.id) { $scope.connection = connection; }
               });
@@ -305,7 +195,30 @@ define(
 
                       angular.forEach(connections, function (connection)
                       {
-                        if (connection.id === number.id) { connection.verified = true; }
+                        if (connection.id === number.id)
+                        {
+                          connection.verified = true;
+
+                          var sequence  = $rootScope.data.sequence,
+                              count     = 0,
+                              groups    = angular.fromJson(Storage.get('groups'));
+
+                          angular.forEach($rootScope.data.sequence, function () { count++; });
+
+                          sequence[count] = connection.id;
+
+                          $rootScope.data.sequence = sequence;
+
+                          angular.forEach(groups, function (group)
+                          {
+                            if (group.name.toString().toUpperCase() == 'CONNECTEDNUMBERSEQUENCE')
+                            {
+                              group.contactInfoSequence = sequence;
+                            }
+                          });
+
+                          Storage.add('groups', angular.toJson(groups));
+                        }
                       });
 
                       Storage.add('connections', angular.toJson(connections));
@@ -319,7 +232,6 @@ define(
               }
             }
           };
-
         }
       ]
     );

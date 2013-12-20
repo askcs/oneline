@@ -29,12 +29,22 @@ define(
 
               Storage.session.clearAll();
 
-              if (logindata.remember)
+              if (logindata && logindata.remember)
               {
                 Storage.add('logindata', angular.toJson(logindata));
               }
 
-              $location.path('/login');
+              $rootScope.$watch(function ()
+              {
+                // $rootScope.data = {};
+                $rootScope.session = {};
+
+                $rootScope.resetProfileEdit();
+              });
+
+              $window.location.href = 'views/logout.html';
+
+              // $location.path('/login');
 
             });
 

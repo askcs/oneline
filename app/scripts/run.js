@@ -6,8 +6,8 @@ define(
 
     app.run(
       [
-        '$rootScope', '$location', '$timeout', 'Storage', '$window', 'User', 'Session', 'Core', '$http',
-        function($rootScope, $location, $timeout, Storage, $window, User, Session, Core, $http)
+        '$rootScope', '$location', '$timeout', 'Storage', '$window', 'User', 'Session', 'Core', '$http', 'Phone',
+        function($rootScope, $location, $timeout, Storage, $window, User, Session, Core, $http, Phone)
         {
           $rootScope.config = config;
 
@@ -17,9 +17,7 @@ define(
           };
 
 
-
-          console.table('contactInfos ->', angular.fromJson(Storage.get('connections')));
-
+          // console.table('contactInfos ->', angular.fromJson(Storage.get('connections')));
 
 
           // TODO: Move these checks to jquery.browser
@@ -104,6 +102,122 @@ define(
             result: false
           };
 
+          $rootScope.forceProfileEdit = function ()
+          {
+            $rootScope.profileEdit = true;
+            $rootScope.profileEdited.status = false;
+          };
+
+          $rootScope.forceProfileView = function ()
+          {
+            $rootScope.profileEdit = false;
+          };
+
+          $rootScope.phoneNumberParsed = {};
+
+          $rootScope.phoneNumberParsed.result = false;
+
+          $rootScope.checkNumber = function (checked)
+          {
+            if (checked && checked.length > 0)
+            {
+//              if (new RegExp('^\\+?[/s]+?[(]+?[-]+?[0-9]+?[)]+?[-]+?[0-9]+$').test($scope.connection.contactInfo))
+//              {
+              var result, all;
+
+              result = all = Phone.parse(checked, 'NL');
+
+              $rootScope.phoneNumberParsed.result = true;
+
+              if (result)
+              {
+                var error = 'It seems not to be a phone number!',
+                  invalidCountry = 'Invalid country code. Please enter a number from Netherlands.',
+                  message;
+
+                if (result.error)
+                {
+                  $rootScope.phoneNumberParsed = {
+                    result:  false,
+                    message: error
+                  };
+                }
+                else
+                {
+                  if (!result.validation.isPossibleNumber)
+                  {
+                    switch (result.validation.isPossibleNumberWithReason)
+                    {
+                      case 'INVALID_COUNTRY_CODE': message = invalidCountry; break;
+                      case 'TOO_SHORT': message = error + ' (Number is too short.)'; break;
+                      case 'TOO_LONG': message = error + ' (Number is too long)'; break;
+                    }
+
+                    $rootScope.phoneNumberParsed = {
+                      result:  false,
+                      message: message
+                    };
+                  }
+                  else
+                  {
+                    if (!result.validation.isValidNumber)
+                    {
+                      $rootScope.phoneNumberParsed = {
+                        result:  false,
+                        message: error
+                      };
+                    }
+                    else
+                    {
+                      if (!result.validation.isValidNumberForRegion)
+                      {
+                        $rootScope.phoneNumberParsed = {
+                          result:  false,
+                          message: invalidCountry
+                        };
+                      }
+                      else
+                      {
+                        $rootScope.phoneNumberParsed = {
+                          result:  true,
+                          message: 'You have entered a correct number. Number is registered for ' +
+                            result.validation.phoneNumberRegion +
+                            ' and number type is ' +
+                            result.validation.getNumberType
+                        };
+
+                        $('.inputPhoneNumber').removeClass('error');
+                      }
+                    }
+                  }
+                }
+              }
+
+              $rootScope.phoneNumberParsed.all = all;
+//              }
+//              else
+//              {
+//                $scope.phoneNumberParsed = {
+//                  result:  false,
+//                  message: 'It does not seem like a number at all! Are you sure about that?'
+//                };
+//              }
+            }
+            else
+            {
+              $rootScope.resetPhoneParser();
+            }
+          };
+
+
+          $rootScope.resetPhoneParser = function ()
+          {
+            $rootScope.phoneNumberParsed.result = true;
+
+            delete $rootScope.phoneNumberParsed.message;
+
+            $('.inputPhoneNumber').removeClass('error');
+          };
 
 
           $rootScope.statusBar =
@@ -163,14 +277,20 @@ define(
           });
 
 
+          // TODO: Functionality is broken!! Remove it in time.
           $rootScope.fixStyles = function ()
           {
             var tabHeight = $('.tabs-left .nav-tabs').height();
 
             $.each($('.tab-content').children(), function ()
             {
-              var $this         = $(this).attr('id'),
-                  contentHeight = $('.tabs-left .tab-content #' + $this).height();
+              var $this         = $(this).attr('id');
+
+              // console.log('$this ->', $this);
+
+              var contentHeight = $('.tabs-left .tab-content #' + $this).height();
+
+              // console.log('contentHeight ->', contentHeight);
 
               if (tabHeight > contentHeight)
               {

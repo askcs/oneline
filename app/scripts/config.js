@@ -7,13 +7,13 @@ define(
 
     meta: 'oneline',
 
-    title: 'OneLine',
+    title: 'OneLine RCv1',
 
     lang:     'en',
 
     fullscreen: 'true',
 
-    demoUsers: 'true',
+    demoUsers: 'false',
 
     host: 'http://askfastmarket1.appspot.com',
 

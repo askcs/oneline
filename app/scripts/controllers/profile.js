@@ -11,40 +11,38 @@ define(
         {
           $rootScope.fixStyles();
 
-          $scope.profile = {
+          $rootScope.profile = {
 
             data: {},
 
             process: function (callback)
             {
-
               var payload = {
                 name: {
-                  contactInfo:    $scope.profile.data.name,
+                  contactInfo:    $rootScope.profile.data.name,
                   contactInfoTag: 'NAME',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 email: {
-                  contactInfo:    $scope.profile.data.email,
+                  contactInfo:    $rootScope.profile.data.email,
                   contactInfoTag: 'EMAIL',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 address: {
-                  contactInfo:    $scope.profile.data.address,
+                  contactInfo:    $rootScope.profile.data.address,
                   contactInfoTag: 'ADDRESS',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 },
                 phone: {
-                  contactInfo:    $scope.profile.data.phone,
+                  contactInfo:    $rootScope.profile.data.phone,
                   contactInfoTag: 'PHONE',
-                  groupKeys:      [$rootScope.data.contact.group.id]
+                  groupKeys:      [$rootScope.data.owner.group.id]
                 }
               };
 
-
               angular.forEach(angular.fromJson(Storage.get('connections')), function (connection)
               {
-                if (connection.groupKeys[0] === $rootScope.data.contact.group.id)
+                if (connection.groupKeys[0] === $rootScope.data.owner.group.id)
                 {
                   switch (connection.contactInfoTag.toString().toUpperCase())
                   {
@@ -64,24 +62,40 @@ define(
                 }
               });
 
-
-              var arrayyed = [];
+              var arr = [];
 
               angular.forEach(payload, function (node)
               {
-                arrayyed.push(node);
+                arr.push(node);
               });
 
-              console.log('arrayed ->', arrayyed);
-
-              Core.connections.profiler(arrayyed)
+              Core.connections.profiler(arr)
                 .then(function (result)
                 {
-                  console.log('returned result ->', result);
+                  if (result.error)
+                  {
+                    console.log('error happened?');
 
-                  Core.factory.process();
+                    $('#modal-profile-btn-save')
+                      .text('Save')
+                      .removeAttr('disabled');
 
-                  callback();
+                    $rootScope.profileEdited = {
+                      status: true,
+                      result: false
+                    };
+                  }
+                  else
+                  {
+                    Core.factory.process();
+
+                    $rootScope.$watch(function ()
+                    {
+                      $rootScope.profileEditing = false;
+                    });
+
+                    callback();
+                  }
                 });
             },
 
@@ -89,9 +103,9 @@ define(
             {
               var result;
 
-              if ($scope.profile.data.name  === undefined ||
-                  $scope.profile.data.email === undefined ||
-                  $scope.profile.data.phone === undefined)
+              if ($rootScope.profile.data.name  === undefined ||
+                $rootScope.profile.data.email === undefined ||
+                $rootScope.profile.data.phone === undefined)
               {
                 $('#modal-profile-btn-save')
                   .attr('disabled', 'disabled');
@@ -121,18 +135,16 @@ define(
 
                 this.process(function ()
                 {
-                  console.log('callback is executed.');
-
                   $('#modal-profile-btn-save')
                     .text('Save')
                     .removeAttr('disabled');
-
-                  $rootScope.profileEditing = false;
 
                   $rootScope.profileEdited = {
                     status: true,
                     result: true
                   };
+
+                  $rootScope.profileEdit = false;
                 });
               }
             }
@@ -140,7 +152,9 @@ define(
 
           if ($location.path() !== '/login')
           {
-            $scope.profile.data = $rootScope.data.account;
+            $rootScope.profile.data = {};
+
+            $rootScope.profile.data = $rootScope.data.account;
           }
         }
       ]

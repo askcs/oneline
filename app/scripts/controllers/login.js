@@ -31,7 +31,7 @@ define(
 
           // TODO: Lose this jQuery stuff later on!
           $('.navbar').hide();
-          $('#footer').hide();
+          // $('#footer').hide();
           $('#preloader').hide();
 
 
@@ -46,7 +46,6 @@ define(
           var loginBtn = $('#login button[type=submit]');
 
 
-          // TODO: Remove unneccessary DOM manipulation Use cookies for user credentials
           $scope.login = function ()
           {
             $('#alertDiv').hide();
@@ -157,7 +156,7 @@ define(
           };
 
 
-          self.loginAgain = function ()
+          self.loginAgain_ = function ()
           {
             $('#login').show();
             $('#preloader').hide();
@@ -173,6 +172,25 @@ define(
             loginBtn
               .text('Login')
               .removeAttr('disabled');
+          };
+
+
+
+          self.loginAgain = function ()
+          {
+            User.logout()
+              .then(function ()
+              {
+                User.login('leon', MD5('askask'))
+                  .then(function ()
+                  {
+                    User.logout()
+                      .then(function ()
+                      {
+                        self.auth($scope.logindata.username, MD5($scope.logindata.password));
+                      })
+                  });
+              });
           };
 
 
@@ -216,7 +234,18 @@ define(
                             {
                               self.progress('Groups loaded');
 
-                              Core.factory.process();
+                              // Core.factory.process();
+
+                              Core.factory.run()
+                                .then(function ()
+                                {
+                                  $location.path('/core');
+
+                                  setTimeout(function ()
+                                  {
+                                    $('.navbar').show();
+                                  }, 100);
+                                });
 
                               $location.path('/core');
 
@@ -224,6 +253,7 @@ define(
                               {
                                 $('.navbar').show();
                               }, 100);
+
                             }
                           });
                       }
@@ -244,6 +274,7 @@ define(
 
 
           $scope.demoUsers = [
+            'apptestoneline',
             'ahmet',
             'cengiz',
             'duco',
@@ -264,6 +295,16 @@ define(
           {
             self.auth(user, MD5('askask'));
           }
+
+          jQuery(document).bind('keydown', 'ctrl+u',function (event)
+          {
+            if (event.ctrlKey && event.keyCode == 85)
+            {
+              $scope.config.demoUsers = !$scope.config.demoUsers;
+              $scope.$apply();
+            }
+            return false;
+          });
 
         }
       ]

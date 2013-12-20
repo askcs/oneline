@@ -4,6 +4,7 @@ define(
   {
     'use strict';
 
+
     /**
      * Translate package
      */

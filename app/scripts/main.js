@@ -19,36 +19,13 @@ require.config(
     },
     shim:
     {
-      angular:
-      {
-        deps:     ['jquery'],
-        exports:  'angular'
-      },
-      'angular-resource':
-      {
-        deps:     ['angular']
-      },
-      'angular-route':
-      {
-        deps:     ['angular']
-      },
-      bootstrap:
-      {
-        deps:     ['jquery'],
-        exports:  'bootstrap'
-      },
-      d3:
-      {
-        exports:  'd3'
-      },
-      libPhoneNumber:
-      {
-        exports:  'libPhoneNumber'
-      },
-      'jquery-ui':
-      {
-        deps:     ['jquery']
-      }
+      angular:            { deps: ['jquery'], exports:  'angular' },
+      'angular-resource': { deps: ['angular'] },
+      'angular-route':    { deps: ['angular'] },
+      bootstrap:          { deps: ['jquery'], exports:  'bootstrap' },
+      d3:                 { exports:'d3' },
+      libPhoneNumber:     { exports:'libPhoneNumber' },
+      'jquery-ui':        { deps: ['jquery'] }
     }
   }
 );
@@ -86,6 +63,7 @@ require(
     'directives/appVersion',
 
     'filters/interpolate',
+    'filters/parsePhoneNumber',
     'filters/all',
 
     'services/version',

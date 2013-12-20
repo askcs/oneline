@@ -7,7 +7,8 @@ br
 
 
     ul.nav.nav-tabs.nav-tabs-app(style='margin-right: 0;')
-      li(class="{{(views.purchaser==true) && 'active'}}")
+      li(class="{{(views.purchaser==true) && 'active'}}",
+          style='display: none;')
         a(ng-click='resetPurchaser(); setViewTo("purchaser")',
           data-toggle='tab')
           span.icomoon.icomoon-cart(aria-hidden='true')
@@ -390,15 +391,17 @@ br
         .row-fluid
           .span12(style='min-height: 300px;')
             form.form-inline.well(ng-submit='connections.save()')
+
               input.input-large(ng-model='connection.label',
                                   type='text',
                                   placeholder='Label')
-              #inputPhoneNumber.control-group(style='display: inline;',
+              .inputPhoneNumber.control-group(style='display: inline;',
                                               class='{{(phoneNumberParsed.message) && "error"}}')
                 input.input-large(ng-model='connection.contactInfo',
                                   type='text',
                                   placeholder='e.g. Phone number…',
-                                  ng-change='checkNumber()')
+                                  ng-change='checkNumber(connection.contactInfo)')
+
               button.btn(type='button',
                           ng-show='connection.label.length > 0',
                           ng-click='resetConnection();') Cancel
@@ -410,86 +413,112 @@ br
                 small
                   i {{phoneNumberParsed.message}}
 
-              span.text-success(style='margin-left: 10px;'
-                              ng-show='phoneNumberParsed.result')
-                small
-                  i {{phoneNumberParsed.message}}
+              div(ng-show='phoneNumberParsed.result')
+                span.text-success(style='margin-top: 15px')
+                  small
+                    i {{phoneNumberParsed.message}}
 
-            h4 Numbers
+
+            div(ng-show='(data.connected.list.notVerified.length > 0)')
+              h4 Not Verified Numbers
+              hr
+
+              .alert(ng-show='verified.status',
+                     class="alert-{{(verified.result) && 'success' || 'error'}}")
+                button.close(type='button',
+                              ng-click='verified.status = false',
+                              data-dismiss='alert') ×
+                span(ng-show='verified.result') Number is verified and ready to use.
+                span(ng-hide='verified.result')
+                  | There was an error with verifiying number.
+                  br
+                  | Did you enter the correct verification code?
+                  br
+                  | If so please try again and if the problem resists, please get in touch with us.
+
+              table.table.table-striped
+                thead
+                  tr
+                    th(style='width: 100px;')
+                    th Label
+                    th Connection
+                    th Type
+                    th
+                tbody
+                  tr(ng-repeat='number in data.connected.list.notVerified')
+                    td(style='vertical-align: middle')
+                      span.label.label-error Not Verified
+                    td(style='vertical-align: middle') {{number.label}}
+                    td(style='vertical-align: middle') {{number.contactInfo}}
+                    td(style='vertical-align: middle') {{number.contactInfoTag}}
+
+                    td(style='vertical-align: middle, text-align: right')
+
+                      button.btn(ng-click='connections.remove(number, "notVerified")',
+                                  type='button',
+                                  style='margin-right:5px') Delete
+
+                      button.btn(ng-click='connections.edit(number)',
+                                  style='margin-right:5px',
+                                  type='button') Edit
+
+                      .input-append(style='margin-top:10px; display: inline',
+                                    ng-show='verifying[number.id]')
+                        input#appendedInputButton.span3(type='text',
+                                                        ng-model='verificationCode[number.id]',
+                                                        autofocus='autofocus')
+                        button.btn(type='button',
+                                    ng-click='resetVerifiers()') Cancel
+                        button.btn(type='button',
+                                    ng-click='connections.verify.confirm(number)') Confirm
+
+                      button.btn(id='verifyBtn-{{number.id}}',
+                                  ng-hide='number.verified || verifying[number.id]',
+                                  ng-click='connections.verify.initiate(number)',
+                                  type='button') Verify
+              br
+              br
+
+
+            h4 Verified Numbers
             hr
-            .alert(ng-show='verified.status',
-                   class="alert-{{(verified.result) && 'success' || 'error'}}")
-              button.close(type='button',
-                            ng-click='verified.status = false',
-                            data-dismiss='alert') ×
-              span(ng-show='verified.result') Number is verified and ready to use.
-              span(ng-hide='verified.result')
-                | There was an error with verifiying number.
-                br
-                | Did you enter the correct verification code?
-                br
-                | If so please try again and if the problem resists, please get in touch with us.
-            p(ng-show='(data.connected.list.length == 0)')
+
+            p(ng-show='(data.connected.list.verified.length == 0)')
               | There are no connected numbers. Please add some.
-            table.table.table-striped(ng-show='(data.connected.list.length > 0)')
+
+            table#verifieds.table.table-striped(ng-show='(data.connected.list.verified.length > 0)')
               thead
                 tr
+                  th(style='width: 80px;')
                   th(style='width: 100px;')
                   th Label
                   th Connection
                   th Type
                   th
               tbody
-                tr(ng-repeat='number in data.connected.list')
+                tr(ng-repeat='verified in data.connected.list.verified', data-rank='{{verified.number.id}}')
                   td(style='vertical-align: middle')
-                    span.label.label-success(ng-show='number.verified') Verified
-                    span.label.label-error(ng-hide='number.verified') Not Verified
-                  td(style='vertical-align: middle') {{number.label}}
-                  td(style='vertical-align: middle') {{number.contactInfo}}
-                  td(style='vertical-align: middle') {{number.contactInfoTag}}
-
+                    span.icomoon.icomoon-menu.muted(aria-hidden='true', style='font-size: 24px;') &nbsp;{{verified.rank}}
+                  td(style='vertical-align: middle')
+                    span.label.label-success Verified
+                  td(style='vertical-align: middle') {{verified.number.label}}
+                  td(style='vertical-align: middle') {{verified.number.contactInfo}}
+                  td(style='vertical-align: middle') {{verified.number.contactInfo | parsePhoneNumber}}
                   td(style='vertical-align: middle, text-align: right')
 
-                    button.btn(ng-click='connections.remove(number)',
+                    button.btn(ng-click='connections.remove(verified.number, "verified")',
                                 type='button',
                                 style='margin-right:5px') Delete
 
-                    button.btn(ng-click='connections.edit(number)',
-                                style='margin-right:5px',
-                                type='button',
-                                ng-hide='number.verified') Edit
-
-                    .input-append(style='margin-top:10px; display: inline',
-                                  ng-show='verifying[number.id]')
-                      input#appendedInputButton.span3(type='text',
-                                                      ng-model='verificationCode[number.id]',
-                                                      autofocus='autofocus')
-                      button.btn(type='button',
-                                  ng-click='resetVerifiers()') Cancel
-                      button.btn(type='button',
-                                  ng-click='connections.verify.confirm(number)') Confirm
-
-                    button.btn(id='verifyBtn-{{number.id}}',
-                                ng-hide='number.verified || verifying[number.id]',
-                                ng-click='connections.verify.initiate(number)',
-                                type='button') Verify
-
-            // p {{phoneNumberParsed.all}}
-
-            table#firsttry.table.table-bordered(style='width: auto;')
-              thead
-                tr
-                  th Index
-                  th Count
-              tbody(ng-model='list')
-                tr.item(ng-repeat='item in list',
-                        style='cursor: move;')
-                  td {{$index}}
-                  td
-                    | {{item}}
+            button#sequenceBtn.btn(ng-show='(data.connected.list.verified.length > 0)',
+                                    ng-click='reGenerate()')
+              i.icon-random
+              |  Resequence
 
 
-      // button test
+
+
+
 
 
       .tab-pane(ng-controller='notifier',
@@ -582,13 +611,30 @@ br
               input.input-medium(ng-model='blacklist.label',
                                   type='text',
                                   placeholder='Label')
-              input.input-large(ng-model='blacklist.contactInfo',
-                                type='text',
-                                placeholder='e.g. Phone number…')
+              .inputPhoneNumber.control-group(style='display: inline;',
+                                              class='{{(phoneNumberParsed.message) && "error"}}')
+                input.input-large(ng-model='blacklist.contactInfo',
+                                  type='text',
+                                  placeholder='e.g. Phone number…',
+                                  ng-change='checkNumber(blacklist.contactInfo)')
+
               button.btn(type='button',
                           ng-show='blacklist.label.length > 0',
                           ng-click='resetBlacklist();') Cancel
-              button.btn(type='submit') Add to blacklist
+
+              button.btn(type='submit',
+                          class='{{(phoneNumberParsed.result == false) && "disabled"}}') Add to blacklist
+              span.text-error(style='margin-left: 10px;'
+                              ng-hide='phoneNumberParsed.result')
+                small
+                  i {{phoneNumberParsed.message}}
+              div(ng-show='phoneNumberParsed.result')
+                span.text-success(style='margin-top: 15px')
+                  small
+                    i {{phoneNumberParsed.message}}
+
+
+
             h4 Numbers
             p(ng-show='(data.blacklist.list.length == 0)')
               | There are no blacklisted numbers.

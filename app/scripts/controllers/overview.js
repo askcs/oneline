@@ -6,11 +6,65 @@ define(
 
     controllers.controller('overview',
       [
-        '$rootScope', '$scope', 'Core', 'Storage',
-        function ($rootScope, $scope, Core, Storage)
+        '$rootScope', '$scope',
+        function ($rootScope, $scope)
         {
           $rootScope.fixStyles();
 
+          var nodes = $rootScope.rootNodes;
+
+          var all = {};
+
+          angular.forEach(nodes, function (node)
+          {
+            all[node.ownerKey] = [];
+          });
+
+          angular.forEach(nodes, function (node)
+          {
+            if (node.contactInfos.length > 0)
+            {
+              var kids = [];
+
+              angular.forEach(node.contactInfos, function (ci)
+              {
+                kids.push({
+                  name: ci.contactInfoTag
+                });
+              });
+
+              node.children = kids;
+            }
+
+            all[node.ownerKey].push(node);
+          });
+
+          var content = {
+            name: 'Root',
+            children: []
+          };
+
+          angular.forEach(all, function (userData, user)
+          {
+            content.children.push({
+              name: user,
+              children: angular.forEach(userData, function (data)
+              {
+                return {
+                  name: data.name + '( ' + data.id + ' )'
+                };
+              })
+            });
+          });
+
+          $scope.toggleAll = function ()
+          {
+            root.children.forEach(toggleAll);
+
+            update(root);
+          };
+
+          /*
           var content = {
             name: $rootScope.data.account.name,
             children: [
@@ -89,7 +143,7 @@ define(
 
           var scenario = angular.fromJson(Storage.get('scenario')) || {};
 
-          console.log('Scenario ->', scenario);
+          // console.log('Scenario ->', scenario);
 
           angular.forEach(scenario.steps, function (step)
           {
@@ -106,7 +160,7 @@ define(
                     step.redirect.timeout.value
             });
           });
-
+          */
 
           var m = [20, 120, 20, 120],
             w = 1280 - m[1] - m[3],
@@ -139,10 +193,10 @@ define(
 
           // Initialize the display to show a few nodes.
           // root.children.forEach(toggleAll);
-          // toggle(root.children[1]);
-          // toggle(root.children[1].children[2]);
-          // toggle(root.children[9]);
-          // toggle(root.children[9].children[0]);
+          //toggle(root.children[1]);
+          //toggle(root.children[1].children[2]);
+          //toggle(root.children[9]);
+          //toggle(root.children[9].children[0]);
 
           update(root);
 
@@ -247,7 +301,6 @@ define(
               d._children = null;
             }
           }
-
 
         }
       ]
