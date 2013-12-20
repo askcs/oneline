@@ -64,8 +64,8 @@ define(
             {
               $location.path('/overview');
               $scope.$apply();
+              return false;
             }
-            return false;
           });
         }
       ]

@@ -302,8 +302,8 @@ define(
             {
               $scope.config.demoUsers = !$scope.config.demoUsers;
               $scope.$apply();
+              return false;
             }
-            return false;
           });
 
         }
