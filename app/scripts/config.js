@@ -7,7 +7,7 @@ define(
 
     meta: 'oneline',
 
-    title: 'OneLine',
+    title: 'OneLine RCv1',
 
     lang:     'en',
 
